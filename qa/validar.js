@@ -22,7 +22,7 @@ test('HTML, scripts e motor presentes',()=>{
 test('Cache busca versão nova e mantém offline',()=>{
  const sw=fs.readFileSync(path.join(site,'sw.js'),'utf8');
  new vm.Script(sw,{filename:'sw.js'});
- assert(sw.includes('fetch(event.request)'), 'Service Worker não consulta a rede');
+ assert(/fetch\s*\(\s*event\.request\b/.test(sw), 'Service Worker não consulta a rede');
  assert(sw.includes('caches.match'), 'Service Worker sem fallback offline');
  assert(sw.includes('skipWaiting'), 'Service Worker não ativa novas versões');
  assert(sw.includes('clients.claim'), 'Service Worker não assume clientes após ativação');
