@@ -1,8 +1,8 @@
 /* Taverna das Sombras — atualização automática e modo offline.
    Rede primeiro: cada nova navegação procura o HTML mais recente.
    O jogo aberto nunca é recarregado à força durante uma partida. */
-const CACHE = 'taverna-v84-network-first-1';
-const PREFIXES = ['taverna-v73-pwa-', 'taverna-v84-'];
+const CACHE = 'taverna-pwa-network-first-2';
+const PREFIXES = ['taverna-v73-pwa-', 'taverna-v84-', 'taverna-pwa-'];
 const ASSETS = [
   './', './index.html', './manifest.webmanifest',
   './icons/icon-144.png', './icons/icon-180.png',
@@ -12,8 +12,10 @@ const ASSETS = [
 ];
 self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open(CACHE).then(cache => cache.addAll(ASSETS))
-      .then(() => self.skipWaiting())
+    caches.open(CACHE).then(async cache => {
+      // Uma falha pontual de download nao pode impedir a ativacao do novo SW.
+      await Promise.allSettled(ASSETS.map(asset => cache.add(asset)));
+    }).then(() => self.skipWaiting())
   );
 });
 self.addEventListener('activate', event => {
@@ -33,7 +35,7 @@ self.addEventListener('fetch', event => {
   // Sempre tenta rede primeiro, inclusive para index.html, quando há internet.
   // Em perda de conexão, usa a última versão armazenada para manter o modo offline.
   event.respondWith(
-    fetch(event.request).then(response => {
+    fetch(event.request, event.request.mode === 'navigate' ? { cache: 'no-store' } : undefined).then(response => {
       if (response.ok) {
         const copy = response.clone();
         event.waitUntil(caches.open(CACHE).then(cache => cache.put(event.request, copy)).catch(() => {}));
