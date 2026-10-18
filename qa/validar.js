@@ -11,9 +11,9 @@ const context={module:{exports:{}},console}; context.globalThis=context;
 const coreScript=scripts.find(s=>s.includes('Mau-Mau 2.0 — núcleo novo')&&s.includes('GameEngine'));
 test('HTML, scripts e motor presentes',()=>{
  assert(fs.statSync(htmlPath).size>100000,'index.html ausente, vazio ou incompleto');
- assert(/<html\\b/i.test(html),'Falta estrutura HTML');
- assert(/<link\\b[^>]*rel=["']manifest["'][^>]*href=["'][^"']*manifest\\.webmanifest["']/i.test(html),'Falta link PWA no head');
- assert(/<script\\b[^>]*id=["']pwa-registration["']/i.test(html),'Falta registro PWA');
+ assert(/<html\b/i.test(html),'Falta estrutura HTML');
+ assert(/<link\b[^>]*rel=["']manifest["'][^>]*href=["'][^"']*manifest\.webmanifest["']/i.test(html),'Falta link PWA no head');
+ assert(/<script\b[^>]*id=["']pwa-registration["']/i.test(html),'Falta registro PWA');
  assert(scripts.length>=7,'Scripts do jogo ausentes');
  assert(coreScript,'Motor do jogo ausente');
 });
