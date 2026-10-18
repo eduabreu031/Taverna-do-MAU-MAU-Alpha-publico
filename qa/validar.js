@@ -60,7 +60,7 @@ test('Carta não pertencente não altera revisão nem mão',()=>{
  const g=make([card('h2','2','♠'),card('h3','3','♠')],card('top','9','♥'));const before=g.state;let a=g.play(0,'inexistente');assert.equal(a.ok,false);assert.equal(a.code,'CARD_NOT_OWNED');assert.equal(g.state.revision,before.revision);assert.deepEqual(g.state.players[0].hand.map(c=>c.id),before.players[0].hand.map(c=>c.id));
 });
 test('Manifest e SW íntegros, ícones disponíveis',()=>{
- const manifest=JSON.parse(fs.readFileSync(path.join(site,'manifest.webmanifest'),'utf8'));assert.equal(manifest.name,'Taverna das Sombras');assert(manifest.icons.length>=2);for(const ico of manifest.icons)assert(fs.existsSync(path.join(site,ico.src)));const sw=fs.readFileSync(path.join(site,'sw.js'),'utf8');assert(sw.includes('self.addEventListener'));assert(sw.includes('const CACHE = '));
+ const manifest=JSON.parse(fs.readFileSync(path.join(site,'manifest.webmanifest'),'utf8'));assert.equal(manifest.name,'Taverna do MAU MAU');assert(manifest.icons.length>=2);for(const ico of manifest.icons)assert(fs.existsSync(path.join(site,ico.src)));const sw=fs.readFileSync(path.join(site,'sw.js'),'utf8');assert(sw.includes('self.addEventListener'));assert(sw.includes('const CACHE = '));
 });
 console.log('\nVerificação concluída:',process.exitCode?'FALHAS':'SEM FALHAS DETECTADAS');
 process.exit(process.exitCode||0);
