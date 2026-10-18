@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="pt-BR">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Taverna do Mau-Mau</title><meta name="theme-color" content="#2c1d16"><style>/* Mau-Mau 2.0 — Interface original A Taverna das Sombras. Zero bibliotecas/assets externos. */
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Taverna do Mau-Mau</title><meta name="theme-color" content="#2c1d16"><link rel="manifest" href="./manifest.webmanifest"><style>/* Mau-Mau 2.0 — Interface original A Taverna das Sombras. Zero bibliotecas/assets externos. */
 :root{--ink:#312015;--ivory:#f0dcb3;--paper:#dec493;--gold:#be9461;--brass:#b28a50;--leather:#4c2b20;--wood:#51321f;--dark:#1b120f;--light:#f6e6c6;--wine:#6a282b;--red:#9e312b;--aqua:#709a91;--shadow:0 22px 44px #07040396}
 *{box-sizing:border-box}html,body{margin:0;min-height:100%;}html{background:#100c09}body{font:15px/1.4 Georgia,'Palatino Linotype','Book Antiqua',serif;color:var(--ivory);background:radial-gradient(ellipse at 50% -12%,#7d4e30 0%,#322217 43%,#130e0a 94%);overflow-x:hidden}button,select,input{font:inherit}button{cursor:pointer}button:disabled{cursor:not-allowed;opacity:.48}button:focus-visible,.playing-card:focus-visible,[role=button]:focus-visible{outline:3px solid #f8d997;outline-offset:3px}h1,h2,h3,p{margin:0}a{color:#e8c78b}
 .scene{position:relative;min-height:100svh}.hidden{display:none!important}.scene-menu{display:grid;place-items:center;padding:22px 15px 34px;isolation:isolate;overflow:hidden}.scene-menu:before{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(ellipse at 17% 27%,#e0a34c32,transparent 33%),radial-gradient(ellipse at 87% 61%,#ca76302b,transparent 30%),repeating-linear-gradient(82deg,#0000 0 28px,#ffffff04 29px 31px)}.ambient-candle{position:absolute;width:22px;height:105px;top:12%;left:7%;border-radius:8px 8px 3px 3px;background:linear-gradient(90deg,#77553b,#f2cc90 36%,#9a683c 73%,#3b2316);box-shadow:0 0 60px 18px #e4983b3a;opacity:.73;pointer-events:none}.ambient-candle:before{content:"";position:absolute;bottom:99%;left:6px;width:10px;height:25px;background:radial-gradient(ellipse at center,#fff3b7 0 26%,#ffa648 42%,#cc6525 61%,#0000 65%);filter:blur(1px);animation:flame 2.3s ease-in-out infinite alternate;transform-origin:bottom}.ambient-candle.right{left:auto;right:6%;top:68%;height:79px}.ambient-candle.right:before{animation-delay:.9s}@keyframes flame{from{transform:skewX(-9deg) scaleY(.92);opacity:.75}to{transform:skewX(8deg) scaleY(1.15);opacity:1}}
@@ -3182,5 +3182,15 @@ window.MauMau2Debug={getState:()=>ui.game?.state,engine:()=>ui.game,start:(n=5)=
   input.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();enterOffline();}});
   // A rota antiga de saída já mostra a tela inicial; não alterar o motor do jogo.
 })();
+</script>
+<script id="pwa-registration">
+/* Instalação PWA somente em hospedagem segura. O HTML local continua autônomo. */
+if (typeof navigator !== 'undefined' && 'serviceWorker' in navigator &&
+    typeof location !== 'undefined' && /^https?:$/.test(location.protocol) &&
+    (location.protocol === 'https:' || location.hostname === 'localhost')) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js').catch(err => console.warn('PWA indisponível:', err));
+  });
+}
 </script>
 </body></html>
