@@ -9,7 +9,22 @@ const scripts=[...html.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/gi)].map(m=
 function test(name,fn){ try{fn();console.log('OK ',name);}catch(e){console.error('FALHOU',name,':',e.stack||e);process.exitCode=1;} }
 const context={module:{exports:{}},console}; context.globalThis=context;
 const coreScript=scripts.find(s=>s.includes('Mau-Mau 2.0 — núcleo novo')&&s.includes('GameEngine'));
-test('HTML, scripts e motor presentes',()=>{assert(html.includes('<html'));assert(html.includes('manifest.webmanifest'));assert(html.includes('pwa-registration'));assert(scripts.length>=7);assert(coreScript);});
+test('HTML, scripts e motor presentes',()=>{
+ assert(fs.statSync(htmlPath).size>100000,'index.html ausente, vazio ou incompleto');
+ assert(/<html\\b/i.test(html),'Falta estrutura HTML');
+ assert(/<link\\b[^>]*rel=["']manifest["'][^>]*href=["'][^"']*manifest\\.webmanifest["']/i.test(html),'Falta link PWA no head');
+ assert(/<script\\b[^>]*id=["']pwa-registration["']/i.test(html),'Falta registro PWA');
+ assert(scripts.length>=7,'Scripts do jogo ausentes');
+ assert(coreScript,'Motor do jogo ausente');
+});
+test('Cache busca versão nova e mantém offline',()=>{
+ const sw=fs.readFileSync(path.join(site,'sw.js'),'utf8');
+ new vm.Script(sw,{filename:'sw.js'});
+ assert(sw.includes('fetch(event.request)'), 'Service Worker não consulta a rede');
+ assert(sw.includes('caches.match'), 'Service Worker sem fallback offline');
+ assert(sw.includes('skipWaiting'), 'Service Worker não ativa novas versões');
+ assert(sw.includes('clients.claim'), 'Service Worker não assume clientes após ativação');
+});
 for(let i=0;i<scripts.length;i++)test(`Sintaxe de script ${i+1}/${scripts.length}`,()=>new vm.Script(scripts[i],{filename:`index-script-${i+1}.js` }));
 if(coreScript){vm.runInNewContext(coreScript,context,{timeout:10000});}
 const C=context.module.exports;
