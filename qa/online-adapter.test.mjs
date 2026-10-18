@@ -1,0 +1,13 @@
+import assert from 'node:assert/strict';
+import {normalizeOnlineState,serverAction} from '../integracao/online-state-adapter.mjs';
+const c=(id,rank,suit)=>({id,rank,suit});
+const m={type:'state',players:[{id:'a',name:'Viajante'},{id:'b',name:'Aldren'}],game:{phase:'playing',revision:3,round:1,players:[{id:'a',alive:true,count:2},{id:'b',alive:true,count:5}],hand:[c('a1','9','♠'),c('a2','J','♥')],top:c('d1','9','♥'),activeSuit:'♥',turnPlayerId:'a',direction:1,deckCount:40,drawn:false,pendingSeven:0}};
+const s=normalizeOnlineState(m,'a');
+assert.equal(s.players[0].hand.length,2);assert.equal(s.players[1].hand,null);
+assert.deepEqual(serverAction(s,'play','a1'),{type:'action',action:'play',cardId:'a1',revision:3});
+assert.throws(()=>serverAction(s,'play','b1'));
+assert.throws(()=>normalizeOnlineState(m,'a',4));
+assert.throws(()=>normalizeOnlineState({...m,game:{...m.game,hand:[c('a1','9','♠')]}},'a'));
+assert.throws(()=>normalizeOnlineState({...m,game:{...m.game,hand:[c('a1','9','♠'),c('a1','9','♠')]}},'a'));
+assert.throws(()=>serverAction(normalizeOnlineState({...m,game:{...m.game,turnPlayerId:'b'}},'a'),'play','a1'));
+console.log('OK: privacidade, identidade, revisão, mão e turno');
