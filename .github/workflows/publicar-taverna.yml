@@ -18,6 +18,17 @@ jobs:
         uses: actions/setup-node@v5
         with:
           node-version: '22'
+      - name: Aplicar icones oficiais do pacote
+        run: |
+          if [ -f Taverna_do_MAU_MAU_Icones_Oficiais.zip ]; then
+            unzip -tq Taverna_do_MAU_MAU_Icones_Oficiais.zip
+            unzip -oq Taverna_do_MAU_MAU_Icones_Oficiais.zip -d .
+            test -s site/icons/icon-192.png
+            test -s site/icons/icon-512.png
+            echo "Icones oficiais aplicados."
+          else
+            echo "Pacote de icones ainda nao enviado; mantendo imagens atuais."
+          fi
       - name: Padronizar nome oficial no HTML
         run: python3 qa/padronizar-nome.py site
       - name: Conferir jogo e integridade das regras
@@ -35,6 +46,17 @@ jobs:
     steps:
       - name: Baixar codigo
         uses: actions/checkout@v5
+      - name: Aplicar icones oficiais do pacote
+        run: |
+          if [ -f Taverna_do_MAU_MAU_Icones_Oficiais.zip ]; then
+            unzip -tq Taverna_do_MAU_MAU_Icones_Oficiais.zip
+            unzip -oq Taverna_do_MAU_MAU_Icones_Oficiais.zip -d .
+            test -s site/icons/icon-192.png
+            test -s site/icons/icon-512.png
+            echo "Icones oficiais aplicados."
+          else
+            echo "Pacote de icones ainda nao enviado; mantendo imagens atuais."
+          fi
       - name: Padronizar nome oficial no HTML
         run: python3 qa/padronizar-nome.py site
       - name: Preparar GitHub Pages
