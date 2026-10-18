@@ -1,7 +1,7 @@
 {
-  "name": "Taverna das Sombras",
-  "short_name": "Taverna",
-  "description": "Mau-Mau medieval offline, com cartas, rádio e o Arauto das Sombras.",
+  "name": "Taverna do MAU MAU",
+  "short_name": "Taverna do MAU MAU",
+  "description": "Taverna do MAU MAU — jogo de cartas medieval offline.",
   "id": "./",
   "start_url": "./",
   "scope": "./",
