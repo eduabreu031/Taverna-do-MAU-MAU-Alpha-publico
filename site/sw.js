@@ -1,4 +1,4 @@
-/* Taverna das Sombras — atualização automática e modo offline.
+/* Taverna do MAU MAU — atualização automática e modo offline.
    Rede primeiro: cada nova navegação procura o HTML mais recente.
    O jogo aberto nunca é recarregado à força durante uma partida. */
 const CACHE = 'taverna-pwa-network-first-2';
