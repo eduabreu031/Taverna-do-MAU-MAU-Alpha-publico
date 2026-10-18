@@ -1,0 +1,6 @@
+TAVERNA DAS SOMBRAS — TESTE DE ATUALIZAÇÃO
+Data: 18/10/2026
+Resultado esperado: publicado pelo GitHub Actions.
+Motor do jogo: v73, INALTERADO.
+Cache PWA: taverna-v73-pwa-2.
+Nenhuma alteração visual ou nas regras.

@@ -1,5 +1,5 @@
 /* Taverna das Sombras PWA, camada de cache isolada da jogabilidade. */
-const CACHE = "taverna-v73-pwa-1";
+const CACHE = "taverna-v73-pwa-2";
 const ASSETS = [
   "./",
   "./index.html",
