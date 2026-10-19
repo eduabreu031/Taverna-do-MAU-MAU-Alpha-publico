@@ -12,7 +12,7 @@ const coreScript=scripts.find(s=>s.includes('Mau-Mau 2.0 — núcleo novo')&&s.i
 test('HTML, scripts e motor presentes',()=>{
  assert(fs.statSync(htmlPath).size>100000,'index.html ausente, vazio ou incompleto');
  assert(!/<title[^>]*>\s*(?:Mau-Mau 2\.0\s*[—-]\s*)?A Taverna das Sombras\s*<\/title>/i.test(html),'Título antigo encontrado no HTML');
- assert(html.includes('Taverna do MAU MAU'),'Nome oficial ausente do HTML');
+ assert(/<title[^>]*>\s*Taverna do Mau[- ]Mau\s*<\/title>/i.test(html),'Título oficial ausente do HTML');
  assert(/<html\b/i.test(html),'Falta estrutura HTML');
  assert(/<link\b[^>]*rel=["']manifest["'][^>]*href=["'][^"']*manifest\.webmanifest["']/i.test(html),'Falta link PWA no head');
  assert(/<script\b[^>]*id=["']pwa-registration["']/i.test(html),'Falta registro PWA');
