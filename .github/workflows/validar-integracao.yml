@@ -15,5 +15,15 @@ jobs:
         run: node --test qa/online-adapter.test.mjs qa/online-event-bridge.test.mjs
       - name: Garantir v84 original intacta
         run: node qa/garantir-v84-original.mjs
+      - name: Montar a interface DEV integrada
+        run: node integracao/montar-dev.mjs
+      - name: Validar scripts da interface integrada
+        run: |
+          node --check integracao/online-v84-controller.js
+          node --check integracao/online-v84-render-bridge.js
+      - uses: actions/upload-artifact@v4
+        with:
+          name: taverna-multiplayer-dev
+          path: preview/index.html
       - name: Validar código original da Taverna
         run: node qa/validar.js
