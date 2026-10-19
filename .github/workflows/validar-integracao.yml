@@ -36,6 +36,11 @@ jobs:
         run: node integracao/montar-v4-rematch.mjs
       - name: Testar fim de duelo, revanche e saída
         run: node qa/online-finished-rematch.test.mjs
+      - name: Montar v5 e testar anúncio para convidados
+        run: |
+          node integracao/montar-v5-vitoria.mjs
+          TAVERNA_RELEASE=../release-v5/index.html node qa/validar-release-v3.mjs
+          node qa/online-vitoria-convidado.test.mjs
       - name: Testar a v3 aprovada no navegador
         run: TAVERNA_HTML=../release/index.html node qa/online-ui-smoke.mjs
       - uses: actions/upload-artifact@v4
@@ -59,16 +64,16 @@ jobs:
           node-version: '22'
       - name: Montar e validar versão aprovada
         run: |
-          node integracao/montar-v4-rematch.mjs
-          TAVERNA_RELEASE=../release-v4/index.html node qa/validar-release-v3.mjs
+          node integracao/montar-v5-vitoria.mjs
+          TAVERNA_RELEASE=../release-v5/index.html node qa/validar-release-v3.mjs
       - name: Criar branch de publicação somente com index.html
         run: |
-          cp release-v4/index.html /tmp/taverna-v4-rematch.html
+          cp release-v5/index.html /tmp/taverna-v5-vitoria.html
           git fetch origin main
-          git checkout -B multiplayer-v4-rematch origin/main
-          cp /tmp/taverna-v4-rematch.html site/index.html
+          git checkout -B multiplayer-v5-vitoria origin/main
+          cp /tmp/taverna-v5-vitoria.html site/index.html
           git config user.name "Taverna Release"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add site/index.html
-          git commit -m "Corrigir fim do duelo e revanche do multiplayer"
-          git push --force origin HEAD:refs/heads/multiplayer-v4-rematch
+          git commit -m "Mostrar anúncio de vitória aos convidados por 4 segundos"
+          git push --force origin HEAD:refs/heads/multiplayer-v5-vitoria
