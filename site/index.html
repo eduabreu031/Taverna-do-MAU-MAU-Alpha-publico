@@ -1499,12 +1499,18 @@ body.score-showing #sceneGame #humanHand{visibility:hidden!important;}
     <p class="multiplayer-eyebrow">✦ &nbsp; MULTIPLAYER ONLINE &nbsp; ✦</p>
     <h1 id="multiplayerTitle">Salas da Taverna</h1>
     <p class="multiplayer-intro" id="multiplayerGreeting">Bem-vindo à ala dos aventureiros.</p>
-    <div class="multiplayer-state" role="status"><span class="multiplayer-state-dot"></span>Salas online em preparação</div>
-    <p class="multiplayer-copy">Aqui você poderá criar uma mesa privada ou entrar em uma mesa usando um código. A conexão entre jogadores ainda não está implementada nesta versão.</p>
-    <div class="multiplayer-preview" aria-label="Recursos planejados">
-      <div><span aria-hidden="true">♜</span><strong>Criar mesa</strong><small>Hospedar uma partida com amigos</small></div>
-      <div><span aria-hidden="true">✉</span><strong>Entrar com código</strong><small>Encontrar a mesa de outro aventureiro</small></div>
+    <div class="multiplayer-state" role="status"><span class="multiplayer-state-dot"></span><span id="onlineStatusText">Aguardando conexão</span></div>
+    <p class="multiplayer-copy" id="onlineNotice">Crie uma sala privada ou entre pelo código de um amigo.</p>
+    <div class="multiplayer-preview" aria-label="Controles de sala">
+      <div><button type="button" class="engraved-btn primary" id="onlineCreate">♜ Criar sala</button><small>Convide seus amigos pelo código</small></div>
+      <div><label for="onlineRoomCode">Código da sala</label><input id="onlineRoomCode" maxlength="6" placeholder="ABC123" autocomplete="off" spellcheck="false"><button type="button" class="engraved-btn" id="onlineJoin">Entrar na sala</button></div>
     </div>
+    <section id="onlineLobby" class="hidden" aria-label="Participantes na sala">
+      <p class="multiplayer-copy">Código: <strong id="onlineCode">—</strong></p>
+      <ol id="onlinePlayers" aria-live="polite"></ol>
+      <div class="modal-actions"><button type="button" class="engraved-btn primary" id="onlineStart" disabled>Iniciar partida</button><button type="button" class="engraved-btn" id="onlineCopy">Copiar convite</button><button type="button" class="engraved-btn" id="onlineLeave">Sair da sala</button></div>
+      <p id="onlineStartHint" class="multiplayer-copy">O anfitrião pode iniciar com dois ou mais participantes.</p>
+    </section>
     <button class="engraved-btn multiplayer-back" id="multiplayerBackBtn" type="button">← &nbsp; Voltar às boas-vindas</button>
   </main>
 </section>
@@ -1995,6 +2001,166 @@ function renderControls(){const s=ui.game.state,can=humanTurn(s),hasSel=ui.selec
  $('passBtn').disabled=!can||(!s.drewThisTurn&&(s.deck.length>0||s.discard.length>1))||s.pendingSeven>0;
  $('sevenBtn').disabled=!sevenForHuman;$('mauBtn').disabled=ui.introActive||s.phase!=='playing'||!s.players[0].alive||!!incident;$('opaBtn').disabled=ui.introActive||s.phase!=='playing'||!s.players[0].alive||s.incident?.actor===0;$('opaBtn').classList.toggle('danger',!!incident&&s.incident.actor!==0);$('drawPile').setAttribute('aria-disabled',String(!can||s.pendingSeven>0||s.drewThisTurn));$('drawPile').tabIndex=can?0:-1;$('scoreHint').textContent=s.pendingSeven?`⚔ 7: penalidade de ${s.pendingSeven} cartas`:(can&&s.drewThisTurn?'Você já comprou nesta vez; jogue ou passe.':aliveCount(s)===2&&s.players[0].duelBluffUsed?'Blefe do duelo já utilizado nesta rodada.':'');}
 function render(){if(!ui.game)return;const s=ui.game.state;$('seats').innerHTML=buildSeats(s);$('discardPile').innerHTML=(s.discard.length>1?`<div class="discard-previous" aria-label="Penúltima carta: ${escapeHtml(prettyCard(s.discard[s.discard.length-2]))}">${cardFace(s.discard[s.discard.length-2])}</div>`:'')+`<div class="discard-current" aria-label="Última carta: ${escapeHtml(prettyCard(getTop(s)))}">${cardFace(getTop(s))}</div>`;$('centerCrest').textContent=s.activeSuit; $('centerCrest').classList.toggle('red',s.activeSuit==='♥'||s.activeSuit==='♦');$('activeSuit').innerHTML=`<strong class="${['♥','♦'].includes(s.activeSuit)?'red-suit':''}" aria-label="Naipe da vez: ${s.activeSuit}">${s.activeSuit}</strong>`;$('directionFlag').innerHTML='<svg class="turn-arrow-art" viewBox="0 0 48 48" aria-hidden="true" focusable="false" style="transform:scaleX('+(s.direction===1?'-1':'1')+')"><path d="M19 12 L31 24 L19 36" fill="none" stroke="currentColor" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';$('directionFlag').setAttribute('aria-label',s.direction===1?'Sentido horário':'Sentido anti-horário');$('directionFlag').setAttribute('title',s.direction===1?'Sentido horário':'Sentido anti-horário');$('deckAmount').textContent=String(s.deck.length);renderHeader();renderHumanHand();renderControls();renderClock();renderMessage();if(ui.historyVisible)renderHistory();ui.visualLast=visualSnapshot(s);}
+// Exclusivamente para o modo online. A v84 offline mantém todos os seus caminhos originais.
+window.__tavOriginalOnline={
+ active:false,revision:null,clockTicker:0,finalShown:false,scoreShownRevision:null,comboSequence:{player:null,count:0,continues:false},
+ unlockAudio(){try{soundInit();}catch(e){console.warn('Áudio indisponível',e)}},
+ chooseSuit(cardId,onChoice){
+  if(!this.active)return;
+  const card=ui.game?.state.players[0]?.hand.find(c=>c.id===cardId);if(!card)return;
+  const choices=Core.SUITS.map(suit=>`<button class="suit-choice ${['♥','♦'].includes(suit)?'red':''}" data-online-suit="${suit}" aria-label="${SUIT_NAMES[suit]}"><b>${suit}</b></button>`).join('');
+  $('dialog').innerHTML=`<div class="parchment-modal" role="dialog" aria-modal="true" aria-label="Escolha um naipe"><div class="modal-kicker">Livro das escolhas</div><h2>Escolha o naipe</h2><div class="suit-list">${choices}</div></div>`;
+  $('overlay').classList.remove('hidden');
+  soundInit();sound('suitReveal');
+  $('dialog').querySelectorAll('[data-online-suit]').forEach(button=>button.addEventListener('click',()=>{
+   const suit=button.dataset.onlineSuit;$('overlay').classList.add('hidden');$('dialog').replaceChildren();onChoice(suit);
+  },{once:true}));
+ },
+ apply(g,members,selfId,meta={}){
+  if(!g||!Array.isArray(g.players)||!g.players.some(p=>p.id===selfId))throw Error('Jogador não encontrado na partida');
+  if(!Array.isArray(g.hand)||!g.top)throw Error('Servidor enviou estado incompleto');
+  if(this.active&&Number.isInteger(this.revision)&&g.revision<this.revision)return false;
+  const oldPositions=this.active?motionPositions():null;
+  const prev=this.active?ui.game?.state:null;
+  const prevRev=this.revision;
+  const back=(id,count)=>Array.from({length:Math.max(0,Number(count)||0)},(_,i)=>({id:'hidden-'+id+'-'+i,rank:'2',suit:'♠'}));
+  const ix=g.players.findIndex(p=>p.id===selfId);
+  const ordered=g.players.slice(ix).concat(g.players.slice(0,ix));
+  const players=ordered.map(p=>({name:members.find(x=>x.id===p.id)?.name||'Jogador',alive:p.alive!==false,
+   hand:p.id===selfId?g.hand.map(c=>({...c})):back(p.id,p.count),saidMau:!!g.mauAnnouncements?.[p.id],penaltyDebt:0,duelBluffUsed:false}));
+  const turn=ordered.findIndex(p=>p.id===g.turnPlayerId),top={...g.top};
+  const opaPending=!!(meta.opa&&!meta.opa.accusedBy&&Number(meta.opa.expiresAt)>(Number(meta.serverNow)||Date.now()));
+  const incident=opaPending?{open:true,actor:ordered.findIndex(p=>p.id===meta.opa.playerId)}:null;
+  const discard=prev?.discard?.length&&prev.discard.at(-1).id!==top.id?[prev.discard.at(-1),top]:prev?.discard?.length?[...prev.discard]:[top];
+  const scoring=g.scoring?{winner:ordered.findIndex(p=>p.id===g.scoring.winnerId),eliminated:(g.scoring.eliminated||[]).map(id=>ordered.findIndex(p=>p.id===id)),scores:(g.scoring.scores||[]).map(x=>({player:ordered.findIndex(p=>p.id===x.id),score:x.points}))}:null;
+  const next={phase:g.phase==='finished'?'game_over':g.phase,round:g.round||1,players,turn:Math.max(0,turn),direction:g.direction,
+   deck:back('deck',g.deckCount||0),discard,activeSuit:g.activeSuit,scoring,winner:ordered.findIndex(p=>p.id===g.winner),
+   turnNo:g.revision,drewThisTurn:!!g.drawn,pendingSeven:g.pendingSeven||0,incident,history:[]};
+  this.active=true;this.revision=g.revision;this.selfId=selfId;
+  clearTimeout(ui.introTimer);ui.introTimer=null;ui.introActive=false;
+  pauseSchedulers();ui.clockCarry=null;ui.game={state:next};
+  // Render never serves as game authority. Network events alone authorize actions.
+  if(this.clockTicker)clearInterval(this.clockTicker);
+  const offset=Date.now()-(Number(meta.serverNow)||Date.now());
+  const deadline=Number(meta.deadline)||0;
+  const remaining=deadline?Math.max(0,deadline-(Date.now()-offset)):0;
+  if(next.phase==='playing'&&deadline){ui.timerLength=15000;ui.timerEnd=performance.now()+remaining;ui.botActionDeadline=performance.now()+remaining;}
+  else{ui.timerEnd=0;ui.botActionDeadline=0;}
+  this.clockTicker=setInterval(()=>{if(!this.active){clearInterval(this.clockTicker);return;}renderClock();},260);
+  currentName=players[0].name;
+  $('overlay').classList.add('hidden');$('sceneMenu').classList.add('hidden');$('sceneWelcome').classList.add('hidden');$('sceneMultiplayer').classList.add('hidden');$('sceneGame').classList.remove('hidden');
+  if(prevRev!==g.revision)ui.selected=[];
+  render();
+  if(!prev){window.dispatchEvent(new Event('taverna:match-visible'));animateDealFromState(next);}
+  else if(prevRev!==g.revision){
+   const geo=motionPositions(),oldTop=prev.discard.at(-1);
+   if(prev.round!==next.round){cancelMotion();const showingElimination=prev.phase==='scoring';if(showingElimination){const forRev=g.revision;setTimeout(()=>{if(this.active&&this.revision===forRev)animateDealFromState(ui.game.state);},2500);}else animateDealFromState(next);}
+   else{
+    const oldIds=new Set(prev.players[0].hand.map(c=>c.id)),newIds=new Set(next.players[0].hand.map(c=>c.id));
+    // The animated card uses the immutable identity from the PREVIOUS hand.
+    for(const c of prev.players[0].hand)if(!newIds.has(c.id))flight({from:oldPositions?.cards?.[c.id]||oldPositions?.players?.[0]||geo.players[0],to:geo.discard,card:c,duration:MOTION.play,impact:'play'});
+    for(const c of next.players[0].hand)if(!oldIds.has(c.id))flight({from:oldPositions?.draw||geo.draw,to:geo.players[0],card:null,duration:MOTION.draw,impact:'draw'});
+    // Opponents are rendered ONLY as card backs; identities never leak.
+    for(let p=1;p<next.players.length;p++){
+     const old=prev.players[p]?.hand.length||0,now=next.players[p].hand.length;
+     if(now>old)for(let j=0;j<Math.min(now-old,8);j++)flight({from:oldPositions?.draw||geo.draw,to:geo.players[p],card:null,duration:MOTION.draw,delay:j*90,impact:j===0?'draw':'soft'});
+    }
+    if(oldTop?.id!==top.id&&!prev.players[0].hand.some(c=>c.id===top.id)){
+     const actor=Math.max(0,prev.turn);
+     flight({from:oldPositions?.players?.[actor]||geo.players[actor]||geo.draw,to:geo.discard,card:top,reveal:actor!==0,duration:MOTION.play,impact:'play'});
+    }
+   }
+  }
+  ui.lastMsg=next.phase==='playing'?(turn===0?'Sua vez de jogar!':'Aguarde a vez de '+players[turn]?.name):next.phase==='scoring'?'Apuração da rodada…':'Fim da partida';
+  ui.lastMsgError=false;renderMessage();
+  if(next.phase!=='scoring')document.querySelector('.online-score-presentation')?.remove();
+  if(next.phase==='scoring'&&this.scoreShownRevision!==g.revision){
+   this.scoreShownRevision=g.revision;this.scoreOnline(g,ordered);
+  }
+  if(next.phase==='game_over'&&!this.finalShown){
+   this.finalShown=true;const champ=players[next.winner]?.name||'Campeão';
+   effect('winner','TEMOS UM CAMPEÃO',champ);sound('win');arautoSpeak(next.winner===0?24:25);
+  }
+  return true;
+ },
+ scoreOnline(g,ordered){
+  if(!g.scoring)return;
+  const info=g.scoring;
+  // The public server intentionally sends score totals, not opponents' card faces.
+  // Do not fabricate hidden cards. Use the v84 parchment and score UI.
+  const stage=document.createElement('div');stage.className='online-score-presentation';
+  stage.setAttribute('role','status');stage.innerHTML=`<div class="parchment-modal"><div class="modal-kicker">Apuração da Taverna</div><h2>Fim da rodada ${g.round}</h2><div class="wood-scoreboard">${info.scores.map(row=>`<div class="score-row ${info.winnerId===row.id?'winner':''} ${info.eliminated.includes(row.id)?'dead':''}"><span>${escapeHtml(ordered.find(p=>p.id===row.id)?ui.game.state.players[ordered.findIndex(p=>p.id===row.id)].name:'Jogador')}</span><strong>${Number(row.points)||0} pontos</strong></div>`).join('')}</div><div class="detail">Preparando a próxima rodada…</div></div>`;
+  $('fxLayer').append(stage);setTimeout(()=>stage.remove(),Math.max(3000,Math.min(7500,Number(g.scoringDeadline)||6000)));
+  sound('win');arautoSpeak(14);
+ },
+ reset(){this.resetComboSequence();this.active=false;this.revision=null;this.finalShown=false;this.scoreShownRevision=null;if(this.clockTicker)clearInterval(this.clockTicker);this.clockTicker=null;pauseSchedulers();cancelMotion();arautoStop();document.querySelector('.online-score-presentation')?.remove();$('overlay').classList.add('hidden');$('dialog').replaceChildren();ui.game=null;ui.selected=[];$('sceneGame').classList.add('hidden');$('sceneMultiplayer').classList.remove('hidden');},
+ resetComboSequence(){this.comboSequence={player:null,count:0,continues:false};},
+ announceOnlineCombo(count){
+  if(!Number.isInteger(count)||count<2)return;
+  const old=document.querySelector('#sequentialComboFx');if(old)old.remove();
+  const el=document.createElement('div');el.id='sequentialComboFx';el.className='sequential-combo-fx';
+  el.textContent='COMBO ×'+count;
+  el.style.setProperty('--combo-scale',String(Math.min(1.62,1+(count-2)*.042)));
+  el.setAttribute('aria-label','Combo de '+count+' cartas consecutivas');
+  $('fxLayer').appendChild(el);setTimeout(()=>el.remove(),1350);
+  comboImpact(count);arautoSpeak(7);
+ },
+ updateOnlineCombo(e,playerIds){
+  const s=ui.game?.state;
+  if(!s||s.players.filter(p=>p.alive).length!==2){this.resetComboSequence();return;}
+  const prev=this.comboSequence;
+  const actor=playerIds.indexOf(e.playerId);
+  if(actor<0)return;
+  const rank=e.type==='play'?String(e.card||'').replace(/[♠♥♦♣]$/,''):null;
+  const count=e.type==='combo'?Math.max(1,Array.isArray(e.cards)?e.cards.length:Number(e.count)||1):prev.player===e.playerId&&prev.continues?prev.count+1:1;
+  const keepsTurn=s.phase==='playing'&&s.turn===actor;
+  const waitsForSeven=e.type==='play'&&rank==='7'&&s.pendingSeven>0&&s.turn!==actor;
+  this.comboSequence={player:e.playerId,count,continues:keepsTurn||waitsForSeven};
+  if(count>=2)this.announceOnlineCombo(count);
+ },
+ showOnlineEvent(e,members,playerIds){
+  if(!e||!this.active)return;
+  const actor=playerIds.indexOf(e.playerId),actorName=members.find(p=>p.id===e.playerId)?.name||'Jogador';
+  const s=ui.game?.state;if(!s)return;
+  switch(e.type){
+   case 'start':this.resetComboSequence();effect('normal','COMEÇA O JOGO!');v64OpeningSound();arautoSpeak(1);break;
+   case 'mau':effect('normal','MAU MAU!',actorName,actor>=0?actor:null);sound('mau');arautoSpeak(2);break;
+   case 'play':{
+    this.updateOnlineCombo(e,playerIds);
+    const value=String(e.card||'');const rank=value.startsWith('10')?'10':value.slice(0,-1);
+    if(rank==='Q'){effect('normal','O mundo GIRA!',s.direction===1?'↻ Sentido horário':'↺ Sentido anti-horário');sound('reverse');arautoSpeak(4);}
+    if(rank==='A'){
+     let n=actor;if(n>=0){do{n=(n+(s.direction===1?1:-1)+s.players.length)%s.players.length;}while(!s.players[n]?.alive&&n!==actor);skipStamp(n);}
+     sound('skip');arautoSpeak(3);
+    }
+    if(rank==='9'){tauntAt(Math.max(0,actor));arautoSpeak(5);}
+    if(rank==='7'){effect('alert','A COBRANÇA DO SETE');sevenFanfare();arautoSpeak(6);}
+    if(rank==='J'){
+     const suit=e.suit||s.activeSuit;
+     effect('normal',(SUIT_NAMES[suit]||'Naipe').toUpperCase()+'!','',null,suit);sound('jack');
+     arautoSpeak(({'♠':9,'♥':10,'♦':11,'♣':12})[suit]);
+    }
+    break;
+   }
+   case 'combo':this.updateOnlineCombo(e,playerIds);break;
+   case 'take_seven':
+    if(this.comboSequence.player!==e.playerId&&s.turn===playerIds.indexOf(this.comboSequence.player)&&s.phase==='playing')this.comboSequence.continues=true;
+    effect('alert','A COBRANÇA DO SETE',actorName+' aceitou a cobrança');sound('penalty');break;
+   case 'accuse':if(e.correct){this.resetComboSequence();effect('alert','OPA!!!',actorName+' acusou corretamente');sound('accuse');arautoSpeak(8);}else{toast('OPA!!! sem infração comprovada');sound('false');}break;
+   case 'false_accusation':toast(actorName+' acusou sem infração.');sound('false');break;
+   case 'draw':if(this.comboSequence.player===e.playerId)this.resetComboSequence();break;
+   case 'pass':this.resetComboSequence();break;
+   case 'timeout':this.resetComboSequence();effect('alert','TEMPO ESGOTADO!',actorName,actor>=0?actor:null);sound('penalty');break;
+   case 'round_won':this.resetComboSequence();effect('normal','FIM DA RODADA!',actorName);break;
+   case 'round_start':this.resetComboSequence();effect('normal','NOVA RODADA!','As cartas foram distribuídas');arautoSpeak(17);break;
+   case 'elimination':{this.resetComboSequence();
+    const names=(e.eliminated||[]).map(id=>members.find(m=>m.id===id)?.name||'Jogador').join(' · ');
+    effect('alert','ELIMINADO!',names);sound('eliminate');arautoSpeak((e.eliminated||[]).includes(this.selfId)?23:13);break;
+   }
+  }
+ }
+};
+
 function formatHistory(e,s){const who=i=>s.players[i]?.name||'Jogador';switch(e.type){case'match_start':return `A mesa abriu com ${e.playerCount} jogadores.`;case'round_start':return `Rodada ${e.round} começou. ${who(e.starter)} inicia.`;case'play':return `${who(e.player)} jogou ${e.rank}${e.suit}${e.valid?'':' (jogada irregular)'}.`;case'combo':return `${who(e.player)} fez um combo de ${e.count} cartas!`;case'draw':return `${who(e.player)} comprou ${e.cardIds.length} carta(s).`;case'pass':return `${who(e.player)} passou a vez.`;case'reverse':return `${who(e.player)} inverteu o sentido da mesa.`;case'skip':return `${who(e.skipped)} foi pulado pelo Ás.`;case'seven':return `O 7 exigiu ${e.count} cartas.`;case'seven_accepted':return `${who(e.player)} aceitou ${e.count} cartas.`;case'seven_cancelled':return `O Valete cancelou o 7.`;case'nine':return `${who(e.player)} jogou 9: ${who(e.recipient)} comprou uma carta.`;case'nine_duel_skip':return `Na final, o 9 devolve a vez ao lançador.`;case'mau_announcement':return `${who(e.player)} anunciou MAU MAU!${e.legitimate?'':' (irregular)'}`;case'accusation_window':return `Janela OPA!!! aberta por ${e.kind==='invalid'?'jogada inválida':'MAU MAU'}.`;case'accusation_correct':return `${who(e.accuser)} acusou corretamente ${who(e.offender)} (+2).`;case'accusation_expired':return `Prazo de acusação encerrado.`;case'false_accusation':return `${who(e.player)} acusou sem infração.`;case'round_won':return `${who(e.winner)} venceu a rodada.`;case'elimination':return `${e.players.map(who).join(', ')} eliminado(s).`;case'champion':return `${who(e.player)} venceu a mesa!`;case'recycle':return 'O monte foi recomposto do descarte.';default:return'';}}
 function renderHistory(){if(!ui.game)return;const s=ui.game.state;$('historyList').innerHTML=s.history.slice(-100).reverse().map(e=>{const t=formatHistory(e,s);return t?`<li>${escapeHtml(t)}</li>`:''}).join('');}
 let mauEffectUntil=0;
@@ -3182,6 +3348,195 @@ window.MauMau2Debug={getState:()=>ui.game?.state,engine:()=>ui.game,start:(n=5)=
   input.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();enterOffline();}});
   // A rota antiga de saída já mostra a tela inicial; não alterar o motor do jogo.
 })();
+</script>
+<style id="online-v84-style">
+#sceneMultiplayer #onlineRoomCode{width:min(130px,90%);padding:9px;border:2px solid #a67b4d;border-radius:6px;background:#ecd4a3;color:#352118;font-weight:bold;text-transform:uppercase}
+#sceneMultiplayer #onlineLobby{margin:14px auto;padding:14px;max-width:540px;border:1px solid #aa8150;background:#2d1b19;border-radius:10px}
+#sceneMultiplayer #onlinePlayers{text-align:left;color:#e4cca8;padding:9px 22px;line-height:1.8}
+#sceneMultiplayer #onlineLobby .modal-actions{gap:8px}
+#sceneMultiplayer #onlineLobby .engraved-btn{min-width:0}
+#sceneMultiplayer .multiplayer-preview button{max-width:100%}
+</style>
+<style id="multiplayer-final-effects">
+.online-score-presentation{position:fixed;z-index:160;inset:0;display:grid;place-items:center;padding:14px;pointer-events:none;background:#0c0909c4;animation:onlineScoreIn .4s ease both}
+.online-score-presentation .parchment-modal{width:min(630px,95vw);max-height:86vh;overflow:auto;box-shadow:0 18px 55px #000b;pointer-events:none}
+@keyframes onlineScoreIn{from{opacity:0;transform:translateY(-16px)}to{opacity:1;transform:translateY(0)}}
+#sceneGame.online-live #humanHand .playing-card{touch-action:none}
+.online-drag-ghost{position:fixed;z-index:250;pointer-events:none;opacity:.94;filter:drop-shadow(0 9px 13px #000c);transform:translate(-50%,-50%) rotate(-7deg);width:72px;height:108px;will-change:left,top}
+.online-drag-ghost .big-card{width:100%;height:100%}
+#sceneGame.online-live #discardPile.online-drop-target{filter:drop-shadow(0 0 17px #ffe09c)}
+@media(max-width:580px){.online-score-presentation .parchment-modal{padding:15px}}
+</style>
+<script id="online-v84-controller">
+(()=>{
+'use strict';
+const API='https://taverna-multiplayer-servidor.edulopes941.workers.dev';
+const el=id=>document.getElementById(id);
+const st=el('onlineStatusText'),notice=el('onlineNotice'),lobby=el('onlineLobby');
+let ws=null,room='',uid='',token='',game=null,players=[],hostId='',opa=null,online=false,closing=false,reconnectTimer=0,retries=0,revision=-1;
+let lastEventIds=new Set(),firstGameState=true;
+const name=()=>String(el('playerName')?.value||'Viajante').trim().slice(0,22)||'Viajante';
+const key=c=>'taverna-session-'+c;
+const store={get(k){try{return sessionStorage.getItem(k)}catch{return null}},set(k,v){try{sessionStorage.setItem(k,v)}catch{}},del(k){try{sessionStorage.removeItem(k)}catch{}}};
+const setStatus=s=>st.textContent=s;
+const message=s=>{notice.textContent=s;const strip=el('message');if(online&&strip){strip.textContent=s;strip.classList.add('error')}};
+function send(data){if(ws?.readyState!==WebSocket.OPEN){message('Conexão indisponível. Aguarde reconexão.');return false}ws.send(JSON.stringify(data));return true;}
+function close(leave=false){closing=true;clearTimeout(reconnectTimer);if(leave&&ws?.readyState===1)send({type:'leave'});if(ws){ws.onclose=null;ws.close();ws=null;}if(leave&&room)store.del(key(room));if(online){online=false;window.__tavOriginalOnline?.reset();}el('sceneGame')?.classList.remove('online-live');firstGameState=true;room='';uid='';game=null;revision=-1;lastEventIds.clear();lobby.classList.add('hidden');setStatus('Aguardando conexão');}
+function connect(code,existingToken=''){
+ if(ws){ws.onclose=null;ws.close();ws=null;}
+ clearTimeout(reconnectTimer);closing=false;room=code;token=existingToken;setStatus('Conectando à sala '+code+'…');
+ const url=new URL(API.replace(/^http/,'ws')+'/api/room/'+code+'/ws');url.searchParams.set('name',name());if(token)url.searchParams.set('token',token);
+ let socket;try{socket=new WebSocket(url)}catch(e){message('Não foi possível criar a conexão: '+e.message);return;}ws=socket;
+ socket.onopen=()=>{retries=0;setStatus('Conectado à sala '+code)};
+ socket.onmessage=event=>{
+  let m;try{m=JSON.parse(event.data)}catch{return;}
+  if(m.type==='welcome'){uid=m.id;token=m.token;store.set(key(code),token);lobby.classList.remove('hidden');el('onlineCode').textContent=code;}
+  if(m.type==='error'){message('Servidor: '+(m.message||'Ação rejeitada'));return;}
+  if(m.type!=='state')return;
+  players=m.players||[];hostId=m.hostId;opa=m.opa;
+  el('onlinePlayers').replaceChildren(...players.map(p=>{const li=document.createElement('li');li.textContent=p.name+(p.id===hostId?' (anfitrião)':'')+(p.id===uid?' · você':'')+(p.online?' · conectado':' · desconectado');return li;}));
+  const canStart=uid===hostId&&players.length>=2&&players.every(p=>p.online)&&!m.game;
+  el('onlineStart').disabled=!canStart;el('onlineStart').classList.toggle('hidden',!!m.game);
+  el('onlineStartHint').textContent=m.game?'Partida iniciada.':canStart?'A sala está pronta para começar.':uid===hostId?'Aguarde pelo menos dois participantes conectados.':'Aguarde o anfitrião iniciar.';
+  if(m.game){
+   if(game&&m.game.revision<revision)return;
+   const appeared=!game, eventIds=m.events||[];
+   const fresh=firstGameState?(eventIds.filter(e=>e.type==='start').slice(-1)):(eventIds.filter(e=>e?.id&&!lastEventIds.has(e.id)));
+   for(const e of eventIds)if(e?.id)lastEventIds.add(e.id);firstGameState=false;
+   if(lastEventIds.size>200)lastEventIds=new Set([...lastEventIds].slice(-160));
+   if(game&&m.game.revision!==revision)comboReset();game=m.game;revision=game.revision;
+   try{online=true;el('sceneGame').classList.add('online-live');window.__tavOriginalOnline.apply(game,players,uid,{opa,deadline:m.turnDeadline,serverNow:m.serverNow});}catch(e){online=false;console.error(e);message('Falha ao abrir a mesa: '+e.message);return;}
+   const roundTransition=fresh.some(e=>e.type==='elimination')&&fresh.some(e=>e.type==='round_start');
+   const ids=game.players.map(x=>x.id),ix=ids.indexOf(uid),relativeIds=ids.slice(ix).concat(ids.slice(0,ix));
+   for(const ev of fresh){const playFx=()=>{try{window.__tavOriginalOnline.showOnlineEvent(ev,players,relativeIds);}catch(err){console.warn('Efeito online',err);}};
+    if(roundTransition&&ev.type==='round_start')setTimeout(()=>{if(online&&window.__tavOriginalOnline.active)playFx();},2500);
+    else playFx();}
+   comboUpdate();if(m.opa){el('opaBtn').disabled=m.opa.playerId===uid;}
+   else el('opaBtn').disabled=false;
+   if(m.turnDeadline&&game.turnPlayerId===uid){const secs=Math.max(0,Math.ceil((m.turnDeadline-m.serverNow)/1000));el('clockText').textContent=secs+'s';}
+   if(game.phase==='finished'||game.phase==='game_over'){setStatus('Partida encerrada');}
+  }else if(online){online=false;el('sceneGame').classList.remove('online-live');window.__tavOriginalOnline.reset();}
+  if(!online)setStatus(players.filter(p=>p.online).length+' participante(s) conectado(s)');
+ };
+ socket.onerror=()=>{setStatus('Sem conexão ao servidor');if(!online)message('Não foi possível conectar à sala.');};
+ socket.onclose=e=>{
+  if(closing||ws!==socket)return;
+  setStatus('Conexão interrompida');
+  if(e.code===4000||e.code===1008||retries>=5){message('Sessão encerrada. Volte ao menu e tente novamente.');return;}
+  const pause=Math.min(12000,1200*2**retries++);reconnectTimer=setTimeout(()=>connect(code,store.get(key(code))||token),pause);
+ };
+}
+const action=(action,cardId=null,suit=null)=>{if(!game||game.phase!=='playing')return;const payload={type:'action',action,revision:game.revision};if(cardId)payload.cardId=cardId;if(suit)payload.suit=suit;send(payload);};
+const comboBtn=document.createElement('button');
+comboBtn.type='button';comboBtn.id='onlineComboBtn';comboBtn.className='engraved-btn slim hidden';
+comboBtn.textContent='COMBO';
+el('mauBtn').after(comboBtn);
+let comboMode=false,comboIds=[];
+function comboReset(){comboMode=false;comboIds=[];comboBtn.textContent='COMBO';document.querySelectorAll('#humanHand [data-card]').forEach(b=>b.classList.remove('selected'));}
+function comboUpdate(){
+ const alive=game?.players?.filter(x=>x.alive!==false)?.length||0;
+ const show=online&&game?.phase==='playing'&&alive===2&&game.turnPlayerId===uid;
+ comboBtn.classList.toggle('hidden',!show);
+ if(!show){comboReset();return;}
+ comboBtn.textContent=comboMode?'JOGAR COMBO ('+comboIds.length+')':'COMBO';
+ for(const b of document.querySelectorAll('#humanHand [data-card]'))b.classList.toggle('selected',comboIds.includes(b.dataset.card));
+}
+comboBtn.onclick=()=>{
+ if(!online||!game||game.turnPlayerId!==uid)return;
+ if(!comboMode){suppressClickUntil=0;comboMode=true;comboIds=[];message('Selecione duas ou mais cartas de efeito para o supercombo.');comboUpdate();return;}
+ if(comboIds.length<2){message('Selecione pelo menos duas cartas para confirmar o supercombo.');return;}
+ send({type:'action',action:'combo',revision:game.revision,cardId:[...comboIds]});comboReset();comboUpdate();
+};
+function comboSelect(id){if(!comboMode)return false;
+ if(!game?.hand?.some(c=>c.id===id))return true;
+ comboIds=comboIds.includes(id)?comboIds.filter(v=>v!==id):[...comboIds,id];comboUpdate();return true;
+}
+el('onlineCreate').onclick=async()=>{const btn=el('onlineCreate');btn.disabled=true;try{setStatus('Criando sala…');const res=await fetch(API+'/api/room',{method:'POST'});if(!res.ok)throw Error('Servidor respondeu '+res.status);const m=await res.json();connect(m.code);}catch(e){message('Falha ao criar sala: '+e.message);}finally{btn.disabled=false;}};
+el('onlineJoin').onclick=()=>{const code=el('onlineRoomCode').value.toUpperCase().trim();if(!/^[A-HJ-NP-Z2-9]{6}$/.test(code)){message('Código inválido: são seis caracteres.');return;}connect(code,store.get(key(code))||'');};
+el('onlineStart').onclick=()=>{window.__tavOriginalOnline?.unlockAudio();send({type:'start'});};
+el('onlineLeave').onclick=()=>close(true);
+el('onlineCopy').onclick=async()=>{const url=new URL(location.href);url.searchParams.set('sala',room);try{await navigator.clipboard.writeText(url.href);setStatus('Convite copiado');}catch{prompt('Copie o convite',url.href)}};
+el('multiplayerBackBtn').addEventListener('click',()=>close(true));
+// Window capture is ordered BEFORE the original document-level gesture handler.
+// This is strictly disabled outside an active online match.
+let drag=null,suppressClickUntil=0;
+function playCard(cardId){
+ if(!game||game.turnPlayerId!==uid){message('Aguarde sua vez.');return;}
+ const card=game.hand.find(c=>c.id===cardId);if(!card)return;
+ window.__tavOriginalOnline.unlockAudio();
+ if(card.rank==='J'&&game.hand.length>1){window.__tavOriginalOnline.chooseSuit(card.id,suit=>action('play',card.id,suit));return;}
+ action('play',card.id);
+}
+function onlineTarget(e){return e.target?.closest?.('[data-card],#drawPile,#passBtn,#sevenBtn,#mauBtn,#opaBtn,#discardPile,#humanHand,#returnMenu')||null;}
+function intercept(e){
+ if(!online)return;
+ const hit=onlineTarget(e);if(!hit)return;
+ if(e.type==='click'&&performance.now()<suppressClickUntil&&(hit.matches?.('[data-card],#humanHand,#drawPile'))){e.stopImmediatePropagation();e.preventDefault();return;}
+ if(e.type!=='click'&&e.type!=='dblclick'&&e.type!=='keydown')return;
+ e.stopImmediatePropagation();e.preventDefault();
+ if(e.type!=='click')return;
+ const card=e.target.closest?.('[data-card]');
+ if(hit.id==='returnMenu'){close(false);el('sceneWelcome').classList.remove('hidden');el('sceneMultiplayer').classList.add('hidden');return;}
+ if(card){if(!comboSelect(card.dataset.card))playCard(card.dataset.card);}
+ else if(hit.id==='drawPile')action('draw');
+ else if(hit.id==='passBtn')action('pass');
+ else if(hit.id==='sevenBtn')action('take_seven');
+ else if(hit.id==='mauBtn')action('mau');
+ else if(hit.id==='opaBtn'){if(!opa){message('Nenhum evento OPA!!! disponível.');return;}send({type:'accuse',eventId:opa.id});}
+}
+for(const t of ['click','dblclick','keydown'])window.addEventListener(t,intercept,true);
+function removeGhost(){
+ if(!drag)return;drag.card?.classList.remove('online-being-dragged');drag.ghost?.remove();el('discardPile')?.classList.remove('online-drop-target');drag=null;
+}
+function beginDrag(e){
+ if(!online)return;
+ const card=e.target?.closest?.('#humanHand [data-card]');
+ const pile=e.target?.closest?.('#drawPile');
+ if(!card&&!pile)return;
+ // Prevent local offline gesture recognizer from getting an active touch/drag.
+ e.stopImmediatePropagation();
+ if(e.button!==undefined&&e.button!==0)return;
+ drag={kind:card?'play':'draw',id:card?.dataset.card||null,card:card||pile,x:e.clientX,y:e.clientY,active:false,ghost:null};
+}
+function moveDrag(e){
+ if(!online||!drag)return;
+ e.stopImmediatePropagation();
+ const distance=Math.hypot(e.clientX-drag.x,e.clientY-drag.y);
+ if(!drag.active&&distance>12){
+  drag.active=true;drag.ghost=document.createElement('div');drag.ghost.className='online-drag-ghost';drag.ghost.innerHTML=drag.card.querySelector('.big-card')?.outerHTML||'<div class="big-card card-back"><div class="coat">⚜</div></div>'; 
+  document.body.append(drag.ghost);drag.card.classList.add('online-being-dragged');
+ }
+ if(!drag.active)return;
+ e.preventDefault();drag.ghost.style.left=e.clientX+'px';drag.ghost.style.top=e.clientY+'px';
+ const destination=drag.kind==='draw'?el('humanHand'):el('discardPile');
+ const r=destination.getBoundingClientRect();
+ const drop=e.clientX>=r.left-35&&e.clientX<=r.right+35&&e.clientY>=r.top-35&&e.clientY<=r.bottom+35;
+ el('discardPile').classList.toggle('online-drop-target',drop&&drag.kind==='play');
+}
+function finishDrag(e){
+ if(!online||!drag)return;
+ e.stopImmediatePropagation();
+ const d=drag,active=d.active;
+ const r=(d.kind==='draw'?el('humanHand'):el('discardPile')).getBoundingClientRect();
+ const over=e.clientX>=r.left-35&&e.clientX<=r.right+35&&e.clientY>=r.top-35&&e.clientY<=r.bottom+35;
+ removeGhost();
+ if(active){suppressClickUntil=performance.now()+260;e.preventDefault();if(over){if(d.kind==='draw')action('draw');else if(!comboSelect(d.id))playCard(d.id);}}
+}
+window.addEventListener('pointerdown',beginDrag,true);
+window.addEventListener('pointermove',moveDrag,{capture:true,passive:false});
+window.addEventListener('pointerup',finishDrag,true);
+window.addEventListener('pointercancel',e=>{if(online&&drag){e.stopImmediatePropagation();removeGhost();}},true);
+window.addEventListener('blur',removeGhost);
+// The original HTML5 drag handler is never allowed to call the offline game.
+for(const t of ['dragstart','dragover','drop','dragend'])window.addEventListener(t,e=>{
+ if(!online)return;
+ const hit=onlineTarget(e);if(!hit)return;
+ e.stopImmediatePropagation();e.preventDefault();
+},true);
+const code=new URLSearchParams(location.search).get('sala');if(code&&/^[A-HJ-NP-Z2-9]{6}$/.test(code.toUpperCase()))el('onlineRoomCode').value=code.toUpperCase();
+window.__tavOnlineTest={isOnline:()=>online,injectWelcome:(id='a',t='abc')=>{uid=id;token=t;},injectState:m=>ws?.onmessage?.({data:JSON.stringify(m)}),getState:()=>game};
+})();
+
 </script>
 <script id="pwa-registration">
 /* Instalação PWA somente em hospedagem segura. O HTML local continua autônomo. */
