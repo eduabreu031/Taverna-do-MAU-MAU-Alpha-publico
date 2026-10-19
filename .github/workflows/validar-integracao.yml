@@ -1,0 +1,17 @@
+name: Validar integração multiplayer sem regressão offline
+on:
+  push:
+    branches: [integracao-multiplayer-original]
+  workflow_dispatch:
+jobs:
+  integridade:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Testar protocolo online
+        run: node --test qa/online-adapter.test.mjs qa/online-event-bridge.test.mjs
+      - name: Validar código original da Taverna
+        run: node qa/validar.js
