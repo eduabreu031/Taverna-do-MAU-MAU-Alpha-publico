@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import {createServer} from 'node:http';
 import {readFileSync} from 'node:fs';
 import {chromium} from 'playwright';
-const html=readFileSync(new URL('../preview/index.html',import.meta.url));
+const html=readFileSync(new URL(process.env.TAVERNA_HTML || '../preview/index.html',import.meta.url));
 const server=createServer((req,res)=>{res.writeHead(200,{'content-type':'text/html; charset=utf-8'});res.end(html);});
 await new Promise(ok=>server.listen(0,'127.0.0.1',ok));
 const port=server.address().port;
