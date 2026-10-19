@@ -60,7 +60,7 @@ jobs:
       - name: Montar e validar versão aprovada
         run: |
           node integracao/montar-v4-rematch.mjs
-          node qa/validar-release-v3.mjs
+          TAVERNA_RELEASE=../release-v4/index.html node qa/validar-release-v3.mjs
       - name: Criar branch de publicação somente com index.html
         run: |
           cp release-v4/index.html /tmp/taverna-v4-rematch.html
