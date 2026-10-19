@@ -32,6 +32,12 @@ for(const width of [1280,390]){
  await page.locator('#onlineRoomCode').fill('ABC234');
  await page.locator('#onlineJoin').click();
  await page.evaluate(()=>window.__sock.onmessage({data:JSON.stringify({type:'welcome',id:'a',token:'tok'})}));
+ const lobbyState={type:'state',hostId:'a',players:[{id:'a',name:'Ana',online:true},{id:'b',name:'Beto',online:true}],game:null};
+ await page.evaluate(g=>window.__sock.onmessage({data:JSON.stringify(g)}),lobbyState);
+ assert.equal(await page.locator('#onlineStart').isEnabled(),true,'Anfitrião deve poder iniciar');
+ await page.locator('#onlineStart').click();
+ assert.equal((await page.evaluate(()=>window.__sent))[0].type,'start','Botão deve enviar início ao servidor');
+ await page.evaluate(()=>window.__sent.length=0);
  await page.evaluate(g=>window.__sock.onmessage({data:JSON.stringify(g)}),game());
  assert.equal(await page.locator('#sceneGame').isVisible(),true,'Mesa original deve abrir');
  assert.equal(await page.locator('#humanHand [data-card]').count(),2,'Cartas verdadeiras da mão');
