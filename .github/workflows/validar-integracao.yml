@@ -32,6 +32,10 @@ jobs:
         run: node integracao/montar-v3-aprovada.mjs
       - name: Verificar sintaxe da release v3
         run: node qa/validar-release-v3.mjs
+      - name: Montar versão v4 com encerramento e revanche
+        run: node integracao/montar-v4-rematch.mjs
+      - name: Testar fim de duelo, revanche e saída
+        run: node qa/online-finished-rematch.test.mjs
       - name: Testar a v3 aprovada no navegador
         run: TAVERNA_HTML=../release/index.html node qa/online-ui-smoke.mjs
       - uses: actions/upload-artifact@v4
