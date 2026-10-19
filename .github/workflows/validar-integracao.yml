@@ -1,4 +1,6 @@
 name: Validar integração multiplayer sem regressão offline
+permissions:
+  contents: write
 on:
   push:
     branches: [integracao-multiplayer-original]
@@ -42,3 +44,27 @@ jobs:
           path: preview/index.html
       - name: Validar código original da Taverna
         run: node qa/validar.js
+  candidata-publicacao:
+    name: Preparar atualização do app público
+    needs: integridade
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Montar e validar versão aprovada
+        run: |
+          node integracao/montar-v3-aprovada.mjs
+          node qa/validar-release-v3.mjs
+      - name: Criar branch de publicação somente com index.html
+        run: |
+          cp release/index.html /tmp/taverna-v3-aprovada.html
+          git fetch origin main
+          git checkout -B multiplayer-v3-aprovada origin/main
+          cp /tmp/taverna-v3-aprovada.html site/index.html
+          git config user.name "Taverna Release"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add site/index.html
+          git commit -m "Atualizar PWA com multiplayer v3 aprovada"
+          git push --force origin HEAD:refs/heads/multiplayer-v3-aprovada
