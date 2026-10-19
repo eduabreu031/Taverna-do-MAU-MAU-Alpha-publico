@@ -21,6 +21,11 @@ jobs:
         run: |
           node --check integracao/online-v84-controller.js
           node --check integracao/online-v84-render-bridge.js
+      - name: Validar mesa online e retorno offline em Chromium
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+          node qa/online-ui-smoke.mjs
       - uses: actions/upload-artifact@v4
         with:
           name: taverna-multiplayer-dev
