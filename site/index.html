@@ -3383,13 +3383,33 @@ const el=id=>document.getElementById(id);
 const finishPanel=document.createElement('section');finishPanel.id='onlineFinishPanel';finishPanel.className='hidden';finishPanel.setAttribute('role','dialog');finishPanel.setAttribute('aria-modal','true');finishPanel.setAttribute('aria-labelledby','onlineFinishTitle');
 finishPanel.innerHTML='<div class="online-finish-card"><div class="modal-kicker">A TAVERNA DO MAU MAU</div><h2 id="onlineFinishTitle">Partida encerrada</h2><p id="onlineFinishText"></p><div class="online-finish-buttons"><button type="button" id="onlineRematch" class="engraved-btn primary">Jogar novamente</button><button type="button" id="onlineFinishExit" class="engraved-btn">Sair da sala</button></div></div>';
 document.body.append(finishPanel);
-const finishText=finishPanel.querySelector('#onlineFinishText'),rematchBtn=finishPanel.querySelector('#onlineRematch');
-function showFinished(g){const finished=g?.phase==='finished'||g?.phase==='game_over';finishPanel.classList.toggle('hidden',!online||!finished);if(!finished)return;
- const winner=players.find(p=>p.id===g.winner)?.name;finishPanel.querySelector('#onlineFinishTitle').textContent=winner?'Vitória de '+winner+'!':'Partida encerrada';
+const finishText=finishPanel.querySelector('#onlineFinishText'),rematchBtn=finishPanel.querySelector('#onlineRematch'),finishExit=finishPanel.querySelector('#onlineFinishExit');
+let guestFinishTimer=null,guestFinishKey='';
+function resetFinishNotice(){if(guestFinishTimer!==null)clearTimeout(guestFinishTimer);guestFinishTimer=null;guestFinishKey='';finishPanel.classList.add('hidden');}
+function showFinished(g){
+ const finished=g?.phase==='finished'||g?.phase==='game_over';
+ if(!online||!finished){resetFinishNotice();return;}
+ const winner=players.find(p=>p.id===g.winner)?.name;
+ finishPanel.querySelector('#onlineFinishTitle').textContent=winner?'Vitória de '+winner+'!':'Partida encerrada';
  const host=uid===hostId,ready=players.length>=2&&players.every(p=>p.online);
- finishText.textContent=host?(ready?'A mesa está pronta para uma nova partida.':'Aguarde todos se reconectarem para jogar novamente.'):'Aguarde o anfitrião iniciar uma nova partida ou saia da sala.';
- rematchBtn.classList.toggle('hidden',!host);rematchBtn.disabled=!host||!ready;
+ rematchBtn.classList.toggle('hidden',!host);finishExit.classList.toggle('hidden',!host);
+ rematchBtn.disabled=!host||!ready;
+ if(host){
+  if(guestFinishTimer!==null)clearTimeout(guestFinishTimer);
+  guestFinishTimer=null;guestFinishKey='';
+  finishText.textContent=ready?'A mesa está pronta para uma nova partida.':'Aguarde todos se reconectarem para jogar novamente.';
+  finishPanel.classList.remove('hidden');
+  return;
+ }
+ finishText.textContent='Aguarde o anfitrião iniciar a próxima partida.';
+ // Uma atualização de estado não reinicia o prazo de 4 segundos.
+ const key=room+':'+String(g.round)+':'+String(g.winner);
+ if(guestFinishKey===key)return;
+ resetFinishNotice();guestFinishKey=key;
+ finishPanel.classList.remove('hidden');
+ guestFinishTimer=setTimeout(()=>{guestFinishTimer=null;if(guestFinishKey===key)finishPanel.classList.add('hidden');},4000);
 }
+
 const st=el('onlineStatusText'),notice=el('onlineNotice'),lobby=el('onlineLobby');
 let ws=null,room='',uid='',token='',game=null,players=[],hostId='',opa=null,online=false,closing=false,reconnectTimer=0,retries=0,revision=-1;
 let lastEventIds=new Set(),firstGameState=true;
@@ -3399,7 +3419,7 @@ const store={get(k){try{return sessionStorage.getItem(k)}catch{return null}},set
 const setStatus=s=>st.textContent=s;
 const message=s=>{notice.textContent=s;const strip=el('message');if(online&&strip){strip.textContent=s;strip.classList.add('error')}};
 function send(data){if(ws?.readyState!==WebSocket.OPEN){message('Conexão indisponível. Aguarde reconexão.');return false}ws.send(JSON.stringify(data));return true;}
-function close(leave=false){closing=true;clearTimeout(reconnectTimer);if(leave&&ws?.readyState===1)send({type:'leave'});if(ws){ws.onclose=null;ws.close();ws=null;}if(leave&&room)store.del(key(room));if(online){online=false;window.__tavOriginalOnline?.reset();}finishPanel.classList.add('hidden');el('sceneGame')?.classList.remove('online-live');firstGameState=true;room='';uid='';game=null;revision=-1;lastEventIds.clear();lobby.classList.add('hidden');setStatus('Aguardando conexão');}
+function close(leave=false){closing=true;clearTimeout(reconnectTimer);if(leave&&ws?.readyState===1)send({type:'leave'});if(ws){ws.onclose=null;ws.close();ws=null;}if(leave&&room)store.del(key(room));if(online){online=false;window.__tavOriginalOnline?.reset();}resetFinishNotice();el('sceneGame')?.classList.remove('online-live');firstGameState=true;room='';uid='';game=null;revision=-1;lastEventIds.clear();lobby.classList.add('hidden');setStatus('Aguardando conexão');}
 function connect(code,existingToken=''){
  if(ws){ws.onclose=null;ws.close();ws=null;}
  clearTimeout(reconnectTimer);closing=false;room=code;token=existingToken;setStatus('Conectando à sala '+code+'…');
@@ -3433,7 +3453,7 @@ function connect(code,existingToken=''){
    else el('opaBtn').disabled=false;
    if(m.turnDeadline&&game.turnPlayerId===uid){const secs=Math.max(0,Math.ceil((m.turnDeadline-m.serverNow)/1000));el('clockText').textContent=secs+'s';}
    if(game.phase==='finished'||game.phase==='game_over'){setStatus('Partida encerrada');}showFinished(game);
-  }else if(online){online=false;finishPanel.classList.add('hidden');el('sceneGame').classList.remove('online-live');window.__tavOriginalOnline.reset();}
+  }else if(online){online=false;resetFinishNotice();el('sceneGame').classList.remove('online-live');window.__tavOriginalOnline.reset();}
   if(!online)setStatus(players.filter(p=>p.online).length+' participante(s) conectado(s)');
  };
  socket.onerror=()=>{setStatus('Sem conexão ao servidor');if(!online)message('Não foi possível conectar à sala.');};
@@ -3470,7 +3490,7 @@ function comboSelect(id){if(!comboMode)return false;
  comboIds=comboIds.includes(id)?comboIds.filter(v=>v!==id):[...comboIds,id];comboUpdate();return true;
 }
 rematchBtn.addEventListener('click',()=>{if(!online||game?.phase!=='finished'||uid!==hostId)return;rematchBtn.disabled=true;send({type:'start'});});
-finishPanel.querySelector('#onlineFinishExit').addEventListener('click',()=>{close(true);el('sceneGame').classList.add('hidden');el('sceneMultiplayer').classList.add('hidden');el('sceneWelcome').classList.remove('hidden');});
+finishExit.addEventListener('click',()=>{close(true);el('sceneGame').classList.add('hidden');el('sceneMultiplayer').classList.add('hidden');el('sceneWelcome').classList.remove('hidden');});
 el('onlineCreate').onclick=async()=>{const btn=el('onlineCreate');btn.disabled=true;try{setStatus('Criando sala…');const res=await fetch(API+'/api/room',{method:'POST'});if(!res.ok)throw Error('Servidor respondeu '+res.status);const m=await res.json();connect(m.code);}catch(e){message('Falha ao criar sala: '+e.message);}finally{btn.disabled=false;}};
 el('onlineJoin').onclick=()=>{const code=el('onlineRoomCode').value.toUpperCase().trim();if(!/^[A-HJ-NP-Z2-9]{6}$/.test(code)){message('Código inválido: são seis caracteres.');return;}connect(code,store.get(key(code))||'');};
 el('onlineStart').onclick=()=>{window.__tavOriginalOnline?.unlockAudio();send({type:'start'});};
