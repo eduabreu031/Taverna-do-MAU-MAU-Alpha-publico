@@ -66,7 +66,7 @@ function connect(code,existingToken=''){
   el('onlineStart').disabled=!canStart;el('onlineStart').classList.toggle('hidden',!!m.game);
   el('onlineStartHint').textContent=m.game?'Partida iniciada.':canStart?'A sala está pronta para começar.':uid===hostId?'Aguarde pelo menos dois participantes conectados.':'Aguarde o anfitrião iniciar.';
   if(m.game){
-   if(game&&m.game.revision<revision)return;
+   if(game&&m.game.revision<revision&&!(game.phase==='finished'&&m.game.phase==='playing'))return;
    const appeared=!game, eventIds=m.events||[];
    const fresh=firstGameState?(eventIds.filter(e=>e.type==='start').slice(-1)):(eventIds.filter(e=>e?.id&&!lastEventIds.has(e.id)));
    for(const e of eventIds)if(e?.id)lastEventIds.add(e.id);firstGameState=false;
