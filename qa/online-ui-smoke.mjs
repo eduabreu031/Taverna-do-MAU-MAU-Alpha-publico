@@ -48,5 +48,34 @@ for(const width of [1280,390]){
  await page.close();
  console.log('OK interface e separação online/offline:',width);
 }
+// Segunda sessão: adversário não recebe as cartas privadas de Ana.
+const observer=await browser.newPage({viewport:{width:390,height:850}});
+observer.on('pageerror',e=>{errors++;console.error('ERROR B',e.message);});
+await observer.addInitScript(()=>{
+ window.__sent=[];
+ window.WebSocket=class MockWebSocket{
+  static OPEN=1;
+  constructor(url){this.url=url;this.readyState=1;window.__sock=this;queueMicrotask(()=>this.onopen?.());}
+  send(s){window.__sent.push(JSON.parse(s));}
+  close(){this.readyState=3;}
+ };
+});
+await observer.goto('http://127.0.0.1:'+port+'/',{waitUntil:'load'});
+await observer.locator('#playerName').fill('Beto');
+await observer.locator('#chooseMultiplayer').click();
+await observer.locator('#onlineRoomCode').fill('ABC234');
+await observer.locator('#onlineJoin').click();
+await observer.evaluate(()=>window.__sock.onmessage({data:JSON.stringify({type:'welcome',id:'b',token:'tok-b'})}));
+const other=game('b');
+other.game.hand=[{id:'b1',rank:'9',suit:'♥'},{id:'b2',rank:'A',suit:'♣'},{id:'b3',rank:'5',suit:'♦'},{id:'b4',rank:'K',suit:'♠'},{id:'b5',rank:'7',suit:'♥'}];
+await observer.evaluate(g=>window.__sock.onmessage({data:JSON.stringify(g)}),other);
+assert.equal(await observer.locator('#humanHand [data-card]').count(),5,'O adversário recebe somente a própria mão');
+assert.equal(await observer.locator('#humanHand [data-card="a1"]').count(),0,'Não vazar carta privada de outro jogador');
+assert.equal(await observer.locator('#seats .seat').count(),1);
+await observer.locator('#humanHand [data-card="b1"]').click({force:true});
+assert.equal((await observer.evaluate(()=>window.__sent)).length,0,'Impedir jogada fora do turno');
+await observer.close();
+console.log('OK sessão adversária e privacidade');
+
 assert.equal(errors,0,'Nenhum erro de execução no navegador');
 }finally{await browser.close();await new Promise(ok=>server.close(ok));}
