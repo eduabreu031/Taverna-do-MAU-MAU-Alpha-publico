@@ -17,5 +17,5 @@ const expected=sha(out);
 if(!out.includes('onlineFinishPanel')||!out.includes('guestFinishTimer'))throw Error('Controles de fim de jogo ausentes');
 for(const id of ['onlineCreate','onlineJoin','onlineStart','onlineLobby','online-v84-controller'])if(!out.includes(id))throw Error('Menu multiplayer incompleto: '+id);
 mkdirSync(new URL('../release-v5/',import.meta.url),{recursive:true});
-writeFileSync(new URL('../release-v4/index.html',import.meta.url),out);
+writeFileSync(new URL('../release-v5/index.html',import.meta.url),out);
 console.log('Candidata v5 produzida:',expected,'bytes',Buffer.byteLength(out));
