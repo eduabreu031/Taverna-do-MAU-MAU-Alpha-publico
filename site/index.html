@@ -3367,11 +3367,29 @@ window.MauMau2Debug={getState:()=>ui.game?.state,engine:()=>ui.game,start:(n=5)=
 #sceneGame.online-live #discardPile.online-drop-target{filter:drop-shadow(0 0 17px #ffe09c)}
 @media(max-width:580px){.online-score-presentation .parchment-modal{padding:15px}}
 </style>
+<style id="online-rematch-style">
+#onlineFinishPanel{position:fixed;z-index:260;inset:0;background:#100909dd;display:grid;place-items:center;padding:16px}
+#onlineFinishPanel.hidden{display:none!important}
+#onlineFinishPanel .online-finish-card{width:min(480px,94vw);max-height:90vh;overflow:auto;padding:30px 20px;text-align:center;color:#392518;background:radial-gradient(ellipse at 35% 10%,#f5dfb0,#d8b887 85%);border:9px ridge #7e5430;border-radius:12px;box-shadow:0 20px 80px #000c}
+#onlineFinishPanel h2{font:normal 32px Georgia,serif;font-variant:small-caps;margin:12px 0}
+#onlineFinishPanel p{margin:10px 0 18px;font-size:15px}
+#onlineFinishPanel .online-finish-buttons{display:flex;justify-content:center;flex-wrap:wrap;gap:10px}
+</style>
 <script id="online-v84-controller">
 (()=>{
 'use strict';
 const API='https://taverna-multiplayer-servidor.edulopes941.workers.dev';
 const el=id=>document.getElementById(id);
+const finishPanel=document.createElement('section');finishPanel.id='onlineFinishPanel';finishPanel.className='hidden';finishPanel.setAttribute('role','dialog');finishPanel.setAttribute('aria-modal','true');finishPanel.setAttribute('aria-labelledby','onlineFinishTitle');
+finishPanel.innerHTML='<div class="online-finish-card"><div class="modal-kicker">A TAVERNA DO MAU MAU</div><h2 id="onlineFinishTitle">Partida encerrada</h2><p id="onlineFinishText"></p><div class="online-finish-buttons"><button type="button" id="onlineRematch" class="engraved-btn primary">Jogar novamente</button><button type="button" id="onlineFinishExit" class="engraved-btn">Sair da sala</button></div></div>';
+document.body.append(finishPanel);
+const finishText=finishPanel.querySelector('#onlineFinishText'),rematchBtn=finishPanel.querySelector('#onlineRematch');
+function showFinished(g){const finished=g?.phase==='finished'||g?.phase==='game_over';finishPanel.classList.toggle('hidden',!online||!finished);if(!finished)return;
+ const winner=players.find(p=>p.id===g.winner)?.name;finishPanel.querySelector('#onlineFinishTitle').textContent=winner?'Vitória de '+winner+'!':'Partida encerrada';
+ const host=uid===hostId,ready=players.length>=2&&players.every(p=>p.online);
+ finishText.textContent=host?(ready?'A mesa está pronta para uma nova partida.':'Aguarde todos se reconectarem para jogar novamente.'):'Aguarde o anfitrião iniciar uma nova partida ou saia da sala.';
+ rematchBtn.classList.toggle('hidden',!host);rematchBtn.disabled=!host||!ready;
+}
 const st=el('onlineStatusText'),notice=el('onlineNotice'),lobby=el('onlineLobby');
 let ws=null,room='',uid='',token='',game=null,players=[],hostId='',opa=null,online=false,closing=false,reconnectTimer=0,retries=0,revision=-1;
 let lastEventIds=new Set(),firstGameState=true;
@@ -3381,7 +3399,7 @@ const store={get(k){try{return sessionStorage.getItem(k)}catch{return null}},set
 const setStatus=s=>st.textContent=s;
 const message=s=>{notice.textContent=s;const strip=el('message');if(online&&strip){strip.textContent=s;strip.classList.add('error')}};
 function send(data){if(ws?.readyState!==WebSocket.OPEN){message('Conexão indisponível. Aguarde reconexão.');return false}ws.send(JSON.stringify(data));return true;}
-function close(leave=false){closing=true;clearTimeout(reconnectTimer);if(leave&&ws?.readyState===1)send({type:'leave'});if(ws){ws.onclose=null;ws.close();ws=null;}if(leave&&room)store.del(key(room));if(online){online=false;window.__tavOriginalOnline?.reset();}el('sceneGame')?.classList.remove('online-live');firstGameState=true;room='';uid='';game=null;revision=-1;lastEventIds.clear();lobby.classList.add('hidden');setStatus('Aguardando conexão');}
+function close(leave=false){closing=true;clearTimeout(reconnectTimer);if(leave&&ws?.readyState===1)send({type:'leave'});if(ws){ws.onclose=null;ws.close();ws=null;}if(leave&&room)store.del(key(room));if(online){online=false;window.__tavOriginalOnline?.reset();}finishPanel.classList.add('hidden');el('sceneGame')?.classList.remove('online-live');firstGameState=true;room='';uid='';game=null;revision=-1;lastEventIds.clear();lobby.classList.add('hidden');setStatus('Aguardando conexão');}
 function connect(code,existingToken=''){
  if(ws){ws.onclose=null;ws.close();ws=null;}
  clearTimeout(reconnectTimer);closing=false;room=code;token=existingToken;setStatus('Conectando à sala '+code+'…');
@@ -3399,7 +3417,7 @@ function connect(code,existingToken=''){
   el('onlineStart').disabled=!canStart;el('onlineStart').classList.toggle('hidden',!!m.game);
   el('onlineStartHint').textContent=m.game?'Partida iniciada.':canStart?'A sala está pronta para começar.':uid===hostId?'Aguarde pelo menos dois participantes conectados.':'Aguarde o anfitrião iniciar.';
   if(m.game){
-   if(game&&m.game.revision<revision)return;
+   if(game&&m.game.revision<revision&&!(game.phase==='finished'&&m.game.phase==='playing'))return;
    const appeared=!game, eventIds=m.events||[];
    const fresh=firstGameState?(eventIds.filter(e=>e.type==='start').slice(-1)):(eventIds.filter(e=>e?.id&&!lastEventIds.has(e.id)));
    for(const e of eventIds)if(e?.id)lastEventIds.add(e.id);firstGameState=false;
@@ -3414,8 +3432,8 @@ function connect(code,existingToken=''){
    comboUpdate();if(m.opa){el('opaBtn').disabled=m.opa.playerId===uid;}
    else el('opaBtn').disabled=false;
    if(m.turnDeadline&&game.turnPlayerId===uid){const secs=Math.max(0,Math.ceil((m.turnDeadline-m.serverNow)/1000));el('clockText').textContent=secs+'s';}
-   if(game.phase==='finished'||game.phase==='game_over'){setStatus('Partida encerrada');}
-  }else if(online){online=false;el('sceneGame').classList.remove('online-live');window.__tavOriginalOnline.reset();}
+   if(game.phase==='finished'||game.phase==='game_over'){setStatus('Partida encerrada');}showFinished(game);
+  }else if(online){online=false;finishPanel.classList.add('hidden');el('sceneGame').classList.remove('online-live');window.__tavOriginalOnline.reset();}
   if(!online)setStatus(players.filter(p=>p.online).length+' participante(s) conectado(s)');
  };
  socket.onerror=()=>{setStatus('Sem conexão ao servidor');if(!online)message('Não foi possível conectar à sala.');};
@@ -3451,6 +3469,8 @@ function comboSelect(id){if(!comboMode)return false;
  if(!game?.hand?.some(c=>c.id===id))return true;
  comboIds=comboIds.includes(id)?comboIds.filter(v=>v!==id):[...comboIds,id];comboUpdate();return true;
 }
+rematchBtn.addEventListener('click',()=>{if(!online||game?.phase!=='finished'||uid!==hostId)return;rematchBtn.disabled=true;send({type:'start'});});
+finishPanel.querySelector('#onlineFinishExit').addEventListener('click',()=>{close(true);el('sceneGame').classList.add('hidden');el('sceneMultiplayer').classList.add('hidden');el('sceneWelcome').classList.remove('hidden');});
 el('onlineCreate').onclick=async()=>{const btn=el('onlineCreate');btn.disabled=true;try{setStatus('Criando sala…');const res=await fetch(API+'/api/room',{method:'POST'});if(!res.ok)throw Error('Servidor respondeu '+res.status);const m=await res.json();connect(m.code);}catch(e){message('Falha ao criar sala: '+e.message);}finally{btn.disabled=false;}};
 el('onlineJoin').onclick=()=>{const code=el('onlineRoomCode').value.toUpperCase().trim();if(!/^[A-HJ-NP-Z2-9]{6}$/.test(code)){message('Código inválido: são seis caracteres.');return;}connect(code,store.get(key(code))||'');};
 el('onlineStart').onclick=()=>{window.__tavOriginalOnline?.unlockAudio();send({type:'start'});};
