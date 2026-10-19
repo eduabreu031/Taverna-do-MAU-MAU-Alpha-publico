@@ -39,18 +39,11 @@ const styling=String.raw`<style id="online-v84-style">
 #sceneMultiplayer .multiplayer-preview button{max-width:100%}
 </style>`;
 const tag='<script id="pwa-registration">';
-let html=original.replace(before,after).replace(marker,bridge+'
-'+marker);
+let html=original.replace(before,after).replace(marker,bridge+'\n'+marker);
 if(html.split(tag).length!==2)throw Error('Entrada de script PWA não encontrada');
-html=html.replace(tag,styling+'
-<script id="online-v84-controller">
-'+controller+'
-</script>
-'+tag);
-const scripts=t=>[...t.matchAll(/<script[^>]*>([sS]*?)</script>/gi)].map(x=>x[1]);
-const old=scripts(original),neo=scripts(html);
-if(neo.length!==old.length+1)throw Error('Número incorreto de scripts');
-for(let i=0;i<old.length;i++){if(i===4)continue; /* o script principal foi estendido */ }
+html=html.replace(tag,styling+'\n<script id="online-v84-controller">\n'+controller+'\n</script>\n'+tag);
+const scripts=t=>t.split('<script').length-1;
+if(scripts(html)!==scripts(original)+1)throw Error('Número incorreto de scripts');
 mkdirSync(new URL('../preview/',import.meta.url),{recursive:true});
 writeFileSync(new URL('../preview/index.html',import.meta.url),html);
 console.log('Preview integrada criada:',Buffer.byteLength(html),'bytes; original preservado.');
