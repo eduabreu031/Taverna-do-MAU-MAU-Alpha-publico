@@ -1,0 +1,5 @@
+    <div class="multiplayer-state" role="status"><span class="multiplayer-state-dot"></span><span id="onlineStatusText">Aguardando conexão</span></div>
+    <p class="multiplayer-copy" id="onlineNotice">Crie uma sala privada ou entre pelo código de um amigo.</p>
+    <div class="multiplayer-preview" aria-label="Controles de sala">
+      <div><button type="button" class="engraved-btn primary" id="onlineCreate">♜ Criar sala</button><small>Convide seus amigos pelo código</small></div>
+      <div><label for="onlineRoomCode">Código da sala</label><input id="onlineRoomCode" maxlength="6" placeholder="ABC123" autocomplete="off" spellcheck="false"><button type="button" class="engraved-btn" id="onlineJoin">Entrar na sala</button></div>
