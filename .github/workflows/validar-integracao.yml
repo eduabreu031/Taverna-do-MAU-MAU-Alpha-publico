@@ -13,5 +13,7 @@ jobs:
           node-version: '22'
       - name: Testar protocolo online
         run: node --test qa/online-adapter.test.mjs qa/online-event-bridge.test.mjs
+      - name: Garantir v84 original intacta
+        run: node qa/garantir-v84-original.mjs
       - name: Validar código original da Taverna
         run: node qa/validar.js
