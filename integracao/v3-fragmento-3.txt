@@ -1,0 +1,160 @@
+// Exclusivamente para o modo online. A v84 offline mantém todos os seus caminhos originais.
+window.__tavOriginalOnline={
+ active:false,revision:null,clockTicker:0,finalShown:false,scoreShownRevision:null,comboSequence:{player:null,count:0,continues:false},
+ unlockAudio(){try{soundInit();}catch(e){console.warn('Áudio indisponível',e)}},
+ chooseSuit(cardId,onChoice){
+  if(!this.active)return;
+  const card=ui.game?.state.players[0]?.hand.find(c=>c.id===cardId);if(!card)return;
+  const choices=Core.SUITS.map(suit=>`<button class="suit-choice ${['♥','♦'].includes(suit)?'red':''}" data-online-suit="${suit}" aria-label="${SUIT_NAMES[suit]}"><b>${suit}</b></button>`).join('');
+  $('dialog').innerHTML=`<div class="parchment-modal" role="dialog" aria-modal="true" aria-label="Escolha um naipe"><div class="modal-kicker">Livro das escolhas</div><h2>Escolha o naipe</h2><div class="suit-list">${choices}</div></div>`;
+  $('overlay').classList.remove('hidden');
+  soundInit();sound('suitReveal');
+  $('dialog').querySelectorAll('[data-online-suit]').forEach(button=>button.addEventListener('click',()=>{
+   const suit=button.dataset.onlineSuit;$('overlay').classList.add('hidden');$('dialog').replaceChildren();onChoice(suit);
+  },{once:true}));
+ },
+ apply(g,members,selfId,meta={}){
+  if(!g||!Array.isArray(g.players)||!g.players.some(p=>p.id===selfId))throw Error('Jogador não encontrado na partida');
+  if(!Array.isArray(g.hand)||!g.top)throw Error('Servidor enviou estado incompleto');
+  if(this.active&&Number.isInteger(this.revision)&&g.revision<this.revision)return false;
+  const oldPositions=this.active?motionPositions():null;
+  const prev=this.active?ui.game?.state:null;
+  const prevRev=this.revision;
+  const back=(id,count)=>Array.from({length:Math.max(0,Number(count)||0)},(_,i)=>({id:'hidden-'+id+'-'+i,rank:'2',suit:'♠'}));
+  const ix=g.players.findIndex(p=>p.id===selfId);
+  const ordered=g.players.slice(ix).concat(g.players.slice(0,ix));
+  const players=ordered.map(p=>({name:members.find(x=>x.id===p.id)?.name||'Jogador',alive:p.alive!==false,
+   hand:p.id===selfId?g.hand.map(c=>({...c})):back(p.id,p.count),saidMau:!!g.mauAnnouncements?.[p.id],penaltyDebt:0,duelBluffUsed:false}));
+  const turn=ordered.findIndex(p=>p.id===g.turnPlayerId),top={...g.top};
+  const opaPending=!!(meta.opa&&!meta.opa.accusedBy&&Number(meta.opa.expiresAt)>(Number(meta.serverNow)||Date.now()));
+  const incident=opaPending?{open:true,actor:ordered.findIndex(p=>p.id===meta.opa.playerId)}:null;
+  const discard=prev?.discard?.length&&prev.discard.at(-1).id!==top.id?[prev.discard.at(-1),top]:prev?.discard?.length?[...prev.discard]:[top];
+  const scoring=g.scoring?{winner:ordered.findIndex(p=>p.id===g.scoring.winnerId),eliminated:(g.scoring.eliminated||[]).map(id=>ordered.findIndex(p=>p.id===id)),scores:(g.scoring.scores||[]).map(x=>({player:ordered.findIndex(p=>p.id===x.id),score:x.points}))}:null;
+  const next={phase:g.phase==='finished'?'game_over':g.phase,round:g.round||1,players,turn:Math.max(0,turn),direction:g.direction,
+   deck:back('deck',g.deckCount||0),discard,activeSuit:g.activeSuit,scoring,winner:ordered.findIndex(p=>p.id===g.winner),
+   turnNo:g.revision,drewThisTurn:!!g.drawn,pendingSeven:g.pendingSeven||0,incident,history:[]};
+  this.active=true;this.revision=g.revision;this.selfId=selfId;
+  clearTimeout(ui.introTimer);ui.introTimer=null;ui.introActive=false;
+  pauseSchedulers();ui.clockCarry=null;ui.game={state:next};
+  // Render never serves as game authority. Network events alone authorize actions.
+  if(this.clockTicker)clearInterval(this.clockTicker);
+  const offset=Date.now()-(Number(meta.serverNow)||Date.now());
+  const deadline=Number(meta.deadline)||0;
+  const remaining=deadline?Math.max(0,deadline-(Date.now()-offset)):0;
+  if(next.phase==='playing'&&deadline){ui.timerLength=15000;ui.timerEnd=performance.now()+remaining;ui.botActionDeadline=performance.now()+remaining;}
+  else{ui.timerEnd=0;ui.botActionDeadline=0;}
+  this.clockTicker=setInterval(()=>{if(!this.active){clearInterval(this.clockTicker);return;}renderClock();},260);
+  currentName=players[0].name;
+  $('overlay').classList.add('hidden');$('sceneMenu').classList.add('hidden');$('sceneWelcome').classList.add('hidden');$('sceneMultiplayer').classList.add('hidden');$('sceneGame').classList.remove('hidden');
+  if(prevRev!==g.revision)ui.selected=[];
+  render();
+  if(!prev){window.dispatchEvent(new Event('taverna:match-visible'));animateDealFromState(next);}
+  else if(prevRev!==g.revision){
+   const geo=motionPositions(),oldTop=prev.discard.at(-1);
+   if(prev.round!==next.round){cancelMotion();const showingElimination=prev.phase==='scoring';if(showingElimination){const forRev=g.revision;setTimeout(()=>{if(this.active&&this.revision===forRev)animateDealFromState(ui.game.state);},2500);}else animateDealFromState(next);}
+   else{
+    const oldIds=new Set(prev.players[0].hand.map(c=>c.id)),newIds=new Set(next.players[0].hand.map(c=>c.id));
+    // The animated card uses the immutable identity from the PREVIOUS hand.
+    for(const c of prev.players[0].hand)if(!newIds.has(c.id))flight({from:oldPositions?.cards?.[c.id]||oldPositions?.players?.[0]||geo.players[0],to:geo.discard,card:c,duration:MOTION.play,impact:'play'});
+    for(const c of next.players[0].hand)if(!oldIds.has(c.id))flight({from:oldPositions?.draw||geo.draw,to:geo.players[0],card:null,duration:MOTION.draw,impact:'draw'});
+    // Opponents are rendered ONLY as card backs; identities never leak.
+    for(let p=1;p<next.players.length;p++){
+     const old=prev.players[p]?.hand.length||0,now=next.players[p].hand.length;
+     if(now>old)for(let j=0;j<Math.min(now-old,8);j++)flight({from:oldPositions?.draw||geo.draw,to:geo.players[p],card:null,duration:MOTION.draw,delay:j*90,impact:j===0?'draw':'soft'});
+    }
+    if(oldTop?.id!==top.id&&!prev.players[0].hand.some(c=>c.id===top.id)){
+     const actor=Math.max(0,prev.turn);
+     flight({from:oldPositions?.players?.[actor]||geo.players[actor]||geo.draw,to:geo.discard,card:top,reveal:actor!==0,duration:MOTION.play,impact:'play'});
+    }
+   }
+  }
+  ui.lastMsg=next.phase==='playing'?(turn===0?'Sua vez de jogar!':'Aguarde a vez de '+players[turn]?.name):next.phase==='scoring'?'Apuração da rodada…':'Fim da partida';
+  ui.lastMsgError=false;renderMessage();
+  if(next.phase!=='scoring')document.querySelector('.online-score-presentation')?.remove();
+  if(next.phase==='scoring'&&this.scoreShownRevision!==g.revision){
+   this.scoreShownRevision=g.revision;this.scoreOnline(g,ordered);
+  }
+  if(next.phase==='game_over'&&!this.finalShown){
+   this.finalShown=true;const champ=players[next.winner]?.name||'Campeão';
+   effect('winner','TEMOS UM CAMPEÃO',champ);sound('win');arautoSpeak(next.winner===0?24:25);
+  }
+  return true;
+ },
+ scoreOnline(g,ordered){
+  if(!g.scoring)return;
+  const info=g.scoring;
+  // The public server intentionally sends score totals, not opponents' card faces.
+  // Do not fabricate hidden cards. Use the v84 parchment and score UI.
+  const stage=document.createElement('div');stage.className='online-score-presentation';
+  stage.setAttribute('role','status');stage.innerHTML=`<div class="parchment-modal"><div class="modal-kicker">Apuração da Taverna</div><h2>Fim da rodada ${g.round}</h2><div class="wood-scoreboard">${info.scores.map(row=>`<div class="score-row ${info.winnerId===row.id?'winner':''} ${info.eliminated.includes(row.id)?'dead':''}"><span>${escapeHtml(ordered.find(p=>p.id===row.id)?ui.game.state.players[ordered.findIndex(p=>p.id===row.id)].name:'Jogador')}</span><strong>${Number(row.points)||0} pontos</strong></div>`).join('')}</div><div class="detail">Preparando a próxima rodada…</div></div>`;
+  $('fxLayer').append(stage);setTimeout(()=>stage.remove(),Math.max(3000,Math.min(7500,Number(g.scoringDeadline)||6000)));
+  sound('win');arautoSpeak(14);
+ },
+ reset(){this.resetComboSequence();this.active=false;this.revision=null;this.finalShown=false;this.scoreShownRevision=null;if(this.clockTicker)clearInterval(this.clockTicker);this.clockTicker=null;pauseSchedulers();cancelMotion();arautoStop();document.querySelector('.online-score-presentation')?.remove();$('overlay').classList.add('hidden');$('dialog').replaceChildren();ui.game=null;ui.selected=[];$('sceneGame').classList.add('hidden');$('sceneMultiplayer').classList.remove('hidden');},
+ resetComboSequence(){this.comboSequence={player:null,count:0,continues:false};},
+ announceOnlineCombo(count){
+  if(!Number.isInteger(count)||count<2)return;
+  const old=document.querySelector('#sequentialComboFx');if(old)old.remove();
+  const el=document.createElement('div');el.id='sequentialComboFx';el.className='sequential-combo-fx';
+  el.textContent='COMBO ×'+count;
+  el.style.setProperty('--combo-scale',String(Math.min(1.62,1+(count-2)*.042)));
+  el.setAttribute('aria-label','Combo de '+count+' cartas consecutivas');
+  $('fxLayer').appendChild(el);setTimeout(()=>el.remove(),1350);
+  comboImpact(count);arautoSpeak(7);
+ },
+ updateOnlineCombo(e,playerIds){
+  const s=ui.game?.state;
+  if(!s||s.players.filter(p=>p.alive).length!==2){this.resetComboSequence();return;}
+  const prev=this.comboSequence;
+  const actor=playerIds.indexOf(e.playerId);
+  if(actor<0)return;
+  const rank=e.type==='play'?String(e.card||'').replace(/[♠♥♦♣]$/,''):null;
+  const count=e.type==='combo'?Math.max(1,Array.isArray(e.cards)?e.cards.length:Number(e.count)||1):prev.player===e.playerId&&prev.continues?prev.count+1:1;
+  const keepsTurn=s.phase==='playing'&&s.turn===actor;
+  const waitsForSeven=e.type==='play'&&rank==='7'&&s.pendingSeven>0&&s.turn!==actor;
+  this.comboSequence={player:e.playerId,count,continues:keepsTurn||waitsForSeven};
+  if(count>=2)this.announceOnlineCombo(count);
+ },
+ showOnlineEvent(e,members,playerIds){
+  if(!e||!this.active)return;
+  const actor=playerIds.indexOf(e.playerId),actorName=members.find(p=>p.id===e.playerId)?.name||'Jogador';
+  const s=ui.game?.state;if(!s)return;
+  switch(e.type){
+   case 'start':this.resetComboSequence();effect('normal','COMEÇA O JOGO!');v64OpeningSound();arautoSpeak(1);break;
+   case 'mau':effect('normal','MAU MAU!',actorName,actor>=0?actor:null);sound('mau');arautoSpeak(2);break;
+   case 'play':{
+    this.updateOnlineCombo(e,playerIds);
+    const value=String(e.card||'');const rank=value.startsWith('10')?'10':value.slice(0,-1);
+    if(rank==='Q'){effect('normal','O mundo GIRA!',s.direction===1?'↻ Sentido horário':'↺ Sentido anti-horário');sound('reverse');arautoSpeak(4);}
+    if(rank==='A'){
+     let n=actor;if(n>=0){do{n=(n+(s.direction===1?1:-1)+s.players.length)%s.players.length;}while(!s.players[n]?.alive&&n!==actor);skipStamp(n);}
+     sound('skip');arautoSpeak(3);
+    }
+    if(rank==='9'){tauntAt(Math.max(0,actor));arautoSpeak(5);}
+    if(rank==='7'){effect('alert','A COBRANÇA DO SETE');sevenFanfare();arautoSpeak(6);}
+    if(rank==='J'){
+     const suit=e.suit||s.activeSuit;
+     effect('normal',(SUIT_NAMES[suit]||'Naipe').toUpperCase()+'!','',null,suit);sound('jack');
+     arautoSpeak(({'♠':9,'♥':10,'♦':11,'♣':12})[suit]);
+    }
+    break;
+   }
+   case 'combo':this.updateOnlineCombo(e,playerIds);break;
+   case 'take_seven':
+    if(this.comboSequence.player!==e.playerId&&s.turn===playerIds.indexOf(this.comboSequence.player)&&s.phase==='playing')this.comboSequence.continues=true;
+    effect('alert','A COBRANÇA DO SETE',actorName+' aceitou a cobrança');sound('penalty');break;
+   case 'accuse':if(e.correct){this.resetComboSequence();effect('alert','OPA!!!',actorName+' acusou corretamente');sound('accuse');arautoSpeak(8);}else{toast('OPA!!! sem infração comprovada');sound('false');}break;
+   case 'false_accusation':toast(actorName+' acusou sem infração.');sound('false');break;
+   case 'draw':if(this.comboSequence.player===e.playerId)this.resetComboSequence();break;
+   case 'pass':this.resetComboSequence();break;
+   case 'timeout':this.resetComboSequence();effect('alert','TEMPO ESGOTADO!',actorName,actor>=0?actor:null);sound('penalty');break;
+   case 'round_won':this.resetComboSequence();effect('normal','FIM DA RODADA!',actorName);break;
+   case 'round_start':this.resetComboSequence();effect('normal','NOVA RODADA!','As cartas foram distribuídas');arautoSpeak(17);break;
+   case 'elimination':{this.resetComboSequence();
+    const names=(e.eliminated||[]).map(id=>members.find(m=>m.id===id)?.name||'Jogador').join(' · ');
+    effect('alert','ELIMINADO!',names);sound('eliminate');arautoSpeak((e.eliminated||[]).includes(this.selfId)?23:13);break;
+   }
+  }
+ }
+};
+
