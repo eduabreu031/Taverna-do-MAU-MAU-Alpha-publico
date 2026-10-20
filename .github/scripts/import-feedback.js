@@ -25,7 +25,7 @@ for(const item of items){
  const version=/^Alpha v\d{1,4}$/.test(item.version)?item.version:'Alpha (não informada)';
  if(!nickname||message.length<10)continue;
  const first=message.split(/\r?\n/).find(x=>x.trim())||'Relato de jogador';
- const title=(item.type==='bug'?'[Bug] ':'[Sugestão] ')+first.slice(0,88);
+ const title=(item.type==='bug'?'[Bug] ':'[Sugestão] ')+protect(first).slice(0,88);
  const body=[
  '<!-- taverna-relato-alpha -->',
  '<!-- alpha-feedback-id:'+item.id+' -->',
