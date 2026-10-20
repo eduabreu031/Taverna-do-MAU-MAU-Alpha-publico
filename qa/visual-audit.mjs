@@ -19,9 +19,11 @@ try{
   await page.screenshot({path:'qa/screenshots/auth-'+width+'.png'});
   await page.click('#alphaAccountCancel');
   await page.evaluate(()=>{
+   document.querySelector('#sceneWelcome')?.classList.add('hidden');
+   document.querySelector('#sceneMultiplayer')?.classList.remove('hidden');
    const lobby=document.querySelector('#onlineLobby');lobby.classList.remove('hidden');
    document.querySelector('#onlineCode').textContent='TAVERN';
-   const bots=document.querySelector('#botsLabDEV');bots.hidden=false;
+   const bots=document.querySelector('#botsLabDEV');bots.hidden=false;bots.classList.remove('hidden');
    const select=document.querySelector('#onlineBotsDEV');select.disabled=false;
   });
   await page.waitForTimeout(1000);
