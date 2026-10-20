@@ -1,0 +1,38 @@
+name: Classificar relatos dos jogadores
+on:
+  issues:
+    types: [opened, reopened, edited]
+permissions:
+  issues: write
+jobs:
+  triagem:
+    if: startsWith(github.event.issue.title, '[Bug]') || startsWith(github.event.issue.title, '[Sugestão]')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Aplicar etiquetas de triagem sem tokens extras
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const {owner,repo}=context.repo;
+            const issue_number=context.issue.number;
+            const title=context.payload.issue.title||'';
+            const isBug=title.startsWith('[Bug]');
+            const wanted=[
+              {name:'origem: jogo',color:'8363AD',description:'Enviado pelo formulario da Taverna'},
+              {name:'alpha-publica',color:'A57846',description:'Relato de testes publicos da Alpha'},
+              {name:'triagem-pendente',color:'D68C31',description:'Aguardando revisao e priorizacao'},
+              isBug
+                ? {name:'tipo: bug',color:'D73A4A',description:'Falha relatada pelos jogadores'}
+                : {name:'tipo: sugestao',color:'4B9B69',description:'Ideia ou melhoria sugerida'}
+            ];
+            for(const label of wanted){
+              try{
+                await github.rest.issues.getLabel({owner,repo,name:label.name});
+              }catch(error){
+                if(error.status!==404)throw error;
+                try{await github.rest.issues.createLabel({owner,repo,...label});}
+                catch(e){if(e.status!==422)throw e;}
+              }
+            }
+            await github.rest.issues.addLabels({owner,repo,issue_number,labels:wanted.map(v=>v.name)});
+            core.info('Relato classificado: '+issue_number+' '+wanted.at(-1).name);
