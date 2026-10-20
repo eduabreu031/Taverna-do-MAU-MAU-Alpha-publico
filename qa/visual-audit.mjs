@@ -103,4 +103,35 @@ try{
   await page.close();
   console.log('VISUAL_VIEWPORT_OK',width);
  }
+
+ // Visitante: sessão existe somente na memória e desaparece ao reabrir o app.
+ const guestPage=await browser.newPage({viewport:{width:390,height:844}});
+ await guestPage.route('**/api/auth/guest',async route=>{
+  const cors={'access-control-allow-origin':'*','access-control-allow-methods':'GET,POST,OPTIONS','access-control-allow-headers':'content-type, authorization'};
+  if(route.request().method()==='OPTIONS')return route.fulfill({status:204,headers:cors});
+  return route.fulfill({status:201,headers:{...cors,'content-type':'application/json'},body:JSON.stringify({
+   token:'temporary-guest-token-of-test',user:{id:'testGuest',username:'guest_session123',role:'guest'}
+  })});
+ });
+ await guestPage.goto('http://127.0.0.1:8765/',{waitUntil:'domcontentloaded'});
+ await guestPage.evaluate(()=>{
+  localStorage.setItem('taverna-alpha:ultima-versao-lida','alpha-0.4.97.0');
+  document.getElementById('alphaInformationOverlay').hidden=true;
+ });
+ await guestPage.locator('#playerName').fill('');
+ await guestPage.locator('#chooseMultiplayer').click();
+ await guestPage.waitForSelector('#alphaAccountsOverlay:not([hidden])');
+ await guestPage.locator('#alphaAccountGuest').click();
+ await guestPage.waitForSelector('#alphaAccountsOverlay[hidden]');
+ assert.deepEqual(await guestPage.evaluate(()=>({
+  storedLocal:localStorage.getItem('taverna-alpha-auth-token'),
+  storedSession:sessionStorage.getItem('taverna-alpha-auth-token'),
+  name:localStorage.getItem('mau2_player_name')
+ })),{storedLocal:null,storedSession:null,name:null});
+ await guestPage.reload({waitUntil:'domcontentloaded'});
+ await guestPage.locator('#chooseMultiplayer').click();
+ await guestPage.waitForSelector('#alphaAccountsOverlay:not([hidden])');
+ console.log('VISITOR_EPHEMERAL_SESSION_OK');
+ await guestPage.close();
+
 }finally{await browser.close();}
