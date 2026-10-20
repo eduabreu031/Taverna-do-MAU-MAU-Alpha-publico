@@ -1,0 +1,55 @@
+name: Validar pacote completo da Alpha v93
+on:
+  push:
+    branches: [release/alpha-anonymous-feedback-v93]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  testar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with: {node-version: '22'}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Preparar e montar o jogo sem alterar regras
+        run: |
+          python -m pip install --disable-pip-version-check cairosvg
+          if [ -f Taverna_do_MAU_MAU_Icones_Oficiais.zip ]; then
+            unzip -tq Taverna_do_MAU_MAU_Icones_Oficiais.zip
+            unzip -oq Taverna_do_MAU_MAU_Icones_Oficiais.zip -d .
+          fi
+          python qa/merge-beta-frontend.py
+          python qa/apply-alpha-ui-v91.py site
+          python qa/apply-alpha-v92.py site
+          python qa/padronizar-nome.py site
+      - name: Validar motor e scripts completos
+        run: node qa/validar.js site
+      - name: Verificar contrato e ausencia de links GitHub para jogadores
+        run: |
+          node <<'NODE'
+          const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm');
+          const h=fs.readFileSync('site/index.html','utf8');
+          const script=(h.match(/<script id="alpha-v92-script">([\s\S]*?)<\/script>/)||[])[1];
+          assert(script);
+          new vm.Script(script);
+          assert(script.includes('Alpha v93'));
+          assert(script.includes('alphaReportName'));
+          assert(script.includes('alphaReportBody'));
+          assert(script.includes('alphaSendFeedback'));
+          assert(script.includes('/api/feedback'));
+          assert(!script.includes('github.com'));
+          assert(!script.includes('/issues/new'));
+          assert(!script.includes('alphaReportTitle'));
+          assert(fs.readFileSync('site/sw.js','utf8').includes('taverna-pwa-alpha-v93-01'));
+          assert(h.includes("const API='https://taverna-multiplayer-servidor.edulopes941.workers.dev'"));
+          console.log('ALPHA_V93_RELEASE_READY: menu, motor, apelido, texto, Worker e cache');
+          NODE
+      - name: Verificar servidor de feedback ativo na Cloudflare
+        run: |
+          curl --fail --silent --show-error --max-time 20 'https://taverna-multiplayer-servidor.edulopes941.workers.dev/health' | grep -q '"feedback":"anonymous-v1"'
+          curl --fail --silent --show-error --max-time 20 'https://taverna-multiplayer-servidor.edulopes941.workers.dev/api/feedback/feed' | grep -q '"items"'
