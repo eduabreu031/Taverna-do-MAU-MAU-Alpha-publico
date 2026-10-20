@@ -14,6 +14,15 @@ assert html.count(needle)==1,('Cliente multiplayer mudou',html.count(needle))
 html=html.replace(needle,
  "if(m.type==='removed_by_admin'){close(false);el('sceneMultiplayer').classList.add('hidden');el('sceneWelcome').classList.remove('hidden');window.TavernaRemovalNotice?.();return;}\n  "+needle,1)
 
+# O apelido automático não vira preferência persistida do navegador.
+# O PWA ainda mantém os assets estáticos necessários ao modo offline.
+readName="const saved=localStorage.getItem('mau2_player_name');if(saved)$('playerName').value=saved;"
+assert html.count(readName)==1,('Restaurador de nome inesperado',html.count(readName))
+html=html.replace(readName,"const saved='';",1)
+saveName="try{localStorage.setItem('mau2_player_name',name)}catch(_){ }"
+assert html.count(saveName)==1,('Persistência de nome inesperada',html.count(saveName))
+html=html.replace(saveName,"/* Apelidos de visitante não persistem após fechar a aba. */",1)
+
 # O endereço no backend preserva a sessão só quando é uma conta real.
 # Visitantes têm sessão efêmera em memória, inclusive para reconexão na mesma aba.
 needle="const key=c=>'taverna-beta-session-'+c;"
