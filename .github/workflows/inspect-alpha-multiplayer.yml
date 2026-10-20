@@ -1,0 +1,13 @@
+name: Inspecionar integração multiplayer Alpha
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  inspecionar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 qa/inspect-alpha-multiplayer.py
