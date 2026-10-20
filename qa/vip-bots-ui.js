@@ -65,6 +65,21 @@ requestAccess.onclick=async()=>{
  finally{requestAccess.disabled=false;}
 };
 
+// A entrada VIP é exclusiva do menu. O campo de códigos é apenas para salas comuns.
+let vipMenuEntry=false;
+const ordinaryJoin=$('onlineJoin');
+ordinaryJoin?.addEventListener('click',event=>{
+ if(($('onlineRoomCode')?.value||'').trim().toUpperCase()!=='TAVERN'||vipMenuEntry)return;
+ event.preventDefault();event.stopImmediatePropagation();
+ status.textContent='A Sala VIP só pode ser acessada pelo botão Sala VIP.';
+},true);
+const vipCodeLabel=$('onlineCode')?.closest('p');
+function hideVipRoomCode(){
+ if(!vipCodeLabel)return;
+ const inVip=!$('onlineLobby')?.classList.contains('hidden')&&$('onlineCode')?.textContent.trim()==='TAVERN';
+ vipCodeLabel.hidden=inVip;
+}
+setInterval(hideVipRoomCode,350);hideVipRoomCode();
 vipButton.onclick=async()=>{
  vipButton.disabled=true;status.textContent='Consultando sala VIP…';
  try{
@@ -72,7 +87,8 @@ vipButton.onclick=async()=>{
   if(!vip.vip)throw Error('Sala VIP ainda não está disponível');
   $('onlineRoomCode').value=vip.code;
   status.textContent='Entrando na sala VIP…';
-  $('onlineJoin').click();
+  vipMenuEntry=true;
+  try{$('onlineJoin').click();}finally{vipMenuEntry=false;}
  }catch(err){status.textContent=err.message||'Não foi possível entrar na sala VIP';}
  finally{vipButton.disabled=false;}
 };
