@@ -80,6 +80,11 @@ try{
     };
     if(path==='/api/vip/password')return {ok:true};
     if(path==='/api/vip/kick')return {ok:true};
+    if(path==='/api/vip/access/requests')return {requests:[{id:'requester-01',name:'Aventureiro',requestedAt:Date.now()}]};
+    if(path==='/api/vip/access/decide')return {ok:true,status:'approved'};
+    if(path==='/api/vip/access/status')return {status:'none'};
+    if(path==='/api/vip/access/request')return {status:'pending'};
+
     throw Error('Rota de teste inesperada: '+path);
    };
   });
@@ -131,6 +136,10 @@ try{
   await page.waitForSelector('#tavVipAdminOverlay:not([hidden])');
   assert(await page.locator('#tavVipAdminOverlay').getByText('Amigo').count()>0,'Membro ausente da administração');
   assert(await page.locator('#tavVipAdminOverlay').getByText('Bot da Taverna').count()>0,'Bot ausente da administração');
+  assert(await page.locator('.tav-admin-approve').count()===1,'Solicitação VIP não exibida');
+  await page.locator('.tav-admin-approve').click();
+  assert.equal(await page.locator('.tav-admin-approve').count(),0,'Aprovação não removeu pedido pendente');
+
   await page.screenshot({path:'qa/screenshots/admin-'+width+'.png'});
   await page.locator('.tav-admin-password').click();
   await page.waitForSelector('.tav-vip-password-sheet:not([hidden])');

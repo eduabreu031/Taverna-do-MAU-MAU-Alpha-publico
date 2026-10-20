@@ -98,6 +98,9 @@ async function pass(code=''){
   if(status.passwordProtected){
    const member=await requireUser();
    if(member?.role!=='admin'&&!vipPassword){
+    const grant=member?.role==='guest'?{status:'none'}:await roomRequest('/api/vip/access/status','GET');
+    // Mesmo com pedido pendente, quem conhece a senha pode entrar normalmente.
+    if(grant.status==='approved')return (await roomRequest('/api/room/pass','POST',{roomCode})).pass;
     if(!vipPromptPending)vipPromptPending=(async()=>window.TavernaVipPrompt?await window.TavernaVipPrompt('Senha da Sala VIP'):null)().finally(()=>{vipPromptPending=null;});
     const value=await vipPromptPending;
     if(value===null||value==='')throw Error('Entrada na Sala VIP cancelada');
