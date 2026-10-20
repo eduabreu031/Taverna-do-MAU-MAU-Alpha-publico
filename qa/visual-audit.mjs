@@ -66,6 +66,7 @@ try{
   await page.screenshot({path:'qa/screenshots/lobby-'+width+'.png'});
   // Central administrativa: usuários comuns não recebem o botão.
   assert(await page.locator('#tavCentralOpen').isHidden(),'Central visível a conta não administradora');
+  assert(await page.locator('#tavVipRequestAccess').isHidden(),'Visitante sem conta não deve ver botão de pedido');
   // Painel VIP: acesso só com conta administrativa, inclusive fora do lobby.
   assert(await page.locator('#tavVipAdminOpen').isHidden(),'Controle administrativo indevidamente exposto');
   await page.evaluate(()=>{
@@ -131,6 +132,7 @@ try{
   await page.locator('.tav-central-close').click();
   assert(await page.locator('#tavCentralOverlay').isHidden());
   await page.evaluate(()=>{document.getElementById('sceneWelcome').classList.add('hidden');document.getElementById('sceneMultiplayer').classList.remove('hidden');});
+  assert(await page.locator('#tavVipRequestAccess').isHidden(),'Administrador não pode ver botão de solicitar acesso');
   await page.waitForSelector('#tavVipAdminOpen:not([hidden])',{timeout:3000});
   await page.locator('#tavVipAdminOpen').click();
   await page.waitForSelector('#tavVipAdminOverlay:not([hidden])');
@@ -207,7 +209,22 @@ try{
  assert(await memberPage.locator('#playerName').evaluate(x=>x.readOnly),'Nome autenticado deveria ser fixo');
  await memberPage.locator('#chooseOffline').click();
  assert.equal(await memberPage.locator('#playerName').inputValue(),'aventureiro_real');
+ await memberPage.evaluate(()=>{
+  window.__vipStatus='none';
+  window.TavernaAuth.roomRequest=async(path)=>{
+   if(path==='/api/vip/access/status')return {status:window.__vipStatus};
+   throw new Error('Requisição não simulada: '+path);
+  };
+ });
+ await memberPage.waitForFunction(()=>document.querySelector('#tavVipRequestAccess')&&!document.querySelector('#tavVipRequestAccess').hidden,{timeout:10000});
+ await memberPage.evaluate(()=>{window.__vipStatus='approved'});
+ await memberPage.waitForFunction(()=>document.querySelector('#tavVipRequestAccess').hidden,{timeout:10000});
+ await memberPage.evaluate(()=>{window.__vipStatus='none'});
+ await memberPage.waitForFunction(()=>!document.querySelector('#tavVipRequestAccess').hidden,{timeout:10000});
+ await memberPage.evaluate(()=>{window.__vipStatus='pending'});
+ await memberPage.waitForFunction(()=>document.querySelector('#tavVipRequestAccess').hidden,{timeout:10000});
  await memberPage.close();
  console.log('REGISTERED_NAME_AUTOFILL_OK');
+ console.log('VIP_REQUEST_BUTTON_VISIBILITY_OK');
 
 }finally{await browser.close();}
