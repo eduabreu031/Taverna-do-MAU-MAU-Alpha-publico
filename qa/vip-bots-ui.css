@@ -36,3 +36,5 @@
 #tavVipRequestAccess:disabled{opacity:.58}
 .tav-access-list .tav-admin-person{flex-wrap:wrap}
 .tav-admin-approve,.tav-admin-deny{flex:0 0 auto;min-height:39px;padding:7px 10px}
+
+#tavVipRequestAccess[hidden]{display:none!important}
