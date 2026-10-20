@@ -8,6 +8,7 @@ try{
   const page=await browser.newPage({viewport:{width,height:800},deviceScaleFactor:1,isMobile:width<=430,hasTouch:width<=430});
   await page.goto('http://127.0.0.1:8765/',{waitUntil:'domcontentloaded',timeout:30000});
   await page.waitForSelector('#chooseMultiplayer',{timeout:15000});
+  await page.waitForTimeout(450);
   await page.evaluate(()=>{const news=document.getElementById('alphaInformationOverlay');if(news)news.hidden=true;});
   const root=await page.evaluate(()=>({body:document.body.scrollWidth,screen:document.documentElement.clientWidth}));
   assert(root.body<=root.screen+3,'Rolagem horizontal em '+width+': '+JSON.stringify(root));
