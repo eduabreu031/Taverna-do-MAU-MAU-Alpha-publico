@@ -1,17 +1,16 @@
 {
-  "current": "alpha-0.4.98.0",
+  "current": "alpha-0.4.99.0",
   "issuesRepo": "eduabreu031/Taverna-do-MAU-MAU-Alpha-publico",
   "entries": [
     {
-      "id": "alpha-0.4.98.0",
-      "label": "0.4.98.0-alpha",
+      "id": "alpha-0.4.99.0",
+      "label": "0.4.99.0-alpha",
       "date": "2026-10-20",
-      "title": "Central da Taverna para administração",
+      "title": "Salas sempre prontas para novas partidas",
       "items": [
-        "Central administrativa exclusiva da conta gestora, com pessoas conectadas, partidas em andamento e salas ativas.",
-        "Observação de partidas somente leitura, sem revelar mãos ocultas nem participar do jogo.",
-        "Consulta de relatos de bugs e sugestões enviados dentro do jogo.",
-        "Contagem global leve sem interferir na jogabilidade e controles existentes."
+        "Salas abandonadas são encerradas automaticamente após um minuto sem jogadores conectados.",
+        "Na Sala VIP, os bots saem quando todos os jogadores deixam a mesa, liberando os lugares para uma nova partida.",
+        "Ao entrar com uma conta, o nome do aventureiro aparece preenchido automaticamente."
       ]
     },
     {
@@ -22,8 +21,7 @@
       "items": [
         "Visitantes entram como Forasteiro e recebem nomes numerados quando necessário, sem salvar sua sessão de convidado no navegador.",
         "Quem é removido da Sala VIP recebe um aviso e retorna às boas-vindas.",
-        "Cadastro com tela própria, confirmação de senha e telefone privado com DDD.",
-        "Sessões de contas registradas, regras e partidas offline preservadas."
+        "Cadastro com tela própria, confirmação de senha e telefone privado com DDD."
       ]
     },
     {
@@ -32,9 +30,9 @@
       "date": "2026-10-20",
       "title": "Sala VIP e convocação de bots",
       "items": [
-        "Sala VIP permanente com presença dos jogadores e início independente do criador.",
-        "Correção da autenticação dos bots em partidas multiplayer.",
-        "Seletor de bots tematizado em vinho e dourado, sem menu nativo do Android."
+        "A Sala VIP está disponível para encontros e partidas com seus amigos.",
+        "Convocação de bots para partidas multiplayer.",
+        "Seletor de bots com visual próprio da Taverna."
       ]
     },
     {
@@ -43,9 +41,8 @@
       "date": "2026-10-20",
       "title": "Visitantes e lobby mais limpo",
       "items": [
-        "Nova opção de entrar online como visitante sem criar conta.",
-        "Corrigida a conexão da sala após login e o alinhamento do perfil no celular.",
-        "Controles de criar/entrar por código ocultos durante o lobby conectado."
+        "Agora é possível jogar online como visitante sem criar conta.",
+        "Entrada nas salas e apresentação do lobby aprimoradas."
       ]
     },
     {
@@ -54,9 +51,8 @@
       "date": "2026-10-20",
       "title": "Contas para jogar na Taverna",
       "items": [
-        "Cadastro e login para o modo multiplayer com contas persistentes.",
-        "Salas online associadas a jogadores autenticados e retomada de conexão vinculada à conta.",
-        "Modo offline preservado sem exigir login."
+        "Cadastro e login para guardar sua conta e entrar nas partidas online.",
+        "Modo offline continua disponível sem exigir conta."
       ]
     },
     {
@@ -65,9 +61,8 @@
       "date": "2026-10-19",
       "title": "O livro da Taverna e as salas",
       "items": [
-        "Livro de regras com fundo bordô e dourado, combinando com os menus de novidades e relatos.",
-        "Depois de criar ou entrar em uma sala multiplayer, os controles de criação e de código ficam ocultos; a tela mostra apenas o lobby.",
-        "Motor do jogo e servidor multiplayer preservados."
+        "Livro de regras disponível no menu de entrada.",
+        "A sala mostra somente as opções de partida quando os jogadores estão reunidos."
       ]
     },
     {
@@ -76,9 +71,7 @@
       "date": "2026-10-19",
       "title": "A mesma Taverna, em cada tela",
       "items": [
-        "O livro de regras agora acompanha as cores vinho, bordô e dourado do changelog e dos relatos.",
-        "Removido o selo de Beta da tela multiplayer: esta versão continua sendo Alpha.",
-        "Sem alterações nas regras, salas ou conexão multiplayer."
+        "O livro de regras agora combina com a identidade visual vinho e dourado da Taverna."
       ]
     },
     {
@@ -87,10 +80,8 @@
       "date": "2026-10-19",
       "title": "As leis da Taverna",
       "items": [
-        "Livro de regras reescrito com explicações claras para jogar, sem detalhes técnicos.",
-        "Cartas especiais apresentadas apenas por seus valores, com efeitos válidos para todos os naipes.",
-        "Malandragens agora aparecem bloqueadas, aguardando o futuro sistema de conquistas.",
-        "Nova numeração pública de quatro partes para distinguir revisões e pequenos ajustes."
+        "Livro de regras com explicações claras das cartas especiais.",
+        "A seção de malandragens está sendo preparada para futuras novidades."
       ]
     },
     {
@@ -99,10 +90,8 @@
       "date": "2026-10-19",
       "title": "A voz da Taverna",
       "items": [
-        "O pergaminho de novidades e os menus agora seguem a paleta vinho e bordô da Taverna.",
-        "Relate problemas e compartilhe sugestões sem criar conta no GitHub.",
-        "O formulário pede apenas um nome ou apelido, o tipo do relato e sua mensagem.",
-        "Os relatos ficam guardados no servidor e são organizados automaticamente no GitHub, quando a sincronização estiver disponível."
+        "Os menus e o pergaminho de novidades seguem as cores da Taverna.",
+        "É possível relatar bugs e enviar sugestões sem criar conta."
       ]
     },
     {
@@ -111,22 +100,8 @@
       "date": "2026-10-19",
       "title": "A voz dos aventureiros",
       "items": [
-        "Novidades da Taverna: pergaminho exibido uma vez por versão neste dispositivo.",
-        "Novo botão discreto para relatar problemas e sugerir melhorias.",
-        "Relatos preenchidos com contexto e encaminhados ao GitHub para revisão.",
-        "Número da Alpha visível no menu; bugs e sugestões organizados na triagem."
-      ]
-    },
-    {
-      "id": "alpha-v91",
-      "label": "Alpha v91",
-      "date": "2026-10-19",
-      "title": "Testes públicos ampliados",
-      "items": [
-        "Livro de Regras & Malandragens na tela inicial.",
-        "Ícone do aplicativo redesenhado, com melhorias de atualização offline.",
-        "Novos recursos multiplayer em teste público: bots, espectadores e placar.",
-        "Regras adicionais para ausência e penalidades, sujeitas a testes dos jogadores."
+        "O pergaminho de novidades reúne atualizações da Taverna.",
+        "Novo espaço para relatar problemas e sugerir melhorias."
       ]
     }
   ]

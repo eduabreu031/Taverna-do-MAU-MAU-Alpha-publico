@@ -43,6 +43,11 @@
   $('sceneMultiplayer')?.classList.add('hidden');
   $('sceneWelcome')?.classList.remove('hidden');
   document.getElementById('tavVipAdminOverlay')?.setAttribute('hidden','');
+  message.textContent='Você foi removido da Sala VIP pelo administrador.';
   notice.hidden=false;button.focus();
+ };
+ window.TavernaRoomExpiredNotice=()=>{
+  window.TavernaRemovalNotice();
+  message.textContent='Esta sala foi encerrada após um minuto sem jogadores conectados. Você voltou às boas-vindas.';
  };
 })();

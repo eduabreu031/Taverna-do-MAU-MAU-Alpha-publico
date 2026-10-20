@@ -6,6 +6,28 @@
 .tav-central-status{font:13px Georgia,serif;color:#e3c39a}.tav-central-counters{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.tav-central-counter{background:#190f17b9;border:1px solid #775e49;border-radius:9px;padding:14px 9px;display:grid;text-align:center}.tav-central-counter strong{font:700 30px Georgia,serif}.tav-central-counter span{font:13px Georgia,serif}.tav-central-tabs{display:flex;gap:9px;margin:17px 0;flex-wrap:wrap}.tav-central-tab{flex:1}.tav-central-panel .tav-central-tab.selected{background:#b58655;color:#26141e}
 .tav-central-match{padding:12px 9px;border-bottom:1px solid #977456;display:flex;align-items:center;justify-content:space-between;gap:10px}.tav-central-match-meta{display:grid;gap:3px}.tav-central-match-meta small{font:13px Georgia,serif;color:#e1c8a2}
 .tav-central-report-list{display:grid;gap:9px}.tav-central-report{border:1px solid #87654d;border-radius:9px;padding:12px;background:#1d1119}.tav-central-report strong,.tav-central-report small{display:block}.tav-central-report small{opacity:.7}.tav-central-report p{margin:6px 0 0;overflow-wrap:anywhere}
-.tav-central-felt{border:8px ridge #754352;border-radius:40px;background:radial-gradient(ellipse at 40% 25%,#834255,#381724);padding:16px 12px;min-height:280px}.tav-central-top{display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap}.tav-central-card{display:inline-flex;align-items:center;justify-content:center;background:#fff4da;border:1px solid #8b6546;color:#36252d;width:34px;height:49px;border-radius:5px;font-weight:bold;box-shadow:1px 2px 4px #0005}.tav-central-card-backs .tav-central-card{background:linear-gradient(45deg,#a75069,#5c2944);color:#e7be80;width:20px;height:32px;font-size:13px}
-.tav-central-player-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(118px,1fr));gap:10px;margin-top:19px}.tav-central-seat{background:#200f19b5;border:1px solid #895e54;border-radius:9px;padding:10px 7px;display:grid;gap:5px;justify-items:center;text-align:center}.tav-central-seat.active{outline:2px solid #e9c37c}.tav-central-seat span{font-size:12px}.tav-central-card-backs{display:flex;gap:2px;justify-content:center}
+.tav-central-felt{box-sizing:border-box;width:100%;border:7px ridge #754352;border-radius:28px;background:radial-gradient(ellipse at 40% 25%,#834255,#381724);padding:clamp(8px,2vw,18px);box-shadow:inset 0 12px 26px #200e16a1;min-height:260px;overflow:hidden}
+.tav-central-board{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;padding:9px 0 15px;border-bottom:1px solid #dab68940}
+.tav-central-board-meta{font:700 clamp(12px,3vw,16px) Georgia,serif;text-align:center;margin:0;color:#f9deb2}
+.tav-central-top{display:flex;align-items:center;justify-content:center;gap:12px;font:700 14px Georgia,serif}
+.tav-central-card{display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;background:#fff4da;border:1px solid #8b6546;color:#36252d;width:34px;height:49px;border-radius:5px;font:700 15px Georgia,serif;box-shadow:1px 2px 4px #0005}
+.tav-central-card.red{color:#b32843}
+.tav-central-discard.new{animation:tavDiscardArrive .55s cubic-bezier(.15,.9,.28,1.04) both}
+.tav-central-deck,.tav-central-suit{font:13px Georgia,serif;color:#eed2ad}
+.tav-central-player-grid{display:grid;grid-template-columns:repeat(var(--seat-columns,3),minmax(0,1fr));gap:clamp(5px,1.5vw,12px);align-items:stretch;margin-top:15px}
+.tav-central-seat{box-sizing:border-box;min-width:0;min-height:86px;background:#200f19b5;border:1px solid #895e54;border-radius:9px;padding:9px 3px;display:flex;flex-direction:column;align-items:center;gap:4px;justify-content:space-around;text-align:center;transition:background-color .3s,border-color .3s,box-shadow .3s}
+.tav-central-seat.active{background:#613244;border-color:#f7d185;box-shadow:0 0 0 2px #e9c37c7b,inset 0 0 16px #ebc47a26}
+.tav-central-seat.active:before{content:'● VEZ';display:block;font:700 10px Georgia,serif;color:#ffe9aa}
+.tav-central-seat.eliminated{opacity:.48}
+.tav-central-seat-name{font:700 clamp(10px,2.8vw,14px)/1.3 Georgia,serif;max-width:100%;overflow-wrap:anywhere}
+.tav-central-seat-count{font:clamp(10px,2.4vw,12px) Georgia,serif}
+.tav-central-card-backs{display:flex;gap:0;justify-content:center;align-items:center;min-height:34px;width:100%;overflow:hidden}
+.tav-central-card-backs .tav-central-card{background:repeating-linear-gradient(45deg,#a75069,#a75069 4px,#5c2944 5px,#5c2944 8px);color:#e7be80;width:clamp(14px,3vw,20px);height:32px;font-size:12px;margin-left:-2px}
+.tav-central-seat.turn-changed{animation:tavSeatTurn .6s ease-out}
+.tav-central-seat.hand-changed .tav-central-card-backs{animation:tavHandChange .45s ease-out}
+@keyframes tavDiscardArrive{from{transform:translateY(-18px) rotate(-14deg) scale(.7);opacity:.35}to{transform:translateY(0) rotate(0) scale(1);opacity:1}}
+@keyframes tavSeatTurn{0%{filter:brightness(1.55)}100%{filter:brightness(1)}}
+@keyframes tavHandChange{0%{transform:translateY(-6px);opacity:.6}100%{transform:translateY(0);opacity:1}}
+@media(prefers-reduced-motion:reduce){.tav-central-seat,.tav-central-discard{animation:none!important;transition:none!important}}
 @media(max-width:420px){.tav-central-panel{padding:14px 10px}.tav-central-panel button{font-size:12px;padding:7px}.tav-central-header h2{font-size:20px}.tav-central-felt{padding:13px 7px}}
+@media(max-width:420px){.tav-central-felt{border-radius:18px;border-width:5px}.tav-central-seat{min-height:78px;padding:7px 2px}.tav-central-player-grid{gap:5px}.tav-central-card-backs .tav-central-card{width:14px;height:25px}.tav-central-panel{width:98vw;max-width:98vw;padding:12px 8px}}
