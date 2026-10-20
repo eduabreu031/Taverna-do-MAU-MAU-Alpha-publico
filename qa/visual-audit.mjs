@@ -38,6 +38,39 @@ try{
   await page.getByRole('button',{name:'Confirmar',exact:true}).click();
   assert.equal(await page.locator('#onlineBotsDEV').inputValue(),'1');
   await page.screenshot({path:'qa/screenshots/lobby-'+width+'.png'});
+  // Painel VIP: acesso só com conta administrativa, inclusive fora do lobby.
+  assert(await page.locator('#tavVipAdminOpen').isHidden(),'Controle administrativo indevidamente exposto');
+  await page.evaluate(()=>{
+   const administrator={id:'account_admin',username:'gedetheboss',role:'admin'};
+   window.TavernaAuth.getUser=()=>administrator;
+   window.TavernaAuth.requireUser=async()=>administrator;
+   window.TavernaAuth.roomRequest=async(path,method)=>{
+    if(path==='/api/vip'&&method==='GET')return {
+     canManage:true,phase:'waiting',passwordProtected:false,
+     members:[{id:'player_a',name:'Amigo',online:true,status:'aguardando'}],
+     bots:[{id:'bot_a',name:'Bot da Taverna',online:true,status:'conectado'}]
+    };
+    if(path==='/api/vip/password')return {ok:true};
+    if(path==='/api/vip/kick')return {ok:true};
+    throw Error('Rota de teste inesperada: '+path);
+   };
+  });
+  await page.waitForSelector('#tavVipAdminOpen:not([hidden])',{timeout:3000});
+  await page.locator('#tavVipAdminOpen').click();
+  await page.waitForSelector('#tavVipAdminOverlay:not([hidden])');
+  assert(await page.locator('#tavVipAdminOverlay').getByText('Amigo').count()>0,'Membro ausente da administração');
+  assert(await page.locator('#tavVipAdminOverlay').getByText('Bot da Taverna').count()>0,'Bot ausente da administração');
+  await page.screenshot({path:'qa/screenshots/admin-'+width+'.png'});
+  await page.locator('.tav-admin-password').click();
+  await page.waitForSelector('.tav-vip-password-sheet:not([hidden])');
+  const above=await page.evaluate(()=>{
+   const pwd=document.querySelector('.tav-vip-password-sheet'),adm=document.querySelector('#tavVipAdminOverlay');
+   return Number(getComputedStyle(pwd).zIndex)>Number(getComputedStyle(adm).zIndex);
+  });
+  assert(above,'Formulário de senha deve ficar acima do painel VIP');
+  await page.locator('.tav-vip-password-sheet').getByRole('button',{name:'Cancelar'}).click();
+  await page.locator('.tav-admin-close').click();
+  assert(await page.locator('#tavVipAdminOverlay').isHidden(),'Painel VIP não fechou');
   const box=await page.locator('#alphaAccountsBar').boundingBox();
   const panel=await page.locator('#sceneMultiplayer .multiplayer-panel').boundingBox();
   assert(box&&panel&&box.x>=panel.x-1&&box.x+box.width<=panel.x+panel.width+1,'Barra de conta fora do painel '+width);
