@@ -19,6 +19,12 @@ test('HTML, scripts e motor presentes',()=>{
  assert(scripts.length>=7,'Scripts do jogo ausentes');
  assert(coreScript,'Motor do jogo ausente');
 });
+test('Sala VIP entra apenas pelo menu específico e não exibe código',()=>{
+ assert(html.includes("vipMenuEntry=true"),'Menu VIP não habilita fluxo dedicado');
+ assert(html.includes("event.stopImmediatePropagation()"),'Entrada manual pelo código VIP não é interceptada');
+ assert(html.includes("vipCodeLabel.hidden=inVip"),'Código interno ainda visível na sala VIP');
+ assert(html.includes("window.TavernaVipPrompt"),'Autenticação VIP foi removida');
+});
 test('Cache busca versão nova e mantém offline',()=>{
  const sw=fs.readFileSync(path.join(site,'sw.js'),'utf8');
  new vm.Script(sw,{filename:'sw.js'});
