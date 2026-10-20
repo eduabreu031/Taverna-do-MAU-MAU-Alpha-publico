@@ -1,7 +1,18 @@
 {
-  "current": "alpha-0.4.99.0",
+  "current": "alpha-0.5.0.0",
   "issuesRepo": "eduabreu031/Taverna-do-MAU-MAU-Alpha-publico",
   "entries": [
+    {
+      "id": "alpha-0.5.0.0",
+      "label": "0.5.0.0-alpha",
+      "date": "2026-10-20",
+      "title": "Convidados à Sala VIP",
+      "items": [
+        "Jogadores com conta podem solicitar acesso à Sala VIP sem conhecer a senha.",
+        "O administrador pode aprovar ou recusar pedidos de entrada.",
+        "Uma autorização aprovada continua válida até a próxima mudança de senha da sala."
+      ]
+    },
     {
       "id": "alpha-0.4.99.0",
       "label": "0.4.99.0-alpha",
