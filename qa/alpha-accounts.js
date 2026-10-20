@@ -34,7 +34,9 @@ const show=()=>{switchMode('login');overlay.hidden=false;query('alphaAccountUser
 const hide=()=>{overlay.hidden=true;query('alphaAccountPassword').value='';query('alphaAccountConfirmPassword').value='';};
 function syncAdventureName(){
  const account=user,field=document.getElementById('playerName');
- if(!field||!account||account.role==='guest')return;
+ if(!field)return;
+ field.readOnly=!!account&&account.role!=='guest';
+ if(!account||account.role==='guest')return;
  if(field.value!==account.username){
   field.value=account.username;
   field.dispatchEvent(new Event('input',{bubbles:true}));
