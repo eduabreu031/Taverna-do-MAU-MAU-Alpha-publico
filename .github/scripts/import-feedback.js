@@ -1,6 +1,5 @@
 // Importa relatos sem conta a partir do Worker para Issues via GITHUB_TOKEN automático do Actions.
 // NÃO colocar GitHub Token, credencial ou chave no cliente.
-const github=globalThis.__github,context=globalThis.__context,core=globalThis.__core;
 const {owner,repo}=context.repo;
 const endpoint='https://taverna-multiplayer-servidor.edulopes941.workers.dev/api/feedback/feed';
 const response=await fetch(endpoint,{headers:{accept:'application/json'},signal:AbortSignal.timeout(20000)});
