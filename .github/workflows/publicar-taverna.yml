@@ -45,6 +45,8 @@ jobs:
         run: python3 qa/apply-alpha-accounts.py site
       - name: Adicionar VIP e seleção temática de bots
         run: python3 qa/apply-vip-bots-ui.py site
+      - name: Ativar visitantes sem cache e aviso de remoção
+        run: python3 qa/apply-visitor-entry.py site
       - name: Conferir jogo e integridade das regras
         run: node qa/validar.js site
   publicar:
@@ -87,6 +89,8 @@ jobs:
         run: python3 qa/apply-alpha-accounts.py site
       - name: Adicionar VIP e seleção temática de bots
         run: python3 qa/apply-vip-bots-ui.py site
+      - name: Ativar visitantes sem cache e aviso de remoção
+        run: python3 qa/apply-visitor-entry.py site
       - name: Preparar GitHub Pages
         uses: actions/configure-pages@v5
       - name: Preparar somente os arquivos publicos
