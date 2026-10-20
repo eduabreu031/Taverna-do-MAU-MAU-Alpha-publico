@@ -13,7 +13,7 @@ async function open(width){
 async function geometry(page){
  return page.evaluate(()=>{
   const box=sel=>{const e=document.querySelector(sel);if(!e)return null;const b=e.getBoundingClientRect();return {x:b.x,y:b.y,width:b.width,height:b.height};};
-  return {viewport:innerWidth,table:box('#sceneGame .table-shell'),felt:box('#sceneGame .felt'),hand:box('#humanHand'),viewportBox:box('#sceneGame .table-viewport'),scroll:document.documentElement.scrollWidth};
+  return {viewport:innerWidth,table:box('#sceneGame .table-shell'),felt:box('#sceneGame .felt'),hand:box('#humanHand'),draw:box('#drawPile'),discard:box('#discardPile'),center:box('#centerZone'),humanZone:box('#humanZone'),viewportBox:box('#sceneGame .table-viewport'),scroll:document.documentElement.scrollWidth};
  });
 }
 try{
@@ -51,6 +51,7 @@ try{
   assert(Math.abs(rendered.table.width-ref.table.width)<3,'Escala da mesa difere offline/online '+width+': '+ref.table.width+' vs '+rendered.table.width);
   assert(Math.abs(rendered.felt.width-ref.felt.width)<3,'Tecido da mesa difere offline/online '+width);
   assert(rendered.scroll<=width+4,'Rolagem horizontal na mesa online '+width);
+  console.log('MESA_GEOMETRIA',width,JSON.stringify({offline:ref,online:rendered}));
   await online.screenshot({path:'qa/screenshots/mesa-online-'+width+'.png',fullPage:false});
   await online.locator('#sceneGame .table-shell').screenshot({path:'qa/screenshots/mesa-online-recorte-'+width+'.png'});
   console.log('PARIDADE_MESA_OFFLINE_ONLINE',width,'largura=',Math.round(rendered.table.width));
