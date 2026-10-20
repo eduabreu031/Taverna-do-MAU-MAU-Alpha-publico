@@ -1,0 +1,16 @@
+/* Tema da Taverna: mesma paleta dos modais de novidades e relatos. */
+#rulesModalDEV{background:#100b13c9!important;backdrop-filter:blur(5px);z-index:995;overscroll-behavior:contain}
+#rulesModalDEV .rules-book{box-sizing:border-box;width:min(570px,95vw);max-height:calc(100dvh - 36px);overflow-y:auto;overscroll-behavior:contain;border:2px solid #b18a58!important;border-radius:15px;padding:21px clamp(14px,4vw,29px);background:radial-gradient(ellipse at 20% 3%,#643346 0%,#482335 36%,#2c1825 100%)!important;color:#f7e8d4!important;box-shadow:inset 0 0 0 4px #25131c,inset 0 2px 36px #aa5b5130,0 26px 90px #0b050bb5}
+#rulesModalDEV .rules-book h2{color:#ffe4bc;text-shadow:0 2px 2px #170a12;font:small-caps bold clamp(26px,5vw,34px) Georgia,serif}
+#rulesModalDEV .rules-kicker{color:#ebc28a}
+#rulesModalDEV .rules-tabs{margin-top:14px;flex-wrap:wrap}
+#rulesModalDEV .rules-tabs button{background:linear-gradient(140deg,#573043,#392030);border:1px solid #886040;color:#f5e2c8;min-height:42px;border-radius:9px;font:700 14px Georgia,serif}
+#rulesModalDEV .rules-tabs button.active{background:linear-gradient(180deg,#ad7853,#765035);border-color:#e1ba81;color:#fff7de}
+#rulesModalDEV .rules-content{color:#f1ddcb;line-height:1.55}
+#rulesModalDEV .rules-content h3{color:#ffe1a9;margin:19px 0 7px}
+#rulesModalDEV .rules-content b{color:#ffe4bc}
+#rulesModalDEV #rulesCloseDEV{background:linear-gradient(180deg,#ad7853,#765035);border:1px solid #e1ba81;color:#fff7de;border-radius:9px;padding:12px 15px;min-height:43px;font:700 14px Georgia,serif;width:100%}
+#rulesModalDEV button:focus-visible{outline:2px solid #e7bd7e;outline-offset:2px}
+@media(max-width:400px){#rulesModalDEV .rules-book{padding:14px 13px;max-height:calc(100dvh - 20px)}}
+/* Criar/entrar e sala aberta sao etapas distintas; nao mostrar controles de entrada na sala criada. */
+#sceneMultiplayer:has(#onlineLobby:not(.hidden)) .multiplayer-preview{display:none!important}
