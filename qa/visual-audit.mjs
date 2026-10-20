@@ -16,6 +16,18 @@ try{
   await page.click('#chooseMultiplayer');
   await page.waitForTimeout(350);
   await page.waitForSelector('#alphaAccountsOverlay:not([hidden])');
+  // Cadastro deve abrir uma TELA nova; formulário de login não valida cadastro.
+  await page.locator('#alphaAccountCreate').click();
+  assert(await page.locator('#alphaRegisterFields').isVisible(),'Confirmar senha e telefone não apareceram');
+  assert(await page.locator('#alphaAccountPhone').isVisible(),'Campo telefone ausente');
+  await page.locator('#alphaAccountUser').fill('qa_teste');
+  await page.locator('#alphaAccountPassword').fill('SenhaLonga123');
+  await page.locator('#alphaAccountConfirmPassword').fill('SenhaDiferente');
+  await page.locator('#alphaAccountPhone').fill('31987654321');
+  await page.locator('#alphaAccountCreate').click();
+  assert.match(await page.locator('#alphaAccountError').innerText(),/senhas/i);
+  await page.locator('#alphaAccountLogin').click();
+  assert(await page.locator('#alphaRegisterFields').isHidden(),'Botão voltar não retornou ao login');
   const auth=await page.locator('.alpha-accounts-panel').boundingBox();
   assert(auth&&auth.x>=-1&&auth.x+auth.width<=width+2,'Modal de conta fora da tela '+width);
   await page.screenshot({path:'qa/screenshots/auth-'+width+'.png'});
