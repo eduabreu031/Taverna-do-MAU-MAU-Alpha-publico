@@ -1,7 +1,19 @@
 {
-  "current": "alpha-v93",
+  "current": "alpha-0.4.94.0",
   "issuesRepo": "eduabreu031/Taverna-do-MAU-MAU-Alpha-publico",
   "entries": [
+    {
+      "id": "alpha-0.4.94.0",
+      "label": "0.4.94.0-alpha",
+      "date": "2026-10-19",
+      "title": "As leis da Taverna",
+      "items": [
+        "Livro de regras reescrito com explicações claras para jogar, sem detalhes técnicos.",
+        "Cartas especiais apresentadas apenas por seus valores, com efeitos válidos para todos os naipes.",
+        "Malandragens agora aparecem bloqueadas, aguardando o futuro sistema de conquistas.",
+        "Nova numeração pública de quatro partes para distinguir revisões e pequenos ajustes."
+      ]
+    },
     {
       "id": "alpha-v93",
       "label": "Alpha v93",
