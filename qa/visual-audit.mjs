@@ -100,6 +100,12 @@ try{
   const box=await page.locator('#alphaAccountsBar').boundingBox();
   const panel=await page.locator('#sceneMultiplayer .multiplayer-panel').boundingBox();
   assert(box&&panel&&box.x>=panel.x-1&&box.x+box.width<=panel.x+panel.width+1,'Barra de conta fora do painel '+width);
+  await page.evaluate(()=>window.TavernaRemovalNotice());
+  assert(await page.locator('#sceneWelcome').isVisible(),'Pessoa removida não retornou às boas-vindas');
+  assert(await page.locator('#tavRemovedNotice').isVisible(),'Aviso da remoção ausente');
+  assert.match(await page.locator('#tavRemovedNotice').innerText(),/removido.*administrador/i);
+  await page.locator('#tavRemovedNotice button').click();
+  assert(await page.locator('#tavRemovedNotice').isHidden(),'Aviso não foi dispensado');
   await page.close();
   console.log('VISUAL_VIEWPORT_OK',width);
  }
