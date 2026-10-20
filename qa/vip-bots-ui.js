@@ -9,10 +9,49 @@ vipButton.type='button';vipButton.id='tavVipEnter';
 const entrance=portal.querySelector('.multiplayer-preview');
 if(entrance)entrance.insertAdjacentElement('beforebegin',vipButton);
 const status=make('p','tav-vip-status','');vipButton.after(status);
+const security=make('section','tav-bots-sheet tav-vip-security');
+security.id='tavVipSecurity';security.hidden=true;security.setAttribute('role','dialog');security.setAttribute('aria-modal','true');
+const securityInside=make('div','tav-bots-sheet-inner');
+const securityHeading=make('h2','','Senha da sala VIP');
+const securityCaption=make('p','','A senha da sala é diferente da senha da sua conta.');
+const securityInput=make('input','tav-vip-secret');securityInput.type='password';securityInput.autocomplete='off';securityInput.maxLength=96;
+securityInput.placeholder='Senha VIP (mínimo 10 caracteres)';
+const securityError=make('p','tav-vip-security-error','');
+const securityActions=make('div','tav-bots-actions');
+const securityCancel=make('button','engraved-btn','Cancelar'),securitySave=make('button','engraved-btn primary','Confirmar');
+securityActions.append(securityCancel,securitySave);
+securityInside.append(securityHeading,securityCaption,securityInput,securityError,securityActions);
+security.append(securityInside);document.body.append(security);
+function askVipSecret(changing=false){
+ return new Promise(resolve=>{
+  security.hidden=false;securityHeading.textContent=changing?'Alterar a senha da VIP':'Digite a senha da sala VIP';
+  securityCaption.textContent=changing?'A mudança será exigida nos próximos acessos. Seus amigos já conectados não serão expulsos.':'Entre com a senha desta sala, fornecida pelo administrador.';
+  securityInput.value='';securityError.textContent='';securityInput.focus();
+  function finish(ok){security.hidden=true;securitySave.onclick=null;securityCancel.onclick=null;securityInput.onkeydown=null;resolve(ok);}
+  securityCancel.onclick=()=>finish(false);
+  securityInput.onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();securitySave.click();}else if(e.key==='Escape')finish(false)};
+  securitySave.onclick=async()=>{
+   if(securitySave.disabled)return;
+   securitySave.disabled=true;securityError.textContent='';
+   try{
+    await window.TavernaAuth.roomRequest(changing?'/api/vip/password':'/api/vip/unlock','POST',{password:securityInput.value});
+    finish(true);
+   }catch(error){securityError.textContent=error.message||'Não foi possível validar a senha.';}
+   finally{securitySave.disabled=false;}
+  };
+ });
+}
 vipButton.onclick=async()=>{
  vipButton.disabled=true;status.textContent='Consultando sala VIP…';
  try{
-  const vip=await window.TavernaAuth.roomRequest('/api/vip','GET');
+  let vip;
+  try{vip=await window.TavernaAuth.roomRequest('/api/vip','GET');}
+  catch(err){
+   if(err.code!=='VIP_PASSWORD_REQUIRED')throw err;
+   const unlocked=await askVipSecret(false);
+   if(!unlocked){status.textContent='Entrada na VIP cancelada.';return;}
+   vip=await window.TavernaAuth.roomRequest('/api/vip','GET');
+  }
   if(!vip.vip)throw Error('Sala VIP ainda não está disponível');
   $('onlineRoomCode').value=vip.code;
   status.textContent='Entrando na sala VIP…';
@@ -57,7 +96,10 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!sheet.hidden)close
 new MutationObserver(refresh).observe(botPanel,{attributes:true,attributeFilter:['hidden']});
 setInterval(refresh,750);refresh();
 const presence=make('section','tav-vip-presence');presence.id='tavVipPresence';presence.hidden=true;
-const title=make('h3','','Presença na sala VIP'),members=make('ul','tav-vip-member-list');presence.append(title,members);
+const title=make('h3','','Presença na sala VIP'),members=make('ul','tav-vip-member-list'),adminActions=make('div','tav-vip-admin-actions'),adminMessage=make('p','tav-vip-admin-message','');
+const changePassword=make('button','engraved-btn tav-vip-change-password','Alterar senha VIP');
+changePassword.type='button';changePassword.onclick=async()=>{if(await askVipSecret(true)){adminMessage.textContent='Senha de acesso alterada com sucesso.';updatePresence();}};
+adminActions.append(changePassword);presence.append(title,members,adminActions,adminMessage);
 $('onlineLobby')?.insertAdjacentElement('afterbegin',presence);
 async function updatePresence(){
  const inVip=!$('onlineLobby')?.classList.contains('hidden')&&$('onlineCode')?.textContent.trim()==='TAVERN';
@@ -66,12 +108,29 @@ async function updatePresence(){
  try{
   const res=await window.TavernaAuth.roomRequest('/api/vip','GET');
   const people=Array.isArray(res.members)?res.members:[];
+  const admin=window.TavernaAuth.getUser()?.role==='admin';
+  adminActions.hidden=!admin;
   members.replaceChildren(...people.map(p=>{
-   const li=make('li','',p.name+' — '+p.status);
-   li.classList.toggle('offline',!p.online);return li;
+   const li=make('li','tav-vip-member-row'),info=make('span','',p.name+' — '+p.status);
+   li.append(info);li.classList.toggle('offline',!p.online);
+   if(admin&&p.id&&p.name.toLowerCase()!=='gedetheboss'){
+    const remove=make('button','engraved-btn tav-vip-remove','Remover');
+    remove.type='button';remove.setAttribute('aria-label','Remover '+p.name+' da sala VIP');
+    remove.onclick=async()=>{
+     if(remove.dataset.confirm!=='yes'){remove.dataset.confirm='yes';remove.textContent='Confirmar remoção';return;}
+     remove.disabled=true;adminMessage.textContent='';
+     try{
+      await window.TavernaAuth.roomRequest('/api/vip/kick','POST',{memberId:p.id});
+      adminMessage.textContent=p.name+' foi retirado da VIP nesta sessão.';
+      updatePresence();
+     }catch(error){adminMessage.textContent=error.message||'Não foi possível remover jogador';remove.disabled=false;}
+    };
+    li.append(remove);
+   }
+   return li;
   }));
   if(!people.length)members.append(make('li','','Nenhum amigo conectado ainda'));
- }catch{members.replaceChildren(make('li','','Presença indisponível momentaneamente'));}
+ }catch(error){members.replaceChildren(make('li','',error.code==='VIP_PASSWORD_REQUIRED'?'Senha VIP alterada. Entre novamente na sala.':'Presença indisponível momentaneamente'));}
 }
 setInterval(updatePresence,6000);
 updatePresence();
