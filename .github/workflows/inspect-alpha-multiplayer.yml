@@ -1,4 +1,4 @@
-name: Inspecionar integração multiplayer Alpha
+name: Validar integração de contas na Alpha
 on:
   pull_request:
     branches: [main]
@@ -10,4 +10,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: python3 -m pip install --disable-pip-version-check cairosvg
+      - run: python3 qa/merge-beta-frontend.py
+      - run: python3 qa/apply-alpha-ui-v91.py site
+      - run: python3 qa/apply-alpha-v92.py site
+      - run: python3 qa/padronizar-nome.py site
       - run: python3 qa/inspect-alpha-multiplayer.py
+      - name: Integrar login e salas
+        run: python3 qa/apply-alpha-accounts.py site
+      - name: Validar motor e sintaxe de scripts
+        run: node qa/validar.js site
