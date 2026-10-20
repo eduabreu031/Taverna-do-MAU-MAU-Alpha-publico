@@ -2,7 +2,7 @@
 (()=>{'use strict';
 const API='https://taverna-multiplayer-servidor.edulopes941.workers.dev';
 const KEY='taverna-alpha-auth-token';
-let token=localStorage.getItem(KEY)||'',user=null,resolveForm=null,vipPassword='',vipPromptPending=null,mode='login';
+let token=localStorage.getItem(KEY)||'',user=null,resolveForm=null,vipPassword='',vipPromptPending=null,mode='login',vipMenuSession=false,vipMenuArmed=false;
 try{sessionStorage.removeItem(KEY);}catch{} // Elimina sessões antigas de visitantes sem afetar contas registradas.
 const el=(tag,attrs={},content='')=>{const node=document.createElement(tag);for(const [k,v] of Object.entries(attrs))node.setAttribute(k,v);if(content)node.textContent=content;return node;};
 const overlay=el('section',{id:'alphaAccountsOverlay',role:'dialog','aria-modal':'true','aria-label':'Acesse sua conta'});
@@ -93,6 +93,8 @@ async function roomRequest(path,method='POST',data){
 }
 async function pass(code=''){
  const roomCode=String(code||'').trim().toUpperCase();
+ if(roomCode==='TAVERN'&&!vipMenuSession)throw Error('Entre na Sala VIP pelo menu exclusivo.');
+ if(roomCode!=='TAVERN')vipMenuSession=false;
  if(roomCode==='TAVERN'){
   const status=await roomRequest('/api/vip','GET');
   if(status.passwordProtected){
@@ -100,7 +102,7 @@ async function pass(code=''){
    if(member?.role!=='admin'&&!vipPassword){
     const grant=member?.role==='guest'?{status:'none'}:await roomRequest('/api/vip/access/status','GET');
     // Mesmo com pedido pendente, quem conhece a senha pode entrar normalmente.
-    if(grant.status==='approved')return (await roomRequest('/api/room/pass','POST',{roomCode})).pass;
+    if(grant.status==='approved')return (await roomRequest('/api/room/pass','POST',{roomCode,vipEntry:true})).pass;
     if(!vipPromptPending)vipPromptPending=(async()=>window.TavernaVipPrompt?await window.TavernaVipPrompt('Senha da Sala VIP'):null)().finally(()=>{vipPromptPending=null;});
     const value=await vipPromptPending;
     if(value===null||value==='')throw Error('Entrada na Sala VIP cancelada');
@@ -108,7 +110,7 @@ async function pass(code=''){
    }
   }
  }
- try{const p=await roomRequest('/api/room/pass','POST',{roomCode,vipPassword:roomCode==='TAVERN'?vipPassword:undefined});return p.pass;}
+ try{const p=await roomRequest('/api/room/pass','POST',{roomCode,vipEntry:roomCode==='TAVERN',vipPassword:roomCode==='TAVERN'?vipPassword:undefined});return p.pass;}
  catch(e){if(roomCode==='TAVERN'&&/senha|VIP/i.test(e.message))vipPassword='';throw e;}
 }
 async function logout(){
@@ -121,7 +123,7 @@ async function restoreSilently(){
  try{const data=await request('/api/auth/me');if(data.user?.role==='guest')return null;user=data.user;syncAdventureName();return user;}
  catch{return null;}
 }
-window.TavernaAuth={requireUser,restoreSilently,roomRequest,pass,logout,syncAdventureName,getUser:()=>user,getToken:()=>token};
+window.TavernaAuth={requireUser,restoreSilently,roomRequest,pass,logout,syncAdventureName,getUser:()=>user,getToken:()=>token,armVipEntrance:()=>{vipMenuArmed=true;},consumeVipEntrance:()=>{const ok=vipMenuArmed;vipMenuArmed=false;if(ok)vipMenuSession=true;return ok;}};
 const portal=query('sceneMultiplayer');
 if(portal){
  const bar=el('div',{id:'alphaAccountsBar'}),status=el('span',{id:'alphaAccountsStatus'}),

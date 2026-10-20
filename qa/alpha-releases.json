@@ -1,7 +1,17 @@
 {
-  "current": "alpha-0.5.0.2",
+  "current": "alpha-0.5.0.3",
   "issuesRepo": "eduabreu031/Taverna-do-MAU-MAU-Alpha-publico",
   "entries": [
+    {
+      "id": "alpha-0.5.0.3",
+      "label": "0.5.0.3-alpha",
+      "date": "2026-10-20",
+      "title": "Entrada VIP organizada",
+      "items": [
+        "A Sala VIP agora é acessada exclusivamente pelo seu botão próprio; o campo de código fica reservado às salas comuns.",
+        "O identificador interno da Sala VIP e o convite por código não aparecem mais no lobby VIP."
+      ]
+    },
     {
       "id": "alpha-0.5.0.2",
       "label": "0.5.0.2-alpha",

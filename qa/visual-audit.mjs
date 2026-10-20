@@ -51,7 +51,15 @@ try{
   await page.screenshot({path:'qa/screenshots/auth-'+width+'.png'});
   await page.click('#alphaAccountCancel');
   await page.evaluate(()=>{const news=document.getElementById('alphaInformationOverlay');if(news)news.hidden=true;});
+  // Código interno da VIP não permite acesso pela entrada de salas comuns.
+  await page.locator('#onlineRoomCode').fill('TAVERN');
+  await page.locator('#onlineJoin').click();
+  assert.match(await page.locator('.tav-vip-status').innerText(),/botão exclusivo/i);
+  assert(await page.locator('#onlineLobby').isHidden(),'Entrada por TAVERN abriu sala VIP fora do menu');
   await page.evaluate(()=>{
+   // Na simulação de lobby, nenhuma janela de login deve interceptar controles.
+   document.getElementById('alphaAccountsOverlay').hidden=true;
+   window.TavernaAuth.roomRequest=async()=>({vip:true,members:[],canManage:false});
    document.querySelector('#sceneWelcome')?.classList.add('hidden');
    document.querySelector('#sceneMultiplayer')?.classList.remove('hidden');
    const lobby=document.querySelector('#onlineLobby');lobby.classList.remove('hidden');
@@ -59,6 +67,12 @@ try{
    const bots=document.querySelector('#botsLabDEV');bots.hidden=false;bots.classList.remove('hidden');
    const select=document.querySelector('#onlineBotsDEV');select.disabled=false;
   });
+  await page.waitForFunction(()=>document.getElementById('onlineCode')?.parentElement?.hidden===true,{timeout:8500});
+  assert(await page.locator('#onlineCopy').isHidden(),'Convite VIP deve ficar oculto');
+  await page.waitForFunction(()=>document.getElementById('tavVipPresence')?.hidden===false,null,{timeout:9500});
+  assert(await page.locator('#tavVipPresence').isVisible(),'Presença VIP deve permanecer visível');
+  assert(await page.locator('#onlineCode').isHidden(),'Código interno da VIP não pode ser exibido');
+  assert(await page.locator('#onlineRoomCode').inputValue()==='TAVERN','Controle comum não deve ganhar código alternativo');
   await page.waitForTimeout(1000);
   assert(await page.locator('.multiplayer-preview').isVisible()===false,'Entrada deve desaparecer no lobby');
   assert(await page.locator('#tavBotsOpen').isVisible(),'Botão temático ausente');
