@@ -90,7 +90,11 @@ try{
     window.TavernaAuth.roomRequest=async(path,method)=>{
       if(path==='/api/central/dashboard')return {online:11,playing:4,activeMatches:1,openRooms:2,rooms:[{code:'TAVERN',round:2,players:4,bots:1}],updatedAt:Date.now()};
       if(path==='/api/central/feedback')return {items:[{type:'bug',name:'Forasteiro',message:'Erro de teste',version:'0.4.97',at:Date.now()}]};
-      if(path==='/api/central/watch?room=TAVERN')return {game:{phase:'playing',round:2,direction:1,deckCount:30,top:{rank:'9',suit:'♠'},activeSuit:'♠',players:[{id:'a',alive:true,count:3},{id:'b',alive:true,count:4}],hand:[],turnPlayerId:'a'},players:[{id:'a',name:'A'},{id:'b',name:'B'}]};
+      if(path==='/api/central/watch?room=TAVERN'){
+        const count=window.__spectatorSeatCount||2,revision=window.__spectatorRevision||1;
+        const seats=Array.from({length:count},(_,i)=>({id:'seat'+i,name:'Aventureiro '+i,isBot:i>0&&i%2===1}));
+        return {game:{phase:'playing',round:2,direction:1,revision,deckCount:30,top:{id:'card'+revision,rank:revision>1?'Q':'9',suit:'♠'},activeSuit:'♠',players:seats.map((p,i)=>({id:p.id,alive:true,count:i===0?3:4})),hand:[],turnPlayerId:seats[revision%count].id},players:seats,serverNow:Date.now(),turnDeadline:Date.now()+15000};
+      }
       return previous(path,method);
     };
   });
@@ -99,7 +103,23 @@ try{
   assert.equal(await page.locator('.tav-central-counter strong').first().innerText(),'11');
   await page.locator('.tav-central-watch').click();
   await page.waitForSelector('.tav-central-felt');
-  assert(await page.locator('.tav-central-felt').getByText('Cartas: 3').count()>0);
+  assert(await page.locator('.tav-central-felt').getByText('Cartas na mão: 3').count()>0);
+  await page.locator('.tav-central-seat').first().evaluate(node=>{window.__seatNodeOriginal=node;});
+  await page.evaluate(()=>{window.__spectatorRevision=2;});
+  await page.waitForTimeout(2150);
+  assert.equal(await page.locator('.tav-central-discard').innerText(),'Q ♠');
+  assert(await page.evaluate(()=>document.querySelector('.tav-central-seat')===window.__seatNodeOriginal),'Espectador reconstruiu assentos sem necessidade');
+  await page.evaluate(()=>{window.__spectatorSeatCount=10;window.__spectatorRevision=3;});
+  await page.waitForTimeout(2150);
+  assert.equal(await page.locator('.tav-central-seat').count(),10,'Espectador ocultou participantes em mesa cheia');
+  const screenCheck=await page.evaluate(()=>{
+    const felt=document.querySelector('.tav-central-felt').getBoundingClientRect();
+    const seats=[...document.querySelectorAll('.tav-central-seat')].map(x=>x.getBoundingClientRect());
+    return {allWithin:seats.every(r=>r.left>=felt.left-1&&r.right<=felt.right+1),
+      noOverlap:seats.every((r,i)=>seats.slice(i+1).every(p=>r.right<=p.left+1||p.right<=r.left+1||r.bottom<=p.top+1||p.bottom<=r.top+1))};
+  });
+  assert(screenCheck.allWithin&&screenCheck.noOverlap,'Mesa de 10 pessoas sem organização: '+JSON.stringify(screenCheck));
+  await page.screenshot({path:'qa/screenshots/spectator-'+width+'.png'});
   await page.locator('.tav-central-back').click();
   await page.locator('.tav-central-tab').nth(1).click();
   await page.waitForSelector('.tav-central-report');
@@ -146,7 +166,7 @@ try{
  });
  await guestPage.goto('http://127.0.0.1:8765/',{waitUntil:'domcontentloaded'});
  await guestPage.evaluate(()=>{
-  localStorage.setItem('taverna-alpha:ultima-versao-lida','alpha-0.4.97.0');
+  localStorage.setItem('taverna-alpha:ultima-versao-lida','alpha-0.4.99.0');
   document.getElementById('alphaInformationOverlay').hidden=true;
  });
  await guestPage.locator('#playerName').fill('');
@@ -164,5 +184,21 @@ try{
  await guestPage.waitForSelector('#alphaAccountsOverlay:not([hidden])');
  console.log('VISITOR_EPHEMERAL_SESSION_OK');
  await guestPage.close();
+
+ // Uma conta cadastrada já autenticada assume seu username como nome de aventureiro.
+ const memberPage=await browser.newPage({viewport:{width:390,height:844}});
+ await memberPage.route('**/api/auth/me',async route=>{
+  const headers={'access-control-allow-origin':'*','content-type':'application/json'};
+  return route.fulfill({status:200,headers,body:JSON.stringify({user:{id:'regular-member',username:'aventureiro_real',role:'player'}})});
+ });
+ await memberPage.goto('http://127.0.0.1:8765/',{waitUntil:'domcontentloaded'});
+ await memberPage.evaluate(()=>{localStorage.setItem('taverna-alpha-auth-token','registered-token-testing');localStorage.setItem('taverna-alpha:ultima-versao-lida','alpha-0.4.99.0')});
+ await memberPage.reload({waitUntil:'domcontentloaded'});
+ await memberPage.waitForFunction(()=>document.getElementById('playerName')?.value==='aventureiro_real',{timeout:6000});
+ assert(await memberPage.locator('#playerName').evaluate(x=>x.readOnly),'Nome autenticado deveria ser fixo');
+ await memberPage.locator('#chooseOffline').click();
+ assert.equal(await memberPage.locator('#playerName').inputValue(),'aventureiro_real');
+ await memberPage.close();
+ console.log('REGISTERED_NAME_AUTOFILL_OK');
 
 }finally{await browser.close();}
