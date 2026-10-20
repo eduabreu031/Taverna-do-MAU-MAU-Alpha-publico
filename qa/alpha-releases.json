@@ -1,7 +1,18 @@
 {
-  "current": "alpha-0.4.94.1",
+  "current": "alpha-0.4.94.2",
   "issuesRepo": "eduabreu031/Taverna-do-MAU-MAU-Alpha-publico",
   "entries": [
+    {
+      "id": "alpha-0.4.94.2",
+      "label": "0.4.94.2-alpha",
+      "date": "2026-10-19",
+      "title": "O livro da Taverna e as salas",
+      "items": [
+        "Livro de regras com fundo bordô e dourado, combinando com os menus de novidades e relatos.",
+        "Depois de criar ou entrar em uma sala multiplayer, os controles de criação e de código ficam ocultos; a tela mostra apenas o lobby.",
+        "Motor do jogo e servidor multiplayer preservados."
+      ]
+    },
     {
       "id": "alpha-0.4.94.1",
       "label": "0.4.94.1-alpha",
