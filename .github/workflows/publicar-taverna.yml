@@ -14,6 +14,8 @@ jobs:
     steps:
       - name: Baixar codigo
         uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
       - name: Preparar Node
         uses: actions/setup-node@v5
         with:
@@ -31,6 +33,8 @@ jobs:
           fi
       - name: Instalar renderizador de icones v91
         run: python3 -m pip install --disable-pip-version-check cairosvg
+      - name: Mesclar Beta pública mais recente ao código Alpha sem alterar o Worker
+        run: python3 qa/merge-beta-frontend.py
       - name: Aplicar somente livro de regras e novo icone
         run: python3 qa/apply-alpha-ui-v91.py site
       - name: Padronizar nome oficial no HTML
@@ -50,6 +54,8 @@ jobs:
     steps:
       - name: Baixar codigo
         uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
       - name: Aplicar icones oficiais do pacote
         run: |
           if [ -f Taverna_do_MAU_MAU_Icones_Oficiais.zip ]; then
@@ -63,6 +69,8 @@ jobs:
           fi
       - name: Instalar renderizador de icones v91
         run: python3 -m pip install --disable-pip-version-check cairosvg
+      - name: Mesclar Beta pública mais recente ao código Alpha sem alterar o Worker
+        run: python3 qa/merge-beta-frontend.py
       - name: Aplicar somente livro de regras e novo icone
         run: python3 qa/apply-alpha-ui-v91.py site
       - name: Padronizar nome oficial no HTML
