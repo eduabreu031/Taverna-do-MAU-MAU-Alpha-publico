@@ -20,6 +20,7 @@ jobs:
       - run: python3 qa/apply-alpha-ui-v91.py site
       - run: python3 qa/apply-alpha-v92.py site
       - run: python3 qa/padronizar-nome.py site
+      - run: python3 qa/inspect-alpha-patch.py
       - run: python3 qa/inspect-alpha-multiplayer.py
       - name: Integrar login e salas
         run: python3 qa/apply-alpha-accounts.py site

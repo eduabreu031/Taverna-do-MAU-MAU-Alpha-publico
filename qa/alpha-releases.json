@@ -1,7 +1,18 @@
 {
-  "current": "alpha-0.4.95.0",
+  "current": "alpha-0.4.95.1",
   "issuesRepo": "eduabreu031/Taverna-do-MAU-MAU-Alpha-publico",
   "entries": [
+    {
+      "id": "alpha-0.4.95.1",
+      "label": "0.4.95.1-alpha",
+      "date": "2026-10-20",
+      "title": "Visitantes e lobby mais limpo",
+      "items": [
+        "Nova opção de entrar online como visitante sem criar conta.",
+        "Corrigida a conexão da sala após login e o alinhamento do perfil no celular.",
+        "Controles de criar/entrar por código ocultos durante o lobby conectado."
+      ]
+    },
     {
       "id": "alpha-0.4.95.0",
       "label": "0.4.95.0-alpha",
