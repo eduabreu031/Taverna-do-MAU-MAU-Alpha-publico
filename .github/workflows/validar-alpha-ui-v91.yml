@@ -1,0 +1,51 @@
+name: Validar melhorias da Alpha antes de publicar
+on:
+  push:
+    branches: [release/alpha-ui-v91]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Aplicar icones oficiais do pacote para simular a Alpha
+        run: |
+          if [ -f Taverna_do_MAU_MAU_Icones_Oficiais.zip ]; then
+            unzip -tq Taverna_do_MAU_MAU_Icones_Oficiais.zip
+            unzip -oq Taverna_do_MAU_MAU_Icones_Oficiais.zip -d .
+          fi
+      - name: Instalar renderizador dos icones
+        run: python -m pip install --disable-pip-version-check cairosvg
+      - name: Aplicar melhorias sobre a Alpha de producao
+        run: python qa/apply-alpha-ui-v91.py site
+      - name: Padronizar titulo e executar testes originais
+        run: |
+          python qa/padronizar-nome.py site
+          node qa/validar.js site
+      - name: Verificar preservacao do multiplayer e recursos da nova interface
+        run: |
+          node <<'NODE'
+          const fs=require('fs'),assert=require('assert');
+          const h=fs.readFileSync('site/index.html','utf8');
+          assert(h.includes("const API='https://taverna-multiplayer-servidor.edulopes941.workers.dev'"));
+          assert(!h.includes('taverna-multiplayer-beta.edulopes941.workers.dev'));
+          for(const name of ['chooseRules','rulesModalDEV','rulesTabDEV','tricksTabDEV','rules-dev-script']){
+            assert(h.includes('id="'+name+'"'),name);
+          }
+          for(const size of [72,96,144,180,192,512]){
+            assert(fs.statSync('site/icons/icon-'+size+'.png').size>1000);
+          }
+          for(const size of [192,512]){
+            assert(fs.statSync('site/icons/icon-maskable-'+size+'.png').size>1000);
+          }
+          assert(fs.readFileSync('site/sw.js','utf8').includes('taverna-pwa-alpha-ui-v91-01'));
+          console.log('OK: regras, PWA, icones, offline e endereco original do multiplayer.');
+          NODE
