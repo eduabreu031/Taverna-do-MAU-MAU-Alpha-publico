@@ -83,6 +83,7 @@ try{
     throw Error('Rota de teste inesperada: '+path);
    };
   });
+  await page.evaluate(()=>{document.getElementById('sceneWelcome').classList.remove('hidden');document.getElementById('sceneMultiplayer').classList.add('hidden');});
   await page.waitForSelector('#tavCentralOpen:not([hidden])',{timeout:3000});
   await page.evaluate(()=>{
     const previous=window.TavernaAuth.roomRequest;
@@ -104,6 +105,7 @@ try{
   await page.waitForSelector('.tav-central-report');
   await page.locator('.tav-central-close').click();
   assert(await page.locator('#tavCentralOverlay').isHidden());
+  await page.evaluate(()=>{document.getElementById('sceneWelcome').classList.add('hidden');document.getElementById('sceneMultiplayer').classList.remove('hidden');});
   await page.waitForSelector('#tavVipAdminOpen:not([hidden])',{timeout:3000});
   await page.locator('#tavVipAdminOpen').click();
   await page.waitForSelector('#tavVipAdminOverlay:not([hidden])');
