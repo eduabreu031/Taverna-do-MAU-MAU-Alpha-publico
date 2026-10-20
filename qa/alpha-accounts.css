@@ -6,3 +6,12 @@
 #alphaAccountsOverlay #alphaAccountGuest{width:100%;margin-top:11px;background:#523040;border:1px solid #aa805c}
 #sceneMultiplayer:has(#onlineLobby:not(.hidden)) .multiplayer-preview,#sceneMultiplayer:has(#onlineLobby:not(.hidden)) #onlineNotice{display:none!important}
 @media(max-width:420px){#sceneMultiplayer #alphaAccountsBar{padding:9px 8px;margin:9px auto 12px}#sceneMultiplayer #alphaAccountsLogout{width:auto;font-size:12px}#sceneMultiplayer .multiplayer-panel{max-width:calc(100vw - 20px);box-sizing:border-box}#alphaAccountsOverlay .alpha-accounts-panel{max-width:100%;box-sizing:border-box}}
+
+#alphaAccountsOverlay #alphaRegisterFields[hidden]{display:none!important}
+#alphaAccountsOverlay .alpha-phone-note{font:13px/1.45 Georgia,serif;margin:8px 0;color:#e8c9a4}
+#alphaAccountsOverlay #alphaAccountGuest[hidden]{display:none!important}
+.tav-removed-notice[hidden]{display:none!important}
+.tav-removed-notice{position:fixed;inset:0;z-index:2147483600;background:#100711dc;display:grid;place-items:center;padding:18px}
+.tav-removed-card{box-sizing:border-box;width:min(420px,95vw);border:3px ridge #c69b62;border-radius:14px;background:linear-gradient(145deg,#64323c,#26131b);color:#f9e4c2;text-align:center;box-shadow:0 20px 75px #000c;padding:26px 19px;font:17px/1.5 Georgia,serif}
+.tav-removed-card h2{font:700 25px Georgia,serif;margin:0 0 12px}
+.tav-removed-card button{min-height:44px;margin-top:12px;padding:10px 25px;border:1px solid #cda66f;border-radius:7px;background:#6b4551;color:#ffebc8}
