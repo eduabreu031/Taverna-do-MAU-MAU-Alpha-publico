@@ -1,0 +1,49 @@
+name: Auditoria da Beta publica v91 antes de liberar
+on:
+  push:
+    branches: [release/full-beta-to-alpha-v91]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validar_versao_integrada:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Preparar icones
+        run: |
+          python -m pip install cairosvg
+          if [ -f Taverna_do_MAU_MAU_Icones_Oficiais.zip ]; then
+            unzip -tq Taverna_do_MAU_MAU_Icones_Oficiais.zip
+            unzip -oq Taverna_do_MAU_MAU_Icones_Oficiais.zip -d .
+          fi
+      - name: Mesclar interface mais nova sem apagar correcoes da Alpha
+        run: |
+          python qa/merge-beta-frontend.py
+          python qa/apply-alpha-ui-v91.py site
+          python qa/padronizar-nome.py site
+      - name: Executar testes originais de regras e JavaScript
+        run: node qa/validar.js site
+      - name: Verificar novas interfaces e endpoint publico preservado
+        run: |
+          node <<'NODE'
+          const fs=require('fs'),vm=require('vm'),assert=require('assert');
+          const h=fs.readFileSync('site/index.html','utf8');
+          assert(h.length>4e6);
+          for(const id of ['chooseRules','rulesModalDEV','onlineBotsDEV','betaSpectatorBanner','betaScorePanel','rules-dev-script'])
+            assert(h.includes(id),'Não encontrado: '+id);
+          assert(h.includes("const API='https://taverna-multiplayer-servidor.edulopes941.workers.dev'"));
+          assert(!h.includes('taverna-multiplayer-beta.edulopes941.workers.dev'));
+          for(const [i,s] of [...h.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/gi)].map(x=>x[1]).entries())
+            new vm.Script(s,{filename:'script-'+i});
+          assert(fs.readFileSync('site/sw.js','utf8').includes('taverna-pwa-alpha-ui-v91-01'));
+          console.log('Beta pública montada, scripts válidos, endpoint original mantido.');
+          NODE
