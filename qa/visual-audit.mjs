@@ -57,6 +57,8 @@ try{
   assert.match(await page.locator('.tav-vip-status').innerText(),/botão exclusivo/i);
   assert(await page.locator('#onlineLobby').isHidden(),'Entrada por TAVERN abriu sala VIP fora do menu');
   await page.evaluate(()=>{
+   // Na simulação de lobby, nenhuma janela de login deve interceptar controles.
+   document.getElementById('alphaAccountsOverlay').hidden=true;
    document.querySelector('#sceneWelcome')?.classList.add('hidden');
    document.querySelector('#sceneMultiplayer')?.classList.remove('hidden');
    const lobby=document.querySelector('#onlineLobby');lobby.classList.remove('hidden');
