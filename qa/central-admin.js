@@ -15,21 +15,21 @@ const keys=[['online','Pessoas online'],['playing','Em partidas'],['activeMatche
 const countersUI={};
 for(const [key,label] of keys){const card=el('div','tav-central-counter'),n=el('strong','','—');card.append(n,el('span','',label));counters.append(card);countersUI[key]=n;}
 const tabs=el('nav','tav-central-tabs'),liveTab=el('button','tav-central-tab selected','Partidas ao vivo'),reportsTab=el('button','tav-central-tab','Relatos da comunidade');
-liveTab.type=reportsTab.type='button';tabs.append(liveTab,reportsTab);
+liveTab.type=reportsTab.type='button';const accountsTab=el('button','tav-central-tab','Jogadores cadastrados');accountsTab.type='button';tabs.append(liveTab,reportsTab,accountsTab);
 const matches=el('div','tav-central-matches'),reports=el('div','tav-central-reports');reports.hidden=true;
-const viewer=el('div','tav-central-viewer');viewer.hidden=true;
+const accounts=el('div','tav-central-accounts');accounts.hidden=true;const accountsSearch=el('input','tav-central-search');accountsSearch.type='search';accountsSearch.placeholder='Buscar usuário';accountsSearch.maxLength=24;const accountSummary=el('p','tav-central-account-summary','');const accountList=el('div','tav-central-account-list');const pageControls=el('div','tav-central-account-pages'),prev=el('button','tav-central-tab','← Anterior'),next=el('button','tav-central-tab','Próxima →');prev.type=next.type='button';pageControls.append(prev,next);accounts.append(accountsSearch,accountSummary,accountList,pageControls);let accountsPage=0,accountsLast='',accountsNext=false;const viewer=el('div','tav-central-viewer');viewer.hidden=true;
 const viewBack=el('button','tav-central-back','← Voltar às partidas');viewBack.type='button';
 const viewTitle=el('h3','','Partida ao vivo'),viewStatus=el('p','tav-central-view-status',''),table=el('div','tav-central-table');
 viewer.append(viewBack,viewTitle,viewStatus,table);
-panel.append(header,detail,counters,tabs,matches,reports,viewer);overlay.append(panel);document.body.append(overlay);
+panel.append(header,detail,counters,tabs,matches,reports,accounts,viewer);overlay.append(panel);document.body.append(overlay);
 let interval=null,activeRoom='',mode='matches',updating=false,serial=0;
 const allowed=()=>auth.getUser()?.role==='admin';
 async function api(path){return auth.roomRequest(path,'GET');}
-function close(){overlay.hidden=true;activeRoom='';serial++;resetWatch();if(interval)clearInterval(interval);interval=null;viewer.hidden=true;matches.hidden=mode==='reports';reports.hidden=mode!=='reports';}
+function close(){overlay.hidden=true;activeRoom='';serial++;resetWatch();if(interval)clearInterval(interval);interval=null;viewer.hidden=true;matches.hidden=mode==='reports';reports.hidden=mode!=='reports';accounts.hidden=mode!=='accounts';}
 exit.onclick=close;viewBack.onclick=()=>{activeRoom='';resetWatch();viewer.hidden=true;matches.hidden=false;};
 overlay.addEventListener('click',e=>{if(e.target===overlay)close();});
-function switchMode(next){mode=next;activeRoom='';resetWatch();viewer.hidden=true;matches.hidden=next!=='matches';reports.hidden=next!=='reports';liveTab.classList.toggle('selected',next==='matches');reportsTab.classList.toggle('selected',next==='reports');update();}
-liveTab.onclick=()=>switchMode('matches');reportsTab.onclick=()=>switchMode('reports');
+function switchMode(next){mode=next;activeRoom='';resetWatch();viewer.hidden=true;matches.hidden=next!=='matches';reports.hidden=next!=='reports';accounts.hidden=next!=='accounts';liveTab.classList.toggle('selected',next==='matches');reportsTab.classList.toggle('selected',next==='reports');accountsTab.classList.toggle('selected',next==='accounts');update();}
+liveTab.onclick=()=>switchMode('matches');reportsTab.onclick=()=>switchMode('reports');accountsTab.onclick=()=>{accountsPage=0;accountsLast='';switchMode('accounts');};accountsSearch.oninput=()=>{accountsPage=0;accountsLast='';if(!overlay.hidden&&mode==='accounts')update();};prev.onclick=()=>{if(accountsPage>0){accountsPage--;accountsLast='';update();}};next.onclick=()=>{if(accountsNext){accountsPage++;accountsLast='';update();}};
 function renderMatch(room){
  const line=el('div','tav-central-match'),meta=el('div','tav-central-match-meta'),watch=el('button','tav-central-watch','Assistir');
  meta.append(el('strong','',room.code==='TAVERN'?'Sala VIP':room.code),el('small','',(room.players||0)+' pessoas · '+(room.bots||0)+' bots · Rodada '+(room.round||1)));
@@ -153,6 +153,15 @@ async function update(){
    }else{
     const rooms=status.rooms||[];matches.replaceChildren(...(rooms.length?rooms.map(renderMatch):[el('p','tav-central-empty','Nenhuma partida online no momento.')]));
    }
+  }else if(mode==='accounts'){
+   const term=accountsSearch.value.trim();const signature=term+'|'+accountsPage;
+   if(signature!==accountsLast||Date.now()-lastReportsAt>15000){
+    const data=await api('/api/central/accounts?q='+encodeURIComponent(term)+'&page='+accountsPage);if(epoch!==serial||overlay.hidden||mode!=='accounts')return;
+    accountsLast=signature;lastReportsAt=Date.now();accountsNext=(accountsPage+1)*data.pageSize<data.total;
+    accountSummary.textContent='Total: '+data.total+' · Novas hoje: '+data.today+' · Últimos 7 dias: '+data.last7days;
+    accountList.replaceChildren(...((data.accounts||[]).length?data.accounts.map(a=>{const item=el('div','tav-central-account');item.append(el('strong','',a.username),el('small','',new Date(a.createdAt).toLocaleString('pt-BR')));return item;}):[el('p','','Nenhuma conta encontrada.')]));
+    prev.disabled=accountsPage===0;next.disabled=!accountsNext;
+   }
   }else if(Date.now()-lastReportsAt>14000||!reports.childElementCount){
    const result=await api('/api/central/feedback');if(epoch!==serial||overlay.hidden)return;
    const items=result.items||[];reports.replaceChildren();
@@ -176,7 +185,7 @@ async function update(){
 button.onclick=async()=>{
  if(!allowed()){button.hidden=true;return;}
  overlay.hidden=false;mode='matches';activeRoom='';resetWatch();serial++;lastReportsAt=0;
- viewer.hidden=true;reports.hidden=true;matches.hidden=false;liveTab.classList.add('selected');reportsTab.classList.remove('selected');
+ viewer.hidden=true;reports.hidden=true;accounts.hidden=true;matches.hidden=false;liveTab.classList.add('selected');reportsTab.classList.remove('selected');accountsTab.classList.remove('selected');
  await update();if(!overlay.hidden)interval=setInterval(update,9000);
 };
 function visibility(){button.hidden=!allowed();if(!allowed()&&!overlay.hidden)close();}
