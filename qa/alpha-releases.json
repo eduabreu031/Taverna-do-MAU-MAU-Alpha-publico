@@ -1,7 +1,16 @@
 {
-  "current": "alpha-0.5.0.0",
+  "current": "alpha-0.5.0.1",
   "issuesRepo": "eduabreu031/Taverna-do-MAU-MAU-Alpha-publico",
   "entries": [
+    {
+      "id": "alpha-0.5.0.1",
+      "label": "0.5.0.1-alpha",
+      "date": "2026-10-20",
+      "title": "Acesso à Sala VIP mais claro",
+      "items": [
+        "O botão para solicitar acesso aparece apenas quando o jogador precisa de autorização para entrar na Sala VIP."
+      ]
+    },
     {
       "id": "alpha-0.5.0.0",
       "label": "0.5.0.0-alpha",
