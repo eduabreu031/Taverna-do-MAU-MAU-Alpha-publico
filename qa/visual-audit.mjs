@@ -10,6 +10,10 @@ try{
   await page.waitForSelector('#chooseMultiplayer',{timeout:15000});
   await page.waitForTimeout(450);
   await page.evaluate(()=>{const news=document.getElementById('alphaInformationOverlay');if(news)news.hidden=true;});
+  await page.locator('#alphaOpenNews').click();
+  assert.equal(await page.locator('#alphaInformationOverlay details.alpha-release').count(),4,'O changelog deve exibir somente quatro versões');
+  await page.locator('#alphaModalClose').click();
+
   const root=await page.evaluate(()=>({body:document.body.scrollWidth,screen:document.documentElement.clientWidth}));
   assert(root.body<=root.screen+3,'Rolagem horizontal em '+width+': '+JSON.stringify(root));
   await page.screenshot({path:'qa/screenshots/welcome-'+width+'.png',fullPage:false});

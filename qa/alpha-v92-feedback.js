@@ -38,7 +38,7 @@ function closeModal(){
 function renderNews(){
  return '<div class="alpha-info-card" tabindex="-1"><div class="alpha-info-head"><span class="alpha-kicker">✦ MENSAGEM DO ARAUTO ✦</span><button type="button" class="alpha-dismiss" id="alphaModalClose" aria-label="Fechar">×</button></div>'+
  '<h2 id="alphaInformationTitle">Novidades da Taverna</h2><p class="alpha-lead">'+current.label+' · '+current.title+'</p>'+
- DATA.entries.map((entry,index)=>'<details class="alpha-release" '+(index===0?'open':'')+'><summary>'+entry.label+' — '+entry.title+'</summary><ul>'+entry.items.map(item=>'<li>'+item+'</li>').join('')+'</ul></details>').join('')+
+ DATA.entries.slice(0,4).map((entry,index)=>'<details class="alpha-release" '+(index===0?'open':'')+'><summary>'+entry.label+' — '+entry.title+'</summary><ul>'+entry.items.map(item=>'<li>'+item+'</li>').join('')+'</ul></details>').join('')+
  '<p class="alpha-note">As notas descrevem mudanças publicadas; recursos multiplayer ainda estão em testes públicos.</p>'+
  '<button type="button" class="alpha-primary" id="alphaNewsContinue">Entrar na Taverna</button></div>';
 }

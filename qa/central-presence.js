@@ -2,7 +2,17 @@
 (()=>{'use strict';
 const auth=window.TavernaAuth;
 const API='https://taverna-multiplayer-servidor.edulopes941.workers.dev';
-const session='tab_'+Array.from(crypto.getRandomValues(new Uint8Array(20)),x=>x.toString(16).padStart(2,'0')).join('');
+const KEY='tav-presence-tab-v1';
+const session=(()=>{
+ let previous='';
+ try{previous=sessionStorage.getItem(KEY)||''}catch{}
+ if(/^tab_[a-f0-9]{40}$/.test(previous))return previous;
+ const fresh='tab_'+Array.from(crypto.getRandomValues(new Uint8Array(20)),x=>x.toString(16).padStart(2,'0')).join('');
+ try{sessionStorage.setItem(KEY,fresh)}catch{}
+ return fresh;
+})();
+auth?.restoreSilently?.().then(()=>tick()).catch(()=>{});
+
 let busy=false;
 async function tick(){
  if(busy||document.visibilityState==='hidden'||!navigator.onLine)return;
