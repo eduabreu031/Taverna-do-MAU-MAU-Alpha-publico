@@ -1,0 +1,70 @@
+const fs=require('node:fs');
+const path=require('node:path');
+const assert=require('node:assert/strict');
+const { chromium }=require('/tmp/taverna-qa/node_modules/playwright-core');
+const chrome=['/usr/bin/google-chrome','/usr/bin/google-chrome-stable','/usr/bin/chromium'].find(f=>fs.existsSync(f));
+if(!chrome)throw Error('Chrome ausente no runner');
+(async()=>{
+ const browser=await chromium.launch({headless:true,executablePath:chrome,args:['--no-sandbox','--disable-dev-shm-usage']});
+ const context=await browser.newContext({viewport:{width:360,height:780}});
+ const page=await context.newPage();
+ const errors=[];page.on('pageerror',e=>errors.push(String(e)));
+ try{
+   await page.goto('file://'+path.resolve('site/index.html'),{waitUntil:'domcontentloaded',timeout:60000});
+   await page.locator('#alphaInformationOverlay').waitFor({state:'visible',timeout:12000});
+   assert.match(await page.locator('#alphaInformationTitle').textContent(),/Novidades da Taverna/);
+   assert.match(await page.locator('#alphaVersionStamp').textContent(),/Alpha v92/);
+   assert.equal(await page.locator('#alphaOpenNews').count(),1);
+   assert.equal(await page.locator('#alphaOpenFeedback').count(),1);
+   assert.equal(await page.locator('#alphaOpenFeedback').isVisible(),true);
+   const dims=await page.locator('#alphaOpenFeedback').boundingBox();
+   assert(dims.width>=30&&dims.width<55,'Botão reportar deve ser discreto');
+   await page.locator('#alphaNewsContinue').click();
+   assert.equal(await page.locator('#alphaInformationOverlay').isHidden(),true);
+   const seen=await page.evaluate(()=>localStorage.getItem('taverna-alpha:ultima-versao-lida'));
+   assert.equal(seen,'alpha-v92');
+   await page.reload({waitUntil:'domcontentloaded'});
+   await page.waitForTimeout(650);
+   assert.equal(await page.locator('#alphaInformationOverlay').isHidden(),true,'Changelog não pode repetir a cada abertura');
+   await page.locator('#alphaOpenNews').click();
+   assert.equal(await page.locator('#alphaInformationOverlay').isVisible(),true,'Histórico de novidades não abriu');
+   await page.locator('#alphaModalClose').click();
+   await page.locator('#alphaOpenFeedback').click();
+   assert.match(await page.locator('#alphaInformationTitle').textContent(),/Bugs e sugestões/);
+   await page.locator('#alphaReportType').selectOption('sugestao');
+   await page.locator('#alphaReportTitle').fill('Permitir escolher estilo de cartas');
+   await page.locator('#alphaReportBody').fill('Gostaria de poder escolher um novo verso de carta na tela inicial.');
+   await page.locator('#alphaReportSteps').fill('Sugestão para futuras versões.');
+   await page.evaluate(()=>{
+     document.addEventListener('click',event=>{
+       const a=event.target.closest('a[href^="https://github.com/eduabreu031/Taverna-do-MAU-MAU-Alpha-publico/issues/new"]');
+       if(a){window.__alphaCapturedIssue=a.href;event.preventDefault();}
+     },true);
+   });
+   await page.locator('#alphaFeedbackForm button[type=submit]').click();
+   const issueUrl=await page.evaluate(()=>window.__alphaCapturedIssue);
+   assert(issueUrl?.includes('github.com/eduabreu031/Taverna-do-MAU-MAU-Alpha-publico/issues/new'));
+   const u=new URL(issueUrl);
+   assert(u.searchParams.get('title').startsWith('[Sugestão] '));
+   assert(u.searchParams.get('body').includes('**Versão:** Alpha v92'));
+   assert(u.searchParams.get('body').includes('**Tipo:** Sugestão'));
+   assert(!u.searchParams.get('body').includes('Navegador:'));
+   assert.match(await page.locator('#alphaFeedbackStatus').textContent(),/O relato ainda não foi enviado/);
+   await page.locator('#alphaModalClose').click();
+   await page.locator('#alphaOpenFeedback').click();
+   await page.locator('#alphaReportType').selectOption('bug');
+   await page.locator('#alphaReportTitle').fill('Cronômetro parou após compra');
+   await page.locator('#alphaReportBody').fill('Ao comprar uma carta o cronômetro ficou parado até trocar de tela.');
+   await page.locator('#alphaAttachEnvironment').check();
+   await page.locator('#alphaFeedbackForm button[type=submit]').click();
+   const bugUrl=await page.evaluate(()=>window.__alphaCapturedIssue);
+   const body=new URL(bugUrl).searchParams.get('body');
+   assert(new URL(bugUrl).searchParams.get('title').startsWith('[Bug] '));
+   assert(body.includes('**Navegador:**'));
+   assert(body.includes('**Janela:** 360 × 780'));
+   assert(!body.includes('ownerToken'),'Nunca enviar token em relato');
+   const fatal=errors.filter(x=>/alpha-v92|alphaInformation|alphaFeedbackForm/.test(x));
+   assert.equal(fatal.length,0,'Falhas fatais de UI: '+fatal.join(';'));
+   console.log('ALPHA_V92_BROWSER_OK: changelog uma vez, reabertura, menu mobile, bug, sugestao, GitHub, privacidade');
+ }finally{await browser.close()}
+})().catch(e=>{console.error(e);process.exitCode=1});
