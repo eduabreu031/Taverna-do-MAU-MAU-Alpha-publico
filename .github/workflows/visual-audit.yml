@@ -21,6 +21,7 @@ jobs:
       - run: python3 qa/padronizar-nome.py site
       - run: python3 qa/apply-alpha-accounts.py site
       - run: python3 qa/apply-vip-bots-ui.py site
+      - run: python3 qa/apply-visitor-entry.py site
       - name: Instalar navegador de teste
         run: npm install --no-save playwright@1.58.2 && npx playwright install --with-deps chromium
       - name: Executar navegador e verificar layouts
