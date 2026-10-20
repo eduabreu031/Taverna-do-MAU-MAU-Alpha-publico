@@ -209,7 +209,22 @@ try{
  assert(await memberPage.locator('#playerName').evaluate(x=>x.readOnly),'Nome autenticado deveria ser fixo');
  await memberPage.locator('#chooseOffline').click();
  assert.equal(await memberPage.locator('#playerName').inputValue(),'aventureiro_real');
+ await memberPage.evaluate(()=>{
+  window.__vipStatus='none';
+  window.TavernaAuth.roomRequest=async(path)=>{
+   if(path==='/api/vip/access/status')return {status:window.__vipStatus};
+   throw new Error('Requisição não simulada: '+path);
+  };
+ });
+ await memberPage.waitForFunction(()=>document.querySelector('#tavVipRequestAccess')&&!document.querySelector('#tavVipRequestAccess').hidden,{timeout:10000});
+ await memberPage.evaluate(()=>{window.__vipStatus='approved'});
+ await memberPage.waitForFunction(()=>document.querySelector('#tavVipRequestAccess').hidden,{timeout:10000});
+ await memberPage.evaluate(()=>{window.__vipStatus='none'});
+ await memberPage.waitForFunction(()=>!document.querySelector('#tavVipRequestAccess').hidden,{timeout:10000});
+ await memberPage.evaluate(()=>{window.__vipStatus='pending'});
+ await memberPage.waitForFunction(()=>document.querySelector('#tavVipRequestAccess').hidden,{timeout:10000});
  await memberPage.close();
  console.log('REGISTERED_NAME_AUTOFILL_OK');
+ console.log('VIP_REQUEST_BUTTON_VISIBILITY_OK');
 
 }finally{await browser.close();}
