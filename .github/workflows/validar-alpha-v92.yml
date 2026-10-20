@@ -1,0 +1,61 @@
+name: Validar Alpha v92, changelog e relatorios
+on:
+  push:
+    branches: [release/alpha-v92-changelog-feedback]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  testar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Preparar pacote de icones e dependencias
+        run: |
+          python -m pip install --disable-pip-version-check cairosvg
+          if [ -f Taverna_do_MAU_MAU_Icones_Oficiais.zip ]; then
+            unzip -tq Taverna_do_MAU_MAU_Icones_Oficiais.zip
+            unzip -oq Taverna_do_MAU_MAU_Icones_Oficiais.zip -d .
+          fi
+      - name: Montar Alpha v92 na ordem exata da publicacao
+        run: |
+          python qa/merge-beta-frontend.py
+          python qa/apply-alpha-ui-v91.py site
+          python qa/apply-alpha-v92.py site
+          python qa/padronizar-nome.py site
+      - name: Validacao tradicional do motor, HTML e service worker
+        run: node qa/validar.js site
+      - name: Testar formulario, versao e codigo publicado
+        run: |
+          node <<'NODE'
+          const fs=require('fs'),vm=require('vm'),assert=require('node:assert/strict');
+          const html=fs.readFileSync('site/index.html','utf8');
+          assert(html.length>4_000_000);
+          assert(html.includes('ALPHA v92'));
+          const index=(html.match(/<script id="alpha-v92-script">([\s\S]*?)<\/script>/)||[])[1];
+          assert(index,'Faltando o codigo Alpha v92');
+          new vm.Script(index);
+          assert(index.includes('alphaOpenNews'));
+          assert(index.includes('alphaOpenFeedback'));
+          assert(index.includes('alphaReportType'));
+          assert(index.includes('taverna-alpha:ultima-versao-lida'));
+          assert(index.includes('https://github.com/'));
+          assert(index.includes('/issues/new'));
+          assert(index.includes('Copiar relato'));
+          assert(index.includes('Sugestão'));
+          assert(index.includes('Registrado em (UTC)'));
+          assert(index.includes('alpha-v92'));
+          assert(!index.includes('/*ALPHA_RELEASES_JSON*/'));
+          assert(html.includes("const API='https://taverna-multiplayer-servidor.edulopes941.workers.dev'"));
+          assert(!html.includes('taverna-multiplayer-beta.edulopes941.workers.dev'));
+          assert(fs.readFileSync('site/sw.js','utf8').includes('taverna-pwa-alpha-v92-01'));
+          console.log('PASSOU: Alpha v92, relatos, versao, cache e motor original.');
+          NODE
