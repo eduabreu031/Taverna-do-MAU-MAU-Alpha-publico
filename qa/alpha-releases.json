@@ -1,7 +1,17 @@
 {
-  "current": "alpha-0.5.0.1",
+  "current": "alpha-0.5.0.2",
   "issuesRepo": "eduabreu031/Taverna-do-MAU-MAU-Alpha-publico",
   "entries": [
+    {
+      "id": "alpha-0.5.0.2",
+      "label": "0.5.0.2-alpha",
+      "date": "2026-10-20",
+      "title": "Contagem mais precisa",
+      "items": [
+        "Contagem de pessoas conectadas aprimorada para não duplicar acessos ao atualizar a página.",
+        "Pergaminho de novidades mais enxuto, mostrando apenas as quatro atualizações recentes."
+      ]
+    },
     {
       "id": "alpha-0.5.0.1",
       "label": "0.5.0.1-alpha",
