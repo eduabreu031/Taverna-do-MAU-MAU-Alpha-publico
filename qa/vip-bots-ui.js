@@ -30,6 +30,28 @@ const status=make('p','tav-vip-status','');vipButton.after(status);
 const requestAccess=make('button','engraved-btn tav-vip-request-access','Solicitar acesso à Sala VIP');
 requestAccess.type='button';requestAccess.id='tavVipRequestAccess';
 status.after(requestAccess);
+requestAccess.hidden=true;
+let lastAccessUser='', lastAccessCheck=0, accessChecking=false;
+async function refreshAccess(force=false){
+ const account=window.TavernaAuth.getUser();
+ const id=account?.id||'';
+ if(!id||account?.role==='admin'||account?.role==='guest'){
+  requestAccess.hidden=true;lastAccessUser=id;return;
+ }
+ if(accessChecking||(!force&&id===lastAccessUser&&Date.now()-lastAccessCheck<7000))return;
+ accessChecking=true;requestAccess.hidden=true;
+ try{
+  const grant=await window.TavernaAuth.roomRequest('/api/vip/access/status','GET');
+  if(window.TavernaAuth.getUser()?.id!==id)return;
+  requestAccess.hidden=grant.status==='approved'||grant.status==='pending';
+  lastAccessUser=id;lastAccessCheck=Date.now();
+ }catch{
+  requestAccess.hidden=true;lastAccessCheck=Date.now();
+ }finally{accessChecking=false;}
+}
+setInterval(refreshAccess,3500);
+document.getElementById('chooseMultiplayer')?.addEventListener('click',()=>setTimeout(()=>refreshAccess(true),500));
+refreshAccess(true);
 requestAccess.onclick=async()=>{
  requestAccess.disabled=true;status.textContent='Registrando solicitação de acesso…';
  try{
@@ -38,6 +60,7 @@ requestAccess.onclick=async()=>{
   if(account.role==='guest')throw Error('Crie uma conta para solicitar acesso duradouro. Visitantes podem entrar com a senha.');
   const result=await window.TavernaAuth.roomRequest('/api/vip/access/request','POST');
   status.textContent=result.status==='approved'?'Seu acesso já está autorizado.':'Solicitação enviada. O administrador poderá aprovar quando estiver online.';
+  await refreshAccess(true);
  }catch(e){status.textContent=e.message||'Falha ao enviar solicitação';}
  finally{requestAccess.disabled=false;}
 };
