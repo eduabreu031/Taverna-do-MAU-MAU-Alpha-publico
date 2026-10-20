@@ -1,14 +1,14 @@
 /* Taverna do MAU MAU — atualização automática e modo offline.
    Rede primeiro: cada nova navegação procura o HTML mais recente.
    O jogo aberto nunca é recarregado à força durante uma partida. */
-const CACHE = 'taverna-pwa-network-first-2';
+const CACHE = 'taverna-pwa-icon-refresh-20261020-1';
 const PREFIXES = ['taverna-v73-pwa-', 'taverna-v84-', 'taverna-pwa-'];
 const ASSETS = [
   './', './index.html', './manifest.webmanifest',
   './icons/icon-144.png', './icons/icon-180.png',
-  './icons/icon-192.png', './icons/icon-512.png',
+  './icons/icon-192.png?v=alpha-icon-20261020-1', './icons/icon-512.png?v=alpha-icon-20261020-1',
   './icons/icon-72.png', './icons/icon-96.png',
-  './icons/icon-maskable-192.png', './icons/icon-maskable-512.png'
+  './icons/icon-maskable-192.png?v=alpha-icon-20261020-1', './icons/icon-maskable-512.png?v=alpha-icon-20261020-1'
 ];
 self.addEventListener('install', event => {
   event.waitUntil(
@@ -35,7 +35,7 @@ self.addEventListener('fetch', event => {
   // Sempre tenta rede primeiro, inclusive para index.html, quando há internet.
   // Em perda de conexão, usa a última versão armazenada para manter o modo offline.
   event.respondWith(
-    fetch(event.request, event.request.mode === 'navigate' ? { cache: 'no-store' } : undefined).then(response => {
+    fetch(event.request, (event.request.mode === 'navigate' || url.pathname.endsWith('/manifest.webmanifest')) ? { cache: 'no-store' } : undefined).then(response => {
       if (response.ok) {
         const copy = response.clone();
         event.waitUntil(caches.open(CACHE).then(cache => cache.put(event.request, copy)).catch(() => {}));
