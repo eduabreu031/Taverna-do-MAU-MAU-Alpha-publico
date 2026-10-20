@@ -12,7 +12,7 @@ controller='<script id="online-v84-controller">'
 assert html.count(controller)==1, 'Controlador online não encontrado ou duplicado'
 replacements={
     'function connect(code,existingToken=\'\'){': 'async function connect(code,existingToken=\'\'){',
-    'let socket;try{socket=new WebSocket(url)}catch(e)':"let socket;try{url.searchParams.set('pass',await window.TavernaAuth.pass());socket=new WebSocket(url)}catch(e)",
+    'let socket;try{socket=new WebSocket(url)}catch(e)':"let socket;try{url.searchParams.set('pass',await window.TavernaAuth.pass(code));socket=new WebSocket(url)}catch(e)",
     "const res=await fetch(API+'/api/room',{method:'POST'});if(!res.ok)throw Error('Servidor respondeu '+res.status);const m=await res.json();connect(m.code);":"const m=await window.TavernaAuth.roomRequest('/api/room');connect(m.code);",
 }
 for before,after in replacements.items():
