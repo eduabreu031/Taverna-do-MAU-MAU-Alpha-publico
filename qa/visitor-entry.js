@@ -2,6 +2,9 @@
 (()=>{'use strict';
  const $=id=>document.getElementById(id);
  const welcome=$('sceneWelcome');
+ const nameLabel=welcome?.querySelector('label[for="playerName"]'),nameInput=$('playerName');
+ if(nameLabel)nameLabel.textContent='Nome de aventureiro (opcional)';
+ if(nameInput)nameInput.placeholder='Sem nome, você será Forasteiro';
  function autoName(){
   if(!welcome)return;
   const inputs=Array.from(welcome.querySelectorAll('input[type="text"],input:not([type])'));
