@@ -19,8 +19,13 @@ async function geometry(page){
 try{
  for(const width of [320,360,390,430]){
   const offline=await open(width);
-  await offline.click('#chooseOffline');
-  await offline.selectOption('#playerCount','2');
+  await offline.evaluate(()=>{
+   document.querySelector('#sceneWelcome')?.classList.add('hidden');
+   document.querySelector('#sceneMultiplayer')?.classList.add('hidden');
+   document.querySelector('#sceneMenu')?.classList.remove('hidden');
+   const count=document.getElementById('playerCount');count.value='2';count.dispatchEvent(new Event('change',{bubbles:true}));
+  });
+  await offline.waitForSelector('#sceneMenu:not(.hidden) #startGameBtn');
   await offline.click('#startGameBtn');
   await offline.waitForSelector('#sceneGame:not(.hidden)');
   const ref=await geometry(offline);
