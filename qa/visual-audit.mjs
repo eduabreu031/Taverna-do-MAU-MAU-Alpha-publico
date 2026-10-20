@@ -18,6 +18,7 @@ try{
   assert(auth&&auth.x>=-1&&auth.x+auth.width<=width+2,'Modal de conta fora da tela '+width);
   await page.screenshot({path:'qa/screenshots/auth-'+width+'.png'});
   await page.click('#alphaAccountCancel');
+  await page.evaluate(()=>{const news=document.getElementById('alphaInformationOverlay');if(news)news.hidden=true;});
   await page.evaluate(()=>{
    document.querySelector('#sceneWelcome')?.classList.add('hidden');
    document.querySelector('#sceneMultiplayer')?.classList.remove('hidden');
