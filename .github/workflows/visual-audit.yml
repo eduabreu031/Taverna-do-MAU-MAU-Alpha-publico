@@ -1,0 +1,36 @@
+name: Auditoria visual de menus e responsividade
+on:
+  pull_request:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  browser:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: python3 -m pip install cairosvg
+      - run: python3 qa/merge-beta-frontend.py
+      - run: python3 qa/apply-alpha-ui-v91.py site
+      - run: python3 qa/apply-alpha-v92.py site
+      - run: python3 qa/padronizar-nome.py site
+      - run: python3 qa/apply-alpha-accounts.py site
+      - run: python3 qa/apply-vip-bots-ui.py site
+      - name: Instalar navegador de teste
+        run: npm install --no-save playwright@1.58.2 && npx playwright install --with-deps chromium
+      - name: Executar navegador e verificar layouts
+        run: |
+          python3 -m http.server 8765 -d site >/tmp/taverna-http.log 2>&1 &
+          node qa/visual-audit.mjs
+      - name: Guardar capturas para auditoria
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: capturas-menus-taverna
+          path: qa/screenshots/
+          if-no-files-found: ignore

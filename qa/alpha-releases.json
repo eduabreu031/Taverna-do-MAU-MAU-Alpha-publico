@@ -1,7 +1,18 @@
 {
-  "current": "alpha-0.4.95.1",
+  "current": "alpha-0.4.96.0",
   "issuesRepo": "eduabreu031/Taverna-do-MAU-MAU-Alpha-publico",
   "entries": [
+    {
+      "id": "alpha-0.4.96.0",
+      "label": "0.4.96.0-alpha",
+      "date": "2026-10-20",
+      "title": "Sala VIP e convocação de bots",
+      "items": [
+        "Sala VIP permanente com presença dos jogadores e início independente do criador.",
+        "Correção da autenticação dos bots em partidas multiplayer.",
+        "Seletor de bots tematizado em vinho e dourado, sem menu nativo do Android."
+      ]
+    },
     {
       "id": "alpha-0.4.95.1",
       "label": "0.4.95.1-alpha",

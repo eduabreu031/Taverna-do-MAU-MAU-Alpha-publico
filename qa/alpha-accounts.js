@@ -64,11 +64,11 @@ if(portal){
  const status=el('span',{id:'alphaAccountsStatus'});
  const btn=el('button',{type:'button',id:'alphaAccountsLogout'},'Trocar conta');
  bar.append(status,btn);
- btn.onclick=async()=>{if(!document.getElementById('onlineLobby')?.classList.contains('hidden')){status.textContent='Saia da sala antes de trocar de conta.';return;}await logout();status.textContent='Você saiu da conta.';await requireUser();status.textContent=user?(user.role==='guest'?'Visitante':'Conta: '+user.username):'Entre para jogar.';};
+ btn.onclick=async()=>{if(!document.getElementById('onlineLobby')?.classList.contains('hidden')){status.textContent='Saia da sala antes de trocar de conta.';return;}await logout();status.textContent='Você saiu da conta.';await requireUser();status.textContent=user?(user.role==='guest'?'Visitante':user.role==='admin'?'Administrador geral · '+user.username:'Conta: '+user.username):'Entre para jogar.';};
  const panel=portal.querySelector('.multiplayer-panel')||portal;
  const state=panel.querySelector('.multiplayer-state');
  if(state)panel.insertBefore(bar,state);else panel.prepend(bar);
  const go=document.getElementById('chooseMultiplayer');
- if(go)go.addEventListener('click',()=>{queueMicrotask(async()=>{const current=await requireUser();status.textContent=current?(current.role==='guest'?'Visitante · sessão temporária':'Conta: '+current.username):'Entre para jogar.';});});
+ if(go)go.addEventListener('click',()=>{queueMicrotask(async()=>{const current=await requireUser();status.textContent=current?(current.role==='guest'?'Visitante · sessão temporária':current.role==='admin'?'Administrador geral · '+current.username:'Conta: '+current.username):'Entre para jogar.';});});
 }
 })();
