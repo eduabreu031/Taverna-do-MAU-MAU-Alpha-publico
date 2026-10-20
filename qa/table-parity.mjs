@@ -38,14 +38,14 @@ try{
    const hand=[
     {id:'hand-1',rank:'2',suit:'♥'},{id:'hand-2',rank:'5',suit:'♣'},
     {id:'hand-3',rank:'9',suit:'♠'},{id:'hand-4',rank:'A',suit:'♦'},
-    {id:'hand-5',rank:'7',suit:'♣'},{id:'hand-6',rank:'J',suit:'♥'},
-    {id:'hand-7',rank:'Q',suit:'♠'}];
-   const g={players:[{id:'human',alive:true,count:7},{id:'bot',alive:true,count:7}],hand,top:{id:'top-1',rank:'9',suit:'♦'},
+    {id:'hand-5',rank:'7',suit:'♣'}];
+   const g={players:[{id:'human',alive:true,count:5},{id:'bot',alive:true,count:5}],hand,top:{id:'top-1',rank:'9',suit:'♦'},
     phase:'playing',round:1,revision:1,turnPlayerId:'human',direction:1,activeSuit:'♦',deckCount:50,mauAnnouncements:{},scoring:null,pendingSeven:0,drawn:false};
    return window.__tavOriginalOnline.apply(g,[{id:'human',name:'Jogador'},{id:'bot',name:'Bot'}],'human',{serverNow:Date.now(),deadline:Date.now()+15000});
   });
   assert.equal(result,true,'Adaptador online não conseguiu renderizar mesa');
   await online.waitForSelector('#sceneGame:not(.hidden)');
+  await online.waitForTimeout(3500); // termina a distribuição animada antes de comparar a mesa estável
   const rendered=await geometry(online);
   assert(rendered.table&&rendered.table.width>150,'Mesa online ausente '+width);
   assert(Math.abs(rendered.table.width-ref.table.width)<3,'Escala da mesa difere offline/online '+width+': '+ref.table.width+' vs '+rendered.table.width);
