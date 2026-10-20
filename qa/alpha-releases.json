@@ -1,7 +1,19 @@
 {
-  "current": "alpha-0.4.97.0",
+  "current": "alpha-0.4.98.0",
   "issuesRepo": "eduabreu031/Taverna-do-MAU-MAU-Alpha-publico",
   "entries": [
+    {
+      "id": "alpha-0.4.98.0",
+      "label": "0.4.98.0-alpha",
+      "date": "2026-10-20",
+      "title": "Central da Taverna para administração",
+      "items": [
+        "Central administrativa exclusiva da conta gestora, com pessoas conectadas, partidas em andamento e salas ativas.",
+        "Observação de partidas somente leitura, sem revelar mãos ocultas nem participar do jogo.",
+        "Consulta de relatos de bugs e sugestões enviados dentro do jogo.",
+        "Contagem global leve sem interferir na jogabilidade e controles existentes."
+      ]
+    },
     {
       "id": "alpha-0.4.97.0",
       "label": "0.4.97.0-alpha",

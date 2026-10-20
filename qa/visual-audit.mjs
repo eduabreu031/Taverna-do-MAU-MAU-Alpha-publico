@@ -64,6 +64,8 @@ try{
   await page.getByRole('button',{name:'Confirmar',exact:true}).click();
   assert.equal(await page.locator('#onlineBotsDEV').inputValue(),'1');
   await page.screenshot({path:'qa/screenshots/lobby-'+width+'.png'});
+  // Central administrativa: usuários comuns não recebem o botão.
+  assert(await page.locator('#tavCentralOpen').isHidden(),'Central visível a conta não administradora');
   // Painel VIP: acesso só com conta administrativa, inclusive fora do lobby.
   assert(await page.locator('#tavVipAdminOpen').isHidden(),'Controle administrativo indevidamente exposto');
   await page.evaluate(()=>{
@@ -81,6 +83,29 @@ try{
     throw Error('Rota de teste inesperada: '+path);
    };
   });
+  await page.evaluate(()=>{document.getElementById('sceneWelcome').classList.remove('hidden');document.getElementById('sceneMultiplayer').classList.add('hidden');});
+  await page.waitForSelector('#tavCentralOpen:not([hidden])',{timeout:3000});
+  await page.evaluate(()=>{
+    const previous=window.TavernaAuth.roomRequest;
+    window.TavernaAuth.roomRequest=async(path,method)=>{
+      if(path==='/api/central/dashboard')return {online:11,playing:4,activeMatches:1,openRooms:2,rooms:[{code:'TAVERN',round:2,players:4,bots:1}],updatedAt:Date.now()};
+      if(path==='/api/central/feedback')return {items:[{type:'bug',name:'Forasteiro',message:'Erro de teste',version:'0.4.97',at:Date.now()}]};
+      if(path==='/api/central/watch?room=TAVERN')return {game:{phase:'playing',round:2,direction:1,deckCount:30,top:{rank:'9',suit:'♠'},activeSuit:'♠',players:[{id:'a',alive:true,count:3},{id:'b',alive:true,count:4}],hand:[],turnPlayerId:'a'},players:[{id:'a',name:'A'},{id:'b',name:'B'}]};
+      return previous(path,method);
+    };
+  });
+  await page.locator('#tavCentralOpen').click();
+  await page.waitForSelector('#tavCentralOverlay:not([hidden])');
+  assert.equal(await page.locator('.tav-central-counter strong').first().innerText(),'11');
+  await page.locator('.tav-central-watch').click();
+  await page.waitForSelector('.tav-central-felt');
+  assert(await page.locator('.tav-central-felt').getByText('Cartas: 3').count()>0);
+  await page.locator('.tav-central-back').click();
+  await page.locator('.tav-central-tab').nth(1).click();
+  await page.waitForSelector('.tav-central-report');
+  await page.locator('.tav-central-close').click();
+  assert(await page.locator('#tavCentralOverlay').isHidden());
+  await page.evaluate(()=>{document.getElementById('sceneWelcome').classList.add('hidden');document.getElementById('sceneMultiplayer').classList.remove('hidden');});
   await page.waitForSelector('#tavVipAdminOpen:not([hidden])',{timeout:3000});
   await page.locator('#tavVipAdminOpen').click();
   await page.waitForSelector('#tavVipAdminOverlay:not([hidden])');
