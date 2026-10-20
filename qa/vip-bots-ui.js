@@ -27,6 +27,7 @@ vipButton.type='button';vipButton.id='tavVipEnter';
 const entrance=portal.querySelector('.multiplayer-preview');
 if(entrance)entrance.insertAdjacentElement('beforebegin',vipButton);
 const status=make('p','tav-vip-status','');vipButton.after(status);
+$('onlineJoin')?.addEventListener('click',e=>{if($('onlineRoomCode')?.value.trim().toUpperCase()!=='TAVERN')return;if(window.TavernaAuth.consumeVipEntrance())return;e.preventDefault();e.stopImmediatePropagation();status.textContent='Entre na Sala VIP pelo botão exclusivo acima.';},true);
 const requestAccess=make('button','engraved-btn tav-vip-request-access','Solicitar acesso à Sala VIP');
 requestAccess.type='button';requestAccess.id='tavVipRequestAccess';
 status.after(requestAccess);
@@ -71,8 +72,10 @@ vipButton.onclick=async()=>{
   const vip=await window.TavernaAuth.roomRequest('/api/vip','GET');
   if(!vip.vip)throw Error('Sala VIP ainda não está disponível');
   $('onlineRoomCode').value=vip.code;
+  window.TavernaAuth.armVipEntrance();
   status.textContent='Entrando na sala VIP…';
   $('onlineJoin').click();
+  $('onlineRoomCode').value='';
  }catch(err){status.textContent=err.message||'Não foi possível entrar na sala VIP';}
  finally{vipButton.disabled=false;}
 };
@@ -131,6 +134,8 @@ $('onlineLobby')?.insertAdjacentElement('afterbegin',presence);
 async function updatePresence(){
  const inVip=!$('onlineLobby')?.classList.contains('hidden')&&$('onlineCode')?.textContent.trim()==='TAVERN';
  presence.hidden=!inVip;
+ const roomCodeLine=$('onlineCode')?.parentElement;if(roomCodeLine)roomCodeLine.hidden=inVip;
+ const copyInvite=$('onlineCopy');if(copyInvite)copyInvite.hidden=inVip;
  if(!inVip)return;
  try{
   const res=await window.TavernaAuth.roomRequest('/api/vip','GET');
