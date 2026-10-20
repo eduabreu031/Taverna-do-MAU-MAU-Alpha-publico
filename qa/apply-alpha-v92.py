@@ -26,7 +26,9 @@ assert '</script' not in js.lower(), 'Script HTML poderia ser encerrado prematur
 html=html.replace('</head>','<style id="alpha-v92-style">\n'+css+'\n</style>\n</head>',1)
 html=html.replace('</body>','<script id="alpha-v92-script">\n'+js+'\n</script>\n</body>',1)
 html=html.replace('Taverna do MAU MAU — TESTES PÚBLICOS v91','Taverna do MAU MAU — 0.4.94.1-alpha',1)
-assert html.count("betaTag.textContent='BETA · TAVERNA';betaTag.hidden=true")==1, 'Selo Beta esperado no multiplayer'\nhtml=html.replace("betaTag.textContent='BETA · TAVERNA';betaTag.hidden=true", "betaTag.textContent='';betaTag.hidden=true;betaTag.style.display='none'")\nindex.write_text(html,encoding='utf-8')
+assert html.count("betaTag.textContent='BETA · TAVERNA';betaTag.hidden=true")==1, 'Selo Beta esperado no multiplayer'
+html=html.replace("betaTag.textContent='BETA · TAVERNA';betaTag.hidden=true", "betaTag.textContent='';betaTag.hidden=true;betaTag.style.display='none'")
+index.write_text(html,encoding='utf-8')
 sw=site/'sw.js'
 content=sw.read_text(encoding='utf-8')
 updated,num=re.subn(r"const CACHE = '[^']+';","const CACHE = 'taverna-pwa-alpha-0.4.94.1-01';",content,count=1)
