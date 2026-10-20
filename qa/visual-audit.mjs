@@ -59,6 +59,7 @@ try{
   await page.evaluate(()=>{
    // Na simulação de lobby, nenhuma janela de login deve interceptar controles.
    document.getElementById('alphaAccountsOverlay').hidden=true;
+   window.TavernaAuth.roomRequest=async()=>({vip:true,members:[],canManage:false});
    document.querySelector('#sceneWelcome')?.classList.add('hidden');
    document.querySelector('#sceneMultiplayer')?.classList.remove('hidden');
    const lobby=document.querySelector('#onlineLobby');lobby.classList.remove('hidden');
