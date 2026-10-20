@@ -17,8 +17,8 @@ try{
    if(path==='/api/vip/password'){window.__tavVipTest.changes.push(body.password);return {ok:true};}
    if(path==='/api/vip/kick'){window.__tavVipTest.kicks.push(body.memberId);return {ok:true};}
    if(path==='/api/vip')return {vip:true,code:'TAVERN',members:[
-     {id:'e5592355-42b8-40df-9984-f14d047d9ed1',name:'Amigo',online:true,status:'aguardando'},
-     {id:'f441b547-87b3-454e-97d7-c69359707986',name:'GedeTheBoss',online:true,status:'aguardando'}]};
+     {id:'e5592355-42b8-40df-9984-f14d047d9ed1',name:'Amigo',accountId:'friend',online:true,status:'aguardando'},
+     {id:'f441b547-87b3-454e-97d7-c69359707986',name:'GedeTheBoss',accountId:'admin',online:true,status:'aguardando'}]};
    throw Error('Unknown URL '+path);
   };
   document.getElementById('onlineJoin').onclick=()=>{};
