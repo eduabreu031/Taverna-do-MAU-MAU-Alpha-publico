@@ -113,7 +113,7 @@ async function updatePresence(){
   members.replaceChildren(...people.map(p=>{
    const li=make('li','tav-vip-member-row'),info=make('span','',p.name+' — '+p.status);
    li.append(info);li.classList.toggle('offline',!p.online);
-   if(admin&&p.id&&p.name.toLowerCase()!=='gedetheboss'){
+   if(admin&&p.id&&p.accountId!==window.TavernaAuth.getUser()?.id){
     const remove=make('button','engraved-btn tav-vip-remove','Remover');
     remove.type='button';remove.setAttribute('aria-label','Remover '+p.name+' da sala VIP');
     remove.onclick=async()=>{
