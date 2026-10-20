@@ -23,7 +23,9 @@
  const peopleList=make('ul','tav-admin-list');
  const botsTitle=make('h3','','Bots da sala');
  const botsList=make('ul','tav-admin-list');
- panel.append(heading,intro,summary,actions,notice,peopleTitle,peopleList,botsTitle,botsList);
+ const requestTitle=make('h3','','Solicitações de acesso');
+ const requestList=make('ul','tav-admin-list tav-access-list');
+ panel.append(heading,intro,summary,actions,notice,requestTitle,requestList,peopleTitle,peopleList,botsTitle,botsList);
  overlay.append(panel);document.body.append(overlay);
  const admin=()=>auth.getUser()?.role==='admin';
  function closed(){overlay.hidden=true;notice.textContent='';}
@@ -56,6 +58,25 @@
   try{
    const data=await auth.roomRequest('/api/vip','GET');
    if(!data.canManage){closed();trigger.hidden=true;return;}
+   const access=await auth.roomRequest('/api/vip/access/requests','GET');
+   requestList.replaceChildren();
+   for(const person of access.requests||[]){
+    const li=make('li','tav-admin-person'),name=make('span','',person.name+' · aguardando autorização');
+    const approve=make('button','engraved-btn tav-admin-approve','Aprovar'),deny=make('button','engraved-btn tav-admin-deny','Recusar');
+    for(const [control,decision] of [[approve,'approved'],[deny,'denied']]){
+     control.type='button';
+     control.onclick=async()=>{
+      approve.disabled=deny.disabled=true;
+      try{
+       await auth.roomRequest('/api/vip/access/decide','POST',{id:person.id,decision});
+       notice.textContent=decision==='approved'?'Acesso autorizado até a próxima troca de senha.':'Pedido recusado.';
+       li.remove();
+      }catch(e){notice.textContent=e.message||'Erro ao decidir solicitação';approve.disabled=deny.disabled=false;}
+     };
+    }
+    li.append(name,approve,deny);requestList.append(li);
+   }
+   if(!requestList.childElementCount)requestList.append(make('li','','Nenhuma solicitação pendente.'));
    const participants=Array.isArray(data.members)?data.members:[];
    const bots=Array.isArray(data.bots)?data.bots:[];
    const canKick=!['playing','scoring'].includes(data.phase);
