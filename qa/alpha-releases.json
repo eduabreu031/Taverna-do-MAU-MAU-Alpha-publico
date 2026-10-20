@@ -1,7 +1,19 @@
 {
-  "current": "alpha-v92",
+  "current": "alpha-v93",
   "issuesRepo": "eduabreu031/Taverna-do-MAU-MAU-Alpha-publico",
   "entries": [
+    {
+      "id": "alpha-v93",
+      "label": "Alpha v93",
+      "date": "2026-10-19",
+      "title": "A voz da Taverna",
+      "items": [
+        "O pergaminho de novidades e os menus agora seguem a paleta vinho e bordô da Taverna.",
+        "Relate problemas e compartilhe sugestões sem criar conta no GitHub.",
+        "O formulário pede apenas um nome ou apelido, o tipo do relato e sua mensagem.",
+        "Os relatos ficam guardados no servidor e são organizados automaticamente no GitHub, quando a sincronização estiver disponível."
+      ]
+    },
     {
       "id": "alpha-v92",
       "label": "Alpha v92",
