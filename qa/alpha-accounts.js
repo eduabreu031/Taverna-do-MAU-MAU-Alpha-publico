@@ -101,7 +101,7 @@ async function logout(){
  try{if(token)await request('/api/auth/logout','POST');}catch{}
  token='';user=null;vipPassword='';localStorage.removeItem(KEY);sessionStorage.removeItem(KEY);
 }
-window.TavernaAuth={requireUser,roomRequest,pass,logout,getUser:()=>user};
+window.TavernaAuth={requireUser,roomRequest,pass,logout,getUser:()=>user,getToken:()=>token};
 const portal=query('sceneMultiplayer');
 if(portal){
  const bar=el('div',{id:'alphaAccountsBar'}),status=el('span',{id:'alphaAccountsStatus'}),
