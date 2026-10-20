@@ -1,0 +1,27 @@
+name: Verificar Alpha 0.4.95.1 no celular
+on:
+  pull_request:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  live:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Conferir HTML público, visitante, CSS e cache
+        shell: bash
+        run: |
+          set -euo pipefail
+          url="https://eduabreu031.github.io/Taverna-do-MAU-MAU-Alpha-publico"
+          for n in $(seq 1 15); do
+            status=$(curl -Ls --max-time 20 -o /tmp/site.html -w '%{http_code}' "$url/" || true)
+            sw=$(curl -Ls --max-time 20 "$url/sw.js" || true)
+            if [[ "$status" == "200" ]] && grep -q '0.4.95.1-alpha' /tmp/site.html && grep -q 'alphaAccountGuest' /tmp/site.html && grep -q 'alphaAccountsBar' /tmp/site.html && grep -q 'alpha-room-active\|onlineLobby:not(.hidden)' /tmp/site.html && grep -q 'taverna-pwa-alpha-0.4.95.1-01' <<<"$sw"; then
+              echo "ALPHA_0_4_95_1_PUBLICADA_COM_VISITANTE_MOBILE_OK"
+              exit 0
+            fi
+            echo "Aguardando publicação rodada $n: HTTP $status"
+            sleep 8
+          done
+          echo "::error::Versão 0.4.95.1 ainda não está totalmente disponível"
+          exit 1
