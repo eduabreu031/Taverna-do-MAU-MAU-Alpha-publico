@@ -1,0 +1,23 @@
+#sceneMultiplayer .tav-vip-enter{display:block;width:min(100%,430px);margin:13px auto;padding:13px 20px;box-sizing:border-box;background:linear-gradient(155deg,#814b50,#472431);color:#ffe5b9;border:2px solid #c99e66;box-shadow:0 5px 15px #1109097a;min-height:46px}
+#sceneMultiplayer:has(#onlineLobby:not(.hidden)) .tav-vip-enter,#sceneMultiplayer:has(#onlineLobby:not(.hidden)) .tav-vip-status{display:none!important}
+.tav-vip-status{color:#f2cf9a;font:14px Georgia,serif;text-align:center;max-width:100%;overflow-wrap:anywhere}
+#sceneMultiplayer #onlineBotsDEV{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;opacity:0!important;pointer-events:none!important;clip-path:inset(50%);}
+#sceneMultiplayer .tav-bots-open{min-height:44px;min-width:110px;border:2px solid #c19b65;color:#fff0ca;background:linear-gradient(#70434b,#422735);padding:10px 14px}
+.tav-bots-sheet[hidden]{display:none!important}
+.tav-bots-sheet{position:fixed;inset:0;z-index:2147483400;display:grid;place-items:center;overflow:auto;padding:16px;background:#140a12df}
+.tav-bots-sheet-inner{box-sizing:border-box;width:min(430px,96vw);max-height:90dvh;overflow:auto;border:3px ridge #c29b64;border-radius:17px;padding:24px 16px;background:linear-gradient(#603641,#281721);color:#f7dfba;text-align:center;box-shadow:0 25px 70px #000c}
+.tav-bots-sheet h2{font:700 26px Georgia,serif;margin:0 0 9px}
+.tav-bots-sheet p{font:15px/1.4 Georgia,serif;margin:0 0 17px}
+.tav-bots-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+.tav-bots-choice{font:700 19px Georgia,serif;border:1px solid #987653;border-radius:9px;min-height:49px;min-width:0;color:#f3d8aa;background:#392532}
+.tav-bots-choice:first-child{font-size:11px}
+.tav-bots-choice.selected{background:linear-gradient(#e2bd7b,#a77b43);color:#2b1521;border-color:#ffe1a3;box-shadow:0 0 0 2px #dec18a80}
+.tav-bots-actions{display:flex;gap:10px;margin-top:20px}
+.tav-bots-actions button{flex:1;min-height:46px}
+.tav-vip-presence{border:1px solid #ab8659;background:#1d1214b8;border-radius:10px;padding:12px 15px;margin-bottom:14px}
+.tav-vip-presence[hidden]{display:none!important}
+.tav-vip-presence h3{font:700 18px Georgia,serif;color:#e6c28f;margin:3px 0 10px}
+.tav-vip-member-list{margin:0;padding:0;list-style:none}
+.tav-vip-member-list li{font:15px/1.6 Georgia,serif;color:#f0d8b9;border-bottom:1px solid #87644a60;overflow-wrap:anywhere}
+.tav-vip-member-list li.offline{opacity:.65}
+@media(max-width:380px){.tav-bots-grid{gap:6px}.tav-bots-choice{font-size:16px;min-height:45px}.tav-bots-sheet-inner{padding:19px 11px}#sceneMultiplayer .tav-bots-open{min-width:95px}}
