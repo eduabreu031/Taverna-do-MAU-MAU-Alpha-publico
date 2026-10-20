@@ -1,27 +1,33 @@
-# Relatos da Taverna do MAU MAU — Alpha publica
+# Relatos e versoes da Taverna do MAU MAU — Alpha publica
 
-## Destino
-Todos os relatos que o jogador **concluir no GitHub** pelo formulario da Alpha viram *Issues* publicas neste repositorio:
-https://github.com/eduabreu031/Taverna-do-MAU-MAU-Alpha-publico/issues
+## Alpha v93: envio sem conta
+Ao tocar no icone 🐞, o jogador escolhe **bug ou sugestao**, escreve **nome/apelido** (qualquer nome) e **mensagem**. O site envia diretamente para `POST https://taverna-multiplayer-servidor.edulopes941.workers.dev/api/feedback`, sem cadastro, sem e-mail, sem GitHub e sem token no HTML. Mensagens aprovadas sao guardadas no Durable Object reservado de feedback, separado das salas do jogo. O retorno HTTP 202 significa *mensagem armazenada*, nao "Issue publicada".
 
-O formulario dentro do jogo coleta tipo, categoria, versao, titulo, descricao, passos, comportamento esperado e horario. Diagnostico de navegador e tamanho da janela e enviado **apenas com consentimento**. Nao coleta dados de cartas privadas, codigos de sala, tokens, contas ou historico da partida.
+Somente `id`, `at`, `type`, `name`, `message` e `version` sao guardados. A Cloudflare recebe dados normais de conexao para operar e aplicar protecao contra spam, mas enderecos IP nao sao guardados na mensagem; o limitador por IP fica apenas na memoria transitoria do Worker. Nao pedir senha, telefone, e-mail, nome real, codigo de sala nem dados de cartas privadas. O jogador e avisado de que seu relato podera aparecer publicamente.
 
-**Limitacao importante**: GitHub exige login para publicar a Issue. Sem backend com credenciais armazenadas de forma segura, o jogo estatico no GitHub Pages nao pode abrir Issues de forma anonima. O botao "Continuar no GitHub" apenas abre a tela preenchida; o relato so e enviado quando o usuario confirmar a publicacao no GitHub. O botao "Copiar relato" permite salvar/compartilhar o texto de quem nao tem conta. Nunca colocar token GitHub no HTML/JS.
+Regras anti-spam: honeypot de formulario, 3 envios/hora por IP (em memoria, melhor esforco), limite global de 35 por hora e 120 por dia. A caixa armazena ate 350 relatos e retira itens com mais de 21 dias. Como o feed publico e legivel antes da publicacao no GitHub, nao usar esse canal para conteudo privado.
 
-## Como classificar
-O workflow `.github/workflows/triagem-relatos.yml` aplica etiquetas automaticamente a Issues com prefixos de titulo:
-- `[Bug]` -> `tipo: bug`, `triagem-pendente`, `alpha-publica`, `origem: jogo`.
-- `[Sugestão]` -> `tipo: sugestao`, `triagem-pendente`, `alpha-publica`, `origem: jogo`.
+## Importacao automatica para Issues
 
-Busca pratica:
+Workflow: `.github/workflows/importar-relatos.yml`, periodico a cada cinco minutos (GitHub pode atrasar execucoes) e com despacho manual. Usa **apenas o GITHUB_TOKEN automatico da propria Action**, com permissao `issues: write`. O servidor Cloudflare NAO precisa guardar token do GitHub.
+
+A Action:
+1. Consulta `GET /api/feedback/feed`.
+2. Compara identificadores `<!-- alpha-feedback-id:<id> -->` com Issues ja importadas, inclusive fechadas.
+3. Cria Issues com origem, tipo, apelido, versao e mensagem, etiquetadas para triagem.
+4. Na execucao seguinte, ignora IDs ja importados. A importacao nao e instantanea.
+
+Nenhum login ou passo externo e exigido do jogador.
+
+## Como consultar os relatos comigo no ChatGPT
+Diga: "Consulte as Issues do repositorio eduabreu031/Taverna-do-MAU-MAU-Alpha-publico e me traga os bugs e sugestoes dos jogadores. Agrupe por prioridade, contexto, reproducibilidade e risco. Mostre alternativas interativas para eu escolher o que corrigir ou incluir."
+
+- Todos os relatos: https://github.com/eduabreu031/Taverna-do-MAU-MAU-Alpha-publico/issues
 - Bugs: https://github.com/eduabreu031/Taverna-do-MAU-MAU-Alpha-publico/issues?q=is%3Aissue+label%3A%22tipo%3A+bug%22
 - Sugestoes: https://github.com/eduabreu031/Taverna-do-MAU-MAU-Alpha-publico/issues?q=is%3Aissue+label%3A%22tipo%3A+sugestao%22
-- Relatos a analisar: https://github.com/eduabreu031/Taverna-do-MAU-MAU-Alpha-publico/issues?q=is%3Aissue+label%3Atriagem-pendente
 
-No ChatGPT, para buscar um inventario com contexto: "Consulte as Issues do repositorio eduabreu031/Taverna-do-MAU-MAU-Alpha-publico. Liste bugs e sugestoes da Alpha, agrupando por gravidade, area, versao, reproducibilidade e risco de correcao. Sugira solucoes sem implementa-las ate eu escolher. Mostre opcoes de priorizacao interativas."
+## Cada nova versao
+Alterar `qa/alpha-releases.json`: incrementar o ID `alpha-vNN`, registrar notas reais e atualizar a chave PWA no script `qa/apply-alpha-v92.py`. O modal aparece uma vez por versao por perfil de navegador e pode ser reaberto com o botao 📜 no menu inicial.
 
-## Publicacao de nova versao
-1. Atualizar `qa/alpha-releases.json`: adicionar nova entrada no inicio, mudar `current` para ID novo, anotar somente alteracoes realmente liberadas.
-2. Atualizar `qa/apply-alpha-v92.py` para reconhecer o ID atual e mudar `const CACHE` (chave PWA).
-3. Testar e publicar pelo fluxo de GitHub Actions; conferir site antes de anunciar. A chave `taverna-alpha:ultima-versao-lida` no localStorage impede repetir o aviso para a mesma versao no mesmo navegador/perfil.
-4. O changelog nunca aparece durante uma partida. O botão 📜 no menu reabre o historico.
+### Como restaurar se houver problema
+Antes da v93: `restore/pre-alpha-feedback-site-2026-10-19` (site) e `restore/pre-alpha-feedback-server-2026-10-19` (servidor). Restaurar apenas codigo GitHub nao desfaz dados ja salvos em Durable Objects.
