@@ -27,6 +27,21 @@ vipButton.type='button';vipButton.id='tavVipEnter';
 const entrance=portal.querySelector('.multiplayer-preview');
 if(entrance)entrance.insertAdjacentElement('beforebegin',vipButton);
 const status=make('p','tav-vip-status','');vipButton.after(status);
+const requestAccess=make('button','engraved-btn tav-vip-request-access','Solicitar acesso à Sala VIP');
+requestAccess.type='button';requestAccess.id='tavVipRequestAccess';
+status.after(requestAccess);
+requestAccess.onclick=async()=>{
+ requestAccess.disabled=true;status.textContent='Registrando solicitação de acesso…';
+ try{
+  const account=await window.TavernaAuth.requireUser();
+  if(!account)throw Error('Entre na sua conta para solicitar acesso.');
+  if(account.role==='guest')throw Error('Crie uma conta para solicitar acesso duradouro. Visitantes podem entrar com a senha.');
+  const result=await window.TavernaAuth.roomRequest('/api/vip/access/request','POST');
+  status.textContent=result.status==='approved'?'Seu acesso já está autorizado.':'Solicitação enviada. O administrador poderá aprovar quando estiver online.';
+ }catch(e){status.textContent=e.message||'Falha ao enviar solicitação';}
+ finally{requestAccess.disabled=false;}
+};
+
 vipButton.onclick=async()=>{
  vipButton.disabled=true;status.textContent='Consultando sala VIP…';
  try{
