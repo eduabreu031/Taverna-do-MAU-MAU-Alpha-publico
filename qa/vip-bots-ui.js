@@ -134,8 +134,8 @@ $('onlineLobby')?.insertAdjacentElement('afterbegin',presence);
 async function updatePresence(){
  const inVip=!$('onlineLobby')?.classList.contains('hidden')&&$('onlineCode')?.textContent.trim()==='TAVERN';
  presence.hidden=!inVip;
- const roomCodeLine=$('onlineCode')?.parentElement;if(roomCodeLine)roomCodeLine.hidden=inVip;
- const copyInvite=$('onlineCopy');if(copyInvite)copyInvite.hidden=inVip;
+ const roomCodeLine=$('onlineCode')?.parentElement;if(roomCodeLine){roomCodeLine.hidden=inVip;roomCodeLine.style.display=inVip?'none':'';}
+ const copyInvite=$('onlineCopy');if(copyInvite){copyInvite.hidden=inVip;copyInvite.style.display=inVip?'none':'';}
  if(!inVip)return;
  try{
   const res=await window.TavernaAuth.roomRequest('/api/vip','GET');
