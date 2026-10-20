@@ -27,7 +27,7 @@ try{
  await page.waitForSelector('#tavVipSecurity:not([hidden])');
  await page.locator('#tavVipSecurity .tav-vip-secret').fill('correct-password');
  await page.locator('#tavVipSecurity .tav-bots-actions button').last().click();
- await page.waitForSelector('#tavVipSecurity[hidden]');
+ await page.waitForFunction(()=>document.getElementById('tavVipSecurity')?.hidden===true);
  assert.equal(await page.locator('#onlineRoomCode').inputValue(),'TAVERN');
  await page.evaluate(()=>{
   document.getElementById('onlineLobby').classList.remove('hidden');
