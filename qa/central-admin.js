@@ -98,5 +98,5 @@ button.onclick=async()=>{
  await update();if(!overlay.hidden)interval=setInterval(update,9000);
 };
 function visibility(){button.hidden=!allowed();if(!allowed()&&!overlay.hidden)close();}
-setInterval(visibility,1000);visibility();
+setInterval(visibility,1000);visibility();auth.restoreSilently?.().then(visibility).catch(()=>{});
 })();
