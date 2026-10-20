@@ -1,0 +1,34 @@
+/* Taverna do MAU MAU — ferramentas discretas da Alpha v92. */
+#alphaTopTools{position:fixed;top:max(10px,env(safe-area-inset-top));right:max(12px,env(safe-area-inset-right));display:flex;gap:7px;z-index:350}
+#alphaTopTools button{width:39px;height:39px;display:grid;place-items:center;border:1px solid #bb925b;border-radius:10px;background:linear-gradient(145deg,#4f2735,#291622);color:#ffe2a7;box-shadow:0 4px 12px #09050777;cursor:pointer;font:21px Georgia,serif;transition:transform .18s,border-color .18s}
+#alphaTopTools button:hover,#alphaTopTools button:focus-visible{transform:translateY(-1px);border-color:#ffe0a2;outline-offset:3px}
+#alphaVersionStamp{position:fixed;bottom:max(10px,env(safe-area-inset-bottom));right:12px;color:#dfbc82;background:#26111fbb;border:1px solid #76513e77;border-radius:6px;padding:4px 8px;font:11px Georgia,serif;pointer-events:none;z-index:140}
+.alpha-information-overlay[hidden]{display:none!important}
+.alpha-information-overlay{position:fixed;inset:0;display:grid;place-items:center;overflow-y:auto;z-index:990;padding:18px 10px;padding-top:max(18px,env(safe-area-inset-top));background:#100b13c9;backdrop-filter:blur(5px);overscroll-behavior:contain}
+.alpha-info-card{position:relative;width:min(570px,95vw);max-height:calc(100dvh - 36px);overflow-y:auto;overscroll-behavior:contain;box-sizing:border-box;border:6px ridge #966a39;border-radius:15px;padding:21px clamp(14px,4vw,29px);background:linear-gradient(145deg,#f5e3c1,#dfc28c);box-shadow:0 25px 90px #080406;color:#30201a;font:15px Georgia,serif;text-align:left}
+.alpha-info-card *{box-sizing:border-box}
+.alpha-info-card h2{font:small-caps bold clamp(26px,5vw,34px) Georgia,serif;text-align:center;margin:6px 0 5px;color:#39231c}
+.alpha-info-head{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.alpha-kicker{color:#72412a;letter-spacing:2px;font:12px Georgia,serif}
+.alpha-dismiss{width:38px;height:38px;border:1px solid #97663f;background:#e6ce9e;border-radius:8px;color:#523128;font:28px Georgia,serif;cursor:pointer}
+.alpha-lead{text-align:center;margin:6px 0 20px;color:#68432d;line-height:1.4}
+.alpha-release{border:1px solid #b49461;border-radius:7px;background:#f3dcac;margin:11px 0;padding:11px}
+.alpha-release summary{cursor:pointer;color:#3b2121;font-weight:bold;line-height:1.4}
+.alpha-release ul{margin:10px 0 0;padding-left:21px;line-height:1.55}
+.alpha-release li{margin:4px 0}
+.alpha-note{font-size:12px;line-height:1.45;color:#6e4c34;margin:15px 0 10px}
+.alpha-primary,.alpha-secondary{display:inline-flex;align-items:center;justify-content:center;padding:12px 15px;border-radius:9px;cursor:pointer;font:700 14px Georgia,serif;min-height:43px}
+.alpha-primary{background:linear-gradient(#70442e,#4b2923);border:1px solid #b58545;color:#fff2d9}
+.alpha-secondary{border:1px solid #9e784c;color:#553528;background:#e7d0a3}
+#alphaNewsContinue{width:100%}
+#alphaFeedbackForm{display:flex;flex-direction:column;gap:7px}
+#alphaFeedbackForm>label:not(.alpha-check){font-weight:bold;margin-top:9px;color:#4c2e25}
+#alphaFeedbackForm select,#alphaFeedbackForm input[type=text],#alphaFeedbackForm textarea{width:100%;border:1px solid #9a7547;border-radius:8px;background:#fff9ed;color:#30231e;padding:10px 11px;font:15px system-ui,sans-serif}
+#alphaFeedbackForm textarea{resize:vertical;min-height:72px}
+#alphaFeedbackForm .alpha-check{display:flex;align-items:flex-start;gap:8px;font-size:13px;line-height:1.5;margin-top:9px}
+#alphaFeedbackForm .alpha-check input{margin-top:4px;accent-color:#753e41}
+#alphaFeedbackStatus{min-height:14px;color:#553024;font-size:13px}
+.alpha-form-actions{display:flex;gap:8px;flex-wrap:wrap}
+.alpha-form-actions button{flex:1;min-width:165px}
+@media(max-width:400px){#alphaTopTools button{width:36px;height:36px;font-size:20px}.alpha-info-card{padding:14px 13px;max-height:calc(100dvh - 20px)}.alpha-info-card h2{font-size:25px}.alpha-form-actions button{min-width:100%}}
+@media(prefers-reduced-motion:reduce){#alphaTopTools button{transition:none}}
