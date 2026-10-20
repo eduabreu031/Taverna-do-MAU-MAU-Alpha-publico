@@ -45,57 +45,49 @@ function renderNews(){
 }
 function renderFeedback(){
  return '<div class="alpha-info-card alpha-form-card" tabindex="-1"><div class="alpha-info-head"><span class="alpha-kicker">✦ OUVIDORIA DA TAVERNA ✦</span><button type="button" class="alpha-dismiss" id="alphaModalClose" aria-label="Fechar">×</button></div>'+
- '<h2 id="alphaInformationTitle">Bugs e sugestões</h2><p class="alpha-lead">Conte o que ocorreu ou o que gostaria de ver no jogo.</p>'+
+ '<h2 id="alphaInformationTitle">Bugs e sugestões</h2><p class="alpha-lead">Sua voz ajuda a melhorar a Taverna. Não é preciso criar conta ou se identificar.</p>'+
  '<form id="alphaFeedbackForm">'+
- '<label for="alphaReportType">Tipo do relato</label><select id="alphaReportType" required><option value="bug">🐞 Reportar um bug</option><option value="sugestao">💡 Sugerir uma melhoria</option></select>'+
- '<label for="alphaReportArea">Onde se aplica?</label><select id="alphaReportArea"><option>Multiplayer / conexão</option><option>Regras / cartas / penalidades</option><option>Menu / instalação / atualização</option><option>Visual / som / animações</option><option>Outro</option></select>'+
- '<label for="alphaReportTitle">Resumo do relato</label><input id="alphaReportTitle" type="text" maxlength="100" minlength="8" required placeholder="Ex.: O cronômetro não reinicia depois da compra">'+
- '<label for="alphaReportBody">Explique o problema ou a ideia</label><textarea id="alphaReportBody" required minlength="15" maxlength="1800" rows="4" placeholder="Descreva o que aconteceu ou como seria a melhoria..."></textarea>'+
- '<label for="alphaReportSteps">Contexto, passos ou exemplo (opcional)</label><textarea id="alphaReportSteps" maxlength="1000" rows="3" placeholder="Em qual momento, depois de qual carta ou ação?"></textarea>'+
- '<label for="alphaReportExpected">O que você esperava? (opcional)</label><textarea id="alphaReportExpected" maxlength="500" rows="2" placeholder="Como deveria ter funcionado?"></textarea>'+
- '<label class="alpha-check"><input id="alphaAttachEnvironment" type="checkbox"> Incluir navegador e tamanho de tela para ajudar na investigação.</label>'+
- '<p class="alpha-note">Seu relato ficará <strong>público no GitHub</strong>. Não inclua senha, token, código de sala, cartas privadas ou dados pessoais. Nada é enviado sem sua confirmação.</p>'+
- '<p class="alpha-note">Você precisará entrar numa conta gratuita do GitHub e confirmar a publicação na próxima tela. Lá também poderá anexar uma imagem.</p>'+
+ '<label for="alphaReportName">Nome ou apelido</label><input id="alphaReportName" name="nickname" type="text" maxlength="32" required autocomplete="nickname" placeholder="Pode inventar um nome!">'+
+ '<label for="alphaReportType">Tipo de mensagem</label><select id="alphaReportType"><option value="bug">🐞 Encontrei um bug</option><option value="sugestao">💡 Tenho uma sugestão</option></select>'+
+ '<label for="alphaReportBody">Seu relato</label><textarea id="alphaReportBody" name="report" required minlength="10" maxlength="1200" rows="6" placeholder="Conte o que aconteceu ou o que gostaria de ver no jogo..."></textarea>'+
+ '<div class="alpha-honeypot" aria-hidden="true"><label for="alphaWebsiteTrap">Deixe este campo vazio</label><input id="alphaWebsiteTrap" type="text" name="website" tabindex="-1" autocomplete="off"></div>'+
+ '<p class="alpha-note">Só pedimos um apelido e o texto. Seu relato poderá aparecer publicamente na lista de melhorias. Não escreva dados pessoais, senhas nem códigos de sala.</p>'+
  '<div id="alphaFeedbackStatus" role="status" aria-live="polite"></div>'+
- '<div class="alpha-form-actions"><button type="button" id="alphaCopyReport" class="alpha-secondary">Copiar relato</button><button type="submit" class="alpha-primary">Continuar no GitHub ↗</button></div></form></div>';
+ '<div class="alpha-form-actions"><button type="submit" id="alphaSendFeedback" class="alpha-primary">Enviar à Taverna</button></div></form></div>';
 }
+const FEEDBACK_ENDPOINT='https://taverna-multiplayer-servidor.edulopes941.workers.dev/api/feedback';
 function buildReport(){
- const type=$('alphaReportType').value,title=$('alphaReportTitle').value.trim(),description=$('alphaReportBody').value.trim();
- if(title.length<8||description.length<15){$('alphaFeedbackStatus').textContent='Preencha o resumo e a descrição antes de continuar.';return null}
- const area=$('alphaReportArea').value,steps=$('alphaReportSteps').value.trim(),expected=$('alphaReportExpected').value.trim();
- const lines=['<!-- taverna-relato-alpha -->','**Tipo:** '+(type==='bug'?'Bug':'Sugestão'),
- '**Área:** '+area,'**Versão:** '+current.label,
- '**Registrado em (UTC):** '+new Date().toISOString(),
- '', '### Descrição',description,'','### Passos / contexto',steps||'Não informado',
- '','### Comportamento esperado ou proposta',expected||'Não informado'];
- if($('alphaAttachEnvironment').checked){
-  lines.push('','### Diagnóstico autorizado','**Navegador:** '+String(navigator.userAgent||'Não disponível').slice(0,230),
-   '**Janela:** '+window.innerWidth+' × '+window.innerHeight);
+ const type=$('alphaReportType').value;
+ const name=$('alphaReportName').value.trim();
+ const message=$('alphaReportBody').value.trim();
+ if(name.length<1||name.length>32||message.length<10||message.length>1200){
+  $('alphaFeedbackStatus').textContent='Informe um apelido e escreva pelo menos 10 caracteres.';return null;
  }
- lines.push('','---','Relato criado a partir da Taverna do MAU MAU '+current.label+'. Nenhuma mão, credencial ou código de sala foi anexado.');
- const issueTitle=(type==='bug'?'[Bug] ':'[Sugestão] ')+title;
- const body=lines.join('\n');
- const link=new URL(ISSUE_URL);link.searchParams.set('title',issueTitle);link.searchParams.set('body',body);
- return {body,issueTitle,link:link.href};
+ return {type,name,message,version:current.label,website:$('alphaWebsiteTrap').value};
+}
+async function sendReport(){
+ const data=buildReport();if(!data)return;
+ const status=$('alphaFeedbackStatus'),button=$('alphaSendFeedback');
+ button.disabled=true;button.textContent='Enviando…';status.textContent='';
+ try{
+  const controller=new AbortController();
+  const timeout=setTimeout(()=>controller.abort(),12000);
+  let response;
+  try{
+   response=await fetch(FEEDBACK_ENDPOINT,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(data),signal:controller.signal});
+  }finally{clearTimeout(timeout)}
+  let info={};try{info=await response.json()}catch{}
+  if(!response.ok||!info.ok)throw Error(info.error||'O servidor não recebeu a mensagem. Tente mais tarde.');
+  $('alphaFeedbackForm').reset();
+  $('alphaFeedbackForm').innerHTML='<div class="alpha-feedback-success"><span class="alpha-success-symbol" aria-hidden="true">✓</span><h3>Mensagem recebida!</h3><p>Obrigado por ajudar a melhorar a Taverna. Seu relato foi guardado e será encaminhado à lista de melhorias.</p><button type="button" class="alpha-primary" id="alphaSendAnother">Escrever outro relato</button></div>';
+  $('alphaSendAnother').addEventListener('click',()=>openModal('feedback'));
+ }catch(error){
+  status.textContent=error?.name==='AbortError'?'A conexão demorou demais. Tente novamente.':(error?.message||'Falha ao enviar. Tente novamente.');
+  button.disabled=false;button.textContent='Tentar novamente';
+ }
 }
 function attachFeedback(){
- $('alphaFeedbackForm').addEventListener('submit',event=>{
-  event.preventDefault();const report=buildReport();if(!report)return;
-  const status=$('alphaFeedbackStatus');
-  if(report.link.length>7500){status.textContent='O relato ficou muito grande para o link. Reduza a descrição ou copie o texto.';return}
-  const a=document.createElement('a');a.href=report.link;a.target='_blank';a.rel='noopener noreferrer';document.body.appendChild(a);a.click();a.remove();
-  status.textContent='Próximo passo: entrar no GitHub e clicar em “Submit new issue”. O relato ainda não foi enviado.';
- });
- $('alphaCopyReport').addEventListener('click',async()=>{
-  const report=buildReport();if(!report)return;
-  const text=report.issueTitle+'\n\n'+report.body;
-  try{await navigator.clipboard.writeText(text);$('alphaFeedbackStatus').textContent='Relato copiado. Você pode compartilhá-lo sem publicar dados pessoais.';}
-  catch{
-   const area=document.createElement('textarea');area.value=text;area.style.position='fixed';area.style.top='-9999px';document.body.appendChild(area);area.select();
-   const copied=typeof document.execCommand==='function'&&document.execCommand('copy');area.remove();
-   $('alphaFeedbackStatus').textContent=copied?'Relato copiado.':'Não foi possível copiar automaticamente.';
-  }
- });
+ $('alphaFeedbackForm').addEventListener('submit',event=>{event.preventDefault();sendReport()});
 }
 $('alphaOpenNews').addEventListener('click',()=>openModal('news'));
 $('alphaOpenFeedback').addEventListener('click',()=>openModal('feedback'));
