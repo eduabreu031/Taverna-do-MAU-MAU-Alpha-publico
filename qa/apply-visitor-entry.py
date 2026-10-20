@@ -12,7 +12,7 @@ assert len(html)>4_000_000 and 'id="alpha-accounts-script"' in html and 'id="tav
 needle="if(m.type==='error'){startPending=false;refreshReadyAfterBots();message('Servidor: '+(m.message||'Ação rejeitada'));return;}"
 assert html.count(needle)==1,('Cliente multiplayer mudou',html.count(needle))
 html=html.replace(needle,
- "if(m.type==='removed_by_admin'){close(false);el('sceneMultiplayer').classList.add('hidden');el('sceneWelcome').classList.remove('hidden');window.TavernaRemovalNotice?.();return;}\n  "+needle,1)
+ "if(m.type==='removed_by_admin'){close(false);el('sceneMultiplayer').classList.add('hidden');el('sceneWelcome').classList.remove('hidden');window.TavernaRemovalNotice?.();return;}\n  if(m.type==='room_expired'){close(true);el('sceneMultiplayer').classList.add('hidden');el('sceneWelcome').classList.remove('hidden');window.TavernaRoomExpiredNotice?.();return;}\n  "+needle,1)
 
 # O apelido automático não vira preferência persistida do navegador.
 # O PWA ainda mantém os assets estáticos necessários ao modo offline.
