@@ -1,7 +1,18 @@
 {
-  "current": "alpha-0.4.94.0",
+  "current": "alpha-0.4.94.1",
   "issuesRepo": "eduabreu031/Taverna-do-MAU-MAU-Alpha-publico",
   "entries": [
+    {
+      "id": "alpha-0.4.94.1",
+      "label": "0.4.94.1-alpha",
+      "date": "2026-10-19",
+      "title": "A mesma Taverna, em cada tela",
+      "items": [
+        "O livro de regras agora acompanha as cores vinho, bordô e dourado do changelog e dos relatos.",
+        "Removido o selo de Beta da tela multiplayer: esta versão continua sendo Alpha.",
+        "Sem alterações nas regras, salas ou conexão multiplayer."
+      ]
+    },
     {
       "id": "alpha-0.4.94.0",
       "label": "0.4.94.0-alpha",
