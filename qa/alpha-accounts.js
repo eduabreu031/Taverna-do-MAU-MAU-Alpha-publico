@@ -3,6 +3,7 @@
 const API='https://taverna-multiplayer-servidor.edulopes941.workers.dev';
 const KEY='taverna-alpha-auth-token';
 let token=localStorage.getItem(KEY)||'',user=null,resolveForm=null,vipPassword='',vipPromptPending=null,mode='login';
+try{sessionStorage.removeItem(KEY);}catch{} // Elimina sessões antigas de visitantes sem afetar contas registradas.
 const el=(tag,attrs={},content='')=>{const node=document.createElement(tag);for(const [k,v] of Object.entries(attrs))node.setAttribute(k,v);if(content)node.textContent=content;return node;};
 const overlay=el('section',{id:'alphaAccountsOverlay',role:'dialog','aria-modal':'true','aria-label':'Acesse sua conta'});
 overlay.hidden=true;
