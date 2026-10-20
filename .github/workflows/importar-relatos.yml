@@ -1,5 +1,8 @@
 name: Importar relatos anônimos para Issues
 on:
+  push:
+    branches: [main]
+    paths: [.github/workflows/importar-relatos.yml]
   schedule:
     - cron: '*/5 * * * *'
   workflow_dispatch:
