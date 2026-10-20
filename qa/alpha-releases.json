@@ -1,7 +1,18 @@
 {
-  "current": "alpha-0.4.94.2",
+  "current": "alpha-0.4.95.0",
   "issuesRepo": "eduabreu031/Taverna-do-MAU-MAU-Alpha-publico",
   "entries": [
+    {
+      "id": "alpha-0.4.95.0",
+      "label": "0.4.95.0-alpha",
+      "date": "2026-10-20",
+      "title": "Contas para jogar na Taverna",
+      "items": [
+        "Cadastro e login para o modo multiplayer com contas persistentes.",
+        "Salas online associadas a jogadores autenticados e retomada de conexão vinculada à conta.",
+        "Modo offline preservado sem exigir login."
+      ]
+    },
     {
       "id": "alpha-0.4.94.2",
       "label": "0.4.94.2-alpha",
