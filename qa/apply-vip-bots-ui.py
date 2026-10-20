@@ -5,8 +5,10 @@ site=Path(sys.argv[1]) if len(sys.argv)>1 else Path('site')
 file=site/'index.html'
 h=file.read_text(encoding='utf8')
 replacements=[
-("function connectBot(bot){","async function connectBot(bot){"),
-("let sock;try{sock=new WebSocket(url)}catch(e)","let sock;try{url.searchParams.set('pass',await window.TavernaAuth.pass());sock=new WebSocket(url)}catch(e)")
+("function connectBot(bot){\n if(!room||bot.removed)return;","async function connectBot(bot){\n if(!room||bot.removed||bot.connecting)return;\n bot.connecting=true;"),
+("let sock;try{sock=new WebSocket(url)}catch(e)","let sock;try{const pass=await window.TavernaAuth.pass();if(bot.removed||room!==code)return;url.searchParams.set('pass',pass);sock=new WebSocket(url)}catch(e){bot.error='Falha temporária de conexão';if(bot.retry<7){const wait=Math.min(14000,700*Math.pow(2,bot.retry++));clearTimeout(bot.reconnectTimer);bot.reconnectTimer=setTimeout(()=>connectBot(bot),wait)}else message('Não foi possível conectar '+bot.name+'. Tente convocar novamente.');return}finally{bot.connecting=false}if(!sock)return;/* ready */"),
+("  if(m.type!=='state')return;","  if(m.type==='removed'){close(true);message('Você foi retirado desta sessão da VIP.');return;}\n  if(m.type!=='state')return;"),
+("if(e.code===4000||e.code===1008||retries>=5)","if(e.code===4000||e.code===4003||e.code===1008||retries>=5)")
 ]
 for old,new in replacements:
  assert h.count(old)==1,(old,h.count(old))

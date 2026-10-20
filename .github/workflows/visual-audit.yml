@@ -27,6 +27,15 @@ jobs:
         run: |
           python3 -m http.server 8765 -d site >/tmp/taverna-http.log 2>&1 &
           node qa/visual-audit.mjs
+          node qa/table-parity.mjs
+          node qa/vip-ui-audit.mjs
+      - name: Guardar HTML gerado para inspeção da mesa online/offline
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: alpha-html-gerado
+          path: site/index.html
+          if-no-files-found: ignore
       - name: Guardar capturas para auditoria
         if: always()
         uses: actions/upload-artifact@v4
