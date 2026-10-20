@@ -41,6 +41,14 @@ try{
   const box=await page.locator('#alphaAccountsBar').boundingBox();
   const panel=await page.locator('#sceneMultiplayer .multiplayer-panel').boundingBox();
   assert(box&&panel&&box.x>=panel.x-1&&box.x+box.width<=panel.x+panel.width+1,'Barra de conta fora do painel '+width);
+  await page.evaluate(()=>{
+   document.querySelector('#sceneMultiplayer')?.classList.add('hidden');
+   document.querySelector('#sceneMenu')?.classList.remove('hidden');
+  });
+  await page.waitForTimeout(250);
+  await page.screenshot({path:'qa/screenshots/offline-menu-'+width+'.png',fullPage:false});
+  const menu=await page.locator('#sceneMenu').boundingBox();
+  assert(menu&&menu.width>=width-5,'Menu offline não ocupa a área esperada '+width);
   await page.close();
   console.log('VISUAL_VIEWPORT_OK',width);
  }
