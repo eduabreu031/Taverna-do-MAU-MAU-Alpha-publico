@@ -1,7 +1,19 @@
 {
-  "current": "alpha-0.4.96.0",
+  "current": "alpha-0.4.97.0",
   "issuesRepo": "eduabreu031/Taverna-do-MAU-MAU-Alpha-publico",
   "entries": [
+    {
+      "id": "alpha-0.4.97.0",
+      "label": "0.4.97.0-alpha",
+      "date": "2026-10-20",
+      "title": "Forasteiros e administração da Sala VIP",
+      "items": [
+        "Visitantes entram como Forasteiro e recebem nomes numerados quando necessário, sem salvar sua sessão de convidado no navegador.",
+        "Quem é removido da Sala VIP recebe um aviso e retorna às boas-vindas.",
+        "Cadastro com tela própria, confirmação de senha e telefone privado com DDD.",
+        "Sessões de contas registradas, regras e partidas offline preservadas."
+      ]
+    },
     {
       "id": "alpha-0.4.96.0",
       "label": "0.4.96.0-alpha",

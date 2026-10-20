@@ -13,9 +13,35 @@ try{
   const root=await page.evaluate(()=>({body:document.body.scrollWidth,screen:document.documentElement.clientWidth}));
   assert(root.body<=root.screen+3,'Rolagem horizontal em '+width+': '+JSON.stringify(root));
   await page.screenshot({path:'qa/screenshots/welcome-'+width+'.png',fullPage:false});
+  // Qualquer porta da Taverna funciona com nome em branco.
+  await page.locator('#playerName').fill('');
+  await page.locator('#chooseOffline').click();
+  assert(await page.locator('#sceneMenu').isVisible(),'Modo offline exigiu apelido em branco');
+  assert.equal(await page.locator('#playerName').inputValue(),'Forasteiro');
+  await page.locator('#offlineBackBtn').click();
+  await page.locator('#playerName').fill('');
+  await page.locator('#chooseRules').click();
+  assert(await page.locator('#rulesModalDEV').isVisible(),'Livro de regras bloqueou visitante sem nome');
+  await page.locator('#rulesCloseDEV').click();
+  await page.locator('#playerName').fill('');
   await page.click('#chooseMultiplayer');
+  assert(await page.locator('#sceneMultiplayer').isVisible(),'Multiplayer exigiu apelido');
+  assert.equal(await page.locator('#playerName').inputValue(),'Forasteiro');
+  assert.equal(await page.evaluate(()=>localStorage.getItem('mau2_player_name')),null,'Nome provisório não pode persistir no navegador');
   await page.waitForTimeout(350);
   await page.waitForSelector('#alphaAccountsOverlay:not([hidden])');
+  // Cadastro deve abrir uma TELA nova; formulário de login não valida cadastro.
+  await page.locator('#alphaAccountCreate').click();
+  assert(await page.locator('#alphaRegisterFields').isVisible(),'Confirmar senha e telefone não apareceram');
+  assert(await page.locator('#alphaAccountPhone').isVisible(),'Campo telefone ausente');
+  await page.locator('#alphaAccountUser').fill('qa_teste');
+  await page.locator('#alphaAccountPassword').fill('SenhaLonga123');
+  await page.locator('#alphaAccountConfirmPassword').fill('SenhaDiferente');
+  await page.locator('#alphaAccountPhone').fill('31987654321');
+  await page.locator('#alphaAccountCreate').click();
+  assert.match(await page.locator('#alphaAccountError').innerText(),/senhas/i);
+  await page.locator('#alphaAccountLogin').click();
+  assert(await page.locator('#alphaRegisterFields').isHidden(),'Botão voltar não retornou ao login');
   const auth=await page.locator('.alpha-accounts-panel').boundingBox();
   assert(auth&&auth.x>=-1&&auth.x+auth.width<=width+2,'Modal de conta fora da tela '+width);
   await page.screenshot({path:'qa/screenshots/auth-'+width+'.png'});
@@ -74,7 +100,44 @@ try{
   const box=await page.locator('#alphaAccountsBar').boundingBox();
   const panel=await page.locator('#sceneMultiplayer .multiplayer-panel').boundingBox();
   assert(box&&panel&&box.x>=panel.x-1&&box.x+box.width<=panel.x+panel.width+1,'Barra de conta fora do painel '+width);
+  await page.evaluate(()=>window.TavernaRemovalNotice());
+  assert(await page.locator('#sceneWelcome').isVisible(),'Pessoa removida não retornou às boas-vindas');
+  assert(await page.locator('#tavRemovedNotice').isVisible(),'Aviso da remoção ausente');
+  assert.match(await page.locator('#tavRemovedNotice').innerText(),/removido.*administrador/i);
+  await page.locator('#tavRemovedNotice button').click();
+  assert(await page.locator('#tavRemovedNotice').isHidden(),'Aviso não foi dispensado');
   await page.close();
   console.log('VISUAL_VIEWPORT_OK',width);
  }
+
+ // Visitante: sessão existe somente na memória e desaparece ao reabrir o app.
+ const guestPage=await browser.newPage({viewport:{width:390,height:844}});
+ await guestPage.route('**/api/auth/guest',async route=>{
+  const cors={'access-control-allow-origin':'*','access-control-allow-methods':'GET,POST,OPTIONS','access-control-allow-headers':'content-type, authorization'};
+  if(route.request().method()==='OPTIONS')return route.fulfill({status:204,headers:cors});
+  return route.fulfill({status:201,headers:{...cors,'content-type':'application/json'},body:JSON.stringify({
+   token:'temporary-guest-token-of-test',user:{id:'testGuest',username:'guest_session123',role:'guest'}
+  })});
+ });
+ await guestPage.goto('http://127.0.0.1:8765/',{waitUntil:'domcontentloaded'});
+ await guestPage.evaluate(()=>{
+  localStorage.setItem('taverna-alpha:ultima-versao-lida','alpha-0.4.97.0');
+  document.getElementById('alphaInformationOverlay').hidden=true;
+ });
+ await guestPage.locator('#playerName').fill('');
+ await guestPage.locator('#chooseMultiplayer').click();
+ await guestPage.waitForSelector('#alphaAccountsOverlay:not([hidden])');
+ await guestPage.locator('#alphaAccountGuest').click();
+ await guestPage.locator('#alphaAccountsOverlay').waitFor({state:'hidden'});
+ assert.deepEqual(await guestPage.evaluate(()=>({
+  storedLocal:localStorage.getItem('taverna-alpha-auth-token'),
+  storedSession:sessionStorage.getItem('taverna-alpha-auth-token'),
+  name:localStorage.getItem('mau2_player_name')
+ })),{storedLocal:null,storedSession:null,name:null});
+ await guestPage.reload({waitUntil:'domcontentloaded'});
+ await guestPage.locator('#chooseMultiplayer').click();
+ await guestPage.waitForSelector('#alphaAccountsOverlay:not([hidden])');
+ console.log('VISITOR_EPHEMERAL_SESSION_OK');
+ await guestPage.close();
+
 }finally{await browser.close();}

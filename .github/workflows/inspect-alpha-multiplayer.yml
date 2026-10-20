@@ -27,5 +27,7 @@ jobs:
         run: python3 qa/apply-alpha-accounts.py site
       - name: Adicionar VIP e seleção temática de bots
         run: python3 qa/apply-vip-bots-ui.py site
+      - name: Ativar visitantes sem cache e aviso de remoção
+        run: python3 qa/apply-visitor-entry.py site
       - name: Validar motor e sintaxe de scripts
         run: node qa/validar.js site
