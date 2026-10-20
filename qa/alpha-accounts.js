@@ -32,7 +32,16 @@ function switchMode(next){
 }
 const show=()=>{switchMode('login');overlay.hidden=false;query('alphaAccountUser').focus();};
 const hide=()=>{overlay.hidden=true;query('alphaAccountPassword').value='';query('alphaAccountConfirmPassword').value='';};
-const settle=value=>{const done=resolveForm;resolveForm=null;hide();if(done)done(value);};
+function syncAdventureName(){
+ const account=user,field=document.getElementById('playerName');
+ if(!field||!account||account.role==='guest')return;
+ if(field.value!==account.username){
+  field.value=account.username;
+  field.dispatchEvent(new Event('input',{bubbles:true}));
+  field.dispatchEvent(new Event('change',{bubbles:true}));
+ }
+}
+const settle=value=>{syncAdventureName();const done=resolveForm;resolveForm=null;hide();if(done)done(value);};
 backButton.onclick=()=>{if(mode==='register')switchMode('login');else settle(null);};
 async function login(){
  const username=query('alphaAccountUser').value.trim(),password=query('alphaAccountPassword').value;
@@ -68,11 +77,11 @@ guestButton.onclick=async()=>{
  }catch(e){err(e.message);}finally{guestButton.disabled=false;}
 };
 async function requireUser(){
- if(user)return user;
+ if(user){syncAdventureName();return user;}
  if(token)try{
   const data=await request('/api/auth/me');
   if(data.user?.role==='guest'){token='';user=null;localStorage.removeItem(KEY);sessionStorage.removeItem(KEY);}
-  else{user=data.user;return user;}
+  else{user=data.user;syncAdventureName();return user;}
  }catch{token='';localStorage.removeItem(KEY);sessionStorage.removeItem(KEY);}
  show();return new Promise(resolve=>{resolveForm=resolve;});
 }
@@ -102,12 +111,12 @@ async function logout(){
  token='';user=null;vipPassword='';localStorage.removeItem(KEY);sessionStorage.removeItem(KEY);
 }
 async function restoreSilently(){
- if(user)return user;
+ if(user){syncAdventureName();return user;}
  if(!token)return null;
- try{const data=await request('/api/auth/me');if(data.user?.role==='guest')return null;user=data.user;return user;}
+ try{const data=await request('/api/auth/me');if(data.user?.role==='guest')return null;user=data.user;syncAdventureName();return user;}
  catch{return null;}
 }
-window.TavernaAuth={requireUser,restoreSilently,roomRequest,pass,logout,getUser:()=>user,getToken:()=>token};
+window.TavernaAuth={requireUser,restoreSilently,roomRequest,pass,logout,syncAdventureName,getUser:()=>user,getToken:()=>token};
 const portal=query('sceneMultiplayer');
 if(portal){
  const bar=el('div',{id:'alphaAccountsBar'}),status=el('span',{id:'alphaAccountsStatus'}),
