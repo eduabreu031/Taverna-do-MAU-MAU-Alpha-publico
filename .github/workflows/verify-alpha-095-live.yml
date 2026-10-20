@@ -1,0 +1,28 @@
+name: Confirmar Alpha 0.4.95.0 publicada
+on:
+  pull_request:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  confirm:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verificar site público e novo cache PWA
+        shell: bash
+        run: |
+          set -euo pipefail
+          site="https://eduabreu031.github.io/Taverna-do-MAU-MAU-Alpha-publico"
+          for n in $(seq 1 12); do
+            status=$(curl -Ls --max-time 30 -o /tmp/taverna-live.html -w '%{http_code}' "$site/" || true)
+            if [[ "$status" == "200" ]] && grep -q "alpha-accounts-script" /tmp/taverna-live.html && grep -q "0.4.95.0-alpha" /tmp/taverna-live.html; then
+              curl -fsSL "$site/sw.js" -o /tmp/taverna-sw.js
+              grep -q "taverna-pwa-alpha-0.4.95.0-01" /tmp/taverna-sw.js
+              echo "ALPHA_0_4_95_0_LIVE_OK"
+              exit 0
+            fi
+            echo "Aguardando publicação $n: HTTP $status, login/versão ainda pendente"
+            sleep 10
+          done
+          echo "::error::Nova Alpha ainda não encontrada na URL pública"
+          exit 1
