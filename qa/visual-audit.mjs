@@ -4,7 +4,7 @@ import {mkdir} from 'node:fs/promises';
 await mkdir('qa/screenshots',{recursive:true});
 const browser=await chromium.launch({headless:true,args:['--no-sandbox']});
 try{
- for(const width of [320,360,390,430,768]){
+ for(const width of [320,360,390,430,768,1024,1440]){
   const page=await browser.newPage({viewport:{width,height:800},deviceScaleFactor:1,isMobile:width<=430,hasTouch:width<=430});
   await page.goto('http://127.0.0.1:8765/',{waitUntil:'domcontentloaded',timeout:30000});
   await page.waitForSelector('#chooseMultiplayer',{timeout:15000});
