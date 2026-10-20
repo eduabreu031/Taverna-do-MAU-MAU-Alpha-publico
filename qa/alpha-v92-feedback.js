@@ -4,7 +4,6 @@ const DATA=/*ALPHA_RELEASES_JSON*/;
 const current=DATA.entries.find(e=>e.id===DATA.current);
 const welcome=document.getElementById('sceneWelcome');
 if(!welcome||!current)return;
-const ISSUE_URL='https://github.com/'+DATA.issuesRepo+'/issues/new';
 const SEEN_KEY='taverna-alpha:ultima-versao-lida';
 const $=id=>document.getElementById(id);
 const tools=document.createElement('div');
