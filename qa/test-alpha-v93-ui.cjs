@@ -1,0 +1,57 @@
+const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
+const {chromium}=require('/tmp/taverna-qa/node_modules/playwright-core');
+const bin=['/usr/bin/google-chrome','/usr/bin/google-chrome-stable','/usr/bin/chromium'].find(fs.existsSync);
+if(!bin)throw Error('Chrome ausente');
+(async()=>{
+ const browser=await chromium.launch({headless:true,executablePath:bin,args:['--no-sandbox','--disable-dev-shm-usage']});
+ try{
+ const context=await browser.newContext({viewport:{width:360,height:780}});
+ const page=await context.newPage();const errors=[],submitted=[];
+ page.on('pageerror',e=>errors.push(String(e)));
+ await page.route('**/api/feedback',async route=>{
+  const payload=route.request().postDataJSON();
+  submitted.push(payload);
+  await route.fulfill({status:submitted.length===1?202:429,contentType:'application/json',body:JSON.stringify(submitted.length===1?{ok:true,id:'001'}:{ok:false,error:'Tente mais tarde'})});
+ });
+ await page.goto('file://'+path.resolve('site/index.html'),{waitUntil:'domcontentloaded',timeout:60000});
+ await page.locator('#alphaInformationOverlay').waitFor({state:'visible',timeout:12000});
+ assert.match(await page.locator('#alphaInformationTitle').textContent(),/Novidades da Taverna/);
+ assert.match(await page.locator('#alphaVersionStamp').textContent(),/Alpha v93/);
+ const bg=await page.locator('.alpha-info-card').evaluate(el=>getComputedStyle(el).backgroundImage);
+ assert(bg.includes('radial-gradient'),'Paleta vinho ausente');
+ await page.locator('#alphaNewsContinue').click();
+ assert.equal(await page.evaluate(()=>localStorage.getItem('taverna-alpha:ultima-versao-lida')),'alpha-v93');
+ await page.reload({waitUntil:'domcontentloaded'});
+ await page.waitForTimeout(550);
+ assert.equal(await page.locator('#alphaInformationOverlay').isHidden(),true);
+ await page.locator('#alphaOpenFeedback').click();
+ assert.equal(await page.locator('#alphaReportName').isVisible(),true);
+ assert.equal(await page.locator('#alphaReportBody').isVisible(),true);
+ assert.equal(await page.locator('#alphaReportType').isVisible(),true);
+ assert.equal(await page.locator('#alphaReportTitle').count(),0);
+ assert.equal(await page.locator('#alphaFeedbackForm a[href*="github"]').count(),0);
+ assert.equal(await page.locator('#alphaSendFeedback').textContent(),'Enviar à Taverna');
+ await page.locator('#alphaReportName').fill('Dragão de Minas');
+ await page.locator('#alphaReportType').selectOption('sugestao');
+ await page.locator('#alphaReportBody').fill('Eu gostaria de escolher outros versos para minhas cartas.');
+ await page.locator('#alphaSendFeedback').click();
+ await page.locator('.alpha-feedback-success').waitFor({state:'visible',timeout:5000});
+ assert.equal(submitted.length,1);
+ assert.deepEqual(Object.keys(submitted[0]).sort(),['message','name','type','version','website'].sort());
+ assert.equal(submitted[0].name,'Dragão de Minas');
+ assert.equal(submitted[0].type,'sugestao');
+ assert.equal(submitted[0].version,'Alpha v93');
+ assert.equal(submitted[0].website,'');
+ await page.locator('#alphaSendAnother').click();
+ await page.locator('#alphaReportName').fill('Jogador');
+ await page.locator('#alphaReportType').selectOption('bug');
+ await page.locator('#alphaReportBody').fill('Um bug que ocorre quando jogo o sete no duelo.');
+ await page.locator('#alphaSendFeedback').click();
+ await page.waitForFunction(()=>document.querySelector('#alphaFeedbackStatus')?.textContent.includes('Tente mais tarde'),{timeout:4500});
+ assert.equal(submitted.length,2);
+ assert.equal(submitted[1].type,'bug');
+ assert(await page.locator('#alphaSendFeedback').isEnabled(),'Deve poder tentar novamente');
+ assert(!errors.some(e=>/alpha.*feedback|alpha.*Information/i.test(e)),errors.join('; '));
+ console.log('ALPHA_V93_BROWSER_OK: vinho, changelog, apelido, texto, sem GitHub, 202 e erro 429');
+ }finally{await browser.close()}
+})().catch(e=>{console.error(e);process.exitCode=1});
