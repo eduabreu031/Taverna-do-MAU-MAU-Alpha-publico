@@ -5,7 +5,7 @@ site=Path(sys.argv[1]) if len(sys.argv)>1 else Path('site')
 file=site/'index.html'
 h=file.read_text(encoding='utf8')
 replacements=[
-("function connectBot(bot){\\n if(!room||bot.removed)return;","async function connectBot(bot){\\n if(!room||bot.removed||bot.connecting)return;\\n bot.connecting=true;"),
+("function connectBot(bot){\n if(!room||bot.removed)return;","async function connectBot(bot){\n if(!room||bot.removed||bot.connecting)return;\n bot.connecting=true;"),
 ("let sock;try{sock=new WebSocket(url)}catch(e)","let sock;try{const pass=await window.TavernaAuth.pass();if(bot.removed||room!==code)return;url.searchParams.set('pass',pass);sock=new WebSocket(url)}catch(e){bot.error='Falha temporária de conexão';if(bot.retry<7){const wait=Math.min(14000,700*Math.pow(2,bot.retry++));clearTimeout(bot.reconnectTimer);bot.reconnectTimer=setTimeout(()=>connectBot(bot),wait)}else message('Não foi possível conectar '+bot.name+'. Tente convocar novamente.');return}finally{bot.connecting=false}if(!sock)return;/* ready */")
 ]
 for old,new in replacements:
