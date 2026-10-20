@@ -131,6 +131,13 @@ passwordButton.onclick=async()=>{
  finally{passwordButton.disabled=false;}
 };
 $('onlineLobby')?.insertAdjacentElement('afterbegin',presence);
+function syncVipCodeVisibility(){
+ const active=!$('onlineLobby')?.classList.contains('hidden')&&$('onlineCode')?.textContent.trim()==='TAVERN';
+ const line=$('onlineCode')?.parentElement;if(line){line.hidden=active;line.style.display=active?'none':'';}
+ const invite=$('onlineCopy');if(invite){invite.hidden=active;invite.style.display=active?'none':'';}
+}
+new MutationObserver(syncVipCodeVisibility).observe($('onlineLobby'),{attributes:true,attributeFilter:['class'],childList:true,characterData:true,subtree:true});
+syncVipCodeVisibility();
 async function updatePresence(){
  const inVip=!$('onlineLobby')?.classList.contains('hidden')&&$('onlineCode')?.textContent.trim()==='TAVERN';
  presence.hidden=!inVip;
