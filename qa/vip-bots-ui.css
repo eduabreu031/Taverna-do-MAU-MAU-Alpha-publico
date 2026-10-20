@@ -31,3 +31,8 @@
 .tav-vip-admin-info{font:13px/1.4 Georgia,serif;margin:6px 0;color:#f4dfbc;overflow-wrap:anywhere}
 .tav-vip-member-list li{display:flex;align-items:center;justify-content:space-between;gap:6px;flex-wrap:wrap;padding:5px 0}
 .tav-vip-kick{min-height:38px;padding:5px 12px;flex-shrink:0;font:13px Georgia,serif}
+
+#tavVipRequestAccess{display:block;max-width:380px;min-height:41px;margin:8px auto;padding:8px 16px;background:linear-gradient(#694252,#452632);color:#f5dcb4;border:1px solid #bd986f;border-radius:8px;font:600 13px Georgia,serif}
+#tavVipRequestAccess:disabled{opacity:.58}
+.tav-access-list .tav-admin-person{flex-wrap:wrap}
+.tav-admin-approve,.tav-admin-deny{flex:0 0 auto;min-height:39px;padding:7px 10px}
