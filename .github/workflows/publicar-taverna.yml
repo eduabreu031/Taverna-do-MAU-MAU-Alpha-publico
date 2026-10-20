@@ -29,6 +29,10 @@ jobs:
           else
             echo "Pacote de icones ainda nao enviado; mantendo imagens atuais."
           fi
+      - name: Instalar renderizador de icones v91
+        run: python3 -m pip install --disable-pip-version-check cairosvg
+      - name: Aplicar somente livro de regras e novo icone
+        run: python3 qa/apply-alpha-ui-v91.py site
       - name: Padronizar nome oficial no HTML
         run: python3 qa/padronizar-nome.py site
       - name: Conferir jogo e integridade das regras
@@ -57,6 +61,10 @@ jobs:
           else
             echo "Pacote de icones ainda nao enviado; mantendo imagens atuais."
           fi
+      - name: Instalar renderizador de icones v91
+        run: python3 -m pip install --disable-pip-version-check cairosvg
+      - name: Aplicar somente livro de regras e novo icone
+        run: python3 qa/apply-alpha-ui-v91.py site
       - name: Padronizar nome oficial no HTML
         run: python3 qa/padronizar-nome.py site
       - name: Preparar GitHub Pages
