@@ -1,0 +1,36 @@
+name: Teste em navegador da Alpha v93 sem cadastro
+on:
+  push:
+    branches: [release/alpha-anonymous-feedback-v93]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  navegador:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Instalar dependencias de testes
+        run: |
+          python -m pip install --disable-pip-version-check cairosvg
+          npm install --prefix /tmp/taverna-qa --no-save playwright-core
+          if [ -f Taverna_do_MAU_MAU_Icones_Oficiais.zip ]; then
+            unzip -tq Taverna_do_MAU_MAU_Icones_Oficiais.zip
+            unzip -oq Taverna_do_MAU_MAU_Icones_Oficiais.zip -d .
+          fi
+      - name: Montar pagina real da Alpha v92
+        run: |
+          python qa/merge-beta-frontend.py
+          python qa/apply-alpha-ui-v91.py site
+          python qa/apply-alpha-v92.py site
+          python qa/padronizar-nome.py site
+      - name: Executar Chrome em modo celular
+        run: node qa/test-alpha-v93-ui.cjs
