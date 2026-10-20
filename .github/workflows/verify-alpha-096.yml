@@ -1,0 +1,32 @@
+name: Confirmar Alpha 0.4.96.0 publicada
+on:
+  pull_request:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  live:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Conferir arquivo público, VIP, bots e cache PWA
+        shell: bash
+        run: |
+          set -euo pipefail
+          base="https://eduabreu031.github.io/Taverna-do-MAU-MAU-Alpha-publico"
+          for attempt in $(seq 1 14); do
+            status=$(curl -Ls --max-time 25 -o /tmp/alpha-live.html -w '%{http_code}' "$base/" || true)
+            cache=$(curl -Ls --max-time 25 "$base/sw.js" || true)
+            if [[ "$status" == "200" ]] &&
+               grep -q '0.4.96.0-alpha' /tmp/alpha-live.html &&
+               grep -q 'tavVipEnter' /tmp/alpha-live.html &&
+               grep -q 'tavBotsSheet' /tmp/alpha-live.html &&
+               grep -q 'window.TavernaAuth.pass()' /tmp/alpha-live.html &&
+               grep -q 'taverna-pwa-alpha-0.4.96.0-01' <<< "$cache"; then
+              echo "ALPHA_096_VIP_BOTS_ONLINE_OK"
+              exit 0
+            fi
+            echo "Aguardando publicação $attempt, HTTP $status"
+            sleep 8
+          done
+          echo "::error::Nova versão ainda não está disponível"
+          exit 1
