@@ -21,3 +21,13 @@
 .tav-vip-member-list li{font:15px/1.6 Georgia,serif;color:#f0d8b9;border-bottom:1px solid #87644a60;overflow-wrap:anywhere}
 .tav-vip-member-list li.offline{opacity:.65}
 @media(max-width:380px){.tav-bots-grid{gap:6px}.tav-bots-choice{font-size:16px;min-height:45px}.tav-bots-sheet-inner{padding:19px 11px}#sceneMultiplayer .tav-bots-open{min-width:95px}}
+
+.tav-vip-password-sheet[hidden]{display:none!important}
+.tav-vip-password-sheet label{display:block;text-align:left;margin:12px 2px 6px;color:#f7ddb6}
+.tav-vip-password-input{box-sizing:border-box;display:block;width:100%;font-size:18px;padding:12px;border:2px solid #bd9b6c;border-radius:8px;background:#fff2d8;color:#271821}
+.tav-vip-management[hidden]{display:none!important}
+.tav-vip-management{border-bottom:1px solid #99765265;padding-bottom:9px;margin-bottom:10px}
+.tav-vip-change-password{min-height:44px;padding:8px 12px;font-size:14px;max-width:100%}
+.tav-vip-admin-info{font:13px/1.4 Georgia,serif;margin:6px 0;color:#f4dfbc;overflow-wrap:anywhere}
+.tav-vip-member-list li{display:flex;align-items:center;justify-content:space-between;gap:6px;flex-wrap:wrap;padding:5px 0}
+.tav-vip-kick{min-height:38px;padding:5px 12px;flex-shrink:0;font:13px Georgia,serif}
