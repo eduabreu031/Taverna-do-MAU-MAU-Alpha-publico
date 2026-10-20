@@ -1,0 +1,30 @@
+{
+  "current": "alpha-v92",
+  "issuesRepo": "eduabreu031/Taverna-do-MAU-MAU-Alpha-publico",
+  "entries": [
+    {
+      "id": "alpha-v92",
+      "label": "Alpha v92",
+      "date": "2026-10-19",
+      "title": "A voz dos aventureiros",
+      "items": [
+        "Novidades da Taverna: pergaminho exibido uma vez por versão neste dispositivo.",
+        "Novo botão discreto para relatar problemas e sugerir melhorias.",
+        "Relatos preenchidos com contexto e encaminhados ao GitHub para revisão.",
+        "Número da Alpha visível no menu; bugs e sugestões organizados na triagem."
+      ]
+    },
+    {
+      "id": "alpha-v91",
+      "label": "Alpha v91",
+      "date": "2026-10-19",
+      "title": "Testes públicos ampliados",
+      "items": [
+        "Livro de Regras & Malandragens na tela inicial.",
+        "Ícone do aplicativo redesenhado, com melhorias de atualização offline.",
+        "Novos recursos multiplayer em teste público: bots, espectadores e placar.",
+        "Regras adicionais para ausência e penalidades, sujeitas a testes dos jogadores."
+      ]
+    }
+  ]
+}
