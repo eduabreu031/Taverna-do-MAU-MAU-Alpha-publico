@@ -122,7 +122,7 @@ try{
  await guestPage.locator('#chooseMultiplayer').click();
  await guestPage.waitForSelector('#alphaAccountsOverlay:not([hidden])');
  await guestPage.locator('#alphaAccountGuest').click();
- await guestPage.waitForSelector('#alphaAccountsOverlay[hidden]');
+ await guestPage.locator('#alphaAccountsOverlay').waitFor({state:'hidden'});
  assert.deepEqual(await guestPage.evaluate(()=>({
   storedLocal:localStorage.getItem('taverna-alpha-auth-token'),
   storedSession:sessionStorage.getItem('taverna-alpha-auth-token'),
