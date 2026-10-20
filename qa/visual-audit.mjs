@@ -69,6 +69,7 @@ try{
   });
   await page.waitForFunction(()=>document.getElementById('onlineCode')?.parentElement?.hidden===true,{timeout:8500});
   assert(await page.locator('#onlineCopy').isHidden(),'Convite VIP deve ficar oculto');
+  await page.waitForFunction(()=>document.getElementById('tavVipPresence')?.hidden===false,null,{timeout:9500});
   assert(await page.locator('#tavVipPresence').isVisible(),'Presença VIP deve permanecer visível');
   assert(await page.locator('#onlineCode').isHidden(),'Código interno da VIP não pode ser exibido');
   assert(await page.locator('#onlineRoomCode').inputValue()==='TAVERN','Controle comum não deve ganhar código alternativo');
