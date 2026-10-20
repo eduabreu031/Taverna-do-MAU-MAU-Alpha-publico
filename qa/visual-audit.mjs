@@ -66,6 +66,7 @@ try{
   await page.screenshot({path:'qa/screenshots/lobby-'+width+'.png'});
   // Central administrativa: usuários comuns não recebem o botão.
   assert(await page.locator('#tavCentralOpen').isHidden(),'Central visível a conta não administradora');
+  assert(await page.locator('#tavVipRequestAccess').isHidden(),'Visitante sem conta não deve ver botão de pedido');
   // Painel VIP: acesso só com conta administrativa, inclusive fora do lobby.
   assert(await page.locator('#tavVipAdminOpen').isHidden(),'Controle administrativo indevidamente exposto');
   await page.evaluate(()=>{
@@ -131,6 +132,7 @@ try{
   await page.locator('.tav-central-close').click();
   assert(await page.locator('#tavCentralOverlay').isHidden());
   await page.evaluate(()=>{document.getElementById('sceneWelcome').classList.add('hidden');document.getElementById('sceneMultiplayer').classList.remove('hidden');});
+  assert(await page.locator('#tavVipRequestAccess').isHidden(),'Administrador não pode ver botão de solicitar acesso');
   await page.waitForSelector('#tavVipAdminOpen:not([hidden])',{timeout:3000});
   await page.locator('#tavVipAdminOpen').click();
   await page.waitForSelector('#tavVipAdminOverlay:not([hidden])');
