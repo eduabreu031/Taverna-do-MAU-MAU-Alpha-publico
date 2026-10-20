@@ -25,5 +25,7 @@ jobs:
       - run: python3 qa/inspect-alpha-multiplayer.py
       - name: Integrar login e salas
         run: python3 qa/apply-alpha-accounts.py site
+      - name: Adicionar VIP e seleção temática de bots
+        run: python3 qa/apply-vip-bots-ui.py site
       - name: Validar motor e sintaxe de scripts
         run: node qa/validar.js site
