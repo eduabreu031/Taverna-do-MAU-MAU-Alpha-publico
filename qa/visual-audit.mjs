@@ -13,7 +13,21 @@ try{
   const root=await page.evaluate(()=>({body:document.body.scrollWidth,screen:document.documentElement.clientWidth}));
   assert(root.body<=root.screen+3,'Rolagem horizontal em '+width+': '+JSON.stringify(root));
   await page.screenshot({path:'qa/screenshots/welcome-'+width+'.png',fullPage:false});
+  // Qualquer porta da Taverna funciona com nome em branco.
+  await page.locator('#playerName').fill('');
+  await page.locator('#chooseOffline').click();
+  assert(await page.locator('#sceneMenu').isVisible(),'Modo offline exigiu apelido em branco');
+  assert.equal(await page.locator('#playerName').inputValue(),'Forasteiro');
+  await page.locator('#offlineBackBtn').click();
+  await page.locator('#playerName').fill('');
+  await page.locator('#chooseRules').click();
+  assert(await page.locator('#rulesModalDEV').isVisible(),'Livro de regras bloqueou visitante sem nome');
+  await page.locator('#rulesCloseDEV').click();
+  await page.locator('#playerName').fill('');
   await page.click('#chooseMultiplayer');
+  assert(await page.locator('#sceneMultiplayer').isVisible(),'Multiplayer exigiu apelido');
+  assert.equal(await page.locator('#playerName').inputValue(),'Forasteiro');
+  assert.equal(await page.evaluate(()=>localStorage.getItem('mau2_player_name')),null,'Nome provisório não pode persistir no navegador');
   await page.waitForTimeout(350);
   await page.waitForSelector('#alphaAccountsOverlay:not([hidden])');
   // Cadastro deve abrir uma TELA nova; formulário de login não valida cadastro.
