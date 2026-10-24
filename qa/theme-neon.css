@@ -99,10 +99,7 @@
 :root[data-tav-theme="neon-test"] :is(
  #sceneGame .portrait-medallion,#sceneGame .bot-avatar,#humanAvatar .portrait-medallion
 ){filter:drop-shadow(0 0 8px #633eff70)}
-/* Preserva legibilidade e significado das cores de cartas e naipes. */
-:root[data-tav-theme="neon-test"] :is(
- .card,.playing-card,.game-card,.card-face,[data-card-id]
-){color:inherit}
+/* Cartas e naipes são deliberadamente excluídos deste tema: cores originais intactas. */
 /* Imprime os tons escuros apenas quando for necessário; não muda ações. */
 @media(prefers-reduced-motion:reduce){
  :root[data-tav-theme="neon-test"] :is(.welcome-mode,.engraved-btn){transition:none!important}
