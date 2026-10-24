@@ -5,6 +5,7 @@ try{
  for(const width of [390,1024]){
   const page=await browser.newPage({viewport:{width,height:844}});
   await page.goto('http://127.0.0.1:8765/',{waitUntil:'domcontentloaded'});
+  await page.evaluate(()=>window.TavernaEntrance?.skipVisualOnly());
   await page.waitForFunction(()=>window.TavernaThemeSystem);
   const values=await page.evaluate(()=>{
    const selectors=[
