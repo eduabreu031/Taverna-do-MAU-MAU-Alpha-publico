@@ -14,6 +14,11 @@ def replace_exact(before,after):
  assert n==1,(before[:110],n)
  html=html.replace(before,after,1)
 
+def replace_first(before,after):
+ global html
+ assert before in html,before[:110]
+ html=html.replace(before,after,1)
+
 replace_exact(
  '<button type="button" id="onlineFinishExit" class="engraved-btn">Sair da sala</button>',
  '<button type="button" id="onlineFinishLobby" class="engraved-btn">Voltar ao lobby</button><button type="button" id="onlineFinishExit" class="engraved-btn">Sair da sala</button>'
@@ -34,7 +39,7 @@ replace_exact(
  "if(!online||game?.phase!=='finished'||uid!==hostId)return;\n if(!areAllBotsReady(players))",
  "if(!online||game?.phase!=='finished'||!(uid===hostId||(room==='TAVERN'&&players.some(p=>p.id===uid&&!p.isBot))))return;\n if(game.players.length!==players.length||!game.players.every(p=>players.some(m=>m.id===p.id&&m.online))){message('A mesa mudou: volte ao lobby para reorganizar.');return;}\n if(!areAllBotsReady(players))"
 )
-replace_exact(
+replace_first(
  "finishExit.addEventListener('click',()=>{close(true);",
  """finishLobby.addEventListener('click',()=>{
  if(!online||game?.phase!=='finished'||!(uid===hostId||(room==='TAVERN'&&players.some(p=>p.id===uid&&!p.isBot))))return;
