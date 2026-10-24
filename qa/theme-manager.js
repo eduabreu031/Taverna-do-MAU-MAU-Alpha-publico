@@ -18,7 +18,7 @@ function validate(config){
  return entries;
 }
 const events=validate(CONFIG);
-let serverDeltaMs=0,serverClockSeen=false,lastId='',clockBusy=false;
+let serverDeltaMs=0,serverClockSeen=false,lastId='',clockBusy=false,boundaryTimer=null;
 const localNow=()=>Date.now();
 const now=()=>localNow()+serverDeltaMs;
 function choose(instant){
@@ -34,6 +34,14 @@ function status(at=now()){
 function displayDate(ms){
  return new Intl.DateTimeFormat('pt-BR',{timeZone:'America/Sao_Paulo',day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}).format(new Date(ms));
 }
+function scheduleBoundary(){
+ if(boundaryTimer!==null){clearTimeout(boundaryTimer);boundaryTimer=null;}
+ const instant=now(),upcoming=events.flatMap(e=>[e.startMs,e.endMs]).filter(ms=>ms>instant).sort((a,b)=>a-b)[0];
+ if(Number.isFinite(upcoming)){
+  const delay=Math.min(2147483000,Math.max(1,upcoming-instant+20));
+  boundaryTimer=setTimeout(sync,delay);
+ }
+}
 function sync(){
  const next=status(),id=next.active?next.id:'';
  if(id)root.setAttribute('data-tav-theme',id);
@@ -42,6 +50,7 @@ function sync(){
   lastId=id;
   try{window.dispatchEvent(new CustomEvent('taverna-theme-change',{detail:next}));}catch{}
  }
+ scheduleBoundary();
  return next;
 }
 async function syncClockFromServer(){
