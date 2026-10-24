@@ -1,7 +1,51 @@
 {
-  "current": "alpha-0.5.0.3",
+  "current": "alpha-0.5.0.7",
   "issuesRepo": "eduabreu031/Taverna-do-MAU-MAU-Alpha-publico",
   "entries": [
+    {
+      "id": "alpha-0.5.0.7",
+      "label": "0.5.0.7-alpha",
+      "date": "2026-10-24",
+      "title": "Salas livres, sem bots fantasmas",
+      "items": [
+        "Quando o último humano abandona uma partida, os bots são retirados automaticamente e o lobby fica disponível para uma nova mesa.",
+        "A Sala VIP preserva seu acesso e as salas comuns vazias são encerradas. Quedas de conexão ainda permitem reconectar dentro do prazo.",
+        "Também corrigimos a saída de quem já estava eliminado, para não deixar bots presos na partida."
+      ]
+    },
+    {
+      "id": "alpha-0.5.0.6",
+      "label": "0.5.0.6-alpha",
+      "date": "2026-10-24",
+      "title": "Sair da partida sem sair da Taverna",
+      "items": [
+        "Agora o X pergunta se você deseja abandonar a partida: Não mantém o jogo; Sim devolve você ao lobby da sala.",
+        "No duelo entre dois jogadores, abandonar concede a vitória ao adversário. Com mais pessoas, a rodada segue normalmente.",
+        "Balões de fala, reações e áudio agora aparecem junto ao retrato do jogador, inclusive nas partidas 1x1."
+      ]
+    },
+    {
+      "id": "alpha-0.5.0.5",
+      "label": "0.5.0.5-alpha",
+      "date": "2026-10-24",
+      "title": "A Taverna ganhou voz e votação",
+      "items": [
+        "Novas reações com seis emojis, mensagens rápidas de até 50 caracteres e áudios de até 3 segundos na mesa online.",
+        "Mensagens aparecem em balões sobre os jogadores; eliminado não pode mais enviar texto, áudio ou reação.",
+        "Votação de expulsão para mesas com pelo menos cinco humanos vivos: dois terços dos votos, até 20 segundos e intervalo de 90 segundos."
+      ]
+    },
+    {
+      "id": "alpha-0.5.0.4",
+      "label": "0.5.0.4-alpha",
+      "date": "2026-10-24",
+      "title": "Final entre bots sem espera interminável",
+      "items": [
+        "Quando todos os jogadores restantes são bots, humanos participantes podem votar para pular a simulação até o resultado final.",
+        "A decisão exige concordância unânime e preserva a vitória calculada pelas regras reais da partida.",
+        "O botão aparece perto da mão, sem cobrir os controles principais."
+      ]
+    },
     {
       "id": "alpha-0.5.0.3",
       "label": "0.5.0.3-alpha",
