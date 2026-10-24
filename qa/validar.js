@@ -107,6 +107,20 @@ test('Entrada cinematográfica não modifica motor e usa áudio original',()=>{
  assert(html.includes("async function enterAsGuest(signal)"),'Visitante não reutiliza autenticação original');
  assert(html.includes("const guestSessionStore="),'Sessão efêmera do visitante deve permanecer');
 });
+test('Fachada v2 utiliza recursos locais e não altera o baralho',()=>{
+ for(const item of ['art/tavern-facade-v2.svg','art/tavern-door-v2.svg']){
+  const contents=fs.readFileSync(path.join(site,item),'utf8');
+  assert(contents.includes('<svg')&&contents.includes('</svg>'),'Asset vetorial inválido: '+item);
+  assert(contents.length>7000,'Asset cinematográfico incompleto: '+item);
+ }
+ assert(html.includes('tav-gate-art'),'A nova composição não foi instalada');
+ assert(html.includes('tav-gate-threshold'),'A luz interna da porta está ausente');
+ assert(html.includes('tav-gate-identity-card'),'Painel da entrada está ausente');
+ assert(html.includes('tavern-facade-v2.svg'),'A cena v2 não está ligada ao HTML');
+ const worker=fs.readFileSync(path.join(site,'sw.js'),'utf8');
+ assert(worker.includes("'./art/tavern-facade-v2.svg'"),'Fachada não pré-carregada offline');
+ assert(worker.includes("'./art/tavern-door-v2.svg'"),'Porta não pré-carregada offline');
+});
 test('Cache busca versão nova e mantém offline',()=>{
  const sw=fs.readFileSync(path.join(site,'sw.js'),'utf8');
  new vm.Script(sw,{filename:'sw.js'});
