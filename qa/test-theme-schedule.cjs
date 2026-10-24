@@ -31,6 +31,7 @@ console.log('THEME_CANDIDATE_SURFACES:',present.join(', '));
 assert(present.length>=1,'Não foi encontrado nenhum seletor de mesa no visual original');
 
 assert(!style.includes('pointer-events:none!important'),'Tema não pode desabilitar jogadas');
+assert(!style.includes('.card-face')&&!style.includes('[data-card-id]'),'Não recolorir cartas ou naipes');
 assert(html.includes('function themeNotice()'),'Changelog dinâmico ausente');
 assert(html.includes('themeNotice()+'),'Changelog não exibe aviso durante a janela');
 assert(html.includes('alpha-theme-notice'),'Estilo do aviso não foi incorporado');
