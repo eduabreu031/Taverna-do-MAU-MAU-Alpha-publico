@@ -31,7 +31,7 @@ tavAbandonNo.addEventListener('click',tavDismissAbandon);
 tavAbandonOverlay.addEventListener('click',e=>{if(e.target===tavAbandonOverlay)tavDismissAbandon();});
 tavAbandonYes.addEventListener('click',()=>{
  if(tavAbandonPending)return;
- const isActive=game&&['playing','scoring'].includes(game.phase)&&game.players?.some(p=>p.id===uid&&p.alive!==false);
+ const isActive=!isSpectator&&game&&['playing','scoring'].includes(game.phase)&&game.players?.some(p=>p.id===uid);
  if(!isActive){tavAbandonOverlay.hidden=true;tavOpenRoomLobby(tavLatestMatchNo);return;}
  if(!send({type:'abandon_match'}))return;
  tavAbandonPending=true;
@@ -65,7 +65,7 @@ function tavHandleAbandonAcknowledgement(m){
 }
 function tavRequestLeaveMatch(){
  if(!room||!uid)return;
- const active=!!(game&&['playing','scoring'].includes(game.phase)&&game.players?.some(p=>p.id===uid&&p.alive!==false));
+ const active=!!(!isSpectator&&game&&['playing','scoring'].includes(game.phase)&&game.players?.some(p=>p.id===uid));
  if(!active){tavOpenRoomLobby(tavLatestMatchNo);return;}
  tavResetAbandonDialog();tavAbandonOverlay.hidden=false;tavAbandonNo.focus();
 }
