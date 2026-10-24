@@ -1,0 +1,202 @@
+/* Taverna do MAU MAU — paletas pessoais: somente CSS, sem sobreposição de gameplay.
+   Clássico = nenhum atributo de paleta. Temas comemorativos usam data-tav-event em separado.
+   Nunca mudar background, cor ou filtros das cartas, naipes, retratos e animações. */
+:root[data-tav-palette="neon-blue"]{
+ --tp-space:#080b27;--tp-dark:#111442;--tp-deep:#1b1c58;--tp-mid:#302b84;
+ --tp-hi:#5449bd;--tp-accent:#9e77ff;--tp-glow:#584bff66;--tp-glow-hi:#79e9ff70;
+ --tp-edge:#887aff;--tp-text:#eeecff;--tp-muted:#cad5ff;--tp-bright:#a6edff;
+ --tp-soft:#2a2469;--tp-wood1:#161747;--tp-wood2:#352469;--tp-wood3:#201d57;
+ --tp-felt1:#4650bc;--tp-felt2:#302e96;--tp-felt3:#121a56;
+ --tp-input:#111637;--tp-btn1:#4d35b6;--tp-btn2:#1b2c76;
+ --tp-screen:radial-gradient(ellipse at 20% 6%,#3330a2 0%,#171849 46%,#080b27 100%);
+}
+:root[data-tav-palette="neon-green"]{
+ --tp-space:#051a19;--tp-dark:#082d29;--tp-deep:#093b35;--tp-mid:#125b50;
+ --tp-hi:#1f8e74;--tp-accent:#60ffc3;--tp-glow:#39ecae66;--tp-glow-hi:#b8ff8d70;
+ --tp-edge:#57dfa9;--tp-text:#eafff3;--tp-muted:#b8e8d7;--tp-bright:#b5ffdb;
+ --tp-soft:#0c5246;--tp-wood1:#072d2a;--tp-wood2:#145c49;--tp-wood3:#0a3e36;
+ --tp-felt1:#177967;--tp-felt2:#105d51;--tp-felt3:#07392f;
+ --tp-input:#082b27;--tp-btn1:#197963;--tp-btn2:#0b4b45;
+ --tp-screen:radial-gradient(ellipse at 20% 6%,#156f5d 0%,#0a3731 46%,#051a19 100%);
+}
+:root[data-tav-palette="neon-pink"]{
+ --tp-space:#220a2c;--tp-dark:#301039;--tp-deep:#45164b;--tp-mid:#6c2377;
+ --tp-hi:#a737a4;--tp-accent:#ff8de9;--tp-glow:#ee49bd70;--tp-glow-hi:#ffa9fa85;
+ --tp-edge:#e96ad6;--tp-text:#fff1fd;--tp-muted:#f2cce9;--tp-bright:#ffd5f9;
+ --tp-soft:#71256e;--tp-wood1:#320d3d;--tp-wood2:#742465;--tp-wood3:#4a184e;
+ --tp-felt1:#ba4b9b;--tp-felt2:#87347b;--tp-felt3:#411650;
+ --tp-input:#2c123a;--tp-btn1:#b53aa0;--tp-btn2:#632172;
+ --tp-screen:radial-gradient(ellipse at 20% 6%,#872879 0%,#481850 46%,#220a2c 100%);
+}
+/* Gradientes e tokens semânticos compartilhados por todas as paletas. */
+:root[data-tav-palette^="neon-"]{
+ color-scheme:dark;
+ --tp-panel:radial-gradient(ellipse at 39% 2%,var(--tp-mid),var(--tp-deep) 54%,var(--tp-dark) 100%);
+ --tp-wood:radial-gradient(ellipse at 17% 6%,var(--tp-hi),transparent 45%),repeating-linear-gradient(94deg,var(--tp-wood1) 0 8px,var(--tp-wood2) 9px 18px,var(--tp-wood3) 19px 29px);
+ --tp-felt:radial-gradient(ellipse at 27% 15%,var(--tp-hi) 0%,transparent 41%),repeating-linear-gradient(114deg,#ffffff08 0 1px,transparent 2px 8px),radial-gradient(ellipse at 50% 44%,var(--tp-felt1),var(--tp-felt2) 52%,var(--tp-felt3) 100%);
+ --tp-button:linear-gradient(148deg,var(--tp-btn1),var(--tp-btn2));
+ --tp-shadow:inset 0 1px 16px var(--tp-glow),0 6px 25px #02061891;
+}
+/* Cenários reais confirmados no HTML — os desenhos originais são gradientes CSS. */
+:root[data-tav-palette^="neon-"] :is(html,body){
+ background:var(--tp-space)!important;color:var(--tp-text)!important;
+}
+:root[data-tav-palette^="neon-"] :is(#sceneWelcome,#sceneMultiplayer,#sceneMenu,#sceneGame){
+ background:var(--tp-screen)!important;color:var(--tp-text)!important;
+}
+:root[data-tav-palette^="neon-"] :is(#sceneWelcome,#sceneMultiplayer,#sceneMenu)::before{
+ background:radial-gradient(circle at 18% 25%,var(--tp-glow),transparent 42%),radial-gradient(circle at 86% 75%,var(--tp-glow-hi),transparent 48%)!important;pointer-events:none;
+}
+:root[data-tav-palette^="neon-"] #sceneGame #tableShell{
+ background:var(--tp-wood)!important;border-color:var(--tp-edge)!important;
+ box-shadow:inset 0 8px 25px #0004,0 0 19px var(--tp-glow)!important;
+}
+:root[data-tav-palette^="neon-"] #sceneGame #tableShell>.felt,
+:root[data-tav-palette^="neon-"] #sceneGame .felt{
+ background:var(--tp-felt)!important;border-color:var(--tp-edge)!important;
+ box-shadow:inset 0 12px 45px #080a3590,0 0 16px var(--tp-glow)!important;
+}
+:root[data-tav-palette^="neon-"] #tableShell>.felt::before,
+:root[data-tav-palette^="neon-"] #tableShell>.felt::after{
+ background:repeating-linear-gradient(104deg,#ffffff0b 0 1px,transparent 2px 6px),radial-gradient(ellipse at 48% 41%,var(--tp-glow),transparent 70%)!important;
+ pointer-events:none;
+}
+:root[data-tav-palette^="neon-"] #tableShell>.ambient-shadow{
+ background:radial-gradient(circle at 7% 29%,var(--tp-glow),transparent 34%),radial-gradient(circle at 90% 71%,var(--tp-glow-hi),transparent 40%),radial-gradient(ellipse at 50% 70%,transparent 33%,#02071970 100%)!important;pointer-events:none;
+}
+:root[data-tav-palette^="neon-"] #tableShell>.table-stamp{filter:hue-rotate(155deg) saturate(.75)!important;opacity:.22!important}
+:root[data-tav-palette^="neon-"] #tableShell :is(.parchment-prop,.book-prop,.mug-prop,.candle-prop){filter:hue-rotate(110deg) saturate(.6)}
+/* Lobby e saguão: inclusive faixa "Central da Taverna", conta e trocar conta. */
+:root[data-tav-palette^="neon-"] :is(
+ #sceneWelcome .welcome-panel,#sceneWelcome .welcome-crest,
+ #sceneMultiplayer .multiplayer-panel,
+ #sceneMultiplayer .multiplayer-preview>div,
+ #sceneMultiplayer .multiplayer-state,
+ #sceneMultiplayer #onlineLobby,#sceneMultiplayer #alphaAccountsBar,
+ .alpha-accounts-panel,.tav-removed-card,.tav-admin-panel,
+ .tav-bots-sheet-inner,.tav-vip-password-sheet,.tav-vip-presence,
+ .tav-central-panel,.tav-central-counter,.tav-central-seat,.tav-central-report,
+ .alpha-info-card,.alpha-release,#rulesModalDEV .rules-book,
+ #onlineFinishPanel .online-finish-card,
+ #tavSocialMenu,#tavSocialVote,
+ #tavAbandonOverlay .tav-abandon-card,
+ .parchment-modal,.wood-scoreboard,.history-drawer
+){
+ background:var(--tp-panel)!important;
+ border-color:var(--tp-edge)!important;
+ color:var(--tp-text)!important;
+ box-shadow:var(--tp-shadow)!important;
+}
+/* Elementos da tela inicial e do lobby que escapavam do primeiro tema neon. */
+:root[data-tav-palette^="neon-"] :is(
+ #tavCentralOpen,#sceneMultiplayer #alphaAccountsLogout,
+ #sceneMultiplayer #tavVipAdminOpen,#sceneMultiplayer .tav-vip-enter,
+ #sceneMultiplayer .tav-bots-open,#tavVipRequestAccess,
+ #sceneMultiplayer .multiplayer-back,.tav-central-panel button,
+ .tav-admin-panel button,.tav-bots-actions button,
+ #alphaAccountsOverlay button,.tav-vip-kick,
+ #tavSocialLauncher,#tavSocialMenu button,#tavSocialVote button,
+ #tavAbandonOverlay button,
+ #alphaTopTools button,.engraved-btn,
+ .alpha-primary,.alpha-secondary,
+ #rulesModalDEV .rules-tabs button,#rulesModalDEV #rulesCloseDEV
+){
+ background:var(--tp-button)!important;border-color:var(--tp-edge)!important;
+ color:var(--tp-text)!important;box-shadow:var(--tp-shadow)!important;
+}
+:root[data-tav-palette^="neon-"] :is(
+ #sceneWelcome .welcome-mode,#sceneMultiplayer .tav-vip-enter,
+ #sceneMultiplayer .multiplayer-preview>div,#sceneMultiplayer #onlineLobby,
+ #sceneMultiplayer .multiplayer-state,
+ .tav-bots-choice
+){
+ background:var(--tp-button)!important;border-color:var(--tp-edge)!important;
+ color:var(--tp-text)!important;box-shadow:var(--tp-shadow)!important;
+}
+/* Livro real do modo offline: capa, folhas, botões e personagens de seleção. */
+:root[data-tav-palette^="neon-"] #sceneMenu .book{
+ background:var(--tp-wood)!important;border-color:var(--tp-edge)!important;
+ box-shadow:var(--tp-shadow)!important;
+}
+:root[data-tav-palette^="neon-"] #sceneMenu :is(.book-page,.book-page.left-page,.book-page.right-page,
+ .book-tab,.illuminated-letter,.hero-choice,.hero-choice.chosen,.hero-choice .hero-frame){
+ background:var(--tp-panel)!important;border-color:var(--tp-edge)!important;
+ color:var(--tp-text)!important;box-shadow:var(--tp-shadow)!important;
+}
+:root[data-tav-palette^="neon-"] #sceneMenu .hero-choice.chosen{outline:1px solid var(--tp-bright)!important}
+/* Mesa: cobrir também a área marrom da mão, os nomes/bots e barra de ações.
+   NÃO atingir .playing-card, .card-face, .card-back ou naipes. */
+:root[data-tav-palette^="neon-"] #sceneGame :is(
+ .game-header,.table-status-medallion,.control-bar,.control-divider,
+ .utility-toolbar,.history-drawer,.human-leather,.human-count,
+ .human-drop,.human-area,.human-zone,.human-panel,.human-dock,
+ .human-hand-zone,.hand-area,.hand-tray,.human-rack,.hand-panel,.player-panel,
+ .leather-name,.seat .leather-name,.seat .leather-name .count,
+ .seat .npc-timer .timer-mark,.human-topline .clock,
+ .round-pill,.center-crest,.active-suit,.toast,.score-tally,.score-header
+){
+ background:var(--tp-panel)!important;color:var(--tp-text)!important;
+ border-color:var(--tp-edge)!important;box-shadow:var(--tp-shadow)!important;
+}
+:root[data-tav-palette^="neon-"] #sceneGame :is(
+ #playBtn,#drawBtn,#passBtn,#mauBtn,#opaBtn,#soundBtn,
+ .control-bar button,.utility-toolbar button,.control-button,
+ .action-btn,.game-action,.action-button
+){
+ background:var(--tp-button)!important;color:var(--tp-text)!important;
+ border-color:var(--tp-edge)!important;box-shadow:0 0 9px var(--tp-glow)!important;
+}
+/* Área inferior da mesa que permanece marrom mesmo com o feltro novo. */
+:root[data-tav-palette^="neon-"] #sceneGame :is(
+ .human-hand-container,.hand-container,.player-hand-container,
+ .human-tray,.human-base,.hand-base,.player-zone,.player-dock,
+ .human-bottom,.bottom-panel,.human-deck,.human-footer
+){background:var(--tp-panel)!important;border-color:var(--tp-edge)!important}
+/* Modais, formulários, estados de espera, marcadores e submenus. */
+:root[data-tav-palette^="neon-"] :is(
+ #sceneWelcome #playerName,#sceneMenu #playerName,#sceneMultiplayer #onlineRoomCode,
+ #sceneMultiplayer #onlineCode,
+ #alphaAccountsOverlay input,#alphaFeedbackForm input,
+ #alphaFeedbackForm select,#alphaFeedbackForm textarea,
+ #tavSocialMenu input,#tavSocialMenu select,
+ .tav-vip-password-input,#sceneMenu select
+){background:var(--tp-input)!important;color:var(--tp-text)!important;border-color:var(--tp-edge)!important}
+:root[data-tav-palette^="neon-"] :is(
+ .alpha-information-overlay,#alphaAccountsOverlay,
+ .tav-admin-overlay,.tav-bots-sheet,.tav-central-overlay,
+ #rulesModalDEV,#tavAbandonOverlay
+){background:color-mix(in srgb,var(--tp-space) 91%,transparent)!important}
+:root[data-tav-palette^="neon-"] :is(
+ #alphaVersionStamp,.alpha-lead,.alpha-kicker,
+ #alphaFeedbackStatus,#alphaFeedbackForm label,#alphaInformationTitle,
+ .tav-admin-panel h2,.tav-admin-panel h3,.tav-admin-intro,
+ .tav-central-status,.tav-central-board-meta,.tav-bots-sheet h2,
+ #rulesModalDEV .rules-book h2,#rulesModalDEV .rules-content,
+ #rulesModalDEV .rules-content h3,#rulesModalDEV .rules-kicker,
+ .alpha-info-card li,.alpha-note,.alpha-release summary,
+ .multiplayer-eyebrow,.multiplayer-copy,.welcome-pretitle,
+ .welcome-footnote,.welcome-title,#sceneWelcome h1,
+ #sceneMultiplayer h1
+){color:var(--tp-text)!important}
+:root[data-tav-palette^="neon-"] :is(
+ .alpha-kicker,.welcome-title,.tav-central-header h2,.table-status-medallion
+){text-shadow:0 0 12px var(--tp-glow-hi)!important}
+:root[data-tav-palette^="neon-"] :is(
+ .tav-central-felt
+){background:var(--tp-felt)!important;border-color:var(--tp-edge)!important}
+:root[data-tav-palette^="neon-"] :is(
+ .tav-vip-presence,.tav-admin-summary,.tav-admin-list,
+ .tav-bots-sheet-inner,.tav-removed-notice
+){border-color:var(--tp-edge)!important}
+:root[data-tav-palette^="neon-"] :is(
+ .tav-bots-choice.selected,.tav-central-tab.selected,
+ #sceneWelcome .welcome-mode:hover,.engraved-btn:hover
+){box-shadow:0 0 15px var(--tp-glow-hi)!important;border-color:var(--tp-bright)!important}
+:root[data-tav-palette^="neon-"] #sceneGame .portrait-medallion{
+ border-color:var(--tp-edge)!important;box-shadow:0 0 12px var(--tp-glow)!important;
+}
+/* Preserva a semântica dos controles e não encobre a mesa. */
+:root[data-tav-palette^="neon-"] :is(
+ #sceneGame .playing-card,#sceneGame .card-face,#sceneGame .card-back,
+ .tav-central-card
+){ /* faces deliberadamente sem alterações de cor */ }
