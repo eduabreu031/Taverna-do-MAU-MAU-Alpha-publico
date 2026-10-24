@@ -133,7 +133,8 @@ try{
     assert.equal(item.seat,'rgba(0, 0, 0, 0)','Assento ainda tem bloco de fundo: '+item.palette);
     assert.equal(item.inner,'rgba(0, 0, 0, 0)','Container ainda tem bloco de fundo: '+item.palette);
     assert.equal(item.fan,'rgba(0, 0, 0, 0)','Leque dos bots ainda tem bloco: '+item.palette);
-    assert(item.labelBg.includes('gradient'),'Nome do bot perdeu placa temática');
+    if(width<=760)assert.equal(item.labelBg,'none','O painel quadrado do retrato ainda aparece: '+item.palette);
+    else assert(item.labelBg.includes('gradient'),'No desktop, a placa do nome deve continuar tematizada');
     assert.notEqual(item.front,hotfix[0].front,'Frente da carta não mudou '+item.palette);
     assert.notEqual(item.back,hotfix[0].back,'Verso da carta não mudou '+item.palette);
     assert.notEqual(item.mini,hotfix[0].mini,'Verso pequeno do bot não mudou '+item.palette);
