@@ -2,17 +2,30 @@ import {chromium} from 'playwright';
 import assert from 'node:assert/strict';
 const browser=await chromium.launch({headless:true,args:['--no-sandbox']});
 try{
- for(const width of [390,1024]){
-  const context=await browser.newContext({viewport:{width,height:844},isMobile:width===390,hasTouch:width===390});
+ for(const width of [320,390,1024,1440]){
+  const context=await browser.newContext({viewport:{width,height:844},isMobile:width<=390,hasTouch:width<=390});
   const page=await context.newPage();
   const errors=[];page.on('pageerror',e=>errors.push(e.message));
   await page.goto('http://127.0.0.1:8765/',{waitUntil:'domcontentloaded'});
   await page.waitForSelector('#tavEntranceDoor');
   assert(await page.locator('#tavEntrance').isVisible(),'Fachada não abriu');
   assert(await page.locator('#tavEntranceIdentity').isHidden(),'Identificação abriu antes do toque');
+  const facade=await page.evaluate(async()=>{
+   const urls=['./art/tavern-facade-v2.svg','./art/tavern-door-v2.svg'];
+   const ok=await Promise.all(urls.map(async path=>{const r=await fetch(path);return r.ok&&(await r.text()).startsWith('<svg ');}));
+   const art=getComputedStyle(document.querySelector('.tav-gate-art'));
+   const box=document.querySelector('#tavEntranceDoor').getBoundingClientRect();
+   return {ok,art:art.backgroundImage,door:[box.x,box.y,box.width,box.height],viewport:innerWidth};
+  });
+  assert(facade.ok.every(Boolean),'Recursos locais 2.5D não carregaram');
+  assert(facade.art.includes('tavern-facade-v2.svg'),'Fachada nova não está em uso');
+  assert(facade.door[2]>=75&&facade.door[3]>=180,'Área tocável da porta muito pequena');
+  assert(facade.door[0]>=0&&facade.door[0]+facade.door[2]<=width+1,'Porta fora da tela: '+width);
+
   await page.screenshot({path:'/tmp/tav-entrance-facade-'+width+'.png'});
   await page.locator('#tavEntranceDoor').click();
   assert.equal(await page.locator('#tavEntrance').evaluate(x=>x.classList.contains('tav-gate-opened')),true);
+  assert.notEqual(await page.locator('#tavEntranceDoor').evaluate(x=>getComputedStyle(x).transform),'none','Porta não recebeu perspectiva');
   await page.waitForSelector('#tavEntranceIdentity:not([hidden])');
   assert(await page.locator('#tavEntranceGuest').isVisible());
   assert(await page.locator('#tavEntranceAccount').isVisible());
