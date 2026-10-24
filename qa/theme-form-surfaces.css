@@ -1,0 +1,78 @@
+/* Paleta de formulários: apenas neons. O Clássico permanece original.
+   Os campos de login/troca de conta, lobby, bugs, chat, VIP e admin
+   antes tinham regras mais específicas de madeira marrom. */
+:root[data-tav-palette^="neon-"] :is(
+ #sceneWelcome,#sceneMenu,#sceneMultiplayer,#alphaAccountsOverlay,
+ #alphaFeedbackForm,#tavSocialMenu,#tavSocialVote,.tav-central-panel,
+ .tav-admin-panel,.tav-bots-sheet,.tav-vip-password-sheet
+) :is(
+ input:not([type="hidden"]):not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]),
+ textarea,select
+){
+ background:var(--tp-input)!important;
+ color:var(--tp-text)!important;
+ caret-color:var(--tp-bright)!important;
+ border-color:var(--tp-edge)!important;
+ box-shadow:inset 0 1px 7px #02091a72,0 0 6px var(--tp-glow)!important;
+}
+:root[data-tav-palette^="neon-"] :is(
+ #sceneWelcome,#sceneMenu,#sceneMultiplayer,#alphaAccountsOverlay,
+ #alphaFeedbackForm,#tavSocialMenu,#tavSocialVote,.tav-central-panel,
+ .tav-admin-panel,.tav-bots-sheet,.tav-vip-password-sheet
+) :is(input,textarea)::placeholder{
+ color:var(--tp-muted)!important;opacity:.75!important;
+}
+:root[data-tav-palette^="neon-"] :is(
+ #sceneWelcome,#sceneMenu,#sceneMultiplayer,#alphaAccountsOverlay,
+ #alphaFeedbackForm,#tavSocialMenu,#tavSocialVote,.tav-central-panel,
+ .tav-admin-panel,.tav-bots-sheet,.tav-vip-password-sheet
+) :is(input,textarea,select):focus-visible{
+ outline:2px solid var(--tp-bright)!important;
+ outline-offset:2px!important;
+ border-color:var(--tp-bright)!important;
+}
+/* Painel onde aparece a conta atual no online (e botão Trocar conta).
+   A fonte, texto, feedback e layout permanecem os mesmos. */
+:root[data-tav-palette^="neon-"] #sceneMultiplayer #alphaAccountsBar{
+ background:var(--tp-panel)!important;
+ border-color:var(--tp-edge)!important;
+ box-shadow:inset 0 0 0 1px var(--tp-glow),0 4px 15px #02061976!important;
+}
+:root[data-tav-palette^="neon-"] #sceneMultiplayer #alphaAccountsStatus{
+ color:var(--tp-text)!important;
+}
+:root[data-tav-palette^="neon-"] #sceneMultiplayer #alphaAccountsBar :is(#alphaAccountsLogout,button){
+ background:var(--tp-button)!important;
+ color:var(--tp-text)!important;
+ border-color:var(--tp-edge)!important;
+ box-shadow:0 0 9px var(--tp-glow)!important;
+}
+/* Cadastro/entrada: preservar avisos de erros (cores de erro),
+   mas harmonizar os botões secundários e seus contornos. */
+:root[data-tav-palette^="neon-"] #alphaAccountsOverlay .alpha-accounts-panel{
+ background:var(--tp-panel)!important;
+ color:var(--tp-text)!important;
+ border-color:var(--tp-edge)!important;
+}
+:root[data-tav-palette^="neon-"] #alphaAccountsOverlay :is(
+ #alphaAccountCancel,#alphaAccountGuest,.alpha-account-actions button
+){
+ background:var(--tp-button)!important;
+ border-color:var(--tp-edge)!important;
+ color:var(--tp-text)!important;
+ box-shadow:0 0 7px var(--tp-glow)!important;
+}
+:root[data-tav-palette^="neon-"] #alphaAccountsOverlay :is(label,.alpha-phone-note,#alphaAccountsStatus){
+ color:var(--tp-muted)!important;
+}
+/* Outros campos com apresentação especial nos submenus. */
+:root[data-tav-palette^="neon-"] :is(
+ #onlineRoomCode,#onlineCode,#playerName,
+ .tav-vip-password-input,#alphaFeedbackForm textarea,
+ #tavSocialMenu input,#tavSocialMenu textarea
+){
+ background:var(--tp-input)!important;
+ color:var(--tp-text)!important;
+ border-color:var(--tp-edge)!important;
+ caret-color:var(--tp-bright)!important;
+}
