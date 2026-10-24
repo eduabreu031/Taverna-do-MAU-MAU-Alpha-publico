@@ -1,0 +1,78 @@
+/* V0.5.0.12 — O turno fica evidente mesmo no visual neon.
+   Somente aparência: sem alterar classes de turno, estado, timers ou eventos.
+   .seat.active e a ausência de .seat.active (com a mão renderizada)
+   são marcadores gerados pelo motor real da partida. */
+:root[data-tav-palette^="neon-"]{
+ --tav-turn-bright:var(--tp-bright);
+ --tav-turn-edge:var(--tp-accent);
+}
+/* IMPORTANTE: no layout móvel .leather-name envolve TODO o retrato:
+   sua caixa mede cerca de 86×87 px. Colorir esse wrapper causava os
+   quadrados denunciados pelo teste no dispositivo. */
+@media (max-width:760px){
+ :root[data-tav-palette^="neon-"] #sceneGame #seats .seat .leather-name{
+  background:transparent!important;
+  background-image:none!important;
+  border-color:transparent!important;
+  border-style:solid!important;
+  box-shadow:none!important;
+ }
+ :root[data-tav-palette^="neon-"] #sceneGame #seats .seat .leather-name::before,
+ :root[data-tav-palette^="neon-"] #sceneGame #seats .seat .leather-name::after{
+  display:none!important;
+ }
+}
+/* Anular o amarelo original do turno adversário, sem afetar as cartas,
+   retratos nem efeitos de sinalização do motor. */
+:root[data-tav-palette^="neon-"] #sceneGame #seats .seat.active .bot-fan{
+ filter:drop-shadow(0 0 8px var(--tav-turn-bright))
+  drop-shadow(0 0 14px var(--tav-turn-edge))!important;
+}
+:root[data-tav-palette^="neon-"] #sceneGame #seats .seat.active .bot-avatar{
+ filter:drop-shadow(0 0 8px var(--tav-turn-bright))
+  drop-shadow(0 0 16px var(--tav-turn-edge))!important;
+}
+:root[data-tav-palette^="neon-"] #sceneGame #seats .seat.active .portrait-medallion{
+ border:3px solid var(--tav-turn-bright)!important;
+ box-shadow:0 0 0 2px var(--tav-turn-edge),0 0 13px 4px var(--tav-turn-bright),
+  0 0 31px 10px var(--tav-turn-edge)!important;
+}
+:root[data-tav-palette^="neon-"] #sceneGame #seats .seat.active .npc-timer{
+ border-color:var(--tav-turn-bright)!important;
+ color:var(--tav-turn-bright)!important;
+ box-shadow:0 0 10px var(--tav-turn-bright),0 0 20px var(--tav-turn-edge)!important;
+}
+/* Fora da própria vez, a mão tem a moldura normal e um brilho discreto. */
+:root[data-tav-palette^="neon-"] #sceneGame #humanZone{
+ border:2px solid var(--tp-edge)!important;
+ box-shadow:inset 0 0 13px var(--tp-glow),0 0 8px var(--tp-glow)!important;
+}
+/* A mão do humano está presente e nenhum assento adversário está ativo:
+   assim o destaque também funciona quando não há carta válida para jogar.
+   O estado é lido das classes que o motor JÁ aplica. */
+:root[data-tav-palette^="neon-"] #sceneGame:not(.hidden):has(#humanHand .playing-card):not(:has(#seats .seat.active)) #humanZone{
+ border:3px solid var(--tav-turn-bright)!important;
+ box-shadow:
+  inset 0 0 0 1px var(--tav-turn-bright),
+  inset 0 0 25px var(--tav-turn-edge),
+  0 0 11px 2px var(--tav-turn-bright),
+  0 0 28px 8px var(--tav-turn-edge)!important;
+}
+/* Indicação extra sobre o próprio nome, mas sem iluminar cartas ou naipes. */
+:root[data-tav-palette^="neon-"] #sceneGame:not(.hidden):has(#humanHand .playing-card):not(:has(#seats .seat.active)) .human-topline{
+ filter:drop-shadow(0 0 6px var(--tav-turn-bright))!important;
+}
+/* A mesma leitura serve para telas menores e horizontais. Sem efeitos
+   sobre hit-testing, clipping, visibilidade, posição nem dimensões do jogo. */
+@media(prefers-reduced-motion:reduce){
+ :root[data-tav-palette^="neon-"] #sceneGame #humanZone{
+  animation:none!important;
+ }
+}
+/* Overlay modal mantém o cenário reconhecível em segundo plano. */
+:root[data-tav-palette^="neon-"] #overlay:has(.suit-list){
+ background:
+  radial-gradient(ellipse at center,var(--tp-glow),transparent 70%),
+  rgba(4,8,19,.78)!important;
+ backdrop-filter:blur(3px) brightness(.68)!important;
+}
