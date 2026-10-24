@@ -1,4 +1,5 @@
 import {chromium} from 'playwright';
+import assert from 'node:assert/strict';
 const browser=await chromium.launch({headless:true,args:['--no-sandbox']});
 const page=await browser.newPage({viewport:{width:390,height:844},isMobile:true,hasTouch:true});
 try{
@@ -59,6 +60,44 @@ try{
   await page.waitForTimeout(1000);
  }
  console.log('AUDIT_TURN_SAMPLES',JSON.stringify(samples));
+
+ const botSample=samples.find(x=>x.seatActive!=='human'&&x.humanCardClasses.every(z=>z.includes('inactive')));
+ const humanSample=samples.find(x=>x.humanClass.includes('turn-active')&&x.humanCardClasses.some(z=>!z.includes('inactive')));
+ assert(botSample,'Não encontramos um turno adversário real');
+ assert(humanSample,'Não encontramos a classe turn-active gerada pelo motor');
+ const themeState=await page.evaluate(()=>{
+  const seat=document.querySelector('#seats .seat');
+  const label=seat.querySelector('.leather-name');
+  const avatar=seat.querySelector('.bot-avatar');
+  const hu=document.getElementById('humanZone');
+  const before=[];
+  for(const theme of ['neon-blue','neon-green','neon-pink']){
+   window.TavernaThemeSystem.setPalette(theme);
+   const c=getComputedStyle(label),h=getComputedStyle(hu);
+   const actor=document.querySelector('#seats .seat');
+   // Rendered turn classes are the game engine's own .active / .turn-active.
+   const old=actor.classList.contains('active');
+   actor.classList.add('active');
+   const f=getComputedStyle(avatar).filter;
+   const med=getComputedStyle(actor.querySelector('.portrait-medallion'));
+   const bsh=getComputedStyle(med).boxShadow;
+   actor.classList.toggle('active',old);
+   before.push({theme,seatBackground:c.backgroundImage,seatShadow:c.boxShadow,seatBorder:c.borderTopColor,
+    humanActiveBorder:h.borderTopColor,humanActiveShadow:h.boxShadow,
+    avatarActiveFilter:f,medallionActiveShadow:bsh});
+  }
+  return before;
+ });
+ console.log('AUDIT_ACTUAL_THEME_STATES',JSON.stringify(themeState));
+ for(const state of themeState){
+  assert.equal(state.seatBackground,'none','Bloco escuro ainda atrás do retrato: '+state.theme);
+  assert.equal(state.seatShadow,'none','Brilho quadrado ao redor do nome: '+state.theme);
+  assert(state.avatarActiveFilter.includes('drop-shadow'),'Adversário ativo sem brilho temático');
+  assert(state.medallionActiveShadow.includes('rgb('),'Retrato ativo sem moldura brilhante');
+  assert(state.humanActiveShadow.includes('rgb('),'Mão do humano sem iluminação ativa');
+ }
+ console.log('THEME_REAL_GAME_TURN_OK',themeState.map(x=>x.theme).join(','));
+
  // Exercise the actual overlay DOM in the visible scene and verify metrics.
  const ov=await page.evaluate(()=>{
   const el=document.getElementById('overlay'),dia=document.getElementById('dialog');
