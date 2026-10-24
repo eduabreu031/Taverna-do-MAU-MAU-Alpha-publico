@@ -1,7 +1,20 @@
 {
-  "current": "alpha-0.5.0.9",
+  "current": "alpha-0.5.0.10",
   "issuesRepo": "eduabreu031/Taverna-do-MAU-MAU-Alpha-publico",
   "entries": [
+    {
+      "id": "alpha-0.5.0.10",
+      "label": "0.5.0.10-alpha",
+      "date": "2026-10-24",
+      "title": "Escolha sua aparência na Taverna",
+      "items": [
+        "Novo menu Aparência: Taverna Clássica, Noite Neon Azul, Noite Neon Verde e Noite Neon Rosa, com troca imediata e preferência salva no dispositivo.",
+        "Corrigidas superfícies que mantinham o marrom original: Central da Taverna, conta multiplayer, área da mão, MAU MAU / OPA!!! / PASSAR, nomes dos jogadores e outros painéis.",
+        "Revisados os visuais do lobby, livro de regras, bots, Sala VIP, administração, histórico, comunicação e diálogos.",
+        "Os eventos comemorativos continuam sendo definidos pelo administrador e encerram nas datas programadas, sem apagar a paleta pessoal escolhida.",
+        "Nada muda no motor das partidas; cartas e naipes preservam suas cores e propriedades."
+      ]
+    },
     {
       "id": "alpha-0.5.0.9",
       "label": "0.5.0.9-alpha",
