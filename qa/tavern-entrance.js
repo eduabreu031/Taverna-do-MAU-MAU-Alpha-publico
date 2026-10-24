@@ -76,8 +76,17 @@ function onInterior(){
  // uma voz genérica nem altera a preferência de efeitos sonoros.
  try{window.dispatchEvent(new CustomEvent('taverna-interior-entered'));}catch{}
 }
+function ensureRadio(){
+ let pref=null;try{pref=localStorage.getItem('tavern-radio-preference');}catch{}
+ const radio=document.getElementById('musicBtn');
+ if(pref!=='false'&&radio&&!radio.classList.contains('audio-on')){
+  // Aciona o controle ORIGINAL; não cria outro sistema de áudio.
+  try{radio.click();}catch{}
+ }
+}
 function finish(){
  if(stage==='done'||busy&&stage==='entering')return;
+ ensureRadio();
  stage='entering';identity.hidden=true;el.classList.add('tav-gate-departing');
  const done=()=>{dismissVisualOnly();onInterior();};
  if(window.matchMedia?.('(prefers-reduced-motion: reduce)').matches)done();
