@@ -29,7 +29,7 @@ el.innerHTML=`
    </div>
    <p id="tavEntranceError" class="tav-gate-error" role="status" aria-live="polite"></p>
   </div>
- </div>;
+ </div>`;
 document.body.appendChild(el);
 const door=el.querySelector('#tavEntranceDoor');
 const identity=el.querySelector('#tavEntranceIdentity');
