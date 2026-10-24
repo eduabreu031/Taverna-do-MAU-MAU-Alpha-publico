@@ -87,10 +87,12 @@ try{
    const f=getComputedStyle(avatar).filter;
    const med=getComputedStyle(actor.querySelector('.portrait-medallion'));
    const bsh=med.boxShadow;
+   const activeAnimation=med.animationName;
+   const nameColor=getComputedStyle(actor.querySelector('.name-text')).color;
    actor.classList.toggle('active',old);
    before.push({theme,seatBackground:c.backgroundImage,seatShadow:c.boxShadow,seatBorder:c.borderTopColor,
     humanActiveBorder:h.borderTopColor,humanActiveShadow:activeHumanShadow,humanIdleShadow:idleHumanShadow,
-    avatarActiveFilter:f,medallionActiveShadow:bsh});
+    avatarActiveFilter:f,medallionActiveShadow:bsh,activeAnimation,nameColor});
   }
   return before;
  });
@@ -100,6 +102,7 @@ try{
   assert.equal(state.seatShadow,'none','Brilho quadrado ao redor do nome: '+state.theme);
   assert(state.avatarActiveFilter.includes('drop-shadow'),'Adversário ativo sem brilho temático');
   assert(state.medallionActiveShadow.includes('rgb('),'Retrato ativo sem moldura brilhante');
+  assert.equal(state.activeAnimation,'none','Animação amarela antiga não foi desligada: '+state.theme);
   assert.notEqual(state.humanActiveShadow,state.humanIdleShadow,'Moldura humana não mudou no turno: '+state.theme);
  }
  console.log('THEME_REAL_GAME_TURN_OK',themeState.map(x=>x.theme).join(','));
