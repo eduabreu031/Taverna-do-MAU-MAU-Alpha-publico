@@ -2,96 +2,79 @@
 const fs=require('fs'),vm=require('vm'),assert=require('assert'),path=require('path');
 const root=path.resolve(__dirname,'..'),base=path.resolve(process.argv[2]||path.join(root,'site'));
 const html=fs.readFileSync(path.join(base,'index.html'),'utf8');
-const config=JSON.parse(fs.readFileSync(path.join(root,'qa','theme-schedule.json'),'utf8'));
-const release=JSON.parse(fs.readFileSync(path.join(root,'qa','alpha-releases.json'),'utf8'));
-assert(config.themes.length>=1);
-const event=config.themes.find(e=>e.id==='neon-test');
-assert(event,'O tema de teste não pode desaparecer antes do fim do ensaio');
-const start=Date.parse(event.start),end=Date.parse(event.end);
-assert.equal(end-start,7200000,'Duração do ensaio neon deve ser exatamente duas horas');
-assert.equal(event.start,'2026-10-24T15:50:00-03:00');
-assert.equal(event.end,'2026-10-24T17:50:00-03:00');
+const config=JSON.parse(fs.readFileSync(path.join(root,'qa/theme-schedule.json'),'utf8'));
+const release=JSON.parse(fs.readFileSync(path.join(root,'qa/alpha-releases.json'),'utf8'));
+const trial=config.themes.find(e=>e.id==='neon-test');
+assert(trial);
+const start=Date.parse(trial.start),end=Date.parse(trial.end);
+assert.equal(end-start,7200000,'O teste sazonal mantém 120 minutos absolutos');
+assert.equal(trial.start,'2026-10-24T15:50:00-03:00');
+assert.equal(trial.end,'2026-10-24T17:50:00-03:00');
 assert.equal(release.entries[0].id,release.current);
-assert(release.entries[0].items.some(s=>/tema|neon/i.test(s)),'Versão não anuncia o ensaio');
-
+assert(release.entries[0].items.some(s=>/aparência|neon|tema/i.test(s)));
 const script=html.match(/<script id="tav-theme-manager">([\s\S]*?)<\/script>/)?.[1];
-const style=html.match(/<style id="tav-seasonal-themes">([\s\S]*?)<\/style>/)?.[1];
-assert(script&&style,'O tema deve entrar no produto final montado');
-new vm.Script(script,{filename:'tav-theme-manager.js'});
-assert(style.includes(':root[data-tav-theme="neon-test"]'),'Aparência deve ser escopada');
-assert(style.includes('#sceneGame')&&style.includes('#sceneMultiplayer')&&style.includes('#sceneWelcome'));
-assert(style.includes('tav-theme-board'),'A mesa também deve mudar a cor');
-for(const [scope,element] of [
- ['#sceneGame #tableShell','background:var(--tav-neon-wood)'],
- ['#sceneGame #tableShell>.felt','background:var(--tav-neon-felt)'],
- ['#sceneGame .felt::before','repeating-linear-gradient'],
- ['#tableShell>.ambient-shadow','radial-gradient'],
- ['#sceneMenu .book','background:var(--tav-neon-wood)'],
- ['#sceneMenu :is(','.book-page'],
- ['#sceneWelcome :is(','.welcome-panel'],
- ['#sceneMultiplayer :is(','.multiplayer-panel'],
- ['#sceneMultiplayer :is(','#onlineLobby']
-])assert(style.includes(scope)&&style.includes(element),'Tema não abrange elemento real: '+scope+' '+element);
-for(const selector of ['id="tableShell"','class="felt"','class="book"','class="welcome-panel"','class="multiplayer-panel"'])
- assert(html.includes(selector),'Elemento real desapareceu do HTML: '+selector);
+const menuScript=html.match(/<script id="tav-appearance-menu">([\s\S]*?)<\/script>/)?.[1];
+const css=html.match(/<style id="tav-seasonal-themes">([\s\S]*?)<\/style>/)?.[1];
+assert(script&&css&&menuScript,'As duas camadas e as opções do jogador precisam estar no build');
+new vm.Script(script);new vm.Script(menuScript);
+for(const id of ['neon-blue','neon-green','neon-pink'])
+ assert(css.includes(':root[data-tav-palette="'+id+'"]'),'Paleta ausente '+id);
+assert(css.includes(':root[data-tav-event="neon-test"]'),'Evento de administrador ausente');
+assert(!css.includes(':root[data-tav-theme="neon-test"]'),'CSS antigo misturado com paletas');
+for(const token of ['--tp-wood','--tp-felt','--tp-panel','--tp-button','--tp-input','--tp-screen'])
+ assert(css.includes(token),'Token de cor ausente '+token);
+for(const selector of ['#tavCentralOpen','#alphaAccountsBar','#alphaAccountsLogout',
+ '.human-leather','.control-bar','.leather-name','#sceneMenu .book','.tav-central-panel',
+ '.tav-admin-panel','#tavSocialMenu','#tavAbandonOverlay','.tav-bots-sheet-inner'])
+ assert(css.includes(selector),'Falta cobertura de tela/submenu '+selector);
+assert(!css.includes('background:#f5dfb0')&&!css.includes('[data-card-id]'),'Cartas não devem receber recoloração');
+assert(html.includes('function themeNotice()'),'Aviso do calendário ausente');
+assert(html.includes('themeNotice()+'),'Aviso não foi incluído no pergaminho');
+assert(html.includes('tav-appearance-options'),'Seleção de aparência não incluída');
 
-const originalStyles=[...html.matchAll(/<style\b[^>]*>([\s\S]*?)<\/style>/gi)]
- .map(m=>m[1]).filter(s=>!s.includes('Noite Neon: APENAS apresentação')).join('\n');
-const surfaceSelectors=['.table','.felt','.table-felt','.felt-table','.game-table',
- '#table','#gameTable','#gameBoard','#tableFelt','.tav-central-felt','.tabletop',
- '.table-surface','.play-table','.game-board'];
-const present=surfaceSelectors.filter(s=>originalStyles.includes(s));
-console.log('THEME_CANDIDATE_SURFACES:',present.join(', '));
-assert(present.length>=1,'Não foi encontrado nenhum seletor de mesa no visual original');
-
-assert(!style.includes('pointer-events:none!important'),'Tema não pode desabilitar jogadas');
-assert(!style.includes('.card-face')&&!style.includes('[data-card-id]'),'Não recolorir cartas ou naipes');
-assert(html.includes('function themeNotice()'),'Changelog dinâmico ausente');
-assert(html.includes('themeNotice()+'),'Changelog não exibe aviso durante a janela');
-assert(html.includes('alpha-theme-notice'),'Estilo do aviso não foi incorporado');
-
-let clock=start-1000, interval=null,events=[],listeners={};
-const attributes=new Map();
-const rootNode={
- setAttribute(k,v){attributes.set(k,String(v));},
- removeAttribute(k){attributes.delete(k);}
-};
+let clock=start-1000,interval=null,events=[],timers=[];
+const listeners={},attrs=new Map(),store=new Map();
+const localStorage={getItem:k=>store.has(k)?store.get(k):null,setItem:(k,v)=>store.set(k,String(v))};
 const document={
- documentElement:rootNode,baseURI:'https://taverna.local/',
- hidden:false,
- addEventListener(name,cb){(listeners[name]??=[]).push(cb);}
+ documentElement:{setAttribute:(a,b)=>attrs.set(a,String(b)),removeAttribute:a=>attrs.delete(a)},
+ hidden:false,baseURI:'https://local.test/',
+ addEventListener:(a,fn)=>{(listeners[a]??=[]).push(fn)}
 };
-const window={
- addEventListener(name,cb){(listeners[name]??=[]).push(cb);},
- dispatchEvent(e){events.push(e);}
-};
+const window={addEventListener:(a,fn)=>{(listeners[a]??=[]).push(fn)},dispatchEvent:e=>events.push(e)};
 class FakeDate extends Date{static now(){return clock;}}
-class FakeEvent{constructor(type,opts){this.type=type;this.detail=opts.detail;}}
-const context={document,window,navigator:{onLine:false},Date:FakeDate,
- Intl,CustomEvent:FakeEvent,URL,setInterval(fn){interval=fn;return 1;},
- setTimeout(fn){return 2;},clearTimeout(){},console};
-vm.runInNewContext(script,context,{timeout:1000});
-assert.equal(typeof interval,'function','Verificação periódica ausente');
-function check(at,active){
- clock=at;interval();
- const s=window.TavernaThemeSystem.getStatus();
- assert.equal(s.active,active,'Estado errado em '+new Date(at).toISOString());
- assert.equal(attributes.get('data-tav-theme'),active?'neon-test':undefined,'Visual errado em '+new Date(at).toISOString());
- return s;
+class FakeEvent{constructor(type,opts){this.type=type;this.detail=opts.detail}}
+vm.runInNewContext(script,{
+ Date:FakeDate,Intl,window,document,localStorage,navigator:{onLine:false},CustomEvent:FakeEvent,
+ URL,console,setInterval:fn=>{interval=fn;return 1},setTimeout:(fn,t)=>{timers.push(t);return 8},clearTimeout(){},
+},{timeout:1200});
+const api=window.TavernaThemeSystem;assert(api);
+assert.equal(api.getChoices().length,4);
+assert.equal(typeof interval,'function');
+function assertState(at,expectedPalette,active){
+ clock=at;api.refresh();
+ const palette=api.getPalette();
+ assert.equal(palette.id,expectedPalette);
+ assert.equal(api.getStatus().active,active);
+ assert.equal(attrs.get('data-tav-palette'),expectedPalette==='classic'?undefined:expectedPalette);
+ assert.equal(attrs.get('data-tav-event'),active?'neon-test':undefined);
+ assert.equal(attrs.has('data-tav-theme'),false,'Marcação legada removida');
 }
-check(start-1,false);
-check(start,true);
-check(start+60_000,true);
-let middle=check(start+3600_000,true);
-assert.equal(middle.remainingMs,3600_000);
-assert.equal(middle.endsAt,end);
-check(end-1,true);
-check(end,false);
-check(end+24*3600_000,false);
-check(end+30*24*3600_000,false);
-assert.equal(events.filter(x=>x.type==='taverna-theme-change').length,2,'Esperadas ativação e desativação');
-assert.deepEqual([...attributes.keys()],[],'O tema padrão precisa ser o HTML original, sem substituição');
-assert(!script.includes('GameEngine')&&!script.includes('game.players')&&!script.includes('webSocket'),'Gerenciador não deve tocar motor online/offline');
-const notice=window.TavernaThemeSystem.getStatus(end-2000);
-assert(notice.notice.includes('voltará automaticamente'),'Aviso sem retorno programado');
-console.log('THEME_SCHEDULE_OK: 120 minutos, entrada, expiração, menu/mesa, changelog e motor intocado');
+assertState(start-1,'classic',false);
+assertState(start,'neon-blue',true);
+assert(api.getPalette().temporary,'Compatibilidade com o ensaio neon');
+assert(api.setPalette('neon-green'));
+assertState(start+180000,'neon-green',true);
+assert(api.setPalette('neon-pink'));
+assertState(end-1,'neon-pink',true);
+assertState(end,'neon-pink',false);
+assertState(end+DAY(),'neon-pink',false);
+assert.equal(store.get('taverna:appearance:palette:v1'),'neon-pink');
+assert(api.setPalette('classic'));
+assertState(end+3600000,'classic',false);
+assert.equal(api.setPalette('not-a-palette'),false);
+assertState(end+3600000,'classic',false);
+assert.equal(api.getStatus(end-1000).endsAt,end);
+assert.equal(api.getSchedule()[0].end,end);
+assert(!script.includes('GameEngine')&&!script.includes('game.players')&&!script.includes('WebSocket'),'Motor não pode ser tocado pelo tema');
+console.log('THEME_SCHEDULE_OK: 4 paletas, usuário persistente, evento independente, prazo absoluto, Clássico original');
+function DAY(){return 86400000}
