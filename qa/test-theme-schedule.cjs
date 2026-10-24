@@ -31,11 +31,15 @@ assert(!css.includes('[data-card-id]'),'Skins nunca podem identificar cartas por
 for(const cls of ['.card-back','.card-face','.card-face.red','.mini-card','.playing-card.selected .big-card']){
  assert(css.includes(cls),'Baralho especial incompleto: '+cls);
 }
-for(const selector of ['#sceneGame #seats :is(.seat,.seat-inner,.opphand,.bot-fan)',
- '#overlay:has(.suit-list) #dialog .parchment-modal',
- '#overlay:has(.suit-list) #dialog .suit-list>.suit-choice']){
- assert(css.includes(selector),'Correção de bot/naipes não foi aplicada: '+selector);
-}
+assert(css.includes('#sceneGame #seats :is(.seat,.seat-inner,.opphand,.bot-fan)'), 'Assentos transparentes ausentes');
+assert(!css.includes('#overlay:has(.suit-list) #dialog .suit-list>.suit-choice'),
+ 'NÃO redesenhar os botões ou a geometria do seletor de naipes');
+assert(!css.includes('#overlay:has(.suit-list) #dialog .parchment-modal'),
+ 'NÃO redesenhar o painel original de naipes');
+assert(css.includes('#alphaAccountsOverlay')&&css.includes('#alphaAccountsLogout'),
+ 'Temas precisam cobrir entrada, troca de conta e formulários');
+assert(css.includes('animation:none!important')&&css.includes('.seat.active .bot-avatar .portrait-medallion'),
+ 'Falta desativar a animação amarela herdada dos retratos');
 for(const selector of [
  '#sceneGame #seats .seat .leather-name',
  '#sceneGame #seats .seat.active .bot-avatar',
