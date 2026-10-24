@@ -67,6 +67,7 @@ try{
   const pref=await page.evaluate(()=>localStorage.getItem('taverna:appearance:palette:v1'));
   assert.equal(pref,'neon-pink');
   await page.reload({waitUntil:'domcontentloaded'});
+  await page.evaluate(()=>window.TavernaEntrance?.skipVisualOnly());
   await page.waitForFunction(()=>!!window.TavernaThemeSystem);
   assert.equal(await page.evaluate(()=>window.TavernaThemeSystem.getPalette().id),'neon-pink','Paleta não persistiu');
   const selected=await page.locator('.tav-palette-option.selected').getAttribute('data-palette');
