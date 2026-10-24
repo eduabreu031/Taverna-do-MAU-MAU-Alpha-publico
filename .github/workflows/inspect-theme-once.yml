@@ -1,0 +1,17 @@
+name: Inspecionar fundos reais da Taverna
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/inspect-theme-once.yml'
+      - '.github/scripts/inspect-theme.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Mapear fundos, imagens e seletores da interface atual
+        run: python3 .github/scripts/inspect-theme.py
