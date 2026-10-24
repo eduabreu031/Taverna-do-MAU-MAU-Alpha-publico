@@ -108,20 +108,20 @@ test('Entrada cinematográfica não modifica motor e usa áudio original',()=>{
  assert(html.includes("const guestSessionStore="),'Sessão efêmera do visitante deve permanecer');
 });
 test('Fachada v2 utiliza recursos locais e não altera o baralho',()=>{
- for(const item of ['art/tavern-facade-v2.svg','art/tavern-door-v2.svg']){
+ for(const item of ['art/tavern-door-v2.svg']){
   const contents=fs.readFileSync(path.join(site,item),'utf8');
   assert(contents.includes('<svg')&&contents.includes('</svg>'),'Asset vetorial inválido: '+item);
   assert(contents.length>7000,'Asset cinematográfico incompleto: '+item);
  }
- assert(fs.statSync(path.join(site,'art/tavern-facade-bc.webp')).size>30000,'Fachada cinematográfica WebP ausente');
+ assert(!html.includes('tavern-facade-bc.webp'),'A fachada fotográfica não deve ser utilizada');
  assert(html.includes('tav-gate-art'),'A nova composição não foi instalada');
  assert(html.includes('tav-gate-threshold'),'A luz interna da porta está ausente');
  assert(html.includes('tav-gate-identity-card'),'Painel da entrada está ausente');
- assert(html.includes('tavern-facade-bc.webp'),'A cena cinematográfica não está ligada ao HTML');
+ assert(html.includes('tavern-door-v2.svg'),'Porta independente ausente da tela');
  const worker=fs.readFileSync(path.join(site,'sw.js'),'utf8');
- assert(worker.includes("'./art/tavern-facade-v2.svg'"),'Fachada não pré-carregada offline');
+
  assert(worker.includes("'./art/tavern-door-v2.svg'"),'Porta não pré-carregada offline');
- assert(worker.includes("'./art/tavern-facade-bc.webp'"),'Foto cinematográfica não foi pré-carregada');
+ assert(!worker.includes("'./art/tavern-facade-bc.webp'"),'Foto removida ainda no cache');
 });
 test('Cache busca versão nova e mantém offline',()=>{
  const sw=fs.readFileSync(path.join(site,'sw.js'),'utf8');
