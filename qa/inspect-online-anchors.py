@@ -11,3 +11,12 @@ for needle in names:
   region=s[max(0,i-380):min(len(s),i+950)]
   region=re.sub(r'data:image/[^"\']+','<BINARY_IMG>',region)
   print('CONTEXT',repr(needle),repr(region[:1300]))
+
+print('SEAT_AUDIT_BEGIN')
+for needle in ['id="seats"','id="humanHand"','leather-name','portrait-medallion','bot-avatar','player-avatar','id="human','class="human','querySelectorAll(\'.seat\'','seat.dataset','seat.innerHTML','const seats=','getElementById(\'seats\')','function renderSeat','renderBot','function renderPlayers','function updateSeats','function render(state','function render()','const lobby=el(','lobby.classList','window.__tavOriginalOnline.apply','m.game){','let online=','const online=']:
+ loc=[m.start() for m in re.finditer(re.escape(needle),s)]
+ print('SEAT_AUDIT',repr(needle),'count',len(loc))
+ for i in loc[:2] if len(loc)>4 else loc:
+  snippet=s[max(i-190,0):i+750]
+  snippet=re.sub(r'data:image/[^"\']+','<BASE64>',snippet)
+  print('SEAT_SNIP',repr(needle),repr(snippet[:900]))
