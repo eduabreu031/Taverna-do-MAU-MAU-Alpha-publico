@@ -36,6 +36,15 @@ for(const selector of ['#sceneGame #seats :is(.seat,.seat-inner,.opphand,.bot-fa
  '#overlay:has(.suit-list) #dialog .suit-list>.suit-choice']){
  assert(css.includes(selector),'Correção de bot/naipes não foi aplicada: '+selector);
 }
+for(const selector of [
+ '#sceneGame #seats .seat .leather-name',
+ '#sceneGame #seats .seat.active .bot-avatar',
+ '#sceneGame #seats .seat.active .portrait-medallion',
+ '#sceneGame #humanZone.turn-active',
+ '#overlay:has(.suit-list)'
+]){
+ assert(css.includes(selector),'Ajuste de turno/avatares ausente: '+selector);
+}
 assert(html.includes('function themeNotice()'),'Aviso do calendário ausente');
 assert(html.includes('themeNotice()+'),'Aviso não foi incluído no pergaminho');
 assert(html.includes('tav-appearance-options'),'Seleção de aparência não incluída');
