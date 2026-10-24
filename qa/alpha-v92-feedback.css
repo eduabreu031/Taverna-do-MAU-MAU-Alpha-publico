@@ -57,3 +57,9 @@
 .alpha-feedback-success h3{color:#ffe1a9;font:small-caps 25px Georgia,serif;margin:9px 0}
 .alpha-success-symbol{display:inline-grid;place-items:center;width:55px;height:55px;border:1px solid #d2ae70;border-radius:50%;background:#663c40;color:#fbe3b7;font-size:29px}
 .alpha-feedback-success button{width:100%;margin-top:17px}
+
+/* Aviso do ensaio sazonal: só é inserido enquanto o tema está ativo. */
+.alpha-theme-notice{margin:0 0 16px;padding:13px 14px;border:1px solid #8378ff;border-radius:10px;background:linear-gradient(138deg,#28186d,#13235a);color:#f0ebff;box-shadow:0 0 18px #4e42f136}
+.alpha-theme-notice strong{display:block;margin-bottom:7px;color:#8defff;letter-spacing:.6px}
+.alpha-theme-notice p{margin:0 0 8px;line-height:1.5}
+.alpha-theme-notice small{display:block;line-height:1.5;color:#dbd7ff}
