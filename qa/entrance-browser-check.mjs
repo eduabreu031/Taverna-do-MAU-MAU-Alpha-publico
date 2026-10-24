@@ -21,6 +21,7 @@ try{
   await page.locator('#tavEntranceGuest').click();
   await page.waitForFunction(()=>!document.getElementById('tavEntrance'),{timeout:5000});
   assert.equal(await page.locator('#playerName').inputValue(),'Forasteiro');
+  await page.evaluate(()=>{const news=document.getElementById('alphaInformationOverlay');if(news)news.hidden=true;});
   await page.locator('#chooseOffline').click();
   assert(await page.locator('#sceneMenu').isVisible(),'Modo offline bloqueado pela fachada');
   await page.locator('#offlineBackBtn').click();
