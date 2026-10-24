@@ -12,9 +12,9 @@ document.body.appendChild(overlay);
 const query=id=>document.getElementById(id);
 const err=x=>query('alphaAccountError').textContent=x||'';
 const loginButton=query('alphaAccountLogin'),createButton=query('alphaAccountCreate'),guestButton=query('alphaAccountGuest'),backButton=query('alphaAccountCancel');
-async function request(path,method='GET',data){
+async function request(path,method='GET',data,signal){
  const headers={};if(token)headers.authorization='Bearer '+token;if(data!==undefined)headers['content-type']='application/json';
- const res=await fetch(API+path,{method,headers,...(data!==undefined?{body:JSON.stringify(data)}:{})});
+ const res=await fetch(API+path,{method,headers,...(data!==undefined?{body:JSON.stringify(data)}:{}),...(signal?{signal}:{})});
  const body=await res.json().catch(()=>({}));
  if(!res.ok)throw Error(body.error||'Servidor indisponível (HTTP '+res.status+')');
  return body;
@@ -68,15 +68,18 @@ async function create(){
 }
 loginButton.onclick=()=>{if(mode==='register')switchMode('login');else login();};
 createButton.onclick=()=>{if(mode==='register')create();else{switchMode('register');query('alphaAccountUser').focus();}};
-guestButton.onclick=async()=>{
- guestButton.disabled=true;err('');
- try{
-  const value=await request('/api/auth/guest','POST');
+async function enterAsGuest(signal){
+  const value=await request('/api/auth/guest','POST',undefined,signal);
   token=value.token;user=value.user;localStorage.removeItem(KEY);sessionStorage.removeItem(KEY);
   // Nenhuma identidade de visitante é armazenada para um próximo acesso.
   try{for(const storage of [localStorage,sessionStorage])for(let i=storage.length-1;i>=0;i--){const k=storage.key(i);if(k&&(k.startsWith('taverna-beta-session-')||k.startsWith('taverna-beta-bots-')||k.startsWith('taverna-guest-runtime-')))storage.removeItem(k);}}catch{}
-  settle(user);
- }catch(e){err(e.message);}finally{guestButton.disabled=false;}
+  syncAdventureName();
+  return user;
+}
+guestButton.onclick=async()=>{
+ guestButton.disabled=true;err('');
+ try{await enterAsGuest();settle(user);}
+ catch(e){err(e.message);}finally{guestButton.disabled=false;}
 };
 async function requireUser(){
  if(user){syncAdventureName();return user;}
@@ -121,7 +124,7 @@ async function restoreSilently(){
  try{const data=await request('/api/auth/me');if(data.user?.role==='guest')return null;user=data.user;syncAdventureName();return user;}
  catch{return null;}
 }
-window.TavernaAuth={requireUser,restoreSilently,roomRequest,pass,logout,syncAdventureName,getUser:()=>user,getToken:()=>token};
+window.TavernaAuth={requireUser,restoreSilently,roomRequest,pass,logout,enterAsGuest,syncAdventureName,getUser:()=>user,getToken:()=>token};
 const portal=query('sceneMultiplayer');
 if(portal){
  const bar=el('div',{id:'alphaAccountsBar'}),status=el('span',{id:'alphaAccountsStatus'}),
