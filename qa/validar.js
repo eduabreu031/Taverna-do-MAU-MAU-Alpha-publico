@@ -77,6 +77,7 @@ test('X online confirma abandono, permanece no lobby e permite sair da sala',()=
  assert(html.includes("type:'abandon_match'"),'Servidor não recebe abandono real');
  assert(html.includes("if(m.type==='match_abandoned')"),'Falta esperar confirmação do servidor');
  assert(html.includes("if(m.game&&!tavStayInLobby(m)){"),'Estados seguintes reabrem partida abandonada');
+ assert(html.includes('if(!m.game&&game&&online)tavOpenRoomLobby(m.matchNo);'),'Mesa de bots encerra e participantes retornam ao lobby');
  assert(html.includes("tavRequestLeaveMatch();return;"),'X ainda sai diretamente');
  assert(html.includes("el('onlineLeave').onclick=tavLeaveToMainMenu;"),'Lobby não tem saída ao menu inicial');
  assert(html.includes('lobby.classList.remove(\'hidden\');'),'Transição não apresenta o lobby');
