@@ -86,7 +86,7 @@ try{
    actor.classList.add('active');
    const f=getComputedStyle(avatar).filter;
    const med=getComputedStyle(actor.querySelector('.portrait-medallion'));
-   const bsh=getComputedStyle(med).boxShadow;
+   const bsh=med.boxShadow;
    actor.classList.toggle('active',old);
    before.push({theme,seatBackground:c.backgroundImage,seatShadow:c.boxShadow,seatBorder:c.borderTopColor,
     humanActiveBorder:h.borderTopColor,humanActiveShadow:activeHumanShadow,humanIdleShadow:idleHumanShadow,
