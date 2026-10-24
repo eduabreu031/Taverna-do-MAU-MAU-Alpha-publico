@@ -27,7 +27,7 @@ once("if(m.type==='social_event'){tavIncomingSocial(m);return;}",
 once("if(m.type==='error'){startPending=false;finishLobby.disabled=false;",
      "if(m.type==='error'){tavAbandonError();startPending=false;finishLobby.disabled=false;")
 once("players=m.players||[];hostId=m.hostId;opa=m.opa;",
-     "players=m.players||[];hostId=m.hostId;opa=m.opa;tavLatestMatchNo=m.matchNo||0;")
+     "if(!m.game&&game&&online)tavOpenRoomLobby(m.matchNo);\n  players=m.players||[];hostId=m.hostId;opa=m.opa;tavLatestMatchNo=m.matchNo||0;")
 once("if(m.game)startPending=false;\n  refreshReadyAfterBots();\n  if(m.game){",
      """if(m.game)startPending=false;
   refreshReadyAfterBots();
