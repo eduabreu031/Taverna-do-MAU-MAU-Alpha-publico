@@ -21,17 +21,17 @@ new vm.Script(script,{filename:'tav-theme-manager.js'});
 assert(style.includes(':root[data-tav-theme="neon-test"]'),'Aparência deve ser escopada');
 assert(style.includes('#sceneGame')&&style.includes('#sceneMultiplayer')&&style.includes('#sceneWelcome'));
 assert(style.includes('tav-theme-board'),'A mesa também deve mudar a cor');
-for(const required of [
- '#sceneGame #tableShell',
- '#sceneGame #tableShell>.felt',
- '#sceneGame .felt::before',
- '#tableShell>.ambient-shadow',
- '#sceneMenu .book',
- '#sceneMenu .book-page',
- '#sceneWelcome .welcome-panel',
- '#sceneMultiplayer .multiplayer-panel',
- '#sceneMultiplayer #onlineLobby'
-])assert(style.includes(required),'Tema não abrange elemento real: '+required);
+for(const [scope,element] of [
+ ['#sceneGame #tableShell','background:var(--tav-neon-wood)'],
+ ['#sceneGame #tableShell>.felt','background:var(--tav-neon-felt)'],
+ ['#sceneGame .felt::before','repeating-linear-gradient'],
+ ['#tableShell>.ambient-shadow','radial-gradient'],
+ ['#sceneMenu .book','background:var(--tav-neon-wood)'],
+ ['#sceneMenu :is(','.book-page'],
+ ['#sceneWelcome :is(','.welcome-panel'],
+ ['#sceneMultiplayer :is(','.multiplayer-panel'],
+ ['#sceneMultiplayer :is(','#onlineLobby']
+])assert(style.includes(scope)&&style.includes(element),'Tema não abrange elemento real: '+scope+' '+element);
 for(const selector of ['id="tableShell"','class="felt"','class="book"','class="welcome-panel"','class="multiplayer-panel"'])
  assert(html.includes(selector),'Elemento real desapareceu do HTML: '+selector);
 
