@@ -1,0 +1,15 @@
+{
+  "schema": 1,
+  "defaultTheme": "classic",
+  "timeZone": "America/Sao_Paulo",
+  "themes": [
+    {
+      "id": "neon-test",
+      "label": "Noite Neon · teste do sistema de temas",
+      "start": "2026-10-24T15:50:00-03:00",
+      "end": "2026-10-24T17:50:00-03:00",
+      "style": "neon-blue-purple",
+      "notice": "Estamos testando o sistema de temas da Taverna. A aparência padrão voltará automaticamente às 17h50 (horário de Brasília), sem alterar partidas ou funcionalidades."
+    }
+  ]
+}
