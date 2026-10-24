@@ -97,6 +97,16 @@ test('Número da Alpha e changelog seguem a versão publicada',()=>{
  assert(sw.includes("const CACHE = 'taverna-pwa-"+releases.current+"';"),'PWA precisa ter cache da versão corrente');
  assert(html.includes("version.textContent=current.label+' · testes públicos'"),'Selo de versão não acompanha o changelog');
 });
+test('Entrada cinematográfica não modifica motor e usa áudio original',()=>{
+ assert(html.includes('id="tav-entrance-script"'),'Camada da porta ausente');
+ assert(html.includes('id="tav-entrance-style"'),'Fachada da Taverna ausente');
+ assert(html.includes("window.TavernaEntrance=Object.freeze"),'Controle isolado da porta ausente');
+ assert(html.includes("tavern-radio-preference"),'Preferência da Rádio ausente');
+ assert(html.includes("taverna-interior-entered"),'Sinal da chegada ao interior ausente');
+ assert(html.includes("arautoSpeak(16)"),'Saudação gravada do Arauto não foi ligada à entrada');
+ assert(html.includes("async function enterAsGuest(signal)"),'Visitante não reutiliza autenticação original');
+ assert(html.includes("const guestSessionStore="),'Sessão efêmera do visitante deve permanecer');
+});
 test('Cache busca versão nova e mantém offline',()=>{
  const sw=fs.readFileSync(path.join(site,'sw.js'),'utf8');
  new vm.Script(sw,{filename:'sw.js'});
