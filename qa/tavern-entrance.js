@@ -6,36 +6,30 @@ const auth=()=>window.TavernaAuth;
 const el=document.createElement('section');
 el.id='tavEntrance';el.setAttribute('role','region');el.setAttribute('aria-label','Entrada da Taverna do Mau Mau');
 el.innerHTML=`
- <div class="tav-gate-moon" aria-hidden="true"></div>
- <div class="tav-gate-mountains" aria-hidden="true"></div>
- <div class="tav-gate-ground" aria-hidden="true"></div>
- <div class="tav-gate-heading" aria-hidden="true">UMA NOITE DE CARTAS E MALANDRAGENS</div>
- <div class="tav-gate-house">
-  <div class="tav-gate-wall"></div><div class="tav-gate-roof"></div>
-  <div class="tav-gate-window left"></div><div class="tav-gate-window right"></div>
-  <div class="tav-gate-sign"><strong>TAVERNA</strong><small>DO MAU MAU</small></div>
-  <div class="tav-gate-arch">
-   <button type="button" id="tavEntranceDoor" class="tav-gate-door" aria-label="Abrir a porta da Taverna">
-    <span>TOQUE PARA ENTRAR</span>
-   </button>
-  </div>
-  <div class="tav-gate-lantern left" aria-hidden="true"></div>
-  <div class="tav-gate-lantern right" aria-hidden="true"></div>
+ <div class="tav-gate-art">
+  <div class="tav-gate-threshold" aria-hidden="true"></div>
+  <div class="tav-gate-embers" aria-hidden="true"></div>
+  <button type="button" id="tavEntranceDoor" class="tav-gate-door" aria-label="Abrir a porta da Taverna" aria-haspopup="dialog" aria-controls="tavEntranceIdentity">
+   <span>ABRIR PORTA</span>
+  </button>
  </div>
- <div class="tav-gate-prompt">✦ Toque na porta para entrar ✦</div>
+ <div class="tav-gate-caption" aria-hidden="true"><span>TOQUE NA PORTA PARA ENTRAR</span><small>✦ A TAVERNA DO MAU MAU ESPERA POR VOCÊ ✦</small></div>
  <div class="tav-gate-identity" id="tavEntranceIdentity" role="dialog" aria-modal="true" aria-labelledby="tavEntranceTitle" hidden>
   <div class="tav-gate-identity-card">
+   <div class="tav-gate-crest" aria-hidden="true">♠</div>
+   <div class="tav-gate-eyebrow">✦ SEJA BEM-VINDO À TAVERNA ✦</div>
    <h2 id="tavEntranceTitle">Quem bate à porta?</h2>
-   <p>Identifique-se para entrar ou venha como um Forasteiro.</p>
+   <div class="tav-gate-rule" aria-hidden="true"></div>
+   <p>As portas estão abertas. Escolha como deseja se apresentar aos demais aventureiros.</p>
    <div class="tav-gate-actions">
     <button type="button" id="tavEntrancePrimary">Entrar com minha conta</button>
     <button type="button" id="tavEntranceAccount">Entrar ou criar conta</button>
     <button type="button" id="tavEntranceGuest">Entrar como Forasteiro</button>
-    <button type="button" id="tavEntranceBack" class="tav-gate-return">Voltar à porta</button>
+    <button type="button" id="tavEntranceBack">Voltar à porta</button>
    </div>
    <p id="tavEntranceError" class="tav-gate-error" role="status" aria-live="polite"></p>
   </div>
- </div>`;
+ </div>;
 document.body.appendChild(el);
 const door=el.querySelector('#tavEntranceDoor');
 const identity=el.querySelector('#tavEntranceIdentity');
@@ -123,7 +117,7 @@ async function enterAccount(replace){
 function openDoor(){
  if(stage!=='door')return;
  opened=true;stage='identity';el.classList.add('tav-gate-opened');
- labels();setTimeout(()=>{if(stage==='identity'){identity.hidden=false;(primary.hidden?accountBtn:primary).focus();}},430);
+ labels();setTimeout(()=>{if(stage==='identity'){identity.hidden=false;(primary.hidden?accountBtn:primary).focus();}},1030);
  Promise.resolve(auth()?.restoreSilently?.()).then(()=>{if(stage==='identity')labels();}).catch(()=>{});
 }
 door.addEventListener('click',openDoor);
