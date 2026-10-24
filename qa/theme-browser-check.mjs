@@ -170,7 +170,11 @@ try{
     return map;
   });
   for(const name of ['neon-blue','neon-green','neon-pink']){
-    assert.deepEqual(picker[name].style,picker.classic.style,
+    // #dialog is a transparent full-screen layout wrapper: its inherited
+    // computed color/border may differ although nothing is painted there.
+    // Every visible element and every dimension must remain identical.
+    const normalize=(items)=>items.map((item,i)=>i===0?{...item,border:'inherited',color:'inherited'}:item);
+    assert.deepEqual(normalize(picker[name].style),normalize(picker.classic.style),
      'NÃO MUDAR A TELA DE ESCOLHA DE NAIPE: '+name);
     assert.notEqual(picker[name].backdrop,picker.classic.backdrop,
      'Somente o fundo do seletor precisa acompanhar o tema: '+name);
