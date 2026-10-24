@@ -100,7 +100,7 @@ try{
  for(const state of themeState){
   assert.equal(state.seatBackground,'none','Bloco escuro ainda atrás do retrato: '+state.theme);
   assert.equal(state.seatShadow,'none','Brilho quadrado ao redor do nome: '+state.theme);
-  assert(state.avatarActiveFilter.includes('drop-shadow'),'Adversário ativo sem brilho temático');
+  assert.equal(state.avatarActiveFilter,'none','O avatar não pode duplicar o brilho do medalhão');
   assert(state.medallionActiveShadow.includes('rgb('),'Retrato ativo sem moldura brilhante');
   assert.equal(state.activeAnimation,'none','Animação amarela antiga não foi desligada: '+state.theme);
   assert.notEqual(state.humanActiveShadow,state.humanIdleShadow,'Moldura humana não mudou no turno: '+state.theme);
