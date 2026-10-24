@@ -146,20 +146,20 @@ function tavUnlockAudio(){
  if(ac?.state==='suspended')ac.resume().catch(()=>{});
 }
 document.addEventListener('pointerdown',tavUnlockAudio,{capture:true,passive:true});
-async function tavPlayVoice(e){
- if(!tavSoundAllowed()||!online||e.playerId===uid)return;
+function tavPlayVoice(e){
+ if(!tavSoundAllowed()||!online||e.playerId===uid)return false;
  const ac=tavGetAudioContext();
- if(!ac||ac.state!=='running')return; // Sem reprodução manual, conforme combinado.
- if(e.format!=='pcm16'||e.sampleRate!==16000||!e.samples||e.samples>48000||!e.data)return;
+ if(!ac||ac.state!=='running')return false; // Sem reprodução manual, conforme combinado.
+ if(e.format!=='pcm16'||e.sampleRate!==16000||!e.samples||e.samples>48000||!e.data)return false;
  try{
   const raw=atob(e.data);
-  if(raw.length!==e.samples*2)return;
+  if(raw.length!==e.samples*2)return false;
   const bytes=new Uint8Array(raw.length);
   for(let i=0;i<raw.length;i++)bytes[i]=raw.charCodeAt(i);
   const pcm=new DataView(bytes.buffer),buffer=ac.createBuffer(1,e.samples,16000),channel=buffer.getChannelData(0);
   for(let i=0;i<e.samples;i++)channel[i]=pcm.getInt16(i*2,true)/32768;
-  const src=ac.createBufferSource();src.buffer=buffer;src.connect(ac.destination);src.start();
- }catch{} // Falha de codec/autoplay simplesmente ignora o áudio.
+  const src=ac.createBufferSource();src.buffer=buffer;src.connect(ac.destination);src.start();return true;
+ }catch{return false;} // Falha de codec/autoplay simplesmente ignora o áudio.
 }
 async function tavStartRecord(ev){
  if(ev.button!==undefined&&ev.button!==0)return;
@@ -283,8 +283,13 @@ function tavUpdateSocialFromState(m){
 }
 function tavIncomingSocial(e){
  if(!e||e.type!=='social_event'||!['text','emoji','audio'].includes(e.kind))return;
+ if(e.kind==='audio'){
+  // Nunca mostrar mensagem inaudível nem criar um botão para reproduzir.
+  if(e.playerId===uid){tavBubble(e);return;}
+  if(tavPlayVoice(e))tavBubble(e);
+  return;
+ }
  tavBubble(e);
- if(e.kind==='audio')tavPlayVoice(e);
 }
 function tavRemovedByVote(m){
  tavStopRecord(false);tavClearBubbles();tavSocialMenu.hidden=true;tavVotePanel.hidden=true;tavSocialLauncher.hidden=true;
