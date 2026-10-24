@@ -58,6 +58,9 @@ test('Comunicação multiplayer: balões, limite, microfone e expulsão',()=>{
  assert(html.includes('if(!alive){tavSocialMenu.hidden=true;tavStopRecord(false);}' ),'Eliminado ainda pode gravar');
  assert(html.includes("if(!ac||ac.state!=='running')return;"),'Áudio bloqueado precisa ser ignorado');
  assert(!html.includes('Reproduzir áudio manualmente'),'Não mostrar botão de reprodução');
+ assert(html.includes('id="soundBtn"'),'Controle de efeitos sonoros original ausente');
+ assert(html.includes("btn.setAttribute('aria-pressed',String(!!on))"),'Controle de som não informa o estado do áudio');
+ assert(html.includes("'#soundBtn'"),'Voz não acompanha a preferência de efeitos sonoros');
 });
 test('Cache busca versão nova e mantém offline',()=>{
  const sw=fs.readFileSync(path.join(site,'sw.js'),'utf8');
