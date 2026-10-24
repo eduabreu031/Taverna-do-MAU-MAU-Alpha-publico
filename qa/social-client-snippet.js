@@ -82,31 +82,46 @@ window.addEventListener('resize',tavPlaceSocial);
 window.addEventListener('scroll',tavPlaceSocial,{passive:true});
 window.visualViewport?.addEventListener('resize',tavPlaceSocial);
 function tavPositionBubble(id,node){
- const scene=document.getElementById('sceneGame'),viewHeight=window.visualViewport?.height||window.innerHeight;
- const name=tavName(id);
- let rect=null;
- if(scene){
-  // Prefere o menor retrato/nome visível do participante, caso exista.
-  const nodes=scene.querySelectorAll('[data-player-id],[data-id],[class*="seat"],[class*="portrait"],[class*="avatar"],[class*="player"]');
-  let bestArea=Infinity;
-  for(const el of nodes){
-   const match=el.getAttribute('data-player-id')===id||el.getAttribute('data-id')===id||(name&&el.textContent?.trim()===name);
-   if(!match)continue;
-   const r=el.getBoundingClientRect(),area=r.width*r.height;
-   if(area>=150&&area<bestArea&&r.height<220&&r.width<250&&r.top<viewHeight&&r.bottom>0){rect=r;bestArea=area;}
+ const scene=document.getElementById('sceneGame');
+ if(!scene||scene.classList.contains('hidden'))return;
+ const current=tavSocialGame?.players||[];
+ const viewerIndex=current.findIndex(p=>p.id===uid);
+ const index=current.findIndex(p=>p.id===id);
+ let portrait=null;
+ if(id===uid&&viewerIndex>=0){
+  portrait=scene.querySelector('#humanAvatar .portrait-medallion')||scene.querySelector('#humanAvatar');
+ }else if(index>=0&&viewerIndex>=0){
+  // O motor sempre exibe quem joga no celular como posição zero.
+  // Os demais recebem data-seat 1..N no retrato, inclusive no 1x1.
+  const seatIndex=(index-viewerIndex+current.length)%current.length;
+  portrait=scene.querySelector('#seats .seat[data-seat="'+seatIndex+'"] .portrait-medallion')||
+           scene.querySelector('#seats .seat[data-seat="'+seatIndex+'"] .bot-avatar');
+ }
+ if(!portrait){
+  // Se a visão for de espectador, o motor pode mudar a origem dos assentos.
+  // Nessa situação, usa exatamente o nome impresso no retrato, não aproximações.
+  const name=tavName(id);
+  for(const seat of scene.querySelectorAll('#seats .seat')){
+   const displayed=seat.querySelector('.name-text')?.textContent?.trim();
+   if(displayed!==name)continue;
+   portrait=seat.querySelector('.portrait-medallion')||seat.querySelector('.bot-avatar');
+   if(portrait)break;
   }
  }
- if(!rect&&id===uid){const hand=document.getElementById('humanHand');rect=hand?.getBoundingClientRect();}
- if(rect){
-  node.style.left=Math.round(Math.min(innerWidth-24,Math.max(24,rect.left+rect.width/2)))+'px';
-  node.style.top=Math.round(Math.max(52,Math.min(viewHeight-70,rect.top-58)))+'px';
- }else{
-  const all=tavSocialGame?.players||[],index=all.findIndex(p=>p.id===id),own=all.findIndex(p=>p.id===uid),n=all.length;
-  const rel=(index-own+n)%Math.max(1,n);
-  // Fallback: perímetro da mesa, nunca sobre os baralhos centrais.
-  const pos=rel===0?[50,73]:rel<(n+1)/3?[12,72-14*rel]:rel<2*(n+1)/3?[Math.min(80,15+65*(rel/(n-1))),12]:[88,24+45*(rel/(n-1))];
-  node.style.left=pos[0]+'vw';node.style.top=pos[1]+'vh';
+ if(!portrait||portrait.getClientRects().length===0){
+  node.hidden=true;return; // Não exibir fala sobre o personagem errado.
  }
+ const rect=portrait.getBoundingClientRect();
+ const viewportHeight=window.visualViewport?.height||window.innerHeight;
+ const viewportWidth=window.visualViewport?.width||window.innerWidth;
+ const h=node.getBoundingClientRect().height||44;
+ const w=node.getBoundingClientRect().width||160;
+ const center=Math.max(w/2+7,Math.min(viewportWidth-w/2-7,rect.left+rect.width/2));
+ const above=rect.top-h-11,below=rect.bottom+12;
+ const putBelow=above<8;
+ node.hidden=false;node.classList.toggle('below-avatar',putBelow);
+ node.style.left=Math.round(center)+'px';
+ node.style.top=Math.round(Math.min(viewportHeight-h-7,Math.max(8,putBelow?below:above)))+'px';
 }
 function tavBubble(e){
  if(!online||!tavSocialGame||!tavSocialGame.players?.some(p=>p.id===e.playerId))return;
