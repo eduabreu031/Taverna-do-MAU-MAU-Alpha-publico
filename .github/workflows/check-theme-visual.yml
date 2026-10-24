@@ -1,0 +1,52 @@
+name: Conferir tema neon no navegador
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/check-theme-visual.yml'
+      - 'qa/theme-neon.css'
+      - 'qa/theme-browser-check.mjs'
+      - 'qa/theme-schedule.json'
+      - 'qa/apply-seasonal-theme.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  browser:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Preparar pacotes gráficos
+        run: python3 -m pip install cairosvg
+      - name: Montar jogo da Alpha
+        run: |
+          python3 qa/merge-beta-frontend.py
+          python3 qa/apply-alpha-ui-v91.py site
+          python3 qa/apply-alpha-v92.py site
+          python3 qa/padronizar-nome.py site
+          python3 qa/apply-alpha-accounts.py site
+          python3 qa/apply-vip-bots-ui.py site
+          python3 qa/apply-visitor-entry.py site
+          python3 qa/apply-rematch-lobby.py site
+          python3 qa/apply-online-skip-final.py site
+          python3 qa/apply-social-features.py site
+          python3 qa/apply-online-abandon.py site
+          python3 qa/apply-seasonal-theme.py site
+      - name: Preparar navegador Chromium
+        run: npm install --no-save playwright@1.58.2 && npx playwright install --with-deps chromium
+      - name: Validar aparência padrão, neon e retorno
+        run: |
+          python3 -m http.server 8765 -d site >/tmp/taverna-theme-http.log 2>&1 &
+          node qa/theme-browser-check.mjs
+      - name: Guardar capturas apenas para diagnóstico
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: teste-visual-neon
+          path: /tmp/tav-theme-neon-*.png
+          if-no-files-found: ignore
