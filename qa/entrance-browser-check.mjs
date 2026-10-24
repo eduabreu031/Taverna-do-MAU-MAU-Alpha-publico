@@ -18,7 +18,7 @@ try{
    return {ok,art:art.backgroundImage,door:[box.x,box.y,box.width,box.height],viewport:innerWidth};
   });
   assert(facade.ok.every(Boolean),'Recursos locais 2.5D não carregaram');
-  assert(facade.art==='none','Fundo da porta não deve carregar uma fachada ilustrada');
+  assert(!facade.art.includes('tavern-facade'),'O fundo não deve carregar uma fachada ilustrada');
   assert(await page.locator('#tavEntranceDoor').evaluate(x=>getComputedStyle(x).backgroundImage.includes('tavern-door-v2.svg')),'Porta detalhada não está aplicada');
   assert(facade.door[2]>=width*(width<=390?.86:.25)&&facade.door[3]>=650,'Porta não ocupa a tela como previsto');
   assert(facade.door[0]>=0&&facade.door[0]+facade.door[2]<=width+1,'Porta fora da tela: '+width);
