@@ -7,7 +7,7 @@ site=Path(sys.argv[1]) if len(sys.argv)>1 else Path('site')
 page=site/'index.html'
 html=page.read_text(encoding='utf8')
 assert 'id="online-v84-controller"' in html
-assert 'id="onlineSkipFinalPanel"' in html
+assert "skipFinalPanel.id='onlineSkipFinalPanel'" in html
 assert 'tavSocialLauncher' not in html
 
 def once(a,b):
