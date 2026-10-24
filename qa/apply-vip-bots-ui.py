@@ -6,7 +6,6 @@ file=site/'index.html'
 h=file.read_text(encoding='utf8')
 vip_owner="(uid===hostId||(room==='TAVERN'&&players.some(p=>p.id===uid&&!p.isBot)))"
 replacements=[
- ("if(bot.token)url.searchParams.set('token',bot.token);","if(bot.token&&game&&['playing','scoring'].includes(game.phase))url.searchParams.set('token',bot.token);else bot.token='';"),
  ("function connectBot(bot){","async function connectBot(bot){"),
  ("let sock;try{sock=new WebSocket(url)}catch(e)","let sock;try{url.searchParams.set('pass',await window.TavernaAuth.pass(code));if(bot.removed||room!==code)return;sock=new WebSocket(url)}catch(e)"),
  ("const host=uid&&uid===hostId;","const host=!!uid&&"+vip_owner+";"),
@@ -16,7 +15,7 @@ replacements=[
  ("if(botChangeBusy||!room||uid!==hostId||game?.phase==='playing'||game?.phase==='scoring')return false;","if(botChangeBusy||!room||!uid||!"+vip_owner+"||game?.phase==='playing'||game?.phase==='scoring')return false;"),
  ("if(startingWithBots||startPending||!room||uid!==hostId||game)return;","if(startingWithBots||startPending||!room||!uid||!"+vip_owner+"||game)return;"),
  ("function waitForBots(desired,maxWait=14000){","function waitForBots(desired,maxWait=25000){"),
- ("if(e.code===4001){bot.removed=true;bots.delete(bot.name);persistBots();refreshReadyAfterBots();return;}","if(e.code===4001||e.code===4002){bot.removed=true;bots.delete(bot.name);persistBots();refreshReadyAfterBots();return;}\n  if(!game||['finished','game_over'].includes(game.phase)){bot.token='';bot.id=null;persistBots();}")
+ ("if(e.code===4001){bot.removed=true;bots.delete(bot.name);persistBots();refreshReadyAfterBots();return;}","if(e.code===4001||e.code===4002){bot.removed=true;bots.delete(bot.name);persistBots();refreshReadyAfterBots();return;}")
 ]
 for old,new in replacements:
  count=h.count(old)
