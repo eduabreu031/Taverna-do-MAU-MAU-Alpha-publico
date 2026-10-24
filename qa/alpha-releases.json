@@ -1,7 +1,18 @@
 {
-  "current": "alpha-0.5.0.21",
+  "current": "alpha-0.5.0.22",
   "issuesRepo": "eduabreu031/Taverna-do-MAU-MAU-Alpha-publico",
   "entries": [
+    {
+      "id": "alpha-0.5.0.22",
+      "label": "0.5.0.22-alpha",
+      "date": "2026-10-24",
+      "title": "Porta nobre com nome entalhado na madeira",
+      "items": [
+        "O nome TAVERNA DO MAU MAU agora é gravado diretamente nas tábuas de carvalho, com sombra de baixo-relevo, sem caixa de texto sobreposta.",
+        "Ferragens reforçadas com arcos de metal envelhecido, rebites e luz rasante, mantendo a porta grande em tela cheia.",
+        "Preservados a animação, o login, o acesso Forasteiro, o seletor de temas simplificado e o funcionamento offline e online."
+      ]
+    },
     {
       "id": "alpha-0.5.0.21",
       "label": "0.5.0.21-alpha",
