@@ -14,6 +14,7 @@ on:
       - 'qa/appearance-menu.js'
       - 'qa/theme-manager.js'
       - 'qa/inspect-card-theme.py'
+      - 'qa/inspect-active-and-forms.py'
       - 'qa/theme-browser-check.mjs'
       - 'qa/theme-real-game-audit.mjs'
       - 'qa/theme-schedule.json'
@@ -48,7 +49,9 @@ jobs:
           python3 qa/apply-online-abandon.py site
           python3 qa/apply-seasonal-theme.py site
       - name: Analisar baralhos e seletor de naipes antes das correções
-        run: python3 qa/inspect-card-theme.py
+        run: |
+          python3 qa/inspect-card-theme.py
+          python3 qa/inspect-active-and-forms.py
       - name: Preparar navegador Chromium
         run: npm install --no-save playwright@1.58.2 && npx playwright install --with-deps chromium
       - name: Validar aparência padrão, neon e retorno
