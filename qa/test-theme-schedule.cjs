@@ -21,6 +21,20 @@ new vm.Script(script,{filename:'tav-theme-manager.js'});
 assert(style.includes(':root[data-tav-theme="neon-test"]'),'Aparência deve ser escopada');
 assert(style.includes('#sceneGame')&&style.includes('#sceneMultiplayer')&&style.includes('#sceneWelcome'));
 assert(style.includes('tav-theme-board'),'A mesa também deve mudar a cor');
+for(const required of [
+ '#sceneGame #tableShell',
+ '#sceneGame #tableShell>.felt',
+ '#sceneGame .felt::before',
+ '#tableShell>.ambient-shadow',
+ '#sceneMenu .book',
+ '#sceneMenu .book-page',
+ '#sceneWelcome .welcome-panel',
+ '#sceneMultiplayer .multiplayer-panel',
+ '#sceneMultiplayer #onlineLobby'
+])assert(style.includes(required),'Tema não abrange elemento real: '+required);
+for(const selector of ['id="tableShell"','class="felt"','class="book"','class="welcome-panel"','class="multiplayer-panel"'])
+ assert(html.includes(selector),'Elemento real desapareceu do HTML: '+selector);
+
 const originalStyles=[...html.matchAll(/<style\b[^>]*>([\s\S]*?)<\/style>/gi)]
  .map(m=>m[1]).filter(s=>!s.includes('Noite Neon: APENAS apresentação')).join('\n');
 const surfaceSelectors=['.table','.felt','.table-felt','.felt-table','.game-table',
