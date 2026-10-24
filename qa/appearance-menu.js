@@ -16,10 +16,10 @@ menu.setAttribute('aria-labelledby','tavAppearanceTitle');
 menu.innerHTML='<div class="tav-appearance-card">'+
  '<div class="tav-appearance-head"><div><small>✦ TAVERNA DO MAU MAU ✦</small><h2 id="tavAppearanceTitle">Aparência</h2></div>'+
  '<button type="button" class="tav-appearance-close" aria-label="Fechar aparência">×</button></div>'+
- '<p>Escolha as cores da sua Taverna. As cartas e a jogabilidade permanecem iguais.</p>'+
+
  '<div class="tav-appearance-options" role="group" aria-label="Escolher paleta de cores"></div>'+
- '<p class="tav-appearance-season"></p>'+
- '<p class="tav-appearance-foot">A preferência fica salva neste dispositivo. Os eventos comemorativos são controlados pela Taverna e independem da sua escolha.</p>'+
+
+
  '<button type="button" class="tav-appearance-finish">Concluir</button></div>';
 doc.body.append(menu);
 const buttons=[];
@@ -59,11 +59,7 @@ function update(){
   b.classList.toggle('selected',active);
   b.setAttribute('aria-pressed',String(active));
  }
- const event=service.getStatus();
- const line=menu.querySelector('.tav-appearance-season');
- line.textContent=event.active?
-  'Evento ativo: '+event.label+'. Encerra em '+service.displayDate(event.endsAt)+' (Brasília). Suas cores escolhidas serão preservadas.':
-  'Sem evento comemorativo ativo. Sua escolha de cores não expira.';
+
 }
 function open(trigger){
  previousFocus=trigger||doc.activeElement;
