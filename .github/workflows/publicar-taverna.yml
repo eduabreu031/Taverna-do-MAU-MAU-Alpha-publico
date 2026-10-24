@@ -47,6 +47,8 @@ jobs:
         run: python3 qa/apply-vip-bots-ui.py site
       - name: Ativar visitantes sem cache e aviso de remoção
         run: python3 qa/apply-visitor-entry.py site
+      - name: Preservar bots na revanche e voltar ao lobby
+        run: python3 qa/apply-rematch-lobby.py site
       - name: Conferir jogo e integridade das regras
         run: node qa/validar.js site
   publicar:
@@ -91,6 +93,8 @@ jobs:
         run: python3 qa/apply-vip-bots-ui.py site
       - name: Ativar visitantes sem cache e aviso de remoção
         run: python3 qa/apply-visitor-entry.py site
+      - name: Preservar bots na revanche e voltar ao lobby
+        run: python3 qa/apply-rematch-lobby.py site
       - name: Preparar GitHub Pages
         uses: actions/configure-pages@v5
       - name: Preparar somente os arquivos publicos

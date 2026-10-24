@@ -25,6 +25,13 @@ test('Sala VIP entra apenas pelo menu específico e não exibe código',()=>{
  assert(html.includes("vipCodeLabel.hidden=inVip"),'Código interno ainda visível na sala VIP');
  assert(html.includes("window.TavernaVipPrompt"),'Autenticação VIP foi removida');
 });
+test('Revanche preserva bots e lobby recebe transição do servidor',()=>{
+ assert(html.includes('id="onlineFinishLobby"'),'Botão Voltar ao lobby ausente');
+ assert(html.includes("type:'return_lobby'"),'Comando coletivo de retorno ao lobby ausente');
+ assert(html.includes('g.players.length===players.length'),'Revanche sem conferência da formação anterior');
+ assert(html.includes('if(!m.game&&game){'),'Cliente não limpa a partida ao regressar ao lobby');
+ assert(html.includes("if(bot.token)url.searchParams.set('token',bot.token);"),'Bot não preserva identidade ao reconectar');
+});
 test('Cache busca versão nova e mantém offline',()=>{
  const sw=fs.readFileSync(path.join(site,'sw.js'),'utf8');
  new vm.Script(sw,{filename:'sw.js'});
