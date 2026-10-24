@@ -1,0 +1,150 @@
+/* Entrada da Taverna: cenário totalmente isolado do motor e dos temas da mesa. */
+#tavEntrance,#tavEntrance *{box-sizing:border-box}
+#tavEntrance[hidden]{display:none!important}
+#tavEntrance{
+ --gate-sky:#11111c;--gate-fire:#eeb879;--gate-fire-bright:#ffe5b4;
+ position:fixed;inset:0;z-index:2147480000;isolation:isolate;
+ display:grid;place-items:center;overflow:hidden;color:#f7e8cf;
+ font-family:Georgia,'Times New Roman',serif;
+ background:
+ radial-gradient(ellipse at 50% 65%,#7a4c4b7a,transparent 52%),
+ radial-gradient(ellipse at 50% -12%,#3e3a57 0%,#1b2334 48%,#090e1b 100%);
+}
+#tavEntrance::before{
+ content:"";pointer-events:none;position:absolute;inset:0;
+ background:radial-gradient(ellipse at 50% 87%,transparent 35%,#030307b0 100%),
+ repeating-linear-gradient(114deg,transparent 0 7px,#f4e9d505 8px,transparent 9px 16px);
+ z-index:6;
+}
+#tavEntrance::after{
+ content:"";pointer-events:none;position:absolute;inset:0;
+ background:linear-gradient(to bottom,transparent 45%,#08070b49 67%,#050406c9 100%);z-index:5;
+}
+#tavEntrance .tav-gate-moon{position:absolute;top:8%;right:17%;width:88px;aspect-ratio:1;border-radius:50%;
+ background:radial-gradient(circle at 35% 33%,#fff3d8,#ddd3c8 55%,#a399a1 90%);
+ box-shadow:0 0 30px 15px #e3d4cf22,0 0 115px 32px #e3d4cf14;opacity:.75}
+#tavEntrance .tav-gate-mountains{position:absolute;inset:31% -10% 0;background:#0b101a;
+ clip-path:polygon(0 48%,9% 30%,17% 47%,29% 15%,38% 37%,48% 24%,57% 44%,68% 12%,79% 35%,88% 18%,100% 43%,100% 100%,0 100%);
+ opacity:.86}
+#tavEntrance .tav-gate-ground{position:absolute;inset:76% -8% -8%;background:
+ radial-gradient(ellipse at 50% 10%,#6c4933a9,transparent 56%),
+ repeating-linear-gradient(93deg,#271c21 0 21px,#302429 22px 24px,#1e171c 26px 43px);
+ transform:perspective(460px) rotateX(28deg);box-shadow:0 -7px 60px #161018}
+#tavEntrance .tav-gate-heading{position:absolute;top:2%;left:0;right:0;text-align:center;z-index:8;
+ font:700 clamp(10px,2vw,13px) Georgia,serif;letter-spacing:.33em;color:#e8c999b8;
+ text-shadow:0 2px 12px #000;pointer-events:none}
+#tavEntrance .tav-gate-house{position:relative;z-index:3;width:min(94vw,750px);height:min(79dvh,690px);min-height:390px;
+ margin-top:6vh;filter:drop-shadow(0 12px 25px #050409);}
+#tavEntrance .tav-gate-roof{position:absolute;left:-4%;right:-4%;top:0;height:22%;
+ background:repeating-linear-gradient(177deg,#302629 0 11px,#493435 12px 22px,#171319 23px 29px);
+ clip-path:polygon(50% 0%,100% 72%,98% 88%,2% 88%,0 72%);
+ box-shadow:inset 0 -15px 24px #0e0a0c;z-index:3}
+#tavEntrance .tav-gate-roof::after{content:"";position:absolute;left:0;right:0;bottom:12%;
+ height:12px;background:linear-gradient(#805d4a,#261a1b);box-shadow:0 4px 8px #0a0709}
+#tavEntrance .tav-gate-wall{position:absolute;inset:16% 4% 0%;border:13px solid #3a2d2a;
+ border-top-width:16px;border-radius:10px 10px 0 0;
+ background:
+ linear-gradient(90deg,#080809a0,transparent 17%,#6b53402b 50%,transparent 83%,#060608a0),
+ repeating-linear-gradient(0deg,transparent 0 31px,#16101499 32px 35px),
+ repeating-linear-gradient(90deg,#55443e 0 44px,#66504a 45px 48px,#483a37 49px 101px);
+ box-shadow:inset 0 0 30px 12px #160d12,0 0 0 4px #120e12,0 9px 48px #0b090a}
+#tavEntrance .tav-gate-wall::before,#tavEntrance .tav-gate-wall::after{
+ content:"";position:absolute;top:9%;bottom:0;width:9%;
+ background:linear-gradient(90deg,#241b20,#907064 49%,#342a2b 60%,#181219);
+ box-shadow:0 0 14px #0008}
+#tavEntrance .tav-gate-wall::before{left:0}#tavEntrance .tav-gate-wall::after{right:0}
+#tavEntrance .tav-gate-sign{position:absolute;top:10%;left:50%;z-index:5;transform:translateX(-50%);
+ width:min(71%,460px);min-height:82px;padding:12px 14px 10px;display:flex;flex-direction:column;align-items:center;justify-content:center;
+ border:4px ridge #966b43;border-radius:20px 20px 32px 32px;background:
+ radial-gradient(ellipse at top,#775437,#39251f 72%,#231518);
+ box-shadow:0 4px 6px #080606,0 8px 25px #060407, inset 0 0 15px #eeb36d35;
+ text-align:center;text-shadow:0 2px 2px #000,0 0 12px #e0a25155;pointer-events:none}
+#tavEntrance .tav-gate-sign strong{font-size:clamp(18px,4.5vw,34px);letter-spacing:.07em;color:#ffe5b4}
+#tavEntrance .tav-gate-sign small{font-size:clamp(9px,1.6vw,12px);letter-spacing:.28em;color:#f6d19c;margin-top:5px}
+#tavEntrance .tav-gate-sign::before,#tavEntrance .tav-gate-sign::after{
+ content:"";position:absolute;top:-27px;width:5px;height:28px;background:#171316;border:1px solid #957455}
+#tavEntrance .tav-gate-sign::before{left:18%}#tavEntrance .tav-gate-sign::after{right:18%}
+#tavEntrance .tav-gate-window{position:absolute;top:38%;width:13%;height:27%;z-index:4;
+ border:8px solid #392722;border-radius:42% 42% 6px 6px;
+ background:repeating-linear-gradient(90deg,#25202c 0 38%,#161115 40% 46%,#2b2029 48% 100%);
+ box-shadow:inset 0 0 27px 12px #f5a34d9a,0 0 36px 5px #ed93343d}
+#tavEntrance .tav-gate-window::after{content:"";position:absolute;top:0;bottom:0;left:45%;width:6px;background:#291b1d;
+ box-shadow:-30px 28px 0 -2px #291b1d,30px 28px 0 -2px #291b1d}
+#tavEntrance .tav-gate-window.left{left:13%}#tavEntrance .tav-gate-window.right{right:13%}
+#tavEntrance .tav-gate-arch{position:absolute;bottom:0;left:50%;transform:translateX(-50%);
+ width:44%;height:63%;border-radius:49% 49% 0 0 / 19% 19% 0 0;
+ background:#0d090b;border:14px solid #4d3b34;
+ box-shadow:0 0 0 6px #85634b,0 0 0 12px #352724,inset 0 0 22px #000;
+ z-index:5;overflow:hidden}
+#tavEntrance .tav-gate-arch::before{content:"";position:absolute;inset:0;
+ background:radial-gradient(ellipse at 50% 45%,#ffcd769e,#130a09 71%);
+ opacity:0;transition:opacity .8s ease}
+#tavEntrance.tav-gate-opened .tav-gate-arch::before{opacity:1}
+#tavEntrance .tav-gate-door{position:absolute;inset:0;z-index:3;width:100%;height:100%;cursor:pointer;
+ appearance:none;border:0;border-radius:inherit;overflow:hidden;
+ background:repeating-linear-gradient(90deg,#241719 0 14%,#5a3025 15% 18%,#392320 19% 34%);
+ box-shadow:inset 0 0 0 7px #1b1416,inset 0 0 28px 14px #0e0a0a,0 0 0 0 #000;
+ color:#ffe5bc;touch-action:manipulation;
+ transition:transform .85s cubic-bezier(.25,.7,.1,1),filter .8s ease;transform-origin:0 50%}
+#tavEntrance .tav-gate-door::before{content:"";position:absolute;inset:6% 12%;
+ border:5px double #8f6945;border-radius:46% 46% 3% 3%/15% 15% 3% 3%;
+ background:radial-gradient(ellipse at 50% 40%,#8e5e3e22,transparent 66%);
+ box-shadow:inset 0 0 13px #0009}
+#tavEntrance .tav-gate-door::after{content:"✦";position:absolute;top:45%;right:9%;width:24px;height:24px;
+ border-radius:50%;border:3px solid #a88044;line-height:17px;text-align:center;
+ font-size:13px;color:#ffe9bc;background:#38281d;box-shadow:0 0 11px #e6a85d99}
+#tavEntrance .tav-gate-door span{position:absolute;left:0;right:0;top:28%;text-align:center;
+ font:700 clamp(10px,1.7vw,13px) Georgia,serif;letter-spacing:.19em;
+ text-shadow:0 2px 8px #000;pointer-events:none}
+#tavEntrance .tav-gate-door:focus-visible{outline:4px solid #fff2b3;outline-offset:-4px}
+#tavEntrance .tav-gate-door:hover{filter:brightness(1.2)}
+#tavEntrance.tav-gate-opened .tav-gate-door{transform:perspective(440px) rotateY(-74deg);pointer-events:none}
+#tavEntrance .tav-gate-lantern{position:absolute;z-index:6;top:33%;width:24px;height:65px;border-radius:7px;
+ border:5px solid #20171b;background:radial-gradient(#fff2bb 1%,var(--gate-fire) 22%,#d57b2a 75%,#37241e);
+ box-shadow:0 0 25px 10px #e9a85761,0 0 80px 22px #fcb35c26}
+#tavEntrance .tav-gate-lantern.left{left:24%}#tavEntrance .tav-gate-lantern.right{right:24%}
+#tavEntrance .tav-gate-lantern::before{content:"";position:absolute;left:5px;top:-25px;width:6px;height:22px;background:#26181b}
+#tavEntrance .tav-gate-prompt{position:absolute;z-index:8;left:0;right:0;bottom:3.5%;text-align:center;
+ color:#f5d9b1;font-size:clamp(12px,2.4vw,16px);letter-spacing:.09em;text-shadow:0 2px 8px #000}
+#tavEntrance.tav-gate-opened .tav-gate-prompt{opacity:0}
+#tavEntrance .tav-gate-identity[hidden]{display:none!important}
+#tavEntrance .tav-gate-identity{position:absolute;inset:0;z-index:15;display:flex;align-items:center;justify-content:center;
+ padding:22px;background:radial-gradient(ellipse at center,#100b0b9d,#060408ec);
+ animation:tavGateReveal .32s ease both}
+#tavEntrance .tav-gate-identity-card{width:min(93vw,410px);max-height:90dvh;overflow-y:auto;border:2px solid #9b7549;
+ border-radius:20px;padding:25px 20px 21px;text-align:center;
+ background:linear-gradient(150deg,#52392d,#291c22 56%,#16131c);
+ box-shadow:0 12px 35px #000c,inset 0 1px 22px #e3b4762a}
+#tavEntrance .tav-gate-identity-card h2{font-size:clamp(23px,5vw,31px);margin:0 0 9px;color:#ffe7bb}
+#tavEntrance .tav-gate-identity-card p{color:#e2c6a9;line-height:1.5;margin:0 0 19px;font-size:14px}
+#tavEntrance .tav-gate-actions{display:grid;gap:10px}
+#tavEntrance .tav-gate-actions button{font:600 15px Georgia,serif;cursor:pointer;min-height:49px;width:100%;
+ border:1px solid #a9845b;border-radius:11px;color:#fff0d7;
+ background:linear-gradient(#725039,#3f2c27);box-shadow:inset 0 1px 4px #f2d39d38,0 3px 8px #0a070a6b}
+#tavEntrance .tav-gate-actions button:first-child{background:linear-gradient(#c69b5c,#785331);color:#160d0d}
+#tavEntrance .tav-gate-actions button:disabled{opacity:.55;cursor:wait}
+#tavEntrance .tav-gate-actions button:focus-visible{outline:3px solid #fff2b3;outline-offset:2px}
+#tavEntrance .tav-gate-return{margin-top:12px!important;background:transparent!important;border-color:transparent!important;
+ color:#efd2a8!important;box-shadow:none!important;min-height:38px!important}
+#tavEntrance .tav-gate-error{min-height:14px;color:#ffdca6!important;margin:8px 0 0!important;font-size:12px!important}
+#tavEntrance.tav-gate-departing{opacity:0;transform:scale(1.055);pointer-events:none;
+ transition:opacity .9s ease,transform .9s ease}
+@keyframes tavGateReveal{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:translateY(0)}}
+:root[data-tav-palette="neon-blue"] #tavEntrance{--gate-fire:#b3a8ff;--gate-fire-bright:#b9eafa}
+:root[data-tav-palette="neon-green"] #tavEntrance{--gate-fire:#b4f0b0;--gate-fire-bright:#d3ffd0}
+:root[data-tav-palette="neon-pink"] #tavEntrance{--gate-fire:#f6a1c8;--gate-fire-bright:#ffddf2}
+:root[data-tav-event] #tavEntrance .tav-gate-sign{box-shadow:0 5px 9px #080606,0 0 29px var(--gate-fire)}
+@media(max-width:600px){
+ #tavEntrance .tav-gate-house{width:118vw;height:min(72dvh,570px);min-height:350px;margin-top:10vh}
+ #tavEntrance .tav-gate-sign{width:68%;top:9%;padding:8px 9px;min-height:68px}
+ #tavEntrance .tav-gate-sign strong{font-size:clamp(19px,6vw,27px)}
+ #tavEntrance .tav-gate-window{border-width:5px}
+ #tavEntrance .tav-gate-arch{width:48%;height:62%;border-width:9px}
+ #tavEntrance .tav-gate-lantern.left{left:20%}
+ #tavEntrance .tav-gate-lantern.right{right:20%}
+ #tavEntrance .tav-gate-prompt{bottom:6%}
+}
+@media(prefers-reduced-motion:reduce){
+ #tavEntrance .tav-gate-door,#tavEntrance.tav-gate-departing{transition-duration:.01ms}
+ #tavEntrance .tav-gate-identity{animation:none}
+}
