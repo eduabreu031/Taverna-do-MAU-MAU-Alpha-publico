@@ -74,6 +74,15 @@
  background:radial-gradient(ellipse at center,var(--tp-glow),transparent 72%),
   linear-gradient(rgba(6,10,20,.77),rgba(6,10,20,.77))!important;
 }
+/* A camada de aparência genérica estiliza outros modais; na escolha de naipes,
+   a arte clássica deve prevalecer. Restauramos APENAS as cores que a
+   camada genérica sobrescreveria, sem mudar a geometria do losango. */
+:root[data-tav-palette^="neon-"] #overlay:has(.suit-list) .parchment-modal{
+ background:none!important;
+ border:0!important;
+ box-shadow:none!important;
+ color:#f7dfb8!important;
+}
 /* Vários estilos legados produzem brilho AMARELO por keyframes de retrato.
    O box-shadow temático por si só não desliga essas animações herdadas.
    Cancelar apenas nos neons, sem suprimir o destaque no tema clássico. */
