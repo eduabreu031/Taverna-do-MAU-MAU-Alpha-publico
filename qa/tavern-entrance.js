@@ -100,13 +100,16 @@ async function enterGuest(){
 }
 async function enterAccount(replace){
  if(busy)return;setBusy(true);error.textContent='';
+ const accountOverlay=document.getElementById('alphaAccountsOverlay');
+ const previousZ=accountOverlay?.style.zIndex||'';
+ if(accountOverlay)accountOverlay.style.zIndex='2147480010';
  try{
   if(replace){await auth()?.logout?.();}
   const user=await auth()?.requireUser?.();
   if(user){auth()?.syncAdventureName?.();finish();}
   else{labels();error.textContent='Escolha uma conta ou entre como Forasteiro.';}
  }catch(e){error.textContent=e?.message||'Não foi possível entrar na conta.';}
- finally{setBusy(false);}
+ finally{if(accountOverlay)accountOverlay.style.zIndex=previousZ;setBusy(false);}
 }
 function openDoor(){
  if(stage!=='door')return;
