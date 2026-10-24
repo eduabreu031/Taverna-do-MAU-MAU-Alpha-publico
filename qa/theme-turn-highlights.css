@@ -68,10 +68,36 @@
   animation:none!important;
  }
 }
-/* Overlay modal mantém o cenário reconhecível em segundo plano. */
+/* A seleção mantém integralmente a interface ORIGINAL do motor:
+   só mudamos o tom do backdrop. Não tocar em modal, botões ou grid. */
 :root[data-tav-palette^="neon-"] #overlay:has(.suit-list){
- background:
-  radial-gradient(ellipse at center,var(--tp-glow),transparent 70%),
-  linear-gradient(rgba(4,8,19,.78),rgba(4,8,19,.78))!important;
- backdrop-filter:blur(3px) brightness(.68)!important;
+ background:radial-gradient(ellipse at center,var(--tp-glow),transparent 72%),
+  linear-gradient(rgba(6,10,20,.77),rgba(6,10,20,.77))!important;
 }
+/* Vários estilos legados produzem brilho AMARELO por keyframes de retrato.
+   O box-shadow temático por si só não desliga essas animações herdadas.
+   Cancelar apenas nos neons, sem suprimir o destaque no tema clássico. */
+:root[data-tav-palette^="neon-"] #sceneGame .table-shell .seat.active .bot-avatar .portrait-medallion,
+:root[data-tav-palette^="neon-"] #sceneGame .table-shell .seat.active .portrait-medallion{
+ animation:none!important;
+ border-color:var(--tav-turn-bright)!important;
+ box-shadow:0 0 0 2px var(--tav-turn-edge),
+  0 0 13px 4px var(--tav-turn-bright),
+  0 0 29px 9px var(--tav-turn-edge)!important;
+}
+:root[data-tav-palette^="neon-"] #sceneGame .table-shell .seat.active .name-text{
+ color:var(--tp-bright)!important;
+ text-shadow:0 0 8px var(--tp-glow-hi)!important;
+}
+:root[data-tav-palette^="neon-"] #sceneGame .table-shell .seat.active .leather-name .npc-timer.active{
+ border-color:var(--tp-bright)!important;
+ color:var(--tp-bright)!important;
+ background:conic-gradient(var(--tp-bright) var(--clock-progress,0%),var(--tp-space) 0)!important;
+ box-shadow:0 0 7px var(--tp-glow-hi),0 1px 4px #0009!important;
+}
+:root[data-tav-palette^="neon-"] #sceneGame .table-shell .seat.active .leather-name .npc-timer .timer-mark{
+ color:var(--tp-bright)!important;
+ background:var(--tp-dark)!important;
+}
+/* Os efeitos não carregam o amarelo clássico para os temas neon,
+   mesmo durante os últimos frames de uma animação. */
