@@ -210,4 +210,37 @@
 <circle cx="205" cy="460" r="10" fill="#141314" stroke="#b88b59" stroke-width="6"/><path d="M205 401q-39 15-16 60" fill="none" stroke="#8a7a65" stroke-width="8"/>
 <path d="M4 755h405" stroke="#100d11" stroke-width="16"/><path d="M12 751h391" stroke="#8c6951" stroke-width="3" opacity=".8"/>
 <path d="M17 110V738M388 109V738" stroke="#150d0c" stroke-width="13" opacity=".65"/>
+<defs>
+<linearGradient id="silver" x1="0" x2="1"><stop stop-color="#141517"/><stop offset=".22" stop-color="#aaa69b"/><stop offset=".48" stop-color="#48494a"/><stop offset=".69" stop-color="#c2a77f"/><stop offset="1" stop-color="#161719"/></linearGradient>
+<linearGradient id="inscription" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#110907"/><stop offset=".47" stop-color="#26150d"/><stop offset="1" stop-color="#b88b55"/></linearGradient>
+</defs>
+<g opacity=".96" fill="none" stroke-linejoin="round">
+<path d="M42 117Q205 70 368 117" stroke="#090a0d" stroke-width="21"/>
+<path d="M42 113Q205 66 368 113" stroke="url(#silver)" stroke-width="13"/>
+<path d="M55 128Q205 89 356 128" stroke="#201918" stroke-width="3"/>
+<path d="M44 694Q205 671 366 694" stroke="#0b0c0e" stroke-width="19"/>
+<path d="M44 692Q205 669 366 692" stroke="url(#silver)" stroke-width="11"/>
+<path d="M31 132v533M379 132v533" stroke="#0b0d10" stroke-width="18"/>
+<path d="M31 132v533M379 132v533" stroke="url(#silver)" stroke-width="10"/>
+<path d="M61 138q-6 135 8 232M344 138q13 100 2 217" stroke="#a49a82" stroke-width="2.5" opacity=".6"/>
+</g>
+<g fill="#121215" stroke="#b5a080" stroke-width="2">
+<circle cx="55" cy="125" r="6"/><circle cx="355" cy="125" r="6"/>
+<circle cx="48" cy="693" r="6"/><circle cx="362" cy="693" r="6"/>
+<circle cx="31" cy="190" r="5"/><circle cx="31" cy="610" r="5"/>
+<circle cx="379" cy="190" r="5"/><circle cx="379" cy="610" r="5"/>
+</g>
+<!-- O nome é entalhado diretamente nas tábuas: sombra interna, borda gasta e luz rasante. -->
+<g font-family="Georgia,'Times New Roman',serif" font-weight="bold" text-anchor="middle" letter-spacing="2.1">
+<text x="206" y="295" font-size="36" fill="#cfa979" opacity=".68">TAVERNA</text>
+<text x="204" y="292" font-size="36" fill="#120b09" stroke="#100907" stroke-width=".7">TAVERNA</text>
+<text x="206" y="334" font-size="22" fill="#bd8a59" opacity=".61">DO MAU MAU</text>
+<text x="204" y="332" font-size="22" fill="url(#inscription)" stroke="#160b08" stroke-width=".6">DO MAU MAU</text>
+</g>
+<path d="M95 349h220" stroke="#150d09" stroke-width="2" opacity=".8"/>
+<path d="M97 351h216" stroke="#ab7b4f" stroke-width="1" opacity=".6"/>
+<g transform="translate(205 263)" fill="none" stroke="#b99767" opacity=".62">
+<path d="m0-21 11 15-11 15-11-15Z" stroke-width="2"/>
+<path d="M-33-6h14M19-6h14" stroke-width="2"/>
+</g>
 </svg>
