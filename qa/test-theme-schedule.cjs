@@ -21,8 +21,8 @@ new vm.Script(script,{filename:'tav-theme-manager.js'});
 assert(style.includes(':root[data-tav-theme="neon-test"]'),'Aparência deve ser escopada');
 assert(style.includes('#sceneGame')&&style.includes('#sceneMultiplayer')&&style.includes('#sceneWelcome'));
 assert(style.includes('tav-theme-board'),'A mesa também deve mudar a cor');
-const originalStyles=[...html.matchAll(/<style\\b[^>]*>([\\s\\S]*?)<\\/style>/gi)]
- .map(m=>m[1]).filter(s=>!s.includes('Noite Neon: APENAS apresentação')).join('\\n');
+const originalStyles=[...html.matchAll(/<style\b[^>]*>([\s\S]*?)<\/style>/gi)]
+ .map(m=>m[1]).filter(s=>!s.includes('Noite Neon: APENAS apresentação')).join('\n');
 const surfaceSelectors=['.table','.felt','.table-felt','.felt-table','.game-table',
  '#table','#gameTable','#gameBoard','#tableFelt','.tav-central-felt','.tabletop',
  '.table-surface','.play-table','.game-board'];
