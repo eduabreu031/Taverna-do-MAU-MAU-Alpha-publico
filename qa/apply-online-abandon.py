@@ -46,7 +46,10 @@ once("el('onlineLeave').onclick=()=>close(true);",
      "el('onlineLeave').onclick=tavLeaveToMainMenu;")
 once("el('multiplayerBackBtn').addEventListener('click',()=>close(true));",
      "el('multiplayerBackBtn').addEventListener('click',tavLeaveToMainMenu);")
-once("finishExit.addEventListener('click',()=>{close(true);el('sceneGame').classList.add('hidden');el('sceneMultiplayer').classList.add('hidden');el('sceneWelcome').classList.remove('hidden');});",
-     "finishExit.addEventListener('click',tavLeaveToMainMenu);")
+original="finishExit.addEventListener('click',()=>{close(true);el('sceneGame').classList.add('hidden');el('sceneMultiplayer').classList.add('hidden');el('sceneWelcome').classList.remove('hidden');});"
+active="<script id=\"online-v84-controller\">"
+before,after=html.split(active,1)
+assert after.count(original)==1,('Controlador Alpha divergente',after.count(original))
+html=before+active+after.replace(original,"finishExit.addEventListener('click',tavLeaveToMainMenu);",1)
 page.write_text(html,encoding='utf8')
 print('ONLINE_ABANDON_READY',len(html))
