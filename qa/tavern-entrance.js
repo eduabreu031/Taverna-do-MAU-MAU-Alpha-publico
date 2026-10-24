@@ -10,10 +10,10 @@ el.innerHTML=`
   <div class="tav-gate-threshold" aria-hidden="true"></div>
   <div class="tav-gate-embers" aria-hidden="true"></div>
   <button type="button" id="tavEntranceDoor" class="tav-gate-door" aria-label="Abrir a porta da Taverna" aria-haspopup="dialog" aria-controls="tavEntranceIdentity">
-   <span>ABRIR PORTA</span>
+   <span>TAVERNA DO MAU MAU</span>
   </button>
  </div>
- <div class="tav-gate-caption" aria-hidden="true"><span>TOQUE NA PORTA PARA ENTRAR</span><small>✦ A TAVERNA DO MAU MAU ESPERA POR VOCÊ ✦</small></div>
+ <div class="tav-gate-caption" aria-hidden="true"><span>TOQUE NA PORTA PARA ENTRAR</span></div>
  <div class="tav-gate-identity" id="tavEntranceIdentity" role="dialog" aria-modal="true" aria-labelledby="tavEntranceTitle" hidden>
   <div class="tav-gate-identity-card">
    <div class="tav-gate-crest" aria-hidden="true">♠</div>
