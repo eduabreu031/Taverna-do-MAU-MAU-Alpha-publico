@@ -35,9 +35,19 @@ function closeModal(){
  if(previousFocus?.isConnected)previousFocus.focus();
  previousFocus=null;
 }
+function themeNotice(){
+ const state=window.TavernaThemeSystem?.getStatus();
+ if(!state?.active)return '';
+ const safe=value=>String(value).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+ const until=window.TavernaThemeSystem.displayDate(state.endsAt);
+ return '<div class="alpha-theme-notice" role="status"><strong>✦ TESTE DE TEMAS EM ANDAMENTO ✦</strong>'+
+ '<p>'+safe(state.notice)+'</p>'+
+ '<small>O visual clássico retorna automaticamente em '+safe(until)+' (Brasília). As funcionalidades e partidas serão mantidas.</small></div>';
+}
 function renderNews(){
  return '<div class="alpha-info-card" tabindex="-1"><div class="alpha-info-head"><span class="alpha-kicker">✦ MENSAGEM DO ARAUTO ✦</span><button type="button" class="alpha-dismiss" id="alphaModalClose" aria-label="Fechar">×</button></div>'+
  '<h2 id="alphaInformationTitle">Novidades da Taverna</h2><p class="alpha-lead">'+current.label+' · '+current.title+'</p>'+
+ themeNotice()+
  DATA.entries.slice(0,4).map((entry,index)=>'<details class="alpha-release" '+(index===0?'open':'')+'><summary>'+entry.label+' — '+entry.title+'</summary><ul>'+entry.items.map(item=>'<li>'+item+'</li>').join('')+'</ul></details>').join('')+
  '<p class="alpha-note">As notas descrevem mudanças publicadas; recursos multiplayer ainda estão em testes públicos.</p>'+
  '<button type="button" class="alpha-primary" id="alphaNewsContinue">Entrar na Taverna</button></div>';
