@@ -1,0 +1,31 @@
+name: Verificar revanche e retorno ao lobby
+on:
+  push:
+    branches: ['fix/vip-rematch-lobby']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validar_geracao:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Preparar dependencias da UI
+        run: python3 -m pip install --disable-pip-version-check cairosvg
+      - name: Construir interface Alpha da mesma forma que a publicacao
+        run: |
+          python3 qa/merge-beta-frontend.py
+          python3 qa/apply-alpha-ui-v91.py site
+          python3 qa/apply-alpha-v92.py site
+          python3 qa/padronizar-nome.py site
+          python3 qa/apply-alpha-accounts.py site
+          python3 qa/apply-vip-bots-ui.py site
+          python3 qa/apply-visitor-entry.py site
+          python3 qa/apply-rematch-lobby.py site
+      - name: Validar regras e scripts resultantes
+        run: node qa/validar.js site
