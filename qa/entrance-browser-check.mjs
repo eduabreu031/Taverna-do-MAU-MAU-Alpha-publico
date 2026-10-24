@@ -68,7 +68,11 @@ try{
  assert.equal(await page.locator('#chooseOffline').count(),1,'Botões foram destruídos após identificação');
  assert.equal(await page.locator('#chooseMultiplayer').count(),1,'Multiplayer desapareceu');
  assert.equal(await page.locator('#chooseRules').count(),1,'Regras desapareceram');
- assert.equal(await page.locator('#sceneWelcome .tav-welcome-name-disabled').count(),1,'O campo de nome deveria desaparecer para usuário autenticado');
+ assert(await page.locator('#playerName').evaluate(x=>getComputedStyle(x).display==='none'),'O campo de nome não foi ocultado para conta');
+ assert(await page.locator('#chooseOffline').isVisible(),'Conta: botão Offline desapareceu');
+ assert(await page.locator('#chooseMultiplayer').isVisible(),'Conta: botão Multiplayer desapareceu');
+ assert(await page.locator('#chooseRules').isVisible(),'Conta: botão Regras desapareceu');
+ assert(await page.locator('#sceneWelcome').evaluate(x=>getComputedStyle(x).display!=='none'),'Conta: menu principal oculto');
  assert((await page.locator('#sceneWelcome').innerText()).includes('Seja bem-vindo, JogadorQA!'),'Saudação personalizada não encontrada');
  await page.waitForFunction(()=>!document.getElementById('tavEntrance'));
  console.log('TAVERN_ENTRANCE_ACCOUNT_OK');
