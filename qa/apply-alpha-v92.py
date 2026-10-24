@@ -35,7 +35,7 @@ html=html.replace("betaTag.textContent='BETA · TAVERNA';betaTag.hidden=true", "
 index.write_text(html,encoding='utf-8')
 sw=site/'sw.js'
 content=sw.read_text(encoding='utf-8')
-updated,num=re.subn(r"const CACHE = '[^']+';","const CACHE = 'taverna-pwa-"+""+"'+data['current']+"+"+"';",content,count=1)
+updated,num=re.subn(r"const CACHE = '[^']+';", "const CACHE = 'taverna-pwa-"+data['current']+"';", content, count=1)
 assert num==1
 sw.write_text(updated,encoding='utf-8')
 print('ALPHA_RELEASE_READY:',data['entries'][0]['label'],'changelog, reports, version, PWA cache')
