@@ -1,0 +1,114 @@
+/* BARALHOS DA TAVERNA — skins de aparência puramente CSS.
+   A identidade física, rank, suit e o conteúdo DOM das cartas nunca mudam.
+   Sem JS, imagens externas, re-render, listeners nem alteração de gameplay.
+   Clássico: nenhum seletor aplicável. */
+:root[data-tav-palette="neon-blue"]{
+ --deck-edge:#4e55cb;--deck-accent:#37def5;--deck-secondary:#a474ff;
+ --deck-core:#111844;--deck-core2:#242474;--deck-paper:#f0f6ff;
+ --deck-ink:#19233d;--deck-red:#ae2146;--deck-glow:#6e78ff7a;
+ --deck-rune:"✧";
+}
+:root[data-tav-palette="neon-green"]{
+ --deck-edge:#167967;--deck-accent:#b3fbca;--deck-secondary:#50dfb3;
+ --deck-core:#082e37;--deck-core2:#135b5c;--deck-paper:#f6fff1;
+ --deck-ink:#182e30;--deck-red:#b52542;--deck-glow:#61f6c174;
+ --deck-rune:"☿";
+}
+:root[data-tav-palette="neon-pink"]{
+ --deck-edge:#91378d;--deck-accent:#ffbded;--deck-secondary:#e766c9;
+ --deck-core:#2b123d;--deck-core2:#6c236d;--deck-paper:#fff3fd;
+ --deck-ink:#352139;--deck-red:#b62355;--deck-glow:#fa83e885;
+ --deck-rune:"✥";
+}
+/* Verso físico e monte de compra; mini cartas são os versos dos bots.
+   Alto contraste com o feltro: bordas claras, núcleo mais escuro, dobra metálica. */
+:root[data-tav-palette^="neon-"] :is(.big-card.card-back,.card-back,.mini-card){
+ border:2px solid var(--deck-accent)!important;
+ background:
+   radial-gradient(ellipse at 50% 46%,var(--deck-secondary) 0 2%,transparent 45%),
+   repeating-linear-gradient(45deg,#ffffff0a 0 1px,transparent 2px 10px),
+   repeating-linear-gradient(-45deg,#ffffff0a 0 1px,transparent 2px 10px),
+   radial-gradient(ellipse at 50% 35%,var(--deck-core2),var(--deck-core) 80%)!important;
+ color:var(--deck-accent)!important;
+ box-shadow:
+   inset 0 0 0 2px var(--deck-core),inset 0 0 0 4px var(--deck-secondary),
+   inset 0 0 16px var(--deck-glow),0 3px 10px #020617b8,
+   0 0 6px var(--deck-glow)!important;
+}
+/* Forma ornamental centrada, sempre ligada ao verso, inclusive animações. */
+:root[data-tav-palette^="neon-"] .card-back::before{
+ content:""!important;
+ inset:15%!important;
+ width:auto!important;height:auto!important;
+ position:absolute!important;
+ transform:rotate(45deg)!important;
+ border:1px solid var(--deck-secondary)!important;
+ box-shadow:inset 0 0 0 2px #ffffff17,0 0 12px var(--deck-glow)!important;
+ border-radius:2px!important;
+ pointer-events:none!important;
+}
+:root[data-tav-palette^="neon-"] .card-back .coat{
+ font-size:0!important;
+ text-shadow:none!important;
+ z-index:1!important;
+ filter:none!important;
+}
+:root[data-tav-palette^="neon-"] .card-back .coat::before{
+ content:var(--deck-rune)!important;
+ display:block!important;
+ font-family:Georgia,serif!important;
+ font-size:clamp(20px,3vw,36px)!important;
+ line-height:1!important;
+ color:var(--deck-accent)!important;
+ text-shadow:0 0 10px var(--deck-accent),0 0 20px var(--deck-glow)!important;
+}
+/* Naipes e índices nunca são substituídos. Frente contrastante, limpa e sofisticada. */
+:root[data-tav-palette^="neon-"] .card-face{
+ border:2px solid var(--deck-edge)!important;
+ background:
+  radial-gradient(ellipse at 44% 14%,#fff 0%,transparent 64%),
+  repeating-linear-gradient(118deg,#10162c05 0 1px,transparent 2px 12px),
+  radial-gradient(ellipse at 50% 31%,#fff,var(--deck-paper) 79%,#d2d8e9 100%)!important;
+ color:var(--deck-ink)!important;
+ box-shadow:
+  inset 0 0 0 2px #ffffffed,inset 0 0 0 5px var(--deck-secondary),
+  inset 0 0 15px #ffffff81,0 5px 13px #060b22b8,
+  0 0 6px var(--deck-glow)!important;
+}
+/* Copas e ouros seguem vermelhos. Paus e espadas seguem escuros.
+   Todos os índices herdam as mesmas cores dos naipes correspondentes. */
+:root[data-tav-palette^="neon-"] .card-face.red{
+ color:var(--deck-red)!important;
+}
+:root[data-tav-palette^="neon-"] .card-face .orn{
+ border:1px solid var(--deck-secondary)!important;
+ opacity:.56!important;
+ box-shadow:inset 0 0 8px var(--deck-glow)!important;
+ pointer-events:none!important;
+}
+:root[data-tav-palette^="neon-"] .card-face .suit-center{
+ text-shadow:0 2px 1px #d2d8e0!important;
+}
+:root[data-tav-palette^="neon-"] .mini-card::before{
+ content:var(--deck-rune)!important;
+ position:absolute!important;
+ inset:5px 3px!important;
+ border:1px solid var(--deck-secondary)!important;
+ display:grid!important;
+ place-items:center!important;
+ color:var(--deck-accent)!important;
+ font:700 13px Georgia,serif!important;
+ text-shadow:0 0 4px var(--deck-accent)!important;
+ pointer-events:none!important;
+}
+/* Efeitos de compra/descarte copiam a mesma estrutura .big-card;
+   as regras estilizam por DOM, não por ID de carta ou posição da mão. */
+:root[data-tav-palette^="neon-"] :is(.draw-pile,.playing-card,.big-card){
+ --deck-visual-theme:1;
+}
+/* Estado de seleção preserva o destaque original, com filete temático. */
+:root[data-tav-palette^="neon-"] .playing-card.selected .big-card{
+ outline:3px solid var(--deck-accent)!important;
+ outline-offset:2px!important;
+}
+/* Nunca altere opacity, visibility, transform, cursor, touch-action nem hitboxes. */
