@@ -43,6 +43,22 @@ test('Pular para o final é consenso entre humanos apenas no modo online',()=>{
  assert(html.includes('requestAnimationFrame(placeSkipFinalNearHand)'),'Reposicionamento não acompanha os votos');
  assert(html.includes('bottom:auto'),'Botão continua preso à borda inferior da tela');
 });
+test('Comunicação multiplayer: balões, limite, microfone e expulsão',()=>{
+ assert(html.includes("tavSocialLauncher.id='tavSocialLauncher'"),'Botão de comunicação ausente');
+ assert(html.includes("type:'social_send'"),'Comunicação não chama servidor');
+ assert(html.includes("kind:'audio'"),'Falta envio de áudio');
+ assert(html.includes('getUserMedia'),'Captura de microfone ausente');
+ assert(html.includes('pcm16'),'Falta PCM padronizado para Android/iPhone');
+ assert(html.includes('tavIncomingSocial(m)'),'Evento não recebido em tempo real');
+ assert(html.includes('tavRemovedByVote(m)'),'Expulsão não recebida');
+ assert(html.includes('tavUpdateSocialFromState(m)'),'Controle não acompanha eliminação');
+ assert(html.includes("type:'vote_kick_start'"),'Falta início da votação');
+ assert(html.includes("type:'vote_kick_cast'"),'Falta votação de expulsão');
+ assert(html.includes("showFinished(game);showSkipFinal(m.skipFinal);tavUpdateSocialFromState(m);"),'Sincronização da interface incompleta');
+ assert(html.includes('if(!alive){tavSocialMenu.hidden=true;tavStopRecord(false);}' ),'Eliminado ainda pode gravar');
+ assert(html.includes("if(!ac||ac.state!=='running')return;"),'Áudio bloqueado precisa ser ignorado');
+ assert(!html.includes('Reproduzir áudio manualmente'),'Não mostrar botão de reprodução');
+});
 test('Cache busca versão nova e mantém offline',()=>{
  const sw=fs.readFileSync(path.join(site,'sw.js'),'utf8');
  new vm.Script(sw,{filename:'sw.js'});
