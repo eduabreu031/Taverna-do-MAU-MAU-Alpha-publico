@@ -25,17 +25,14 @@
 /* Anular o amarelo original do turno adversário, sem afetar as cartas,
    retratos nem efeitos de sinalização do motor. */
 :root[data-tav-palette^="neon-"] #sceneGame #seats .seat.active .bot-fan{
- filter:drop-shadow(0 0 8px var(--tav-turn-bright))
-  drop-shadow(0 0 14px var(--tav-turn-edge))!important;
+ filter:none!important;
 }
 :root[data-tav-palette^="neon-"] #sceneGame #seats .seat.active .bot-avatar{
- filter:drop-shadow(0 0 8px var(--tav-turn-bright))
-  drop-shadow(0 0 16px var(--tav-turn-edge))!important;
+ filter:none!important;
 }
 :root[data-tav-palette^="neon-"] #sceneGame #seats .seat.active .portrait-medallion{
  border:3px solid var(--tav-turn-bright)!important;
- box-shadow:0 0 0 2px var(--tav-turn-edge),0 0 13px 4px var(--tav-turn-bright),
-  0 0 31px 10px var(--tav-turn-edge)!important;
+ box-shadow:0 0 12px 3px var(--tav-turn-edge)!important;
 }
 :root[data-tav-palette^="neon-"] #sceneGame #seats .seat.active .npc-timer{
  border-color:var(--tav-turn-bright)!important;
@@ -90,9 +87,7 @@
 :root[data-tav-palette^="neon-"] #sceneGame .table-shell .seat.active .portrait-medallion{
  animation:none!important;
  border-color:var(--tav-turn-bright)!important;
- box-shadow:0 0 0 2px var(--tav-turn-edge),
-  0 0 13px 4px var(--tav-turn-bright),
-  0 0 29px 9px var(--tav-turn-edge)!important;
+ box-shadow:0 0 12px 3px var(--tav-turn-edge)!important;
 }
 :root[data-tav-palette^="neon-"] #sceneGame .table-shell .seat.active .name-text{
  color:var(--tp-bright)!important;
@@ -142,13 +137,26 @@
 /* Reafirma o destaque cromático do avatar sem herdar amarelo dos
    keyframes do motor. Não remove a iluminação de turno existente. */
 :root[data-tav-palette^="neon-"] #sceneGame #seats .seat.active .bot-avatar{
- filter:drop-shadow(0 0 8px var(--tav-turn-bright))
-        drop-shadow(0 0 16px var(--tav-turn-edge))!important;
+ filter:none!important;
 }
 :root[data-tav-palette^="neon-"] #sceneGame #seats .seat.active .portrait-medallion{
  animation:none!important;
  border-color:var(--tav-turn-bright)!important;
- box-shadow:0 0 0 2px var(--tav-turn-edge),
-            0 0 13px 4px var(--tav-turn-bright),
-            0 0 29px 9px var(--tav-turn-edge)!important;
+ box-shadow:0 0 12px 3px var(--tav-turn-edge)!important;
+}
+
+/* v0.5.0.17: uma única fonte de halo. Evita somar sombras em
+   bot-avatar, bot-fan, placas de nome e no próprio medalhão. */
+:root[data-tav-palette^="neon-"] #sceneGame #seats .seat.active :is(.bot-avatar,.bot-fan,.opphand,.leather-name){
+ filter:none!important;
+}
+:root[data-tav-palette^="neon-"] #sceneGame #seats .seat.active .leather-name{
+ text-shadow:none!important;
+}
+:root[data-tav-palette^="neon-"] #sceneGame #seats .seat.active .portrait-medallion{
+ filter:none!important;
+ animation:none!important;
+ outline:none!important;
+ border:2px solid var(--tav-turn-edge)!important;
+ box-shadow:0 0 12px 3px var(--tav-turn-edge)!important;
 }
