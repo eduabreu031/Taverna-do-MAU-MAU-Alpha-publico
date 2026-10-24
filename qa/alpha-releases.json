@@ -1,7 +1,19 @@
 {
-  "current": "alpha-0.5.0.18",
+  "current": "alpha-0.5.0.19",
   "issuesRepo": "eduabreu031/Taverna-do-MAU-MAU-Alpha-publico",
   "entries": [
+    {
+      "id": "alpha-0.5.0.19",
+      "label": "0.5.0.19-alpha",
+      "date": "2026-10-24",
+      "title": "Entrada da Taverna redesenhada: pedra, carvalho e sombras",
+      "items": [
+        "Reconstruída a fachada com arte vetorial detalhada de pedra irregular, vigas de madeira, letreiro entalhado, arcos, lanternas, banners e calçamento úmido, em estilo medieval realista e cinematográfico.",
+        "A porta de carvalho com ferragens ganhou peça visual independente e abertura 2.5D em perspectiva, revelando iluminação quente do interior.",
+        "Refinado o painel de identificação com acabamento escuro, relevo metálico e tipografia sóbria, mantendo todas as ações originais.",
+        "Assets locais incluídos no cache offline da PWA; preservadas contas, visitante, Rádio, Arauto, temas de mesa, multiplayer e motor de regras."
+      ]
+    },
     {
       "id": "alpha-0.5.0.18",
       "label": "0.5.0.18-alpha",
