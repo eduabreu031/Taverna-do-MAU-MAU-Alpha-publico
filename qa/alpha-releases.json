@@ -1,7 +1,19 @@
 {
-  "current": "alpha-0.5.0.20",
+  "current": "alpha-0.5.0.21",
   "issuesRepo": "eduabreu031/Taverna-do-MAU-MAU-Alpha-publico",
   "entries": [
+    {
+      "id": "alpha-0.5.0.21",
+      "label": "0.5.0.21-alpha",
+      "date": "2026-10-24",
+      "title": "Porta medieval em tela cheia e escolha de temas simplificada",
+      "items": [
+        "A entrada mostra somente a porta medieval de carvalho e ferro, grande e detalhada, quase em tela cheia no celular, com o texto para tocar e entrar; removida a fachada fotográfica e os elementos de cenário.",
+        "A abertura animada da porta e o painel de identificação permanecem funcionais, incluindo conta, troca de conta e acesso como Forasteiro.",
+        "No seletor de aparência, removidos o aviso de eventos, a nota de preferência salva e os textos explicativos; ficam apenas os quatro temas e os comandos essenciais.",
+        "O asset da porta continua local e disponível offline. Nenhuma alteração no motor de cartas ou nas salas multiplayer."
+      ]
+    },
     {
       "id": "alpha-0.5.0.20",
       "label": "0.5.0.20-alpha",
