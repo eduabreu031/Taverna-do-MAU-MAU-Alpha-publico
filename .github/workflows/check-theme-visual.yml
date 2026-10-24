@@ -21,6 +21,7 @@ on:
       - 'qa/theme-real-game-audit.mjs'
       - 'qa/theme-schedule.json'
       - 'qa/apply-seasonal-theme.py'
+      - 'qa/inspect-entrance-hooks.py'
   workflow_dispatch:
 permissions:
   contents: read
@@ -50,6 +51,8 @@ jobs:
           python3 qa/apply-social-features.py site
           python3 qa/apply-online-abandon.py site
           python3 qa/apply-seasonal-theme.py site
+      - name: Inspecionar ganchos de áudio para a entrada
+        run: python3 qa/inspect-entrance-hooks.py
       - name: Analisar baralhos e seletor de naipes antes das correções
         run: |
           python3 qa/inspect-card-theme.py
