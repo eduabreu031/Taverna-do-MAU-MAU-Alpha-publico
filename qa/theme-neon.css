@@ -1,0 +1,109 @@
+/* Noite Neon: APENAS apresentação. Nenhum seletor afeta cartas, input, timers ou lógica.
+   Ausência de [data-tav-theme="neon-test"] = tema clássico original, sem rollback. */
+:root[data-tav-theme="neon-test"]{
+ --tav-theme-midnight:#090b2b;
+ --tav-theme-royal:#21145e;
+ --tav-theme-purple:#8234ef;
+ --tav-theme-blue:#326ffe;
+ --tav-theme-cyan:#80f3ff;
+ --tav-theme-text:#f4efff;
+ --tav-theme-panel:linear-gradient(150deg,#231459,#101134 58%,#080a27);
+ --tav-theme-edge:#8d63ff;
+ --tav-theme-board:radial-gradient(ellipse at 42% 29%,#343391 0%,#211c6b 43%,#141344 78%,#080b24 100%);
+ color-scheme:dark
+}
+:root[data-tav-theme="neon-test"] body{
+ background:radial-gradient(ellipse at 22% 4%,#30208d 0%,#120d40 35%,#060819 90%)!important;
+ color:var(--tav-theme-text)!important;
+}
+/* Telas completas — efeitos de iluminação azul/violeta, sem blocos sobre a mesa. */
+:root[data-tav-theme="neon-test"] :is(#sceneWelcome,#sceneMenu,#sceneMultiplayer,#sceneGame){
+ background:radial-gradient(ellipse at 30% 6%,#272071 0%,#101340 43%,#070a22 90%)!important;
+ color:var(--tav-theme-text)!important;
+}
+/* Feltro da mesa; escopado para não recolorir as faces das cartas. */
+:root[data-tav-theme="neon-test"] :is(
+ #table,#gameTable,#gameBoard,#tableFelt,#tableSurface,#mesa,#felt,
+ .game-table,.game-board,.game-felt,.table-felt,.table-surface,
+ .felt-table,.felt-surface,.table-cloth,.mesa-jogo,.tav-central-felt
+){
+ background:var(--tav-theme-board)!important;
+ border-color:#635bff!important;
+ box-shadow:inset 0 7px 40px #090a30ad,inset 0 -9px 44px #1616519a,0 8px 36px #170f54b5!important;
+}
+/* O palco de jogo pode receber diferentes superfícies conforme a orientação. */
+:root[data-tav-theme="neon-test"] #sceneGame :is(
+ .table,.tabletop,.table-top,.table-field,.felt,.felt-board,.felt-bg,
+ .table-background,.table-container,.play-table,.playing-table,
+ .table-cloth,.oval-table,.board-surface
+){
+ background:var(--tav-theme-board)!important;
+ border-color:#635bff!important;
+}
+/* Painéis e menus. Não mudamos padding, dimensões, hierarquia ou cliques. */
+:root[data-tav-theme="neon-test"] :is(
+ .welcome-panel,.welcome-content,.menu-panel,.menu-card,.multiplayer-panel,
+ #onlineLobby,.multiplayer-lobby,.alpha-info-card,.alpha-accounts-panel,
+ .rules-book,.tav-central-panel,.tav-bots-sheet,.tav-bots-panel,
+ #tavSocialMenu,#tavSocialVote,.tav-abandon-card,
+ .tav-vip-admin-panel,.tav-central-counter,.tav-central-report
+){
+ background:var(--tav-theme-panel)!important;
+ color:var(--tav-theme-text)!important;
+ border-color:var(--tav-theme-edge)!important;
+ box-shadow:inset 0 0 0 1px #76c5ff42,0 12px 42px #06091ebe!important;
+}
+:root[data-tav-theme="neon-test"] :is(
+ .welcome-mode,.engraved-btn,#alphaTopTools button,
+ #rulesModalDEV .rules-tabs button,#rulesCloseDEV,
+ .alpha-primary,.alpha-secondary,
+ .tav-central-panel button,.tav-bots-choice,
+ #tavSocialLauncher,#tavSocialMenu button,#tavSocialVote button,
+ #tavAbandonOverlay button
+){
+ background:linear-gradient(145deg,#4c2ca4,#232579 64%,#174694)!important;
+ color:#f4f4ff!important;
+ border-color:#a879ff!important;
+ box-shadow:0 3px 13px #4d37e260,inset 0 1px 0 #add5ff50!important;
+}
+:root[data-tav-theme="neon-test"] :is(
+ .welcome-mode:hover,.engraved-btn:hover,
+ .alpha-primary:hover,#alphaTopTools button:hover,
+ #tavSocialLauncher:hover
+){
+ border-color:#7bfeff!important;
+ box-shadow:0 0 17px #50dcff64,inset 0 1px 0 #b2f7ff9c!important;
+}
+:root[data-tav-theme="neon-test"] :is(
+ h1,h2,.rules-book h2,.alpha-info-card h2,.alpha-lead,
+ .welcome-mode strong,.alpha-kicker,.rules-kicker,
+ #alphaVersionStamp,#tavAbandonTitle,.tav-central-header h2
+){color:#bbdfff!important;text-shadow:0 0 13px #553bff7c!important}
+:root[data-tav-theme="neon-test"] :is(
+ .rules-content,.rules-content h3,.alpha-release,
+ .alpha-note,.tav-central-status,.alpha-info-card li
+){color:#ebe8ff!important}
+:root[data-tav-theme="neon-test"] :is(
+ .alpha-release,.rules-content,#alphaVersionStamp,
+ #tavSocialMenu input,#tavSocialMenu select,
+ #alphaFeedbackForm input,#alphaFeedbackForm select,#alphaFeedbackForm textarea
+){
+ background:#12113d!important;
+ border-color:#7771ff!important;
+ color:#f8f2ff!important;
+}
+:root[data-tav-theme="neon-test"] :is(
+ .alpha-information-overlay,#rulesModalDEV,#tavAbandonOverlay,.tav-central-overlay
+){background:#07091bdc!important}
+/* Molduras dos retratos podem receber luz de ambiente, sem alterar sua identidade. */
+:root[data-tav-theme="neon-test"] :is(
+ #sceneGame .portrait-medallion,#sceneGame .bot-avatar,#humanAvatar .portrait-medallion
+){filter:drop-shadow(0 0 8px #633eff70)}
+/* Preserva legibilidade e significado das cores de cartas e naipes. */
+:root[data-tav-theme="neon-test"] :is(
+ .card,.playing-card,.game-card,.card-face,[data-card-id]
+){color:inherit}
+/* Imprime os tons escuros apenas quando for necessário; não muda ações. */
+@media(prefers-reduced-motion:reduce){
+ :root[data-tav-theme="neon-test"] :is(.welcome-mode,.engraved-btn){transition:none!important}
+}
