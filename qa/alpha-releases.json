@@ -1,7 +1,19 @@
 {
-  "current": "alpha-0.5.0.7",
+  "current": "alpha-0.5.0.8",
   "issuesRepo": "eduabreu031/Taverna-do-MAU-MAU-Alpha-publico",
   "entries": [
+    {
+      "id": "alpha-0.5.0.8",
+      "label": "0.5.0.8-alpha",
+      "date": "2026-10-24",
+      "title": "Noite Neon — ensaio de temas sazonais",
+      "items": [
+        "Novo sistema de temas independentes do motor, com ativação e desativação automática conforme datas programadas.",
+        "Teste azul e roxo neon programado hoje das 15h50 às 17h50 (horário de Brasília), com retorno automático ao visual tradicional.",
+        "O pergaminho de novidades informa o período do ensaio enquanto o tema estiver ativo.",
+        "O modo offline, as cartas, as salas multiplayer, os bots e todas as melhorias continuam sendo os mesmos ao término do tema."
+      ]
+    },
     {
       "id": "alpha-0.5.0.7",
       "label": "0.5.0.7-alpha",
