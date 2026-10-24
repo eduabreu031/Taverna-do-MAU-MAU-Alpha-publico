@@ -42,7 +42,7 @@ function themeNotice(){
  const until=window.TavernaThemeSystem.displayDate(state.endsAt);
  return '<div class="alpha-theme-notice" role="status"><strong>✦ TESTE DE TEMAS EM ANDAMENTO ✦</strong>'+
  '<p>'+safe(state.notice)+'</p>'+
- '<small>O visual clássico retorna automaticamente em '+safe(until)+' (Brasília). As funcionalidades e partidas serão mantidas.</small></div>';
+ '<small>O evento termina automaticamente em '+safe(until)+' (Brasília). A paleta escolhida pelo jogador será preservada, assim como partidas e funcionalidades.</small></div>';
 }
 function renderNews(){
  return '<div class="alpha-info-card" tabindex="-1"><div class="alpha-info-head"><span class="alpha-kicker">✦ MENSAGEM DO ARAUTO ✦</span><button type="button" class="alpha-dismiss" id="alphaModalClose" aria-label="Fechar">×</button></div>'+
