@@ -38,6 +38,10 @@ test('Pular para o final é consenso entre humanos apenas no modo online',()=>{
  assert(html.includes("showSkipFinal(m.skipFinal)"),'Votação não recebe estado autoritativo');
  assert(html.includes("showSkipFinal(null)"),'Lobby não limpa votação antiga');
  assert(html.includes("state.votes+'/'+state.needed"),'Contagem de confirmações ausente');
+ assert(html.includes('function placeSkipFinalNearHand()'),'Falta reposicionamento para a área da mão');
+ assert(html.includes("document.getElementById('humanHand')"),'Posicionamento não referencia a mão');
+ assert(html.includes('requestAnimationFrame(placeSkipFinalNearHand)'),'Reposicionamento não acompanha os votos');
+ assert(html.includes('bottom:auto'),'Botão continua preso à borda inferior da tela');
 });
 test('Cache busca versão nova e mantém offline',()=>{
  const sw=fs.readFileSync(path.join(site,'sw.js'),'utf8');
