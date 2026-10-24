@@ -18,6 +18,7 @@ try{
     '#sceneMenu .book','#sceneMenu .book-page',
     '#sceneGame #tableShell','#sceneGame #tableShell>.felt',
     '#sceneGame .game-header','#sceneGame .control-bar',
+    '#sceneGame #humanZone','#sceneGame .action-list',
     '#tavAppearanceOverlay .tav-appearance-card',
     '#tavSocialMenu','#tavAbandonOverlay .tav-abandon-card'
    ];
@@ -48,6 +49,7 @@ try{
    '#sceneMenu .book','#sceneMenu .book-page',
    '#sceneGame #tableShell','#sceneGame #tableShell>.felt',
    '#sceneGame .game-header','#sceneGame .control-bar',
+    '#sceneGame #humanZone','#sceneGame .action-list',
    '#tavAppearanceOverlay .tav-appearance-card'
   ];
   for(const selector of must){
