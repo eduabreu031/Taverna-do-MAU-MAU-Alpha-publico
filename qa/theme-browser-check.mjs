@@ -161,6 +161,7 @@ try{
      overlayVisible:getComputedStyle(overlay).display
     };
   });
+  console.log('THEME_SUIT_GEOMETRY',JSON.stringify({width,geometry:choose}));
   assert(choose.panel.width>=250&&choose.panel.width<430,'Painel de naipe vazio/estreito');
   assert(choose.panel.height>180&&choose.panel.height<650,'Painel de naipe ocupa a tela inteira');
   assert(choose.bg!=='none','Painel de escolha precisa ter aparência temática');
