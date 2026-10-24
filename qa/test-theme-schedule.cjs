@@ -45,7 +45,7 @@ class FakeDate extends Date{static now(){return clock;}}
 class FakeEvent{constructor(type,opts){this.type=type;this.detail=opts.detail;}}
 const context={document,window,navigator:{onLine:false},Date:FakeDate,
  Intl,CustomEvent:FakeEvent,URL,setInterval(fn){interval=fn;return 1;},
- console};
+ setTimeout(fn){return 2;},clearTimeout(){},console};
 vm.runInNewContext(script,context,{timeout:1000});
 assert.equal(typeof interval,'function','Verificação periódica ausente');
 function check(at,active){
