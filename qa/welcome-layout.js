@@ -19,12 +19,9 @@ buttons.forEach((b,i)=>{
 });
 const authenticLabel=field.closest('label')||root.querySelector('label[for="playerName"]');
 const nameRegion=field.parentElement;
-const welcomeCandidates=Array.from(root.querySelectorAll('h1,h2,h3,p,.welcome-subtitle,.welcome-heading,.hero-greeting,.welcome-intro'));
-let greeting=welcomeCandidates.find(e=>/seja bem.vindo/i.test(e.textContent||'')&&e.children.length<4);
-if(!greeting){
- const list=Array.from(root.querySelectorAll('*')).filter(e=>e.children.length===0&&/seja bem.vindo/i.test(e.textContent||''));
- greeting=list[0]||null;
-}
+// NUNCA substituir textContent de um contêiner: isso remove seus botões e inputs.
+const greeting=Array.from(root.querySelectorAll('h1,h2,h3,p,span,strong'))
+ .find(e=>e.children.length===0&&/seja bem.vindo/i.test(e.textContent||''))||null;
 const originalGreeting=greeting?.textContent||'';
 function update(){
  const u=window.TavernaAuth?.getUser?.();
