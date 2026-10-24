@@ -104,3 +104,192 @@
 @media(prefers-reduced-motion:reduce){
  :root[data-tav-theme="neon-test"] :is(.welcome-mode,.engraved-btn){transition:none!important}
 }
+
+
+/* =============================================================
+   Camada 2 — seletores verificados no DOM original da v0.5.0.8.
+   O CSS antigo atingia #table e .game-table (não existem);
+   a mesa real é #tableShell > .felt com cenas internas 2D.
+   Esta camada NÃO altera posicionamento, cartas nem eventos.
+   ============================================================= */
+:root[data-tav-theme="neon-test"] {
+ --tav-neon-outer:radial-gradient(ellipse at 21% 4%,#3631aa 0%,#151751 41%,#090d31 78%,#080d24 100%);
+ --tav-neon-wood:radial-gradient(ellipse at 17% 6%,#5636bb88,transparent 43%),repeating-linear-gradient(91deg,#111c54 0 9px,#202763 10px 20px,#141748 21px 32px);
+ --tav-neon-felt:radial-gradient(ellipse at 35% 19%,#6155da8c,transparent 40%),radial-gradient(ellipse at 70% 87%,#15124aa9,transparent 61%),repeating-linear-gradient(105deg,#ffffff05 0 1px,transparent 2px 6px),radial-gradient(ellipse at 52% 43%,#303aab 0%,#231a76 58%,#0c1748 100%);
+ --tav-neon-parchment:radial-gradient(ellipse at 31% 8%,#342e88,#1c1a61 51%,#11163b 100%);
+ --tav-neon-ink:#e9ecff;
+ --tav-neon-light:#a8e9ff;
+ --tav-neon-border:#777aff;
+}
+/* Iluminação ambiental dos saguões e da tela da mesa. */
+:root[data-tav-theme="neon-test"] :is(
+ #sceneWelcome,#sceneMenu,#sceneMultiplayer,#sceneGame
+){
+ background:var(--tav-neon-outer)!important;
+}
+:root[data-tav-theme="neon-test"] :is(
+ #sceneWelcome::before,#sceneMultiplayer::before,#sceneMenu::before,
+ #sceneGame::before
+){
+ background:
+ radial-gradient(circle at 16% 18%,#5e52ed32,transparent 37%),
+ radial-gradient(circle at 85% 67%,#02c6ff21,transparent 42%),
+ repeating-linear-gradient(87deg,#ffffff02 0 30px,transparent 31px 42px)!important;
+}
+/* Mesa física (inclusive layout horizontal, vertical e multiplayer). */
+:root[data-tav-theme="neon-test"] #sceneGame #tableShell{
+ background:var(--tav-neon-wood)!important;
+ border-color:#7f64ef!important;
+ box-shadow:inset 0 6px 20px #b3a9ff28,inset 0 -12px 26px #080d3999,0 11px 35px #04091bba!important;
+}
+:root[data-tav-theme="neon-test"] #sceneGame #tableShell>.felt,
+:root[data-tav-theme="neon-test"] #sceneGame .felt{
+ background:var(--tav-neon-felt)!important;
+ border-color:#7070ed!important;
+ box-shadow:inset 0 11px 37px #09103e92,inset 0 -15px 25px #11155097,0 0 19px #3a4bef55!important;
+}
+:root[data-tav-theme="neon-test"] #sceneGame #tableShell>.felt::before,
+:root[data-tav-theme="neon-test"] #sceneGame .felt::before{
+ background:repeating-linear-gradient(112deg,#a5adff10 0 1px,transparent 2px 6px),
+ repeating-linear-gradient(13deg,#060c3617 0 1px,transparent 3px 9px)!important;
+}
+:root[data-tav-theme="neon-test"] #sceneGame #tableShell>.felt::after,
+:root[data-tav-theme="neon-test"] #sceneGame .felt::after{
+ background:repeating-linear-gradient(117deg,#d4dbff07 0 1px,transparent 2px 8px),
+ radial-gradient(ellipse at 51% 31%,#8378ed2f,transparent 70%)!important;
+}
+/* Uma sombra quente originalmente cobria o feltro: trocar a iluminação,
+   em vez de acrescentar uma película que impediria jogar cartas. */
+:root[data-tav-theme="neon-test"] #tableShell>.ambient-shadow{
+ background:radial-gradient(circle at 10% 27%,#8e53ee2f,transparent 34%),
+ radial-gradient(circle at 89% 77%,#2698ff30,transparent 38%),
+ radial-gradient(ellipse at 50% 70%,transparent 30%,#060c3c83 100%)!important;
+ pointer-events:none;
+}
+:root[data-tav-theme="neon-test"] #tableShell>.table-stamp{
+ filter:hue-rotate(175deg) saturate(1.28)!important;
+ opacity:.2!important;
+}
+:root[data-tav-theme="neon-test"] #tableShell :is(.parchment-prop,.book-prop){
+ background:linear-gradient(135deg,#3b3089,#151947)!important;
+ border-color:#8c7be9!important;
+}
+:root[data-tav-theme="neon-test"] #tableShell :is(.mug-prop,.candle-prop){
+ filter:hue-rotate(140deg) saturate(1.15);
+}
+:root[data-tav-theme="neon-test"] #sceneGame :is(
+ .game-header,.v80-floating-header,.table-status-medallion,
+ .control-bar,.history-drawer,.human-leather,.human-count,
+ .leather-name,.seat .leather-name,.center-crest,.round-pill,
+ .active-suit,.toast,.wood-scoreboard,.utility-toolbar
+){
+ background:linear-gradient(155deg,#322373,#151d50 75%,#0c1235)!important;
+ border-color:#736ff3!important;
+ color:#f0eaff!important;
+}
+:root[data-tav-theme="neon-test"] #sceneGame :is(
+ .seat .leather-name .count,.seat .npc-timer .timer-mark,
+ .human-topline .clock,.leather-name .count
+){background:#171d55!important;color:#f4eaff!important}
+:root[data-tav-theme="neon-test"] #sceneGame .portrait-medallion{
+ background:#232365!important;
+ border-color:#8474fa!important;
+ box-shadow:0 0 10px #5e52ff66!important;
+}
+/* Os livros e páginas do menu OFFLINE são o fundo visível, não #sceneMenu. */
+:root[data-tav-theme="neon-test"] #sceneMenu .book{
+ background:var(--tav-neon-wood)!important;
+ border-color:#8174ee!important;
+ box-shadow:0 15px 42px #030821dd,0 0 17px #5941ee6e!important;
+}
+:root[data-tav-theme="neon-test"] #sceneMenu .book::before,
+:root[data-tav-theme="neon-test"] #sceneMenu .book::after{
+ background:linear-gradient(90deg,#171a52,#392875 60%,#111747)!important;
+}
+:root[data-tav-theme="neon-test"] #sceneMenu :is(
+ .book-page,.book-page.left-page,.book-page.right-page,
+ .hero-choice,.illuminated-letter,.book-tab
+){
+ background:var(--tav-neon-parchment)!important;
+ border-color:#7273df!important;
+ color:var(--tav-neon-ink)!important;
+ box-shadow:inset 0 1px 20px #6677d319!important;
+}
+:root[data-tav-theme="neon-test"] #sceneMenu .hero-choice.chosen{
+ background:linear-gradient(135deg,#5142aa,#252778)!important;
+ border-color:#81ecff!important;
+ box-shadow:0 0 16px #59bcff82!important;
+}
+:root[data-tav-theme="neon-test"] #sceneMenu .hero-choice .hero-frame{
+ background:#151747!important;
+ border-color:#8f78e8!important;
+}
+:root[data-tav-theme="neon-test"] #sceneMenu :is(
+ .book-page::before,.book-page::after,.book-page .wax-seal,
+ .wax-seal
+){filter:hue-rotate(125deg) saturate(1.15)}
+:root[data-tav-theme="neon-test"] #sceneMenu :is(
+ .book-page select,#playerName,.hero-choice label
+){background:#171843!important;color:#f0ecff!important;border-color:#7970e9!important}
+/* Superfícies dos menus inicial, multiplayer e lobby. */
+:root[data-tav-theme="neon-test"] #sceneWelcome :is(
+ .welcome-panel,.welcome-mode,.welcome-crest
+),
+:root[data-tav-theme="neon-test"] #sceneMultiplayer :is(
+ .multiplayer-panel,#onlineLobby,.multiplayer-state,
+ .multiplayer-preview>div,.multiplayer-mark,#onlineRoomCode
+){
+ background:var(--tav-neon-parchment)!important;
+ color:#eeecff!important;
+ border-color:#7875ef!important;
+ box-shadow:inset 0 1px 24px #7975f51e,0 0 22px #241b8d52!important;
+}
+:root[data-tav-theme="neon-test"] :is(
+ #sceneWelcome,#sceneMultiplayer,#sceneMenu
+) :is(h1,h2,h3,strong,.welcome-pretitle,.multiplayer-eyebrow,.multiplayer-mark){
+ color:#bdedff!important;
+ text-shadow:0 0 12px #8c55f5aa!important;
+}
+:root[data-tav-theme="neon-test"] :is(
+ #sceneWelcome,#sceneMultiplayer,#sceneMenu
+) :is(p,small,label,.welcome-footnote,.multiplayer-copy,.mode-footer){
+ color:#dce2ff!important;
+}
+:root[data-tav-theme="neon-test"] #sceneWelcome .welcome-mode{
+ background:linear-gradient(140deg,#3d2b98,#1a205b)!important;
+ border-color:#9d8cff!important;
+}
+:root[data-tav-theme="neon-test"] #sceneMultiplayer :is(
+ #onlineCode,#onlineRoomCode,#onlineLobby,.multiplayer-state,.multiplayer-preview>div
+){
+ background:#171a50!important;
+ border-color:#7975dd!important;
+ color:#f4edff!important;
+}
+:root[data-tav-theme="neon-test"] #sceneMultiplayer .multiplayer-state-dot{
+ background:#85eeff!important;
+ box-shadow:0 0 10px #60eeffb3!important;
+}
+/* Resultados, cartas continuam originais; só moldura de modais e feedback.
+   Escopo rigoroso evita tornar cartas vermelhas/pretas ilegíveis. */
+:root[data-tav-theme="neon-test"] :is(
+ .alpha-information-overlay .alpha-info-card,
+ #rulesModalDEV .rules-book,#tavAbandonOverlay .tav-abandon-card,
+ .tav-central-panel,#tavSocialMenu,#tavSocialVote
+){
+ background:var(--tav-neon-parchment)!important;
+ color:#eeeaff!important;
+ border-color:#8a78ee!important;
+}
+:root[data-tav-theme="neon-test"] :is(
+ .alpha-release,.alpha-theme-notice,.alpha-feedback-success,
+ .tav-central-counter,.tav-central-report
+){background:linear-gradient(140deg,#332877,#171b51)!important;color:#f0edff!important;border-color:#8880ff!important}
+:root[data-tav-theme="neon-test"] #rulesModalDEV :is(
+ .rules-content,.rules-content h3,.rules-kicker,.rules-book h2
+){color:#eaf1ff!important}
+:root[data-tav-theme="neon-test"] .alpha-info-card :is(
+ .alpha-lead,.alpha-note,.alpha-release li,#alphaInformationTitle
+){color:#e6e6ff!important}
+/* The original table's own SVG portraits and bitmap icons stay intact.
+   No image replacement, no layer above the felt, no pointer interception. */
