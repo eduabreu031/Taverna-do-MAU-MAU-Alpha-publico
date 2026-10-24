@@ -8,6 +8,7 @@ on:
       - 'qa/theme-player-palettes.css'
       - 'qa/theme-card-decks.css'
       - 'qa/theme-gameplay-hotfix.css'
+      - 'qa/theme-turn-highlights.css'
       - 'qa/theme-seasonal-overlay.css'
       - 'qa/appearance-menu.css'
       - 'qa/appearance-menu.js'
