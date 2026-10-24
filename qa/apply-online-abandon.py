@@ -50,7 +50,7 @@ original="finishExit.addEventListener('click',()=>{close(true);el('sceneGame').c
 active="<script id=\"online-v84-controller\">"
 before,after=html.split(active,1)
 controller,tail=after.split('</script>',1)
-assert controller.count(original)==1,('Controlador Alpha divergente',controller.count(original))
-html=before+active+controller.replace(original,"finishExit.addEventListener('click',tavLeaveToMainMenu);",1)+'</script>'+tail
+assert 1<=controller.count(original)<=2,('Controlador Alpha divergente',controller.count(original))
+html=before+active+controller.replace(original,"finishExit.addEventListener('click',tavLeaveToMainMenu);")+'</script>'+tail
 page.write_text(html,encoding='utf8')
 print('ONLINE_ABANDON_READY',len(html))
