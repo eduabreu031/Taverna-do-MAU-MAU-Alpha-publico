@@ -21,7 +21,6 @@ on:
       - 'qa/theme-real-game-audit.mjs'
       - 'qa/theme-schedule.json'
       - 'qa/apply-seasonal-theme.py'
-      - 'qa/inspect-entrance-hooks.py'
       - 'qa/tavern-entrance.css'
       - 'qa/tavern-entrance.js'
       - 'qa/apply-tavern-entrance.py'
@@ -56,8 +55,6 @@ jobs:
           python3 qa/apply-online-abandon.py site
           python3 qa/apply-seasonal-theme.py site
           python3 qa/apply-tavern-entrance.py site
-      - name: Inspecionar ganchos de áudio para a entrada
-        run: python3 qa/inspect-entrance-hooks.py
       - name: Analisar baralhos e seletor de naipes antes das correções
         run: |
           python3 qa/inspect-card-theme.py
