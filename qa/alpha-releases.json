@@ -1,7 +1,20 @@
 {
-  "current": "alpha-0.5.0.17",
+  "current": "alpha-0.5.0.18",
   "issuesRepo": "eduabreu031/Taverna-do-MAU-MAU-Alpha-publico",
   "entries": [
+    {
+      "id": "alpha-0.5.0.18",
+      "label": "0.5.0.18-alpha",
+      "date": "2026-10-24",
+      "title": "A porta da Taverna agora se abre",
+      "items": [
+        "Nova fachada medieval cinematográfica: toque diretamente na porta para revelar a identificação e entrar no interior.",
+        "Continuar com a conta existente, trocar de conta ou entrar como Forasteiro, com suporte offline preservado.",
+        "A entrada aparece apenas ao abrir o aplicativo; voltar do jogo ao menu não repete a animação.",
+        "A gravação original de boas-vindas do Arauto é reproduzida no interior quando a narração está ligada; a Rádio liga na primeira entrada e respeita as preferências posteriores.",
+        "A fachada preserva sua estrutura nos temas e muda a iluminação; mesas, cartas, salas multiplayer e regras permanecem inalteradas."
+      ]
+    },
     {
       "id": "alpha-0.5.0.17",
       "label": "0.5.0.17-alpha",
