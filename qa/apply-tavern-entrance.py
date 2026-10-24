@@ -25,26 +25,21 @@ html=html.replace(voice_fn,
 html=html.replace(music_fn,
  music_fn+"try{localStorage.setItem('tavern-radio-preference',String(ui.musicOn));}catch(e){}",1)
 
-# Assets locais: as duas camadas de arte têm identidade própria e podem
-# carregar offline desde a instalação do PWA.
+# Apenas a porta é um asset visual: evita carregar a fotografia e a fachada
+# eliminadas. O único SVG é pré-copiado para funcionar totalmente offline.
 artdir=site/'art'
 artdir.mkdir(parents=True,exist_ok=True)
-for source,target in [
- ('entrance-facade-v2.svg','tavern-facade-v2.svg'),
- ('entrance-door-v2.svg','tavern-door-v2.svg')
-]:
- asset=root/'qa'/source
- content=asset.read_text(encoding='utf-8')
- assert content.startswith('<svg ') and '</svg>' in content
- shutil.copyfile(asset,artdir/target)
-raster=root/'qa'/'entrance-facade-bc.webp'
-assert raster.exists() and raster.stat().st_size>30000,'Arte cinematográfica ausente'
-shutil.copyfile(raster,artdir/'tavern-facade-bc.webp')
+asset=root/'qa'/'entrance-door-v2.svg'
+content=asset.read_text(encoding='utf-8')
+assert content.startswith('<svg ') and '</svg>' in content
+shutil.copyfile(asset,artdir/'tavern-door-v2.svg')
+for unused in ('tavern-facade-v2.svg','tavern-facade-bc.webp'):
+ (artdir/unused).unlink(missing_ok=True)
 swfile=site/'sw.js'
 worker=swfile.read_text(encoding='utf-8')
 assets_marker="  './', './index.html', './manifest.webmanifest',"
 assert worker.count(assets_marker)==1
-worker=worker.replace(assets_marker,assets_marker+"\n  './art/tavern-facade-v2.svg', './art/tavern-door-v2.svg', './art/tavern-facade-bc.webp',",1)
+worker=worker.replace(assets_marker,assets_marker+"\n  './art/tavern-door-v2.svg',",1)
 swfile.write_text(worker,encoding='utf-8')
 css=(root/'qa/tavern-entrance.css').read_text(encoding='utf-8')
 js=(root/'qa/tavern-entrance.js').read_text(encoding='utf-8')
