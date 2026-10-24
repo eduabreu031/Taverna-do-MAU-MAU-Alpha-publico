@@ -1,7 +1,20 @@
 {
-  "current": "alpha-0.5.0.11",
+  "current": "alpha-0.5.0.12",
   "issuesRepo": "eduabreu031/Taverna-do-MAU-MAU-Alpha-publico",
   "entries": [
+    {
+      "id": "alpha-0.5.0.12",
+      "label": "0.5.0.12-alpha",
+      "date": "2026-10-24",
+      "title": "Retratos sem quadrados e brilho da vez",
+      "items": [
+        "Corrigida a causa real dos fundos quadrados: no celular, a placa leather-name abrigava o retrato e recebia indevidamente um fundo inteiro nas cores neon. Agora o fundo desse contêiner fica transparente.",
+        "Na sua vez, a borda e a área da mão recebem iluminação forte na cor do tema, utilizando a sinalização turn-active já produzida pelo jogo.",
+        "Na vez do adversário, o retrato e os indicadores recebem brilho intenso azul, verde ou rosa de acordo com a paleta escolhida, substituindo o amarelo.",
+        "A tela de escolha de naipe mantém seu painel central, apresenta a mesa suavemente escurecida ao fundo e conserva os quatro botões legíveis.",
+        "Alterações exclusivamente visuais, sem modificação de turnos, cartas, bots, multiplayer ou cronômetros. O Clássico mantém seu visual original."
+      ]
+    },
     {
       "id": "alpha-0.5.0.11",
       "label": "0.5.0.11-alpha",
