@@ -19,7 +19,7 @@ assert html.count(voice_off)==1 and html.count(voice_fn)==1,'Gancho original do 
 assert html.count(music_fn)==1,'Controle da Rádio mudou'
 html=html.replace(voice_off,'if(String(track)==="16"&&!window.__tavEntranceInteriorReady)return; // Faixa de boas-vindas só na entrada',1)
 html=html.replace(voice_fn,
- 'window.addEventListener("taverna-interior-entered",()=>{window.__tavEntranceInteriorReady=true;arautoSpeak(16);});\\n'+voice_fn,1)
+ 'window.addEventListener("taverna-interior-entered",()=>{window.__tavEntranceInteriorReady=true;arautoSpeak(16);});\n'+voice_fn,1)
 # Registrar a última preferência APENAS quando o controle original é usado.
 html=html.replace(music_fn,
  music_fn+"try{localStorage.setItem('tavern-radio-preference',String(ui.musicOn));}catch(e){}",1)
