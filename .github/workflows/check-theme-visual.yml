@@ -22,6 +22,10 @@ on:
       - 'qa/theme-schedule.json'
       - 'qa/apply-seasonal-theme.py'
       - 'qa/inspect-entrance-hooks.py'
+      - 'qa/tavern-entrance.css'
+      - 'qa/tavern-entrance.js'
+      - 'qa/apply-tavern-entrance.py'
+      - 'qa/entrance-browser-check.mjs'
   workflow_dispatch:
 permissions:
   contents: read
@@ -51,6 +55,7 @@ jobs:
           python3 qa/apply-social-features.py site
           python3 qa/apply-online-abandon.py site
           python3 qa/apply-seasonal-theme.py site
+          python3 qa/apply-tavern-entrance.py site
       - name: Inspecionar ganchos de áudio para a entrada
         run: python3 qa/inspect-entrance-hooks.py
       - name: Analisar baralhos e seletor de naipes antes das correções
@@ -65,6 +70,7 @@ jobs:
           node qa/theme-browser-check.mjs
           node qa/theme-real-game-audit.mjs
           node qa/theme-form-audit.mjs
+          node qa/entrance-browser-check.mjs
       - name: Guardar capturas apenas para diagnóstico
         if: always()
         uses: actions/upload-artifact@v4
@@ -73,4 +79,5 @@ jobs:
           path: |
             /tmp/tav-theme-neon-*.png
             /tmp/tav-suit-hotfix-green-*.png
+            /tmp/tav-entrance-*.png
           if-no-files-found: ignore
