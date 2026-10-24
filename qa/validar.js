@@ -82,6 +82,21 @@ test('X online confirma abandono, permanece no lobby e permite sair da sala',()=
  assert(html.includes("el('onlineLeave').onclick=tavLeaveToMainMenu;"),'Lobby não tem saída ao menu inicial');
  assert(html.includes('lobby.classList.remove(\'hidden\');'),'Transição não apresenta o lobby');
 });
+test('Número da Alpha e changelog seguem a versão publicada',()=>{
+ const releases=JSON.parse(fs.readFileSync(path.join(root,'qa','alpha-releases.json'),'utf8'));
+ const latest=releases.entries[0];
+ assert.equal(latest.id,releases.current);
+ assert.equal(latest.label,releases.current.replace(/^alpha-/,'')+'-alpha');
+ assert(html.includes('Taverna do MAU MAU — '+latest.label),'Título da Alpha continua com versão antiga');
+ assert(html.includes('"current":"'+latest.id+'"'),'Changelog embutido está desatualizado');
+ for(const entry of releases.entries.slice(0,4)){
+  assert(html.includes('"id":"'+entry.id+'"'),'Novidades não incluem '+entry.label);
+  assert(html.includes(entry.title),'Título da atualização ausente '+entry.label);
+ }
+ const sw=fs.readFileSync(path.join(site,'sw.js'),'utf8');
+ assert(sw.includes("const CACHE = 'taverna-pwa-"+releases.current+"';"),'PWA precisa ter cache da versão corrente');
+ assert(html.includes("version.textContent=current.label+' · testes públicos'"),'Selo de versão não acompanha o changelog');
+});
 test('Cache busca versão nova e mantém offline',()=>{
  const sw=fs.readFileSync(path.join(site,'sw.js'),'utf8');
  new vm.Script(sw,{filename:'sw.js'});
