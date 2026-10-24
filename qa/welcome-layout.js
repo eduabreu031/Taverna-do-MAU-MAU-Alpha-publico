@@ -18,7 +18,7 @@ buttons.forEach((b,i)=>{
  const strong=b.querySelector('strong');if(strong)strong.textContent=captions[i];
 });
 const authenticLabel=field.closest('label')||root.querySelector('label[for="playerName"]');
-const nameRegion=field.parentElement;
+// Nunca esconder o pai do campo: ele também contém os botões do menu.
 // NUNCA substituir textContent de um contêiner: isso remove seus botões e inputs.
 const greeting=Array.from(root.querySelectorAll('h1,h2,h3,p,span,strong'))
  .find(e=>e.children.length===0&&/seja bem.vindo/i.test(e.textContent||''))||null;
@@ -31,11 +31,9 @@ function update(){
   const txt=signed?'Seja bem-vindo, '+u.username+'!':originalGreeting;
   if(greeting.textContent!==txt)greeting.textContent=txt;
  }
- if(nameRegion){
-  nameRegion.classList.toggle('tav-welcome-name-disabled',signed);
-  if(signed&&authenticLabel&&!nameRegion.contains(authenticLabel))authenticLabel.classList.add('tav-welcome-name-disabled');
-  else if(authenticLabel)authenticLabel.classList.remove('tav-welcome-name-disabled');
- }
+ // Ocultar somente o input e a label exata, sem afetar seus ancestrais.
+ field.classList.toggle('tav-welcome-name-disabled',signed);
+ if(authenticLabel)authenticLabel.classList.toggle('tav-welcome-name-disabled',signed);
  field.readOnly=signed;
  if(signed&&field.value!==u.username){
   field.value=u.username;field.dispatchEvent(new Event('change',{bubbles:true}));
