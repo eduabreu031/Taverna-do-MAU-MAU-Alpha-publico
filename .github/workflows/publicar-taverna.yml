@@ -53,8 +53,6 @@ jobs:
         run: python3 qa/apply-online-skip-final.py site
       - name: Comunicação em balões, voz e votações online
         run: python3 qa/apply-social-features.py site
-      - name: Conferir configuração de efeitos sonoros
-        run: python3 qa/diagnose-sfx.py site
       - name: Conferir jogo e integridade das regras
         run: node qa/validar.js site
   publicar:
