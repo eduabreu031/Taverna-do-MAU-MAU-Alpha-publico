@@ -56,7 +56,8 @@ test('Comunicação multiplayer: balões, limite, microfone e expulsão',()=>{
  assert(html.includes("type:'vote_kick_cast'"),'Falta votação de expulsão');
  assert(html.includes("showFinished(game);showSkipFinal(m.skipFinal);tavUpdateSocialFromState(m);"),'Sincronização da interface incompleta');
  assert(html.includes('if(!alive){tavSocialMenu.hidden=true;tavStopRecord(false);}' ),'Eliminado ainda pode gravar');
- assert(html.includes("if(!ac||ac.state!=='running')return;"),'Áudio bloqueado precisa ser ignorado');
+ assert(html.includes("if(!ac||ac.state!=='running')return false;"),'Áudio bloqueado precisa ser ignorado');
+ assert(html.includes("if(tavPlayVoice(e))tavBubble(e);"),'Áudio inaudível não deve criar balão');
  assert(!html.includes('Reproduzir áudio manualmente'),'Não mostrar botão de reprodução');
  assert(html.includes('id="soundBtn"'),'Controle de efeitos sonoros original ausente');
  assert(html.includes("btn.setAttribute('aria-pressed',String(!!on))"),'Controle de som não informa o estado do áudio');
