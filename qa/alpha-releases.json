@@ -1,7 +1,19 @@
 {
-  "current": "alpha-0.5.0.14",
+  "current": "alpha-0.5.0.15",
   "issuesRepo": "eduabreu031/Taverna-do-MAU-MAU-Alpha-publico",
   "entries": [
+    {
+      "id": "alpha-0.5.0.15",
+      "label": "0.5.0.15-alpha",
+      "date": "2026-10-24",
+      "title": "Temas refinados e testados em partidas reais",
+      "items": [
+        "Finalizado o retorno da escolha de naipes ao visual Clássico: mesmo losango e mesmos controles, apenas o fundo acompanha Azul, Verde ou Rosa.",
+        "Resolvida a mistura entre brilho temático e animações douradas legadas nos retratos ativos dos adversários; sua própria mão continua destacada na vez de jogar.",
+        "Atualizados painel de troca de conta, autenticação e campos de texto nos submenus para responderem às paletas.",
+        "Testes visuais em celular e desktop aprovaram os três neons, com turnos reais de bots e humano; a Taverna Clássica mantém sua aparência original."
+      ]
+    },
     {
       "id": "alpha-0.5.0.14",
       "label": "0.5.0.14-alpha",
