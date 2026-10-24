@@ -1,7 +1,20 @@
 {
-  "current": "alpha-0.5.0.10",
+  "current": "alpha-0.5.0.11",
   "issuesRepo": "eduabreu031/Taverna-do-MAU-MAU-Alpha-publico",
   "entries": [
+    {
+      "id": "alpha-0.5.0.11",
+      "label": "0.5.0.11-alpha",
+      "date": "2026-10-24",
+      "title": "Baralhos neon e ajustes da mesa",
+      "items": [
+        "Corrigido o bloco retangular que aparecia atrás dos personagens nas partidas com as paletas neon, preservando as molduras e os retratos.",
+        "Reorganizada a janela 'Escolha o naipe' nas três paletas neon: painel central, opções de toque bem definidas e símbolos vermelhos e escuros legíveis.",
+        "Três baralhos especiais acompanham automaticamente Neon Azul (arcano elétrico), Neon Verde (alquimia esmeralda) e Neon Rosa (encantamento): novas frentes, versos, bordas, brilho e emblemas.",
+        "O baralho da Taverna Clássica foi preservado; nomes, naipes, valores e identidades das cartas continuam intactos. Os estilos também abrangem cartas dos bots, compra e descarte.",
+        "A escolha de Aparência continua salva no aparelho; o calendário de eventos não altera a preferência pessoal."
+      ]
+    },
     {
       "id": "alpha-0.5.0.10",
       "label": "0.5.0.10-alpha",
