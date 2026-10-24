@@ -9,6 +9,8 @@ on:
       - 'qa/theme-card-decks.css'
       - 'qa/theme-gameplay-hotfix.css'
       - 'qa/theme-turn-highlights.css'
+      - 'qa/theme-form-surfaces.css'
+      - 'qa/theme-form-audit.mjs'
       - 'qa/theme-seasonal-overlay.css'
       - 'qa/appearance-menu.css'
       - 'qa/appearance-menu.js'
@@ -59,6 +61,7 @@ jobs:
           python3 -m http.server 8765 -d site >/tmp/taverna-theme-http.log 2>&1 &
           node qa/theme-browser-check.mjs
           node qa/theme-real-game-audit.mjs
+          node qa/theme-form-audit.mjs
       - name: Guardar capturas apenas para diagnóstico
         if: always()
         uses: actions/upload-artifact@v4
