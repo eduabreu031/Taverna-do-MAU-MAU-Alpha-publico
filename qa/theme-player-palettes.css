@@ -80,7 +80,7 @@
  #onlineFinishPanel .online-finish-card,
  #tavSocialMenu,#tavSocialVote,
  #tavAbandonOverlay .tav-abandon-card,
- .wood-scoreboard,.history-drawer
+ .parchment-modal,.wood-scoreboard,.history-drawer
 ){
  background:var(--tp-panel)!important;
  border-color:var(--tp-edge)!important;
