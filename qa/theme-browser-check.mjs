@@ -145,33 +145,43 @@ try{
     assert.notEqual(hotfix[i].back,hotfix[j].back,'Baralhos com versos idênticos');
   // Simula o HTML EXATO de escolha de naipe que ambos os motores usam:
   // Não é um screenshot de partida, mas garante geometria/estilo e alvos clicáveis.
-  const choose=await page.evaluate(()=>{
+  // Guardrail: o usuário pediu EXATAMENTE o layout original da escolha.
+  // A paleta pode modificar APENAS o backdrop, nunca dimensões, arranjo,
+  // títulos, tipografia ou estilo dos quatro naipes.
+  const picker=await page.evaluate(()=>{
     const overlay=document.getElementById('overlay'),dialog=document.getElementById('dialog');
-    window.TavernaThemeSystem.setPalette('neon-green');
     dialog.innerHTML='<div class="parchment-modal" role="dialog"><div class="modal-kicker">Livro das escolhas</div><h2 id="modalTitle">Escolha o naipe</h2><div class="suit-list">'+
      ['♥','♠','♣','♦'].map(s=>'<button class="suit-choice '+(['♥','♦'].includes(s)?'red':'')+'"><b>'+s+'</b></button>').join('')+'</div></div>';
     overlay.classList.remove('hidden');
-    const panel=dialog.querySelector('.parchment-modal'),buttons=[...dialog.querySelectorAll('.suit-choice')];
-    const p=panel.getBoundingClientRect();
-    return {
-     panel:{x:p.x,y:p.y,width:p.width,height:p.height},
-     bg:getComputedStyle(panel).backgroundImage,
-     border:getComputedStyle(panel).borderTopColor,
-     buttonRects:buttons.map(b=>{const r=b.getBoundingClientRect();return {x:r.x,y:r.y,width:r.width,height:r.height,events:getComputedStyle(b).pointerEvents,bg:getComputedStyle(b).backgroundImage};}),
-     titleVisible:getComputedStyle(dialog.querySelector('h2')).display,
-     overlayVisible:getComputedStyle(overlay).display
-    };
+    const el=[dialog,dialog.querySelector('.parchment-modal'),dialog.querySelector('#modalTitle'),
+      dialog.querySelector('.suit-list'),...dialog.querySelectorAll('.suit-choice')];
+    const map={};
+    for(const name of ['classic','neon-blue','neon-green','neon-pink']){
+      window.TavernaThemeSystem.setPalette(name);
+      const attrs=el.map(node=>{
+        const b=node.getBoundingClientRect(),s=getComputedStyle(node);
+        return {rect:[b.x,b.y,b.width,b.height].map(Math.round),
+         gridColumns:s.gridTemplateColumns,gridRows:s.gridTemplateRows,
+         position:s.position,background:s.backgroundImage,border:s.borderTopColor,
+         font:s.fontSize,color:s.color,pointer:s.pointerEvents};
+      });
+      map[name]={style:attrs,backdrop:getComputedStyle(overlay).backgroundImage};
+    }
+    return map;
   });
-  console.log('THEME_SUIT_GEOMETRY',JSON.stringify({width,geometry:choose}));
-  assert(choose.panel.width>=250&&choose.panel.width<430,'Painel de naipe vazio/estreito');
-  assert(choose.panel.height>180&&choose.panel.height<650,'Painel de naipe ocupa a tela inteira');
-  assert(choose.bg!=='none','Painel de escolha precisa ter aparência temática');
-  assert(choose.buttonRects.every(b=>b.width>90&&b.height>50&&b.events!=='none'),'Naipes perderam alvo de toque');
-  assert(choose.buttonRects.every(b=>b.x>=choose.panel.x-2&&b.x+b.width<=choose.panel.x+choose.panel.width+2&&b.y>=choose.panel.y-2&&b.y+b.height<=choose.panel.y+choose.panel.height+2),
-   'Símbolos de naipe escaparam do painel');
+  for(const name of ['neon-blue','neon-green','neon-pink']){
+    assert.deepEqual(picker[name].style,picker.classic.style,
+     'NÃO MUDAR A TELA DE ESCOLHA DE NAIPE: '+name);
+    assert.notEqual(picker[name].backdrop,picker.classic.backdrop,
+     'Somente o fundo do seletor precisa acompanhar o tema: '+name);
+  }
+  assert(picker.classic.style.slice(-4).every(s=>s.rect[2]>40&&s.rect[3]>40&&s.pointer!=='none'),
+   'Os quatro naipes originais devem continuar clicáveis');
+  console.log('THEME_SUIT_NATIVE_LAYOUT_OK',width,'layout clássico idêntico em três neons; só backdrop colorido');
+  await page.evaluate(()=>window.TavernaThemeSystem.setPalette('neon-green'));
   await page.screenshot({path:'/tmp/tav-suit-hotfix-green-'+width+'.png'});
   await page.evaluate(()=>{document.getElementById('overlay').classList.add('hidden');document.getElementById('dialog').replaceChildren();});
-  console.log('THEME_CARD_HOTFIX_OK',width,'bot seat sem retângulo, 3 baralhos diferentes, escolha de naipe em painel');
+  console.log('THEME_CARD_HOTFIX_OK',width,'baralhos e assentos; seletor original intacto');
   await page.close();
  }
 }finally{await browser.close();}
