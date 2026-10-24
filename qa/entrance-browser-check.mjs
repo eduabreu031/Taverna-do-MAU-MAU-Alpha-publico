@@ -35,6 +35,9 @@ try{
   await page.locator('#tavEntranceGuest').click();
   await page.waitForFunction(()=>!document.getElementById('tavEntrance'),{timeout:5000});
   assert.equal(await page.locator('#playerName').inputValue(),'Forasteiro');
+  assert.equal(await page.locator('#sceneWelcome .tav-welcome-name-disabled').count(),0,'O visitante deve poder editar seu nome');
+  assert.deepEqual(await page.locator('#sceneWelcome .tav-welcome-mode-compact').evaluateAll(nodes=>nodes.map(n=>n.id)),['chooseOffline','chooseMultiplayer','chooseRules'],'Ordem de modos incorreta');
+  assert(await page.locator('#sceneWelcome .tav-welcome-modes-column').isVisible(),'Modos não estão organizados em coluna');
   await page.evaluate(()=>{const news=document.getElementById('alphaInformationOverlay');news?.remove();});
   await page.locator('#chooseOffline').click();
   assert(await page.locator('#sceneMenu').isVisible(),'Modo offline bloqueado pela fachada');
@@ -57,6 +60,9 @@ try{
  assert.equal(await page.locator('#tavEntrancePrimary').innerText(),'Continuar como JogadorQA');
  assert.equal(await page.locator('#tavEntranceAccount').innerText(),'Trocar conta');
  await page.locator('#tavEntrancePrimary').click();
+ await page.waitForFunction(()=>document.getElementById('sceneWelcome').classList.contains('tav-welcome-account'));
+ assert.equal(await page.locator('#sceneWelcome .tav-welcome-name-disabled').count(),1,'O campo de nome deveria desaparecer para usuário autenticado');
+ assert((await page.locator('#sceneWelcome').innerText()).includes('Seja bem-vindo, JogadorQA!'),'Saudação personalizada não encontrada');
  await page.waitForFunction(()=>!document.getElementById('tavEntrance'));
  console.log('TAVERN_ENTRANCE_ACCOUNT_OK');
  await page.close();
