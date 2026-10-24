@@ -79,6 +79,7 @@ menu.querySelector('.tav-appearance-finish').addEventListener('click',close);
 menu.addEventListener('click',e=>{if(e.target===menu)close();});
 doc.addEventListener('keydown',escape);
 window.addEventListener('taverna-theme-change',update);
+update();
 // Espelhos amigáveis para QA, sem incluir credenciais nem expor ações do motor.
 window.TavernaAppearance=Object.freeze({open:()=>open(null),close,availableButtons:()=>buttons.length});
 })();
