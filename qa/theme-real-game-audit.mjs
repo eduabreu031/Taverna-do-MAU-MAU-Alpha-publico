@@ -7,7 +7,7 @@ try{
   await page.evaluate(()=>window.TavernaEntrance?.skipVisualOnly());
  await page.waitForFunction(()=>window.TavernaThemeSystem);
  await page.evaluate(()=>window.TavernaThemeSystem.setPalette('neon-green'));
- await page.evaluate(()=>{const notes=document.getElementById('alphaInformationOverlay');if(notes)notes.hidden=true;});
+ await page.evaluate(()=>{const notes=document.getElementById('alphaInformationOverlay');notes?.remove();});
  const init=await page.evaluate(()=>[...document.querySelectorAll('#sceneWelcome button,#sceneMenu button')].map(x=>({id:x.id,cls:x.className,text:x.textContent.trim().slice(0,65)})).slice(0,65));
  console.log('AUDIT_BUTTONS_INIT',JSON.stringify(init));
  await page.locator('#chooseOffline').click({timeout:3000});
