@@ -37,7 +37,7 @@ try{
  })));
 
  const samples=[];
- for(let i=0;i<16;i++){
+ for(let i=0;i<23;i++){
   const st=await page.evaluate(()=>{
    const game=document.getElementById('sceneGame');
    const hand=document.getElementById('humanHand');
@@ -56,7 +56,7 @@ try{
    };
   });
   samples.push(st);
-  if(samples.some(s=>s.humanCardClasses.some(c=>!c.includes('inactive')))&&samples.some(s=>s.humanCardClasses.some(c=>c.includes('inactive'))))break;
+  if(samples.some(s=>s.seatActive!=='human')&&samples.some(s=>s.humanClass.includes('turn-active')))break;
   await page.waitForTimeout(1000);
  }
  console.log('AUDIT_TURN_SAMPLES',JSON.stringify(samples));
@@ -74,6 +74,12 @@ try{
   for(const theme of ['neon-blue','neon-green','neon-pink']){
    window.TavernaThemeSystem.setPalette(theme);
    const c=getComputedStyle(label),h=getComputedStyle(hu);
+   const humanWasActive=hu.classList.contains('turn-active');
+   hu.classList.remove('turn-active');
+   const idleHumanShadow=getComputedStyle(hu).boxShadow;
+   hu.classList.add('turn-active');
+   const activeHumanShadow=getComputedStyle(hu).boxShadow;
+   hu.classList.toggle('turn-active',humanWasActive);
    const actor=document.querySelector('#seats .seat');
    // Rendered turn classes are the game engine's own .active / .turn-active.
    const old=actor.classList.contains('active');
@@ -83,7 +89,7 @@ try{
    const bsh=getComputedStyle(med).boxShadow;
    actor.classList.toggle('active',old);
    before.push({theme,seatBackground:c.backgroundImage,seatShadow:c.boxShadow,seatBorder:c.borderTopColor,
-    humanActiveBorder:h.borderTopColor,humanActiveShadow:h.boxShadow,
+    humanActiveBorder:h.borderTopColor,humanActiveShadow:activeHumanShadow,humanIdleShadow:idleHumanShadow,
     avatarActiveFilter:f,medallionActiveShadow:bsh});
   }
   return before;
@@ -94,7 +100,7 @@ try{
   assert.equal(state.seatShadow,'none','Brilho quadrado ao redor do nome: '+state.theme);
   assert(state.avatarActiveFilter.includes('drop-shadow'),'Adversário ativo sem brilho temático');
   assert(state.medallionActiveShadow.includes('rgb('),'Retrato ativo sem moldura brilhante');
-  assert(state.humanActiveShadow.includes('rgb('),'Mão do humano sem iluminação ativa');
+  assert.notEqual(state.humanActiveShadow,state.humanIdleShadow,'Moldura humana não mudou no turno: '+state.theme);
  }
  console.log('THEME_REAL_GAME_TURN_OK',themeState.map(x=>x.theme).join(','));
 
