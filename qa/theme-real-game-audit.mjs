@@ -8,6 +8,7 @@ try{
  const init=await page.evaluate(()=>[...document.querySelectorAll('#sceneWelcome button,#sceneMenu button')].map(x=>({id:x.id,cls:x.className,text:x.textContent.trim().slice(0,65)})).slice(0,65));
  console.log('AUDIT_BUTTONS_INIT',JSON.stringify(init));
  await page.locator('#chooseOffline').click({timeout:3000});
+ await page.locator('#playerCount').selectOption('2');
  console.log('AUDIT_MENU',JSON.stringify(await page.evaluate(()=>({
   html:document.querySelector('#sceneMenu')?.innerText?.slice(0,1600),
   buttons:[...document.querySelectorAll('#sceneMenu button')].map(b=>({id:b.id,cls:b.className,text:b.innerText?.slice(0,50)})),
@@ -33,4 +34,39 @@ try{
    dialog:attrs(document.querySelector('#dialog'))
   }
  })));
+
+ const samples=[];
+ for(let i=0;i<16;i++){
+  const st=await page.evaluate(()=>{
+   const game=document.getElementById('sceneGame');
+   const hand=document.getElementById('humanHand');
+   const hu=document.getElementById('humanZone');
+   const s=document.querySelector('#seats .seat.active');
+   return {
+    at:Math.round(performance.now()),hidden:game.classList.contains('hidden'),
+    humanClass:hu.className,humanAttrs:[...hu.attributes].map(x=>[x.name,x.value]),
+    humanCardClasses:[...hand.querySelectorAll('.playing-card')].slice(0,4).map(n=>n.className),
+    seatActive:s?.getAttribute('data-seat')||'human',
+    clock:document.getElementById('clockText')?.textContent,
+    activeLabel:document.getElementById('turnLabel')?.textContent,
+    roundText:document.getElementById('roundBadge')?.textContent,
+    turn:document.getElementById('turnInfo')?.textContent,
+    gameClasses:game.className
+   };
+  });
+  samples.push(st);
+  if(samples.some(s=>s.humanCardClasses.some(c=>!c.includes('inactive')))&&samples.some(s=>s.humanCardClasses.some(c=>c.includes('inactive'))))break;
+  await page.waitForTimeout(1000);
+ }
+ console.log('AUDIT_TURN_SAMPLES',JSON.stringify(samples));
+ // Exercise the actual overlay DOM in the visible scene and verify metrics.
+ const ov=await page.evaluate(()=>{
+  const el=document.getElementById('overlay'),dia=document.getElementById('dialog');
+  dia.innerHTML='<div class="parchment-modal" role="dialog"><div class="modal-kicker">Livro das escolhas</div><h2 id="modalTitle">Escolha o naipe</h2><div class="suit-list">'+['♥','♠','♣','♦'].map(s=>'<button class="suit-choice '+(['♥','♦'].includes(s)?'red':'')+'"><b>'+s+'</b></button>').join('')+'</div></div>';
+  el.classList.remove('hidden');
+  const elements=[el,dia,dia.querySelector('.parchment-modal'),dia.querySelector('h2'),dia.querySelector('.suit-list'),...dia.querySelectorAll('button')];
+  return elements.map(n=>{const r=n.getBoundingClientRect(),css=getComputedStyle(n);return {cls:n.className,id:n.id,rect:[r.x,r.y,r.width,r.height].map(v=>Math.round(v)),bg:css.backgroundImage.slice(0,100),position:css.position,z:css.zIndex}});
+ });
+ console.log('AUDIT_REAL_SUIT',JSON.stringify(ov));
+ await page.screenshot({path:'/tmp/tav-live-modal-390.png'});
 }finally{await browser.close()}
