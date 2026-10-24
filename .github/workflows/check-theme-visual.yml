@@ -5,6 +5,11 @@ on:
     paths:
       - '.github/workflows/check-theme-visual.yml'
       - 'qa/theme-neon.css'
+      - 'qa/theme-player-palettes.css'
+      - 'qa/theme-seasonal-overlay.css'
+      - 'qa/appearance-menu.css'
+      - 'qa/appearance-menu.js'
+      - 'qa/theme-manager.js'
       - 'qa/theme-browser-check.mjs'
       - 'qa/theme-schedule.json'
       - 'qa/apply-seasonal-theme.py'
