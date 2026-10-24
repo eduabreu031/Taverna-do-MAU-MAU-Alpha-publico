@@ -35,7 +35,10 @@
 :root[data-tav-palette^="neon-"] #overlay:has(.suit-list) #dialog{
  width:min(96vw,420px)!important;
  max-width:420px!important;
- max-height:calc(100dvh - 30px)!important;
+ max-height:min(600px,calc(100dvh - 30px))!important;
+ min-height:0!important;
+ height:auto!important;
+ display:block!important;
  margin:auto!important;
  position:relative!important;
  transform:none!important;
@@ -48,7 +51,9 @@
  width:100%!important;
  min-width:0!important;
  max-width:100%!important;
- max-height:calc(100dvh - 36px)!important;
+ max-height:min(590px,calc(100dvh - 36px))!important;
+ min-height:0!important;
+ height:auto!important;
  margin:0!important;
  padding:23px 18px 24px!important;
  border:2px solid var(--tp-edge)!important;
