@@ -37,11 +37,14 @@ for source,target in [
  content=asset.read_text(encoding='utf-8')
  assert content.startswith('<svg ') and '</svg>' in content
  shutil.copyfile(asset,artdir/target)
+raster=root/'qa'/'entrance-facade-bc.webp'
+assert raster.exists() and raster.stat().st_size>30000,'Arte cinematográfica ausente'
+shutil.copyfile(raster,artdir/'tavern-facade-bc.webp')
 swfile=site/'sw.js'
 worker=swfile.read_text(encoding='utf-8')
 assets_marker="  './', './index.html', './manifest.webmanifest',"
 assert worker.count(assets_marker)==1
-worker=worker.replace(assets_marker,assets_marker+"\n  './art/tavern-facade-v2.svg', './art/tavern-door-v2.svg',",1)
+worker=worker.replace(assets_marker,assets_marker+"\n  './art/tavern-facade-v2.svg', './art/tavern-door-v2.svg', './art/tavern-facade-bc.webp',",1)
 swfile.write_text(worker,encoding='utf-8')
 css=(root/'qa/tavern-entrance.css').read_text(encoding='utf-8')
 js=(root/'qa/tavern-entrance.js').read_text(encoding='utf-8')
