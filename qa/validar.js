@@ -63,6 +63,24 @@ test('Comunicação multiplayer: balões, limite, microfone e expulsão',()=>{
  assert(html.includes("btn.setAttribute('aria-pressed',String(!!on))"),'Controle de som não informa o estado do áudio');
  assert(html.includes("'#soundBtn'"),'Voz não acompanha a preferência de efeitos sonoros');
 });
+test('Balões seguem a foto exata, inclusive no duelo 1x1',()=>{
+ assert(html.includes("scene.querySelector('#humanAvatar .portrait-medallion')"),'Própria foto não é ancorada');
+ assert(html.includes("seatIndex=(index-viewerIndex+current.length)%current.length"),'Assento não acompanha ponto de vista');
+ assert(html.includes("scene.querySelector('#seats .seat[data-seat="),'Balão sem assento real');
+ assert(html.includes(".querySelector('.name-text')"),'Falta fallback por retrato exibido');
+ assert(html.includes('node.hidden=true;return; // Não exibir fala sobre o personagem errado.'),'Balão pode aparecer na pessoa errada');
+});
+test('X online confirma abandono, permanece no lobby e permite sair da sala',()=>{
+ assert(html.includes("tavAbandonTitle.textContent='Abandonar a partida?'"),'Modal de confirmação ausente');
+ assert(html.includes("tavAbandonNo.textContent='Não, continuar'"),'Botão de cancelar ausente');
+ assert(html.includes("tavAbandonYes.textContent='Sim, abandonar'"),'Botão de confirmar ausente');
+ assert(html.includes("type:'abandon_match'"),'Servidor não recebe abandono real');
+ assert(html.includes("if(m.type==='match_abandoned')"),'Falta esperar confirmação do servidor');
+ assert(html.includes("if(m.game&&!tavStayInLobby(m)){"),'Estados seguintes reabrem partida abandonada');
+ assert(html.includes("tavRequestLeaveMatch();return;"),'X ainda sai diretamente');
+ assert(html.includes("el('onlineLeave').onclick=tavLeaveToMainMenu;"),'Lobby não tem saída ao menu inicial');
+ assert(html.includes('lobby.classList.remove(\'hidden\');'),'Transição não apresenta o lobby');
+});
 test('Cache busca versão nova e mantém offline',()=>{
  const sw=fs.readFileSync(path.join(site,'sw.js'),'utf8');
  new vm.Script(sw,{filename:'sw.js'});
