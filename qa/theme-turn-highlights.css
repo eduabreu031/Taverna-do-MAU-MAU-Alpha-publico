@@ -110,3 +110,45 @@
 }
 /* Os efeitos não carregam o amarelo clássico para os temas neon,
    mesmo durante os últimos frames de uma animação. */
+
+/* v0.5.0.16 — neutraliza o SEGUNDO halo dourado gerado nos wrappers dos
+   adversários pelo CSS clássico (incluindo animações e pseudo-elementos).
+   Os medalhões conservam exclusivamente o halo configurado acima.
+   Regras aplicadas apenas às paletas neon: o Clássico fica intocado. */
+:root[data-tav-palette^="neon-"] #sceneGame #seats .seat.active,
+:root[data-tav-palette^="neon-"] #sceneGame #seats .seat.active .seat-inner{
+ animation:none!important;
+ box-shadow:none!important;
+ text-shadow:none!important;
+ outline-color:transparent!important;
+}
+:root[data-tav-palette^="neon-"] #sceneGame #seats .seat.active .bot-avatar,
+:root[data-tav-palette^="neon-"] #sceneGame #seats .seat.active .leather-name{
+ animation:none!important;
+}
+:root[data-tav-palette^="neon-"] #sceneGame #seats .seat.active::before,
+:root[data-tav-palette^="neon-"] #sceneGame #seats .seat.active::after,
+:root[data-tav-palette^="neon-"] #sceneGame #seats .seat.active .seat-inner::before,
+:root[data-tav-palette^="neon-"] #sceneGame #seats .seat.active .seat-inner::after,
+:root[data-tav-palette^="neon-"] #sceneGame #seats .seat.active .bot-avatar::before,
+:root[data-tav-palette^="neon-"] #sceneGame #seats .seat.active .bot-avatar::after{
+ animation:none!important;
+ box-shadow:none!important;
+ filter:none!important;
+ text-shadow:none!important;
+ outline:none!important;
+ border-color:transparent!important;
+}
+/* Reafirma o destaque cromático do avatar sem herdar amarelo dos
+   keyframes do motor. Não remove a iluminação de turno existente. */
+:root[data-tav-palette^="neon-"] #sceneGame #seats .seat.active .bot-avatar{
+ filter:drop-shadow(0 0 8px var(--tav-turn-bright))
+        drop-shadow(0 0 16px var(--tav-turn-edge))!important;
+}
+:root[data-tav-palette^="neon-"] #sceneGame #seats .seat.active .portrait-medallion{
+ animation:none!important;
+ border-color:var(--tav-turn-bright)!important;
+ box-shadow:0 0 0 2px var(--tav-turn-edge),
+            0 0 13px 4px var(--tav-turn-bright),
+            0 0 29px 9px var(--tav-turn-edge)!important;
+}
