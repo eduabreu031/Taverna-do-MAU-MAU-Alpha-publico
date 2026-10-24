@@ -4,6 +4,7 @@ const browser=await chromium.launch({headless:true,args:['--no-sandbox']});
 const page=await browser.newPage({viewport:{width:390,height:844},isMobile:true,hasTouch:true});
 try{
  await page.goto('http://127.0.0.1:8765/',{waitUntil:'domcontentloaded'});
+  await page.evaluate(()=>window.TavernaEntrance?.skipVisualOnly());
  await page.waitForFunction(()=>window.TavernaThemeSystem);
  await page.evaluate(()=>window.TavernaThemeSystem.setPalette('neon-green'));
  const init=await page.evaluate(()=>[...document.querySelectorAll('#sceneWelcome button,#sceneMenu button')].map(x=>({id:x.id,cls:x.className,text:x.textContent.trim().slice(0,65)})).slice(0,65));
