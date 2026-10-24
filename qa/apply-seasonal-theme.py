@@ -26,14 +26,23 @@ for e in config['themes']:
  ranges.append((start.astimezone(datetime.timezone.utc),end.astimezone(datetime.timezone.utc)))
 for a,b in zip(sorted(ranges),sorted(ranges)[1:]):
  assert a[1]<=b[0],'Temas com datas sobrepostas'
-styles=(root/'qa/theme-neon.css').read_text(encoding='utf-8')
+palettes=(root/'qa/theme-player-palettes.css').read_text(encoding='utf-8')
+events_css=(root/'qa/theme-seasonal-overlay.css').read_text(encoding='utf-8')
+appearance_css=(root/'qa/appearance-menu.css').read_text(encoding='utf-8')
+appearance_js=(root/'qa/appearance-menu.js').read_text(encoding='utf-8')
 manager=(root/'qa/theme-manager.js').read_text(encoding='utf-8')
-assert styles.count(':root[data-tav-theme="neon-test"]')>=8,'Tema deve manter estilos escopados'
-assert '</style' not in styles.lower() and '</script' not in manager.lower()
+assert palettes.count(':root[data-tav-palette="neon-')==3
+assert ':root[data-tav-palette^="neon-"]' in palettes
+assert 'data-tav-event' in events_css
+for style in (palettes,events_css,appearance_css):
+ assert '</style' not in style.lower()
+for js in (manager,appearance_js):
+ assert '</script' not in js.lower()
 assert manager.count('/*TAVERNA_THEME_SCHEDULE*/')==1
 serialized=json.dumps(config,ensure_ascii=False,separators=(',',':')).replace('</','<\\/')
 manager=manager.replace('/*TAVERNA_THEME_SCHEDULE*/',serialized)
+styles=palettes+'\n'+events_css+'\n'+appearance_css
 html=html.replace('</head>','<style id="tav-seasonal-themes">\n'+styles+'\n</style>\n</head>',1)
-html=html.replace('</body>','<script id="tav-theme-manager">\n'+manager+'\n</script>\n</body>',1)
+html=html.replace('</body>','<script id="tav-theme-manager">\n'+manager+'\n</script>\n<script id="tav-appearance-menu">\n'+appearance_js+'\n</script>\n</body>',1)
 path.write_text(html,encoding='utf-8')
-print('SEASONAL_THEME_READY',','.join(known),'base=classic','periods='+str(len(ranges)))
+print('APPEARANCE_READY: classic, neon-blue, neon-green, neon-pink; seasonal events:',','.join(known))
