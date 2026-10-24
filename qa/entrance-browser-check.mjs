@@ -35,6 +35,10 @@ try{
   await page.locator('#tavEntranceGuest').click();
   await page.waitForFunction(()=>!document.getElementById('tavEntrance'),{timeout:5000});
   assert.equal(await page.locator('#playerName').inputValue(),'Forasteiro');
+  assert(await page.locator('#chooseOffline').isVisible(),'Botão offline desapareceu após entrada');
+  assert(await page.locator('#chooseMultiplayer').isVisible(),'Botão multiplayer desapareceu após entrada');
+  assert(await page.locator('#chooseRules').isVisible(),'Regras desapareceram após entrada');
+  assert(await page.locator('#sceneWelcome').innerText(),'Menu principal ficou vazio');
   assert.equal(await page.locator('#sceneWelcome .tav-welcome-name-disabled').count(),0,'O visitante deve poder editar seu nome');
   assert.deepEqual(await page.locator('#sceneWelcome .tav-welcome-mode-compact').evaluateAll(nodes=>nodes.map(n=>n.id)),['chooseOffline','chooseMultiplayer','chooseRules'],'Ordem de modos incorreta');
   assert(await page.locator('#sceneWelcome .tav-welcome-modes-column').isVisible(),'Modos não estão organizados em coluna');
@@ -61,6 +65,9 @@ try{
  assert.equal(await page.locator('#tavEntranceAccount').innerText(),'Trocar conta');
  await page.locator('#tavEntrancePrimary').click();
  await page.waitForFunction(()=>document.getElementById('sceneWelcome').classList.contains('tav-welcome-account'));
+ assert.equal(await page.locator('#chooseOffline').count(),1,'Botões foram destruídos após identificação');
+ assert.equal(await page.locator('#chooseMultiplayer').count(),1,'Multiplayer desapareceu');
+ assert.equal(await page.locator('#chooseRules').count(),1,'Regras desapareceram');
  assert.equal(await page.locator('#sceneWelcome .tav-welcome-name-disabled').count(),1,'O campo de nome deveria desaparecer para usuário autenticado');
  assert((await page.locator('#sceneWelcome').innerText()).includes('Seja bem-vindo, JogadorQA!'),'Saudação personalizada não encontrada');
  await page.waitForFunction(()=>!document.getElementById('tavEntrance'));
