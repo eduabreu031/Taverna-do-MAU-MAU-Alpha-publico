@@ -13,7 +13,7 @@ assert 'https://taverna-multiplayer-servidor.edulopes941.workers.dev' in html
 assert 'taverna-multiplayer-beta.edulopes941.workers.dev' not in html
 assert 'alphaTopTools' not in html and 'alphaInformationOverlay' not in html,'UI v92 duplicada'
 data=json.loads((root/'qa/alpha-releases.json').read_text('utf-8'))
-assert re.fullmatch(r'alpha-\\d+\\.\\d+\\.\\d+\\.\\d+', data['current']), 'Número da Alpha inválido'
+assert re.fullmatch(r'alpha-\d+\.\d+\.\d+\.\d+', data['current']), 'Número da Alpha inválido'
 assert data['entries'][0]['id']==data['current'], 'Versão atual não é a primeira no changelog'
 assert data['entries'][0]['label']==data['current'].removeprefix('alpha-')+'-alpha'
 assert len({e['id'] for e in data['entries']})==len(data['entries']), 'Versões duplicadas'
