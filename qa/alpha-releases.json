@@ -10,7 +10,8 @@
       "items": [
         "Corrigida a regressão que apagava os elementos do menu ao alterar o texto de boas-vindas; o texto agora só é atualizado quando pertence a um elemento simples, sem filhos.",
         "Mantidos os botões e controles do menu principal após a entrada e o login.",
-        "O nome entalhado na porta foi deslocado para cima, sem cobrir a fechadura; não houve alterações no motor de jogo."
+        "O nome entalhado na porta foi deslocado para cima, sem cobrir a fechadura; não houve alterações no motor de jogo.",
+        "A aparência e os temas da Taverna permanecem preservados, sem alterações na seleção de cores."
       ]
     },
     {
