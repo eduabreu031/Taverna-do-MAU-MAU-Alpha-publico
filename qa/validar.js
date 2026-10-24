@@ -32,6 +32,13 @@ test('Revanche preserva bots e lobby recebe transição do servidor',()=>{
  assert(html.includes('if(!m.game&&game){'),'Cliente não limpa a partida ao regressar ao lobby');
  assert(html.includes("if(bot.token)url.searchParams.set('token',bot.token);"),'Bot não preserva identidade ao reconectar');
 });
+test('Pular para o final é consenso entre humanos apenas no modo online',()=>{
+ assert(html.includes("skipFinalPanel.id='onlineSkipFinalPanel'"),'Painel de aceleração online ausente');
+ assert(html.includes("type:'skip_final_vote'"),'Botão não envia voto ao servidor');
+ assert(html.includes("showSkipFinal(m.skipFinal)"),'Votação não recebe estado autoritativo');
+ assert(html.includes("showSkipFinal(null)"),'Lobby não limpa votação antiga');
+ assert(html.includes("state.votes+'/'+state.needed"),'Contagem de confirmações ausente');
+});
 test('Cache busca versão nova e mantém offline',()=>{
  const sw=fs.readFileSync(path.join(site,'sw.js'),'utf8');
  new vm.Script(sw,{filename:'sw.js'});
