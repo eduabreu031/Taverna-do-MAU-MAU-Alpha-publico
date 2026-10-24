@@ -27,7 +27,15 @@ for(const selector of ['#tavCentralOpen','#alphaAccountsBar','#alphaAccountsLogo
  '.human-leather','.control-bar','.leather-name','#sceneMenu .book','.tav-central-panel',
  '.tav-admin-panel','#tavSocialMenu','#tavAbandonOverlay','.tav-bots-sheet-inner'])
  assert(css.includes(selector),'Falta cobertura de tela/submenu '+selector);
-assert(!css.includes('background:#f5dfb0')&&!css.includes('[data-card-id]'),'Cartas não devem receber recoloração');
+assert(!css.includes('[data-card-id]'),'Skins nunca podem identificar cartas por ID');
+for(const cls of ['.card-back','.card-face','.card-face.red','.mini-card','.playing-card.selected .big-card']){
+ assert(css.includes(cls),'Baralho especial incompleto: '+cls);
+}
+for(const selector of ['#sceneGame #seats :is(.seat,.seat-inner,.opphand,.bot-fan)',
+ '#overlay:has(.suit-list) #dialog .parchment-modal',
+ '#overlay:has(.suit-list) #dialog .suit-list>.suit-choice']){
+ assert(css.includes(selector),'Correção de bot/naipes não foi aplicada: '+selector);
+}
 assert(html.includes('function themeNotice()'),'Aviso do calendário ausente');
 assert(html.includes('themeNotice()+'),'Aviso não foi incluído no pergaminho');
 assert(html.includes('tav-appearance-options'),'Seleção de aparência não incluída');
