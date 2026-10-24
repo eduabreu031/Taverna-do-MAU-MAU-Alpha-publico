@@ -11,15 +11,16 @@ try{
   assert(await page.locator('#tavEntrance').isVisible(),'Fachada não abriu');
   assert(await page.locator('#tavEntranceIdentity').isHidden(),'Identificação abriu antes do toque');
   const facade=await page.evaluate(async()=>{
-   const urls=['./art/tavern-facade-v2.svg','./art/tavern-door-v2.svg','./art/tavern-facade-bc.webp'];
+   const urls=['./art/tavern-door-v2.svg'];
    const ok=await Promise.all(urls.map(async path=>{const r=await fetch(path);return r.ok&&(path.endsWith('.webp')?(await r.blob()).size>30000:(await r.text()).startsWith('<svg '));}));
    const art=getComputedStyle(document.querySelector('.tav-gate-art'));
    const box=document.querySelector('#tavEntranceDoor').getBoundingClientRect();
    return {ok,art:art.backgroundImage,door:[box.x,box.y,box.width,box.height],viewport:innerWidth};
   });
   assert(facade.ok.every(Boolean),'Recursos locais 2.5D não carregaram');
-  assert(facade.art.includes('tavern-facade-bc.webp'),'Fachada nova não está em uso');
-  assert(facade.door[2]>=75&&facade.door[3]>=180,'Área tocável da porta muito pequena');
+  assert(facade.art==='none','Fundo da porta não deve carregar uma fachada ilustrada');
+  assert(await page.locator('#tavEntranceDoor').evaluate(x=>getComputedStyle(x).backgroundImage.includes('tavern-door-v2.svg')),'Porta detalhada não está aplicada');
+  assert(facade.door[2]>=width*(width<=390?.86:.25)&&facade.door[3]>=650,'Porta não ocupa a tela como previsto');
   assert(facade.door[0]>=0&&facade.door[0]+facade.door[2]<=width+1,'Porta fora da tela: '+width);
 
   await page.screenshot({path:'/tmp/tav-entrance-facade-'+width+'.png'});
