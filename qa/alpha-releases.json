@@ -10,7 +10,8 @@
       "items": [
         "Quando o último humano abandona uma partida, os bots são retirados automaticamente e o lobby fica disponível para uma nova mesa.",
         "A Sala VIP preserva seu acesso e as salas comuns vazias são encerradas. Quedas de conexão ainda permitem reconectar dentro do prazo.",
-        "Também corrigimos a saída de quem já estava eliminado, para não deixar bots presos na partida."
+        "Também corrigimos a saída de quem já estava eliminado, para não deixar bots presos na partida.",
+        "Versão e pergaminho de novidades sincronizados com cada atualização publicada."
       ]
     },
     {
