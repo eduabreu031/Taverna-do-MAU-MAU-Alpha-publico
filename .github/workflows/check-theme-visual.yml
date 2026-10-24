@@ -14,6 +14,7 @@ on:
       - 'qa/theme-manager.js'
       - 'qa/inspect-card-theme.py'
       - 'qa/theme-browser-check.mjs'
+      - 'qa/theme-real-game-audit.mjs'
       - 'qa/theme-schedule.json'
       - 'qa/apply-seasonal-theme.py'
   workflow_dispatch:
@@ -53,6 +54,7 @@ jobs:
         run: |
           python3 -m http.server 8765 -d site >/tmp/taverna-theme-http.log 2>&1 &
           node qa/theme-browser-check.mjs
+          node qa/theme-real-game-audit.mjs
       - name: Guardar capturas apenas para diagnóstico
         if: always()
         uses: actions/upload-artifact@v4
