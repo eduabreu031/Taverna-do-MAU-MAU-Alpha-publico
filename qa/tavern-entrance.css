@@ -64,14 +64,8 @@
 }
 #tavEntrance .tav-gate-door:hover{filter:brightness(1.09)}
 #tavEntrance .tav-gate-door:focus-visible{outline:4px solid #ffe4aa;outline-offset:2px}
-#tavEntrance .tav-gate-door span{
- position:absolute;top:15%;left:10%;right:10%;
- display:block;pointer-events:none;text-align:center;
- color:#e8c994;font:700 clamp(15px,2.4dvh,25px) Georgia,serif;
- letter-spacing:.07em;line-height:1.27;
- padding:11px 7px;text-shadow:0 2px 8px #000,0 0 17px #000;
- background:linear-gradient(90deg,transparent,#150c0c8c 20%,#150c0c8c 80%,transparent);
-}
+/* O letreiro já está gravado nas tábuas do SVG: nenhum texto flutuante. */
+#tavEntrance .tav-gate-door span{display:none!important}
 #tavEntrance .tav-gate-embers{
  position:absolute;inset:0;z-index:4;pointer-events:none;
  background:radial-gradient(ellipse at 50% 80%,#e8a15e15,transparent 50%);
