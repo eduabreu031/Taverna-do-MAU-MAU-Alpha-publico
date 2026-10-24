@@ -1,0 +1,29 @@
+/* A coluna de modos substitui os antigos cartões lado a lado. */
+#sceneWelcome .tav-welcome-modes-column{
+ display:flex!important;flex-direction:column!important;align-items:stretch!important;
+ grid-template-columns:1fr!important;gap:11px!important;
+ width:100%!important;max-width:510px!important;margin-inline:auto!important;
+}
+#sceneWelcome .tav-welcome-modes-column>.tav-welcome-mode-compact{
+ width:100%!important;min-width:0!important;max-width:none!important;
+ min-height:66px!important;display:flex!important;flex-direction:row!important;
+ align-items:center!important;justify-content:flex-start!important;
+ gap:16px!important;padding:12px 20px!important;text-align:left!important;
+ border-radius:11px!important;box-sizing:border-box!important;
+}
+#sceneWelcome .tav-welcome-mode-compact .mode-icon{
+ flex:0 0 38px!important;font-size:25px!important;line-height:1!important;
+ margin:0!important;
+}
+#sceneWelcome .tav-welcome-mode-compact strong{
+ display:block!important;flex:1!important;font-size:clamp(16px,4vw,21px)!important;
+ line-height:1.2!important;margin:0!important;
+}
+#sceneWelcome .tav-welcome-mode-compact :is(small,.mode-footer){display:none!important}
+#sceneWelcome .tav-welcome-name-disabled{display:none!important}
+@media(max-width:550px){
+ #sceneWelcome .tav-welcome-modes-column{gap:9px!important;}
+ #sceneWelcome .tav-welcome-modes-column>.tav-welcome-mode-compact{
+  min-height:59px!important;padding:10px 17px!important;
+ }
+}
