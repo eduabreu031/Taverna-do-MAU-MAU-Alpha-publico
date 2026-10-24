@@ -232,14 +232,14 @@
 </g>
 <!-- O nome é entalhado diretamente nas tábuas: sombra interna, borda gasta e luz rasante. -->
 <g font-family="Georgia,'Times New Roman',serif" font-weight="bold" text-anchor="middle" letter-spacing="2.1">
-<text x="206" y="295" font-size="36" fill="#cfa979" opacity=".68">TAVERNA</text>
-<text x="204" y="292" font-size="36" fill="#120b09" stroke="#100907" stroke-width=".7">TAVERNA</text>
-<text x="206" y="334" font-size="22" fill="#bd8a59" opacity=".61">DO MAU MAU</text>
-<text x="204" y="332" font-size="22" fill="url(#inscription)" stroke="#160b08" stroke-width=".6">DO MAU MAU</text>
+<text x="206" y="247" font-size="36" fill="#cfa979" opacity=".68">TAVERNA</text>
+<text x="204" y="244" font-size="36" fill="#120b09" stroke="#100907" stroke-width=".7">TAVERNA</text>
+<text x="206" y="284" font-size="22" fill="#bd8a59" opacity=".61">DO MAU MAU</text>
+<text x="204" y="282" font-size="22" fill="url(#inscription)" stroke="#160b08" stroke-width=".6">DO MAU MAU</text>
 </g>
-<path d="M95 349h220" stroke="#150d09" stroke-width="2" opacity=".8"/>
-<path d="M97 351h216" stroke="#ab7b4f" stroke-width="1" opacity=".6"/>
-<g transform="translate(205 263)" fill="none" stroke="#b99767" opacity=".62">
+<path d="M95 298h220" stroke="#150d09" stroke-width="2" opacity=".8"/>
+<path d="M97 300h216" stroke="#ab7b4f" stroke-width="1" opacity=".6"/>
+<g transform="translate(205 175)" fill="none" stroke="#b99767" opacity=".62">
 <path d="m0-21 11 15-11 15-11-15Z" stroke-width="2"/>
 <path d="M-33-6h14M19-6h14" stroke-width="2"/>
 </g>
