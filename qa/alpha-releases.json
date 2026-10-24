@@ -1,7 +1,18 @@
 {
-  "current": "alpha-0.5.0.24",
+  "current": "alpha-0.5.0.25",
   "issuesRepo": "eduabreu031/Taverna-do-MAU-MAU-Alpha-publico",
   "entries": [
+    {
+      "id": "alpha-0.5.0.25",
+      "label": "0.5.0.25-alpha",
+      "date": "2026-10-24",
+      "title": "Correção emergencial do menu para contas cadastradas",
+      "items": [
+        "Corrigida a ocultação indevida do menu principal quando o jogador entra com uma conta: somente o campo e seu rótulo individual são escondidos.",
+        "Os botões Offline, Multiplayer e Regras permanecem visíveis para conta e Forasteiro, com verificações específicas após login.",
+        "Mantidos aparência, temas e funcionamento das partidas sem alterações nas regras."
+      ]
+    },
     {
       "id": "alpha-0.5.0.24",
       "label": "0.5.0.24-alpha",
