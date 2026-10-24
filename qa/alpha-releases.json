@@ -1,7 +1,19 @@
 {
-  "current": "alpha-0.5.0.8",
+  "current": "alpha-0.5.0.9",
   "issuesRepo": "eduabreu031/Taverna-do-MAU-MAU-Alpha-publico",
   "entries": [
+    {
+      "id": "alpha-0.5.0.9",
+      "label": "0.5.0.9-alpha",
+      "date": "2026-10-24",
+      "title": "Neon em toda a Taverna — correção visual",
+      "items": [
+        "O tema azul e roxo agora inclui a mesa verdadeira, o feltro, a iluminação, o livro do menu offline, o lobby, as molduras e os painéis.",
+        "Corrigidos seletores antigos que apenas coloriam alguns botões e deixavam o cenário clássico.",
+        "O ensaio começa hoje às 15h50 e termina às 17h50 (Brasília); ao final, o tema padrão volta sem perder melhorias do jogo.",
+        "Retratos, cartas, naipes e controles conservam a apresentação e o funcionamento originais."
+      ]
+    },
     {
       "id": "alpha-0.5.0.8",
       "label": "0.5.0.8-alpha",
