@@ -20,3 +20,8 @@ for needle in ['id="seats"','id="humanHand"','leather-name','portrait-medallion'
   snippet=s[max(i-190,0):i+750]
   snippet=re.sub(r'data:image/[^"\']+','<BASE64>',snippet)
   print('SEAT_SNIP',repr(needle),repr(snippet[:900]))
+
+i=s.find('function buildSeats(')
+print('SEATS_RENDER_FUNCTION',re.sub(r'data:image/[^"\']+','<BASE64>',s[i:i+5600]))
+i=s.find('function asOnline')
+print('ONLINE_ADAPTER_FUNC',re.sub(r'data:image/[^"\']+','<BASE64>',s[i:i+1500]))
