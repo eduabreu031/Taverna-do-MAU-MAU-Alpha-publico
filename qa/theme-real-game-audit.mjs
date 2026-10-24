@@ -14,11 +14,12 @@ try{
   selects:[...document.querySelectorAll('#sceneMenu select')].map(b=>({id:b.id,value:b.value,options:b.options.length}))
  }))));
  const buttons=await page.evaluate(()=>[...document.querySelectorAll('#sceneMenu button')].filter(b=>!b.disabled).map(b=>({id:b.id,text:b.innerText})));
- const candidate=buttons.find(b=>/iniciar|jogar|começar|partida/i.test(b.text));
+ const candidate=buttons.find(b=>b.id==='startGameBtn')||buttons.find(b=>/iniciar|jogar|começar|partida|sentar/i.test(b.text));
  if(candidate){
   const sel=candidate.id?'#'+candidate.id:'';
   if(sel) await page.locator(sel).click({timeout:3000});
  }
+ await page.waitForTimeout(750);
  console.log('AUDIT_GAME',JSON.stringify(await page.evaluate(()=>{
   const scene=document.querySelector('#sceneGame');
   const attrs=node=>{if(!node)return null;const s=getComputedStyle(node),r=node.getBoundingClientRect();return {id:node.id,cls:node.className,tag:node.tagName,bg:s.backgroundImage.slice(0,135),bgc:s.backgroundColor,shadow:s.boxShadow.slice(0,200),filter:s.filter,display:s.display,rect:[r.x,r.y,r.width,r.height].map(x=>Math.round(x))}};
