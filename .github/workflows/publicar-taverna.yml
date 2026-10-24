@@ -20,6 +20,8 @@ jobs:
         uses: actions/setup-node@v5
         with:
           node-version: '22'
+      - name: Exigir versão e changelog para cada atualização do jogo
+        run: python3 qa/check-release-current.py
       - name: Aplicar icones oficiais do pacote
         run: |
           if [ -f Taverna_do_MAU_MAU_Icones_Oficiais.zip ]; then
@@ -72,6 +74,8 @@ jobs:
         uses: actions/checkout@v5
         with:
           fetch-depth: 0
+      - name: Exigir versão e changelog para cada atualização do jogo
+        run: python3 qa/check-release-current.py
       - name: Aplicar icones oficiais do pacote
         run: |
           if [ -f Taverna_do_MAU_MAU_Icones_Oficiais.zip ]; then
