@@ -1,7 +1,18 @@
 {
-  "current": "alpha-0.5.0.23",
+  "current": "alpha-0.5.0.24",
   "issuesRepo": "eduabreu031/Taverna-do-MAU-MAU-Alpha-publico",
   "entries": [
+    {
+      "id": "alpha-0.5.0.24",
+      "label": "0.5.0.24-alpha",
+      "date": "2026-10-24",
+      "title": "Correção urgente do menu e posição do entalhe",
+      "items": [
+        "Corrigida a regressão que apagava os elementos do menu ao alterar o texto de boas-vindas; o texto agora só é atualizado quando pertence a um elemento simples, sem filhos.",
+        "Mantidos os botões e controles do menu principal após a entrada e o login.",
+        "O nome entalhado na porta foi deslocado para cima, sem cobrir a fechadura; não houve alterações no motor de jogo."
+      ]
+    },
     {
       "id": "alpha-0.5.0.23",
       "label": "0.5.0.23-alpha",
