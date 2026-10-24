@@ -79,6 +79,19 @@ try{
   assert.equal(await page.evaluate(()=>document.documentElement.hasAttribute('data-tav-palette')),false);
   // Estilos não devem afetar entradas ou a mesa; nenhuma exceção JS do gerenciador.
   assert(errors.filter(x=>/theme|appearance|palette/i.test(x)).length===0,'Erro de runtime: '+errors.join('; '));
+  const hierarchy=await page.evaluate(()=>{
+   const hand=document.getElementById('humanHand');
+   const parents=[];
+   for(let node=hand,i=0;node&&i<7;node=node.parentElement,i++){
+    const s=getComputedStyle(node);
+    parents.push({tag:node.tagName,id:node.id,cls:node.className?.toString().slice(0,140),
+     bg:s.backgroundImage.slice(0,100),color:s.backgroundColor});
+   }
+   const related=[...document.querySelectorAll('#sceneGame [class]')].filter(n=>/human|hand|action|control|seat|bot/i.test(n.className.toString())).slice(0,110)
+    .map(n=>({tag:n.tagName,id:n.id,cls:n.className.toString().slice(0,110)}));
+   return {parents,related};
+  });
+  if(width===390)console.log('THEME_HAND_AUDIT',JSON.stringify(hierarchy));
   console.log('THEME_BROWSER_OK',width,must.length,'áreas; 4 paletas; preferências; menu interativo');
   await page.evaluate(()=>window.TavernaThemeSystem.setPalette('neon-green'));
   await page.screenshot({path:'/tmp/tav-theme-neon-'+width+'.png'});
