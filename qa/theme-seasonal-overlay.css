@@ -1,0 +1,16 @@
+/* Eventos comemorativos são decoração administrada, não paleta do jogador.
+   Um novo evento só precisa definir data em theme-schedule.json e estes estilos. */
+:root[data-tav-event="neon-test"]{
+ --te-event-glow:var(--tp-glow-hi,#7657ed65);
+ --te-event-border:var(--tp-edge,#7965e7);
+}
+:root[data-tav-event="neon-test"] #sceneWelcome .welcome-crest{
+ box-shadow:0 0 22px var(--te-event-glow)!important;
+}
+:root[data-tav-event="neon-test"] #sceneGame #tableShell{
+ outline:1px solid var(--te-event-border);
+ outline-offset:2px;
+}
+/* Exemplo da expansão futura:
+ :root[data-tav-event="natal"] .welcome-crest{...}
+ Nenhuma decoração toca nas cartas nem nos timers. */
