@@ -95,7 +95,7 @@ try{
    assert(materials[id].depth.includes('inset'),'Botão sem relevo: '+id);
    assert.notEqual(materials[id].sky,materials.classic.sky,'Cenário igual ao clássico: '+id);
   }
-  assert(materials['neon-aero'].glass.includes('blur(10px)'),'Vidro Aero sem translucidez');
+  assert(materials['neon-aero'].glass.includes(width<=650?'blur(5px)':'blur(10px)'),'Vidro Aero sem translucidez');
   assert.notEqual(materials['neon-blue'].sky,materials['neon-green'].sky);
   assert.notEqual(materials['neon-green'].sky,materials['neon-pink'].sky);
 
@@ -199,9 +199,9 @@ try{
     'Botão herdou amarelo clássico: '+id);
    assert(menuSurfaces[id].buttonShadow!=='none','Falta sombra para contraste: '+id);
   }
-  assert(menuSurfaces['neon-aero'].panel['#sceneWelcome .welcome-panel'].filter.includes('blur(10px)'),
+  assert(menuSurfaces['neon-aero'].panel['#sceneWelcome .welcome-panel'].filter.includes(width<=650?'blur(5px)':'blur(10px)'),
    'Painel Aero não foi vitrificado');
-  assert(menuSurfaces['neon-aero'].panel['#tavEntrance .tav-gate-identity-card'].filter.includes('blur(10px)'),
+  assert(menuSurfaces['neon-aero'].panel['#tavEntrance .tav-gate-identity-card'].filter.includes(width<=650?'blur(5px)':'blur(10px)'),
    'Vidro do painel da entrada está ausente');
   assert(menuSurfaces['neon-aero'].panel['#sceneWelcome .welcome-panel'].bg.includes('rgba('),
    'Vidro Aero sem transparência real');
@@ -212,6 +212,92 @@ try{
    assert.notEqual(menuSurfaces[id].originalPanel,'none','HUD não deve desaparecer: '+id);
   }
 
+
+  // 0.5.0.34 — identidade própria dos sete baralhos e superfícies sem
+  // riscas diagonais. CSS computado em 390 e 1024 pixels.
+  const gameStyle=await page.evaluate(()=>{
+    const ids=['classic','neon-blue','neon-green','neon-pink','neon-tavern-dark',
+      'neon-aero','neon-imperial','neon-amber'];
+    const selectors=['#sceneGame #tableShell','#sceneGame #tableShell>.felt',
+      '#sceneGame #humanZone','#sceneGame .control-bar',
+      '#sceneGame .game-header','#sceneGame .action-list'];
+    const probe=document.createElement('div');
+    probe.innerHTML='<div class="big-card card-back"><div class="coat"></div></div><div class="mini-card"></div><div class="card-face red"><div class="orn"></div></div>';
+    document.body.appendChild(probe);
+    const read=el=>{
+      if(!el)return null;
+      const s=getComputedStyle(el);
+      return {bg:s.backgroundImage,color:s.color,border:s.borderTopColor,
+        filter:s.backdropFilter||s.webkitBackdropFilter,shadow:s.boxShadow};
+    };
+    const out={};
+    for(const id of ids){
+      window.TavernaThemeSystem.setPalette(id);
+      const panels=Object.fromEntries(selectors.map(s=>[s,read(document.querySelector(s))]));
+      out[id]={panels,
+        back:read(probe.querySelector('.card-back')),
+        mini:read(probe.querySelector('.mini-card')),
+        face:read(probe.querySelector('.card-face')),
+        backBefore:getComputedStyle(probe.querySelector('.card-back'),'::before').content,
+        coatBefore:getComputedStyle(probe.querySelector('.coat'),'::before').content,
+        sombria:read(document.querySelector('#sceneWelcome .welcome-panel')),
+        book:read(document.querySelector('#sceneMenu .book'))
+      };
+    }
+    probe.remove();
+    window.TavernaThemeSystem.setPalette('neon-pink');
+    return out;
+  });
+  const variants=['neon-blue','neon-green','neon-pink','neon-tavern-dark',
+    'neon-aero','neon-imperial','neon-amber'];
+  const regions=['#sceneGame #tableShell','#sceneGame #tableShell>.felt',
+    '#sceneGame #humanZone','#sceneGame .control-bar',
+    '#sceneGame .game-header','#sceneGame .action-list'];
+  for(const id of variants){
+    const state=gameStyle[id];
+    for(const sel of regions){
+      const surface=state.panels[sel];
+      assert(surface,'Região do jogo não encontrada: '+sel);
+      assert(!surface.bg.includes('repeating-linear-gradient'),
+        'Ainda existem listras na área '+sel+' do tema '+id+' computed='+surface.bg.slice(0,550));
+      assert(surface.bg.includes('gradient'),'Superfície temática ausente: '+id+' '+sel);
+      assert.notEqual(surface.bg,gameStyle.classic.panels[sel]?.bg,
+        'A superfície não pode ser igual à clássica: '+id+' '+sel);
+    }
+    assert(state.back.bg.includes('theme-decks/'+id+'.svg'),'Verso sem arte própria: '+id);
+    assert(state.mini.bg.includes('theme-decks/'+id+'.svg'),'Miniverso sem a arte própria: '+id);
+    assert(state.face.bg.includes('gradient'),'Carta da frente perdeu papel temático: '+id);
+    assert(!state.face.bg.includes('repeating-linear-gradient'),'Frente ainda listrada: '+id);
+    assert.equal(state.backBefore,'none','Losango compartilhado sobrepõe arte SVG: '+id);
+    assert.equal(state.coatBefore,'none','Runa duplicada sobrepõe arte SVG: '+id);
+    if(id==='neon-tavern-dark'||id==='neon-imperial'){
+      assert(!state.sombria.bg.includes('repeating-linear-gradient'),
+        'Painel de menu herdou listras: '+id);
+      assert(!state.book.bg.includes('repeating-linear-gradient'),
+        'Capa do livro offline herdou listras: '+id);
+    }
+  }
+  assert.notEqual(gameStyle['neon-blue'].back.bg,gameStyle['neon-green'].back.bg);
+  assert.notEqual(gameStyle['neon-green'].back.bg,gameStyle['neon-pink'].back.bg);
+  assert.equal(gameStyle.classic.back.bg.includes('theme-decks/'),false,
+   'Taverna Clássica não deve receber baralho alternativo');
+  const deckAssets=await page.evaluate(async()=>{
+    return Promise.all(['neon-blue','neon-green','neon-pink','neon-tavern-dark',
+      'neon-aero','neon-imperial','neon-amber'].map(async id=>{
+      const uri='./theme-decks/'+id+'.svg';
+      const response=await fetch(uri),body=await response.text();
+      const image=new Image();image.src=uri;
+      try{await image.decode()}catch{return {id,ok:false}}
+      return {id,ok:response.ok&&body.includes('<svg')&&!body.includes('<script'),
+        bytes:body.length,width:image.naturalWidth,height:image.naturalHeight};
+    }));
+  });
+  for(const s of deckAssets){
+    assert(s.ok&&s.width===240&&s.height===336,
+      'Verso SVG não renderiza no navegador: '+JSON.stringify(s));
+    assert(s.bytes<4500,'SVG pesado demais para celular: '+s.id);
+  }
+  console.log('THEME_GAME_SURFACES_AND_SEVEN_DECKS_OK',width,deckAssets.map(x=>x.bytes));
   // v0.5.0.33: reproduz o relato real (saudação, instrução e ornamento
   // entre o título e a saudação), calculando CSS de cada tema no Chromium.
   const welcomeColors=await page.evaluate(()=>{
@@ -347,7 +433,8 @@ try{
     assert.notEqual(item.back,hotfix[0].back,'Verso da carta não mudou '+item.palette);
     assert.notEqual(item.mini,hotfix[0].mini,'Verso pequeno do bot não mudou '+item.palette);
     assert(item.red.startsWith('rgb('),'Naipe vermelho sem cor');
-    assert(item.symbol!=='none','Verso não tem símbolo exclusivo '+item.palette);
+    assert(item.symbol==='none'&&item.back.includes('theme-decks/'+item.palette+'.svg'),
+      'Símbolo autoral deve estar no SVG sem duplicação em CSS: '+item.palette);
   }
   for(let i=1;i<hotfix.length;i++)for(let j=i+1;j<hotfix.length;j++)
     assert.notEqual(hotfix[i].back,hotfix[j].back,'Baralhos com versos idênticos');

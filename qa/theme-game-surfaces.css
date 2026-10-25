@@ -1,0 +1,156 @@
+/* 0.5.0.34 — direção de arte para a mesa e a mão nos sete temas.
+   Nenhuma regra no Clássico. Não altera DOM, posição, timers, seleção,
+   cartas, contador, indicação do turno, hitbox ou atributos do motor.
+   Sem repetição diagonal, assets ou animação adicional nas superfícies. */
+
+/* Tokens de superfície: três camadas estáticas econômicas por região. */
+:root[data-tav-palette="neon-blue"]{
+ --tg-table:radial-gradient(ellipse at 28% 22%,#5e69b05e,transparent 54%),radial-gradient(ellipse at 78% 71%,#384c9270,transparent 55%),linear-gradient(148deg,#252e71,#151f55 61%,#101741);
+ --tg-rack:radial-gradient(ellipse at 22% 0%,#899ae650,transparent 62%),linear-gradient(165deg,#202d64f2,#111a44f8);
+ --tg-control:linear-gradient(170deg,#262f69ef,#141f4aef);
+ --tg-actions:linear-gradient(169deg,#2f3771ee,#171f50f5);
+ --tg-rail:linear-gradient(165deg,#303b79,#172354);
+ --tg-line:#809eff;--tg-sheen:#adcbff54;--tg-shadow:#0710299c;
+}
+:root[data-tav-palette="neon-green"]{
+ --tg-table:radial-gradient(ellipse at 30% 20%,#3e9d7d69,transparent 52%),radial-gradient(ellipse at 73% 74%,#13574c5d,transparent 58%),linear-gradient(151deg,#185b53,#0a3b39 67%,#09272e);
+ --tg-rack:radial-gradient(ellipse at 19% 0%,#7beec659,transparent 60%),linear-gradient(164deg,#164f47f2,#092e32f8);
+ --tg-control:linear-gradient(167deg,#1e6253ef,#0a3739f4);
+ --tg-actions:linear-gradient(169deg,#195a51ef,#093435f7);
+ --tg-rail:linear-gradient(167deg,#1d6552,#0c3938);
+ --tg-line:#79e8be;--tg-sheen:#abffe34b;--tg-shadow:#0428209c;
+}
+:root[data-tav-palette="neon-pink"]{
+ --tg-table:radial-gradient(ellipse at 32% 16%,#d378ad53,transparent 54%),radial-gradient(ellipse at 83% 74%,#8a3fa656,transparent 56%),linear-gradient(149deg,#702d78,#441e5f 65%,#29173d);
+ --tg-rack:radial-gradient(ellipse at 26% 0%,#ee8aca55,transparent 62%),linear-gradient(165deg,#632764f1,#331646f8);
+ --tg-control:linear-gradient(169deg,#792f79ed,#411c59f5);
+ --tg-actions:linear-gradient(165deg,#743676ec,#3e1c56f6);
+ --tg-rail:linear-gradient(160deg,#86407f,#411e5c);
+ --tg-line:#f4a9e6;--tg-sheen:#ffd2f555;--tg-shadow:#210a2da8;
+}
+:root[data-tav-palette="neon-tavern-dark"]{
+ /* Couro negro e pano rubro com luz refletida, sem riscas de tapeçaria. */
+ --tg-table:radial-gradient(ellipse at 44% 25%,#be364856,transparent 52%),radial-gradient(ellipse at 80% 71%,#87233238,transparent 63%),linear-gradient(152deg,#7b2230,#4a1625 60%,#27121c);
+ --tg-rack:radial-gradient(ellipse at 19% 0%,#98665a35,transparent 59%),linear-gradient(163deg,#322025fb,#181318fd);
+ --tg-control:linear-gradient(171deg,#38242afb,#19151afa);
+ --tg-actions:linear-gradient(166deg,#46252d,#22171c);
+ --tg-rail:linear-gradient(170deg,#40292b,#1d1619);
+ --tg-line:#bd8089;--tg-sheen:#df9b9f33;--tg-shadow:#080306ba;
+}
+:root[data-tav-palette="neon-aero"]{
+ /* Vidro jade aquático: transmissão de cor sem filtro gigante na mesa. */
+ --tg-table:radial-gradient(ellipse at 22% 17%,#dcfff08a,transparent 48%),radial-gradient(ellipse at 80% 73%,#54adc47a,transparent 59%),linear-gradient(155deg,#95d4cb,#69b3bd 58%,#397e99);
+ --tg-rack:radial-gradient(ellipse at 22% 2%,#edfffaa6,transparent 53%),linear-gradient(159deg,#418c9cce,#256b88e1);
+ --tg-control:radial-gradient(ellipse at 18% 0%,#e7fff665,transparent 57%),linear-gradient(166deg,#4a9eb1cf,#246b87e9);
+ --tg-actions:radial-gradient(ellipse at 18% 0%,#eafff57c,transparent 55%),linear-gradient(166deg,#469aabd8,#1c637ee9);
+ --tg-rail:linear-gradient(167deg,#5cabb6dc,#2c738cdf);
+ --tg-line:#bbfff1;--tg-sheen:#edfff7b5;--tg-shadow:#0b44586b;
+}
+:root[data-tav-palette="neon-imperial"]{
+ /* Veludo de salão: luz rasteira e corpo profundo, sem listras. */
+ --tg-table:radial-gradient(ellipse at 30% 16%,#b383b35b,transparent 51%),radial-gradient(ellipse at 78% 74%,#68426b60,transparent 58%),linear-gradient(153deg,#644264,#432b51 62%,#281e3a);
+ --tg-rack:radial-gradient(ellipse at 28% 0%,#c99db25a,transparent 58%),linear-gradient(157deg,#4c2c48f7,#271c35fa);
+ --tg-control:linear-gradient(167deg,#5a3653f6,#2c203cf9);
+ --tg-actions:radial-gradient(ellipse at 20% 0%,#a7779757,transparent 66%),linear-gradient(165deg,#563454f6,#2e213cfa);
+ --tg-rail:linear-gradient(160deg,#674362,#2c203c);
+ --tg-line:#c8aa83;--tg-sheen:#e4cba258;--tg-shadow:#160d20aa;
+}
+:root[data-tav-palette="neon-amber"]{
+ /* Pedra pigmentada e bronze fosco: grão em pontos, não tecido riscado. */
+ --tg-table:radial-gradient(circle at 11% 18%,#ffe5b32f 0 1px,transparent 2.1px),radial-gradient(ellipse at 33% 19%,#ebc2876b,transparent 47%),linear-gradient(150deg,#b69360,#8b6a45 56%,#634b35);
+ --tg-rack:radial-gradient(ellipse at 22% 0%,#e5bd8556,transparent 59%),linear-gradient(164deg,#735536f6,#4b3527fb);
+ --tg-control:linear-gradient(167deg,#8b683ff3,#543b2af9);
+ --tg-actions:radial-gradient(ellipse at 20% 0%,#ffe7b64d,transparent 58%),linear-gradient(166deg,#88633ef6,#513b2af9);
+ --tg-rail:linear-gradient(168deg,#947048,#533e2d);
+ --tg-line:#dfbb8a;--tg-sheen:#ffe3b05a;--tg-shadow:#301c129a;
+}
+/* Feltro principal e detalhe de luz: não usar filtros, transformações ou
+   pseudo-elementos clicáveis. A geometria continua do jogo. */
+:root[data-tav-palette^="neon-"] #sceneGame #tableShell>.felt,
+:root[data-tav-palette^="neon-"] #sceneGame .felt{
+ background:var(--tg-table)!important;
+ border-color:var(--tg-line)!important;
+ box-shadow:inset 0 10px 28px #03071928,inset 0 -17px 28px #05051c32,
+  0 0 11px var(--tp-glow)!important;
+}
+:root[data-tav-palette^="neon-"] #sceneGame #tableShell>.felt::before{
+ background:radial-gradient(ellipse at 23% 18%,var(--tg-sheen),transparent 64%)!important;
+ opacity:.62!important;pointer-events:none!important;
+}
+:root[data-tav-palette^="neon-"] #sceneGame #tableShell>.felt::after{
+ background:radial-gradient(ellipse at 71% 77%,var(--tp-glow),transparent 64%)!important;
+ opacity:.3!important;pointer-events:none!important;
+}
+/* Remover heranças de veios diagonais da mesa física, sem alterar cena ou
+   moldura da mesa que delimita a área de jogo. */
+:root[data-tav-palette^="neon-"] #sceneGame #tableShell{
+ background:var(--tg-rail)!important;
+ border-color:var(--tg-line)!important;
+ box-shadow:inset 0 3px 11px var(--tg-shadow),0 8px 21px var(--tg-shadow)!important;
+}
+/* Mesa de mão do jogador: suporte coeso, sem fibras listradas.
+   #humanZone também existe durante partida on-line. */
+:root[data-tav-palette^="neon-"] #sceneGame #humanZone,
+:root[data-tav-palette^="neon-"] #sceneGame:is(#sceneGame) :is(
+ .human-leather,.human-area,.human-panel,.human-dock,.human-hand-zone,
+ .human-tray,.human-base,.hand-base,.hand-panel,.hand-tray,
+ .human-hand-container,.hand-container,.human-bottom,.human-footer
+){
+ background:var(--tg-rack)!important;
+ border-color:var(--tg-line)!important;
+}
+/* A borda externa da mão continua forte na vez humana — essa propriedade
+   não modifica o brilho adicional de turno implementado separadamente. */
+:root[data-tav-palette^="neon-"] #sceneGame #humanZone{
+ box-shadow:inset 0 1px 0 var(--tg-sheen),inset 0 -12px 24px var(--tg-shadow),
+  0 0 12px var(--tp-glow)!important;
+}
+/* Faixas escuras soltas: só os suportes reais, nunca os botões nem o HUD
+   de timer. Mantêm profundidade sem borda preta residual. */
+:root[data-tav-palette^="neon-"] #sceneGame:is(#sceneGame) :is(
+ .game-header,.control-bar,.utility-toolbar,.control-divider,
+ .human-topline,.control-guide,.history-drawer
+){
+ background:var(--tg-control)!important;
+ border-color:var(--tg-line)!important;
+ color:var(--tp-text)!important;
+ box-shadow:inset 0 1px 0 var(--tg-sheen),0 4px 12px var(--tg-shadow)!important;
+}
+:root[data-tav-palette^="neon-"] #sceneGame:is(#sceneGame) :is(.action-list,.action-list::before,.action-list::after){
+ background:var(--tg-actions)!important;
+ border-color:var(--tg-line)!important;
+}
+:root[data-tav-palette^="neon-"] #sceneGame:is(#sceneGame) .action-list{
+ box-shadow:inset 0 1px 0 var(--tg-sheen),0 4px 12px var(--tg-shadow)!important;
+}
+/* Três botões permanecem com sua aparência e destaque de acionamento
+   próprios. Não recolorir ícones, feedback nem zonas de clique. */
+/* Montras de informação e estruturas secundárias de partida. */
+:root[data-tav-palette^="neon-"] #sceneGame:is(#sceneGame) :is(
+ .center-crest,.active-suit,.round-pill,.table-status-medallion,
+ .score-tally,.score-header
+){
+ background:var(--tg-control)!important;border-color:var(--tg-line)!important;
+}
+/* Aero somente na bandeja inferior: blur moderado e estático;
+   sem aplicar blur em feltro amplo, pilhas, botões, rosto ou animações. */
+:root[data-tav-palette="neon-aero"] #sceneGame #humanZone{
+ -webkit-backdrop-filter:blur(5px) saturate(1.06);
+ backdrop-filter:blur(5px) saturate(1.06);
+}
+@media(max-width:650px){
+ /* Poupar recomposição durante arrastes/compra em celulares. */
+ :root[data-tav-palette="neon-aero"] #sceneGame #humanZone{
+  -webkit-backdrop-filter:none;backdrop-filter:none;
+ }
+}
+@media(prefers-reduced-motion:reduce),(prefers-reduced-transparency:reduce){
+ :root[data-tav-palette="neon-aero"] #sceneGame #humanZone{
+  -webkit-backdrop-filter:none;backdrop-filter:none;
+ }
+}
+
+/* Nota: :is(#sceneGame) repete apenas o ID do próprio contêiner;
+   o seletor casa os mesmos elementos, mas vence uma antiga regra do
+   tema-base que tinha especificidade alta por incluir .seat .name .count
+   no mesmo :is(). Sem alteração de classe, estrutura ou hitbox. */

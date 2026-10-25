@@ -153,3 +153,85 @@
  outline-offset:2px!important;
 }
 /* Nunca altere opacity, visibility, transform, cursor, touch-action nem hitboxes. */
+
+/* 0.5.0.34 — sete versos vetoriais autorais, cada qual com composição
+   independente. Assets locais 240x336 (~1,3 KB cada), pré-cache PWA.
+   A mesma arte cobre baralho de compra, bots e animação de verso.
+   Nenhuma identidade de carta ou conteúdo DOM é reescrito. */
+:root[data-tav-palette="neon-blue"]{--tg-deck-image:url("./theme-decks/neon-blue.svg")}
+:root[data-tav-palette="neon-green"]{--tg-deck-image:url("./theme-decks/neon-green.svg")}
+:root[data-tav-palette="neon-pink"]{--tg-deck-image:url("./theme-decks/neon-pink.svg")}
+:root[data-tav-palette="neon-tavern-dark"]{--tg-deck-image:url("./theme-decks/neon-tavern-dark.svg")}
+:root[data-tav-palette="neon-aero"]{--tg-deck-image:url("./theme-decks/neon-aero.svg")}
+:root[data-tav-palette="neon-imperial"]{--tg-deck-image:url("./theme-decks/neon-imperial.svg")}
+:root[data-tav-palette="neon-amber"]{--tg-deck-image:url("./theme-decks/neon-amber.svg")}
+
+:root[data-tav-palette^="neon-"] :is(.card-back,.big-card.card-back,.mini-card),
+:root[data-tav-palette^="neon-"] #sceneGame :is(.mini-card,#seats .seat .mini-card){
+ background-image:var(--tg-deck-image)!important;
+ background-repeat:no-repeat!important;
+ background-position:center!important;
+ background-size:100% 100%!important;
+ border-color:var(--deck-accent)!important;
+ box-shadow:inset 0 0 0 1px var(--deck-core),0 3px 8px #0810207d!important;
+}
+/* Desenhos SVG já contêm as molduras e símbolos: retirar o antigo
+   losango girado e a runa repetida, sem ocultar frente/índices/naipe. */
+:root[data-tav-palette^="neon-"] .card-back::before{
+ content:none!important;
+ box-shadow:none!important;
+ border:0!important;
+}
+:root[data-tav-palette^="neon-"] .card-back .coat::before{
+ content:none!important;
+ text-shadow:none!important;
+}
+:root[data-tav-palette^="neon-"] #sceneGame .mini-card::before,
+:root[data-tav-palette^="neon-"] #sceneGame #seats .seat .mini-card::before{
+ content:none!important;
+ border:0!important;
+ box-shadow:none!important;
+}
+/* Frentes também ganham papel/material próprios, mas sempre com a mesma
+   legibilidade de números e naipes e sem linhas diagonais repetidas. */
+:root[data-tav-palette="neon-blue"]{
+ --tg-card-paper:radial-gradient(ellipse at 22% 8%,#fff 0%,transparent 52%),linear-gradient(160deg,#f6fcff,#d8e6fd);
+ --tg-card-rim:#697bd2;--tg-card-orn:#a2adf8;
+}
+:root[data-tav-palette="neon-green"]{
+ --tg-card-paper:radial-gradient(ellipse at 20% 3%,#fff 0%,transparent 53%),linear-gradient(153deg,#f7fff8,#d8f0e1);
+ --tg-card-rim:#64aa88;--tg-card-orn:#9ad2af;
+}
+:root[data-tav-palette="neon-pink"]{
+ --tg-card-paper:radial-gradient(ellipse at 20% 5%,#fff 0%,transparent 55%),linear-gradient(159deg,#fff9fd,#f1dcef);
+ --tg-card-rim:#c277b7;--tg-card-orn:#e5abda;
+}
+:root[data-tav-palette="neon-tavern-dark"]{
+ --tg-card-paper:radial-gradient(ellipse at 20% 6%,#fffaee 0%,transparent 54%),linear-gradient(155deg,#f6e8dc,#d6c5b8);
+ --tg-card-rim:#82515c;--tg-card-orn:#b78b8a;
+}
+:root[data-tav-palette="neon-aero"]{
+ --tg-card-paper:radial-gradient(ellipse at 22% 8%,#fff 0%,transparent 54%),linear-gradient(155deg,#f9ffff,#d6f4f4);
+ --tg-card-rim:#6cafbe;--tg-card-orn:#abe6da;
+}
+:root[data-tav-palette="neon-imperial"]{
+ --tg-card-paper:radial-gradient(ellipse at 22% 7%,#fffaf2 0%,transparent 53%),linear-gradient(159deg,#fffaef,#eee2dd);
+ --tg-card-rim:#b79a74;--tg-card-orn:#dbbe9d;
+}
+:root[data-tav-palette="neon-amber"]{
+ --tg-card-paper:radial-gradient(ellipse at 20% 7%,#fff9e9 0%,transparent 52%),linear-gradient(158deg,#fff8dd,#ecd9b5);
+ --tg-card-rim:#b58c52;--tg-card-orn:#dcc197;
+}
+:root[data-tav-palette^="neon-"] .card-face{
+ background:var(--tg-card-paper)!important;
+ border-color:var(--tg-card-rim)!important;
+ box-shadow:inset 0 0 0 2px #fff9,inset 0 0 0 5px var(--tg-card-orn),
+  0 4px 11px #06102576!important;
+}
+:root[data-tav-palette^="neon-"] .card-face .orn{
+ border-color:var(--tg-card-orn)!important;
+ opacity:.52!important;
+ box-shadow:none!important;
+}
+/* As regras red/black e índices da implementação anterior seguem intactas.
+   Nunca adicionar filtros, transform, opacity ou escala ao verso das cartas. */
