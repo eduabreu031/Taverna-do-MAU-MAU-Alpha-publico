@@ -40,11 +40,11 @@ function harness(storage,user,override={}){
  return {events,sandbox};
 }
 (async()=>{
- const goodRoom='ABC123',token='server-seat';
+ const goodRoom='ABC234',token='server-seat';
  const storage=new Map();
  const account={username:'alice',role:'player'};
  let a=harness(storage,account);
- vm.runInContext("saveResume('ABC123','server-seat')",a.sandbox);
+ vm.runInContext("saveResume('ABC234','server-seat')",a.sandbox);
  assert.equal(JSON.parse(storage.get('taverna-online-resume-v1')).room,goodRoom);
  a=harness(storage,account);
  await vm.runInContext('restoreRoomOnStartup()',a.sandbox);
@@ -59,12 +59,12 @@ function harness(storage,user,override={}){
 
  const guest={username:'guest_abc',role:'guest'},guestStore=new Map();
  a=harness(guestStore,guest);
- vm.runInContext("saveResume('ABC123','server-seat')",a.sandbox);
+ vm.runInContext("saveResume('ABC234','server-seat')",a.sandbox);
  assert.equal(JSON.parse(guestStore.get('taverna-online-resume-v1')).guestToken,'guest-bearer');
  a=harness(guestStore,guest);
  await vm.runInContext('restoreRoomOnStartup()',a.sandbox);
  assert(a.events.includes('guest:guest-bearer'),'credencial de visitante não reutilizada');
- assert(a.events.includes('connect:ABC123:server-seat'),'visitante não retomou a mesma cadeira');
+ assert(a.events.includes('connect:ABC234:server-seat'),'visitante não retomou a mesma cadeira');
  vm.runInContext('clearResume()',a.sandbox);
  assert.equal(guestStore.size,0,'sair explicitamente deve limpar retomada');
  console.log('ONLINE_RESUME_OK: conta, Forasteiro, troca de identidade, encerramento, isolamento e sintaxe');
