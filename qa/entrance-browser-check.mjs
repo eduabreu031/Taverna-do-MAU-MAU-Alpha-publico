@@ -1,96 +1,66 @@
 import {chromium} from 'playwright';
 import assert from 'node:assert/strict';
+// Sem porta: identifica o jogador diretamente, em modo offline e autenticado.
 const browser=await chromium.launch({headless:true,args:['--no-sandbox']});
 try{
  for(const width of [320,390,1024,1440]){
   const context=await browser.newContext({viewport:{width,height:844},isMobile:width<=390,hasTouch:width<=390});
   const page=await context.newPage();
-  const errors=[];page.on('pageerror',e=>errors.push(e.message));
+  const errors=[];page.on('pageerror',error=>errors.push(error.message));
   await page.goto('http://127.0.0.1:8765/',{waitUntil:'domcontentloaded'});
-  await page.waitForSelector('#tavEntranceDoor');
-  assert(await page.locator('#tavEntrance').isVisible(),'Fachada não abriu');
-  assert(await page.locator('#tavEntranceIdentity').isHidden(),'Identificação abriu antes do toque');
-  const facade=await page.evaluate(async()=>{
-   const urls=['./art/tavern-door-v2.svg'];
-   const ok=await Promise.all(urls.map(async path=>{const r=await fetch(path);return r.ok&&(path.endsWith('.webp')?(await r.blob()).size>30000:(await r.text()).startsWith('<svg '));}));
-   const art=getComputedStyle(document.querySelector('.tav-gate-art'));
-   const box=document.querySelector('#tavEntranceDoor').getBoundingClientRect();
-   return {ok,art:art.backgroundImage,door:[box.x,box.y,box.width,box.height],viewport:innerWidth};
-  });
-  assert(facade.ok.every(Boolean),'Recursos locais 2.5D não carregaram');
-  const imageCheck=await page.evaluate(async()=>{
-    const res=await fetch('./art/tavern-door-v2.svg');
-    const svg=await res.text();
-    const img=new Image();
-    img.src=URL.createObjectURL(new Blob([svg],{type:'image/svg+xml'}));
-    try{
-      await img.decode();
-      const canvas=document.createElement('canvas');canvas.width=260;canvas.height=462;
-      const ctx=canvas.getContext('2d',{willReadFrequently:true});
-      ctx.drawImage(img,0,0,260,462);
-      const pixel=ctx.getImageData(130,230,1,1).data;
-      return {complete:img.complete,width:img.naturalWidth,pixel:[...pixel],embedded:svg.includes('data:image/webp;base64,')};
-    }finally{URL.revokeObjectURL(img.src)}
-  });
-  assert(imageCheck.embedded&&imageCheck.complete&&imageCheck.width>0,'Imagem cinematográfica não foi incorporada corretamente');
-  assert(imageCheck.pixel[3]===255&&imageCheck.pixel.slice(0,3).some(n=>n>12),'A porta fotográfica apareceu em branco');
-  assert(!facade.art.includes('tavern-facade'),'O fundo não deve carregar uma fachada ilustrada');
-  assert(await page.locator('#tavEntranceDoor').evaluate(x=>getComputedStyle(x).backgroundImage.includes('tavern-door-v2.svg')),'Porta detalhada não está aplicada');
-  assert(facade.door[2]>=width*(width<=390?.86:.25)&&facade.door[3]>=650,'Porta não ocupa a tela como previsto');
-  assert(facade.door[0]>=0&&facade.door[0]+facade.door[2]<=width+1,'Porta fora da tela: '+width);
-
-  await page.screenshot({path:'/tmp/tav-entrance-facade-'+width+'.png'});
-  await page.locator('#tavEntranceDoor').click();
-  assert.equal(await page.locator('#tavEntrance').evaluate(x=>x.classList.contains('tav-gate-opened')),true);
-  assert.notEqual(await page.locator('#tavEntranceDoor').evaluate(x=>getComputedStyle(x).transform),'none','Porta não recebeu perspectiva');
-  await page.waitForSelector('#tavEntranceIdentity:not([hidden])');
-  assert(await page.locator('#tavEntranceGuest').isVisible());
-  assert(await page.locator('#tavEntranceAccount').isVisible());
+  await page.waitForSelector('#tavEntranceIdentity');
+  assert(await page.locator('#tavEntranceIdentity').isVisible(),'Identificação não apareceu diretamente');
+  assert(await page.locator('#tavEntranceGuest').isVisible(),'Botão Forasteiro ausente');
+  assert(await page.locator('#tavEntranceAccount').isVisible(),'Botão de conta ausente');
+  assert.equal(await page.locator('#tavEntranceDoor').count(),0,'Porta antiga ainda está na página');
+  assert.equal(await page.locator('.tav-gate-art').count(),0,'Cenário antigo ainda está na página');
+  assert.equal(await page.locator('#tavEntranceBack').count(),0,'Botão de voltar à porta ainda está na página');
+  const hasPhoto=await page.locator('#tavEntrance').evaluate(node=>
+   getComputedStyle(node).backgroundImage.includes('tavern-door-v2.svg'));
+  assert(!hasPhoto,'Imagem da porta ainda é carregada');
   await page.screenshot({path:'/tmp/tav-entrance-identity-'+width+'.png'});
   await context.setOffline(true);
   await page.locator('#tavEntranceGuest').click();
   await page.waitForFunction(()=>!document.getElementById('tavEntrance'),{timeout:5000});
   assert.equal(await page.locator('#playerName').inputValue(),'Forasteiro');
-  assert(await page.locator('#chooseOffline').isVisible(),'Botão offline desapareceu após entrada');
-  assert(await page.locator('#chooseMultiplayer').isVisible(),'Botão multiplayer desapareceu após entrada');
-  assert(await page.locator('#chooseRules').isVisible(),'Regras desapareceram após entrada');
-  assert(await page.locator('#sceneWelcome').innerText(),'Menu principal ficou vazio');
-  assert.equal(await page.locator('#sceneWelcome .tav-welcome-name-disabled').count(),0,'O visitante deve poder editar seu nome');
-  assert.deepEqual(await page.locator('#sceneWelcome .tav-welcome-mode-compact').evaluateAll(nodes=>nodes.map(n=>n.id)),['chooseOffline','chooseMultiplayer','chooseRules'],'Ordem de modos incorreta');
-  assert(await page.locator('#sceneWelcome .tav-welcome-modes-column').isVisible(),'Modos não estão organizados em coluna');
-  await page.evaluate(()=>{const news=document.getElementById('alphaInformationOverlay');news?.remove();});
+  for(const id of ['chooseOffline','chooseMultiplayer','chooseRules']){
+   assert(await page.locator('#'+id).isVisible(),'Botão '+id+' desapareceu para Forasteiro');
+  }
+  assert.deepEqual(await page.locator('#sceneWelcome .tav-welcome-mode-compact')
+   .evaluateAll(nodes=>nodes.map(node=>node.id)),
+   ['chooseOffline','chooseMultiplayer','chooseRules'],'Ordem do menu incorreta');
+  await page.evaluate(()=>document.getElementById('alphaInformationOverlay')?.remove());
   await page.locator('#chooseOffline').click();
-  assert(await page.locator('#sceneMenu').isVisible(),'Modo offline bloqueado pela fachada');
+  assert(await page.locator('#sceneMenu').isVisible(),'Jogo offline inacessível');
   await page.locator('#offlineBackBtn').click();
-  assert(await page.locator('#sceneWelcome').isVisible(),'Retorno não exibiu interior');
-  assert.equal(await page.locator('#tavEntrance').count(),0,'Porta apareceu ao voltar ao menu');
-  assert(errors.length===0,'Erros JS no fluxo visitante: '+errors.join('; '));
+  assert(await page.locator('#sceneWelcome').isVisible(),'Retorno ao menu falhou');
+  assert.equal(await page.locator('#tavEntrance').count(),0,'Identificação retornou indevidamente');
+  assert.equal(errors.length,0,'Erro JS no visitante: '+errors.join('; '));
   await context.close();
   console.log('TAVERN_ENTRANCE_GUEST_OK',width);
  }
  const page=await browser.newPage({viewport:{width:390,height:844}});
+ const errors=[];page.on('pageerror',error=>errors.push(error.message));
  await page.goto('http://127.0.0.1:8765/',{waitUntil:'domcontentloaded'});
+ await page.waitForSelector('#tavEntranceIdentity');
  await page.evaluate(()=>{
   window.TavernaAuth.getUser=()=>({role:'user',username:'JogadorQA'});
   window.TavernaAuth.restoreSilently=async()=>({role:'user',username:'JogadorQA'});
   window.TavernaAuth.syncAdventureName=()=>{};
+  window.TavernaEntrance.refreshLabels();
  });
- await page.locator('#tavEntranceDoor').click();
- await page.waitForSelector('#tavEntranceIdentity:not([hidden])');
+ assert(await page.locator('#tavEntranceIdentity').isVisible(),'Identificação autenticada ausente');
  assert.equal(await page.locator('#tavEntrancePrimary').innerText(),'Continuar como JogadorQA');
  assert.equal(await page.locator('#tavEntranceAccount').innerText(),'Trocar conta');
  await page.locator('#tavEntrancePrimary').click();
+ await page.waitForFunction(()=>!document.getElementById('tavEntrance'),{timeout:5000});
  await page.waitForFunction(()=>document.getElementById('sceneWelcome').classList.contains('tav-welcome-account'));
- assert.equal(await page.locator('#chooseOffline').count(),1,'Botões foram destruídos após identificação');
- assert.equal(await page.locator('#chooseMultiplayer').count(),1,'Multiplayer desapareceu');
- assert.equal(await page.locator('#chooseRules').count(),1,'Regras desapareceram');
- assert(await page.locator('#playerName').evaluate(x=>getComputedStyle(x).display==='none'),'O campo de nome não foi ocultado para conta');
- assert(await page.locator('#chooseOffline').isVisible(),'Conta: botão Offline desapareceu');
- assert(await page.locator('#chooseMultiplayer').isVisible(),'Conta: botão Multiplayer desapareceu');
- assert(await page.locator('#chooseRules').isVisible(),'Conta: botão Regras desapareceu');
- assert(await page.locator('#sceneWelcome').evaluate(x=>getComputedStyle(x).display!=='none'),'Conta: menu principal oculto');
- assert((await page.locator('#sceneWelcome').innerText()).trim().length>30,'Menu da conta não exibiu conteúdo');
- await page.waitForFunction(()=>!document.getElementById('tavEntrance'));
+ for(const id of ['chooseOffline','chooseMultiplayer','chooseRules']){
+  assert(await page.locator('#'+id).isVisible(),'Conta: botão '+id+' desapareceu');
+ }
+ assert(await page.locator('#playerName').evaluate(node=>getComputedStyle(node).display==='none'),
+  'Campo de nome deve ficar oculto para conta');
+ assert.equal(errors.length,0,'Erro JS com conta: '+errors.join('; '));
  console.log('TAVERN_ENTRANCE_ACCOUNT_OK');
  await page.close();
 }finally{await browser.close();}
