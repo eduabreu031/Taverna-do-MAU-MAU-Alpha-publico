@@ -11,7 +11,7 @@
         "Ao puxar para atualizar ou recarregar a aba, o multiplayer retorna automaticamente à mesma sala e recupera do servidor o jogador, a mão e o estado atual da mesa.",
         "A reconexão preserva contas cadastradas e a sessão efêmera do Forasteiro na mesma aba, sem armazenar as cartas no navegador.",
         "Saída voluntária, identidade trocada e sessão expirada não recriam o jogador; a reconexão respeita a janela de abandono de 60 segundos já existente.",
-        "Sem mudança nas regras, bots, temas, modo offline, Arauto ou Rádio; teste de compatibilidade com o cliente Beta e de retomada."
+        "Preservados motor offline, regras, temas, Arauto e Rádio; verificações de compatibilidade, identidade e códigos válidos de sala."
       ]
     },
     {
