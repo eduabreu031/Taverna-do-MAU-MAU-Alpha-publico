@@ -15,6 +15,43 @@ try{
   assert.equal(themes.length,12,'A prévia deve permitir alternar entre os 12 temas');
   for(const name of ['Forja dos Dragões','Reino Abissal','Bosque dos Sussurros','Solar de Porcelana'])
     assert(themes.some(t=>t.label===name),'Novo tema não aparece no menu: '+name);
+  // Private preview regression: every visible draw card and bot back
+  // must have a decoded, opaque image in all 12 palettes (including Classic).
+  const cardAudit=await page.evaluate(async()=>{
+    const scene=document.querySelector('#sceneGame');
+    const mini=document.createElement('span');mini.className='mini-card';
+    mini.style.cssText='width:14px;height:28px';scene.appendChild(mini);
+    const draw=document.querySelector('#drawPile');
+    const rows=[];
+    for(const theme of window.TavernaThemeSystem.getChoices()){
+      window.TavernaThemeSystem.setPalette(theme.id);
+      const items=[];
+      for(const el of [draw,mini]){
+        const cs=getComputedStyle(el),bg=cs.backgroundImage;
+        const url=bg.match(/url\\(["']?(.*?)["']?\\)/)?.[1];
+        let ok=false,dimensions=[0,0];
+        if(url){
+          const im=new Image();im.src=url;
+          try{await im.decode();ok=true;dimensions=[im.naturalWidth,im.naturalHeight]}catch{}
+        }
+        items.push({bgColor:cs.backgroundColor,bg:bg.slice(0,160),ok,dimensions});
+      }
+      rows.push({theme:theme.id,items});
+    }
+    mini.remove();
+    return rows;
+  });
+  for(const row of cardAudit){
+    for(const item of row.items){
+      assert(item.ok&&item.dimensions[0]>=240&&item.dimensions[1]>=336,
+        'O verso não renderiza: '+JSON.stringify(row));
+      assert.notEqual(item.bgColor,'rgba(0, 0, 0, 0)',
+        'Verso transparente (fundo ausente): '+row.theme+' '+JSON.stringify(item));
+      if(row.theme!=='classic') assert(item.bg.includes('theme-decks-raster/'+row.theme+'.webp'),
+        'A arte raster exclusiva não está ativa: '+row.theme);
+    }
+  }
+  console.log('ALL_TWELVE_OPAQUE_CARD_BACKS_OK',width,cardAudit.length);
   const existing=await page.evaluate(()=>{
     window.TavernaThemeSystem.setPalette('classic');
     return getComputedStyle(document.querySelector('#sceneWelcome .welcome-panel')).backgroundImage;
