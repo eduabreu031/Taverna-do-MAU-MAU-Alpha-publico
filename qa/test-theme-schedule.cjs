@@ -67,6 +67,15 @@ assert(parityCSS.includes('#sceneGame:is(#sceneGame) .action-list'),
 assert(parityCSS.includes('#activeSuit'),'Indicador de naipe ainda com placa');
 assert(parityCSS.includes('#sceneMenu .book-page'),
   'Texto do aventureiro offline não acompanha a paleta');
+assert(parityCSS.includes('#sceneMenu .offline-player-banner'),
+ 'Painel de nome do aventureiro sem superfície do tema');
+assert(parityCSS.includes('#sceneMenu #changePlayerName'),
+ 'Botão alterar nome mantém fundo marrom da Taverna Clássica');
+assert(parityCSS.includes('#sceneMenu .offline-setup-heading'),
+ 'Cabeçalho de personagens ainda usa amarelo clássico');
+assert(parityCSS.includes('#sceneMenu :is(\n .v72-welcome-prelude'),
+ 'Texto Prepare sua aventura precisa acompanhar a paleta');
+
 assert(parityCSS.includes('multiplayer-mark')&&parityCSS.includes('multiplayer-intro'),
   'Marca e saudações multiplayer devem acompanhar a paleta');
 assert(parityCSS.includes('.tav-gate-rule::after')&&parityCSS.includes('.tav-gate-crest'),
