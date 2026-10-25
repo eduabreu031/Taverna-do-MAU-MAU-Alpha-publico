@@ -35,7 +35,7 @@ turn_css=(root/'qa/theme-turn-highlights.css').read_text(encoding='utf-8')
 forms_css=(root/'qa/theme-form-surfaces.css').read_text(encoding='utf-8')
 appearance_js=(root/'qa/appearance-menu.js').read_text(encoding='utf-8')
 manager=(root/'qa/theme-manager.js').read_text(encoding='utf-8')
-assert palettes.count(':root[data-tav-palette="neon-')==3
+assert palettes.count(':root[data-tav-palette="neon-')==7, 'As sete paletas opcionais precisam de tokens'
 assert ':root[data-tav-palette^="neon-"]' in palettes
 assert 'data-tav-event' in events_css
 for style in (palettes,events_css,appearance_css,decks_css,hotfix_css,turn_css,forms_css):
@@ -49,4 +49,4 @@ styles=palettes+'\n'+events_css+'\n'+appearance_css+'\n'+decks_css+'\n'+hotfix_c
 html=html.replace('</head>','<style id="tav-seasonal-themes">\n'+styles+'\n</style>\n</head>',1)
 html=html.replace('</body>','<script id="tav-theme-manager">\n'+manager+'\n</script>\n<script id="tav-appearance-menu">\n'+appearance_js+'\n</script>\n</body>',1)
 path.write_text(html,encoding='utf-8')
-print('APPEARANCE_READY: classic, neon-blue, neon-green, neon-pink; seasonal events:',','.join(known))
+print('APPEARANCE_READY: 8 paletas (original + 7 alternativas); seasonal events:',','.join(known))
