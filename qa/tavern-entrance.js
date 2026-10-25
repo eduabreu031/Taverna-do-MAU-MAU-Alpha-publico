@@ -6,40 +6,29 @@ const auth=()=>window.TavernaAuth;
 const el=document.createElement('section');
 el.id='tavEntrance';el.setAttribute('role','region');el.setAttribute('aria-label','Entrada da Taverna do Mau Mau');
 el.innerHTML=`
- <div class="tav-gate-art">
-  <div class="tav-gate-threshold" aria-hidden="true"></div>
-  <div class="tav-gate-embers" aria-hidden="true"></div>
-  <button type="button" id="tavEntranceDoor" class="tav-gate-door" aria-label="Abrir a porta da Taverna" aria-haspopup="dialog" aria-controls="tavEntranceIdentity">
-   
-  </button>
- </div>
- <div class="tav-gate-caption" aria-hidden="true"><span>TOQUE NA PORTA PARA ENTRAR</span></div>
- <div class="tav-gate-identity" id="tavEntranceIdentity" role="dialog" aria-modal="true" aria-labelledby="tavEntranceTitle" hidden>
+ <div class="tav-gate-identity" id="tavEntranceIdentity" role="dialog" aria-modal="true" aria-labelledby="tavEntranceTitle">
   <div class="tav-gate-identity-card">
    <div class="tav-gate-crest" aria-hidden="true">♠</div>
    <div class="tav-gate-eyebrow">✦ SEJA BEM-VINDO À TAVERNA ✦</div>
-   <h2 id="tavEntranceTitle">Quem bate à porta?</h2>
+   <h2 id="tavEntranceTitle">Bem-vindo à Taverna</h2>
    <div class="tav-gate-rule" aria-hidden="true"></div>
-   <p>As portas estão abertas. Escolha como deseja se apresentar aos demais aventureiros.</p>
+   <p>Escolha como deseja entrar.</p>
    <div class="tav-gate-actions">
-    <button type="button" id="tavEntrancePrimary">Entrar com minha conta</button>
+    <button type="button" id="tavEntrancePrimary" hidden>Continuar com minha conta</button>
     <button type="button" id="tavEntranceAccount">Entrar ou criar conta</button>
     <button type="button" id="tavEntranceGuest">Entrar como Forasteiro</button>
-    <button type="button" id="tavEntranceBack">Voltar à porta</button>
    </div>
    <p id="tavEntranceError" class="tav-gate-error" role="status" aria-live="polite"></p>
   </div>
  </div>`;
 document.body.appendChild(el);
-const door=el.querySelector('#tavEntranceDoor');
 const identity=el.querySelector('#tavEntranceIdentity');
 const primary=el.querySelector('#tavEntrancePrimary');
 const accountBtn=el.querySelector('#tavEntranceAccount');
 const guestBtn=el.querySelector('#tavEntranceGuest');
-const back=el.querySelector('#tavEntranceBack');
 const error=el.querySelector('#tavEntranceError');
-const buttons=[primary,accountBtn,guestBtn,back];
-let stage='door',busy=false,voiceOnce=false,opened=false;
+const buttons=[primary,accountBtn,guestBtn];
+let stage='identity',busy=false,voiceOnce=false;
 function current(){const found=auth()?.getUser?.();return found?.role!=='guest'?found:null;}
 function labels(){
  const user=current();
@@ -84,7 +73,7 @@ function finish(){
  stage='entering';identity.hidden=true;el.classList.add('tav-gate-departing');
  const done=()=>{dismissVisualOnly();onInterior();};
  if(window.matchMedia?.('(prefers-reduced-motion: reduce)').matches)done();
- else setTimeout(done,950);
+ else setTimeout(done,320);
 }
 async function enterGuest(){
  if(busy)return;
@@ -114,23 +103,14 @@ async function enterAccount(replace){
  }catch(e){error.textContent=e?.message||'Não foi possível entrar na conta.';}
  finally{if(accountOverlay)accountOverlay.style.zIndex=previousZ;setBusy(false);}
 }
-function openDoor(){
- if(stage!=='door')return;
- opened=true;stage='identity';el.classList.add('tav-gate-opened');
- labels();setTimeout(()=>{if(stage==='identity'){identity.hidden=false;(primary.hidden?accountBtn:primary).focus();}},1030);
- Promise.resolve(auth()?.restoreSilently?.()).then(()=>{if(stage==='identity')labels();}).catch(()=>{});
-}
-door.addEventListener('click',openDoor);
+// A identificação agora é a primeira tela: não existe mais porta para tocar.
+labels();
+Promise.resolve(auth()?.restoreSilently?.()).then(()=>{if(stage==='identity')labels();}).catch(()=>{});
 primary.addEventListener('click',()=>{if(current()){auth()?.syncAdventureName?.();finish();}else enterAccount(false);});
 accountBtn.addEventListener('click',()=>enterAccount(!!current()));
 guestBtn.addEventListener('click',enterGuest);
-back.addEventListener('click',()=>{
- if(busy)return;
- identity.hidden=true;el.classList.remove('tav-gate-opened');stage='door';door.focus();
-});
 el.addEventListener('keydown',event=>{
- if(event.key==='Escape'&&stage==='identity'&&!busy){event.preventDefault();back.click();}
- if(event.key!=='Tab'||identity.hidden)return;
+ if(event.key!=='Tab'||stage!=='identity'||busy)return;
  const tabbable=buttons.filter(b=>!b.disabled&&!b.hidden);
  const idx=tabbable.indexOf(document.activeElement);
  if(event.shiftKey&&idx===0){event.preventDefault();tabbable.at(-1).focus();}
@@ -145,8 +125,7 @@ const observer=new MutationObserver(()=>{
 observer.observe(document.body,{subtree:true,attributes:true,attributeFilter:['class']});
 window.TavernaEntrance=Object.freeze({
  isOpen:()=>stage!=='done',
- skipVisualOnly:dismissVisualOnly,
- openDoor
+ skipVisualOnly:dismissVisualOnly
 });
 if(welcome.classList.contains('hidden'))dismissVisualOnly();
 })();
