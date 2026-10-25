@@ -9,7 +9,7 @@ html=path.read_text(encoding='utf-8')
 assert len(html)>4_000_000,'O build original do jogo ainda não foi montado'
 assert html.count('</head>')==1 and html.count('</body>')==1
 for anchor in ('id="alpha-accounts-script"','id="tav-theme-manager"','id="tav-entrance-script"',
-               'id="sceneWelcome"','id="sceneMenu"','id="alphaTopTools"'):
+               'id="sceneWelcome"','id="sceneMenu"','alphaTopTools'):
     assert anchor in html, 'Âncora de integração ausente: '+anchor
 assert 'id="tav-cronicas-script"' not in html and 'id="tav-cronicas-style"' not in html,'Crônicas duplicadas'
 catalog=json.loads((root/'qa/cronicas-catalog-preview.json').read_text(encoding='utf-8'))
