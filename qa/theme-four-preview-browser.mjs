@@ -63,7 +63,7 @@ try{
    assert(data.rack.includes('gradient'),'Bandeja da mão sem material próprio: '+id);
    assert.equal(data.action,'none','Há placa atrás de MAU MAU / OPA!!!: '+id);
    assert.equal(data.controls,'none','Faixa escura atrás dos controles: '+id);
-   assert(data.paper.includes('gradient'),'Frente da carta não está no tema: '+id);
+   assert(data.paper.includes('gradient'),'Frente da carta não está no tema: '+id+' computed='+data.paper.slice(0,240));
    assert(data.cardback.includes('theme-decks/'+id+'.svg'),'Verso SVG não aplicado: '+id);
    assert.equal(data.before,'none','Desenho genérico duplicado no verso: '+id);
    assert(data.assets.every(a=>a.ok&&a.svg&&a.bytes<4200),'SVG fora do orçamento: '+JSON.stringify(data.assets));
