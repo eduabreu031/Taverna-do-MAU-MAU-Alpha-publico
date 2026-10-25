@@ -21,6 +21,31 @@ assert(script&&css&&menuScript,'As duas camadas e as opções do jogador precisa
    original: zero imagens, zero mudanças em cartas, naipes, turnos ou cliques. */
 const materials=fs.readFileSync(path.join(root,'qa/theme-materials.css'),'utf8').trim();
 assert(css.includes(materials),'Camada dos materiais não foi embutida no HTML gerado');
+
+const menus=fs.readFileSync(path.join(root,'qa/theme-menu-surfaces.css'),'utf8').trim();
+assert(css.includes(menus),'Refinamento dos painéis não está incluído no HTML de produção');
+assert(css.indexOf(menus)>css.indexOf(materials),'Estilo dos menus precisa vir após os materiais');
+assert(!menus.includes('url('),'As texturas de fundo aprovadas não devem ser duplicadas nos painéis');
+assert(!menus.includes(':root[data-tav-palette="classic"]'),'Não alterar a Taverna Clássica');
+assert(!menus.includes('#sceneGame'),'Caixas de contexto não devem modificar a mesa de jogo');
+assert(!menus.includes('#overlay:has(.suit-list) .'),'Seleção de naipes deve continuar original');
+assert(!menus.includes('animation:')&&!menus.includes('pointer-events:auto'),'Painel não deve alterar interações');
+for(const id of ['neon-blue','neon-green','neon-pink','neon-aero','neon-amber']){
+ const marker=':root[data-tav-palette="'+id+'"]{';
+ const offset=menus.indexOf(marker);
+ assert(offset>=0,'Tema sem identidade própria de menu '+id);
+ const body=menus.slice(offset,menus.indexOf('}',offset));
+ assert(body.includes('--tm-menu-surface:'),'Material de menu ausente: '+id);
+ assert(!body.includes('repeating-linear-gradient'),'Riscas ainda definidas para '+id);
+ assert(body.includes('--tm-menu-button-ink:'),'Faltou cor do botão '+id);
+}
+for(const key of ['#tavEntrance .tav-gate-identity-card','#sceneWelcome .welcome-panel',
+ '#sceneMultiplayer .multiplayer-panel','#sceneMenu .book-page',
+ '#tavAppearanceOverlay .tav-appearance-card','#alphaAccountsOverlay .alpha-accounts-panel'])
+ assert(menus.includes(key),'Contexto de menu não refinado: '+key);
+assert(menus.includes('backdrop-filter:blur(10px)'),'Aero sem desfoque de vidro');
+assert(menus.includes(':not(.suit-choice):not([data-suit])'),'Botões de naipes não devem ser afetados');
+
 assert(!materials.includes(':root[data-tav-palette="classic"]'),'Taverna Clássica deve ficar intocada');
 const backdropIds=['neon-blue','neon-green','neon-pink','neon-tavern-dark','neon-aero','neon-imperial','neon-amber'];
 const backdropPaths=backdropIds.map(id=>'./theme-backdrops/'+id+'.svg');

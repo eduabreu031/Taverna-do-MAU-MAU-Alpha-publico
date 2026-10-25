@@ -95,7 +95,7 @@ try{
    assert(materials[id].depth.includes('inset'),'Botão sem relevo: '+id);
    assert.notEqual(materials[id].sky,materials.classic.sky,'Cenário igual ao clássico: '+id);
   }
-  assert(materials['neon-aero'].glass.includes('blur(8px)'),'Vidro Aero sem translucidez');
+  assert(materials['neon-aero'].glass.includes('blur(10px)'),'Vidro Aero sem translucidez');
   assert.notEqual(materials['neon-blue'].sky,materials['neon-green'].sky);
   assert.notEqual(materials['neon-green'].sky,materials['neon-pink'].sky);
 
@@ -126,6 +126,91 @@ try{
     assert(result.stars>=600,'Faltam estrelas no tema '+result.id);
   }
 
+  // v0.5.0.32: a caixa de MENU precisa ser lisa; o CENÁRIO aprovado
+  // continua em tela inteira. Botões existentes não perdem a aparência.
+  const menuSurfaces=await page.evaluate(()=>{
+   const palette=['classic','neon-blue','neon-green','neon-pink','neon-aero','neon-amber','neon-tavern-dark','neon-imperial'];
+   const selectors=[
+    '#tavEntrance .tav-gate-identity-card','#sceneWelcome .welcome-panel',
+    '#sceneMultiplayer .multiplayer-panel','#sceneMenu .book-page',
+    '#tavAppearanceOverlay .tav-appearance-card',
+    '#alphaAccountsOverlay .alpha-accounts-panel'
+   ];
+   const out={};
+   for(const id of palette){
+    window.TavernaThemeSystem.setPalette(id);
+    const panel={};
+    for(const selector of selectors){
+     const el=document.querySelector(selector);
+     if(!el){panel[selector]=null;continue}
+     const style=getComputedStyle(el);
+     panel[selector]={
+      bg:style.backgroundImage,
+      filter:style.backdropFilter||style.webkitBackdropFilter,
+      color:style.color
+     };
+    }
+    const btn=document.querySelector('#sceneWelcome .welcome-mode');
+    const nested=btn?.querySelector('strong');
+    const expectedInkNode=document.createElement('span');
+    expectedInkNode.style.color='var(--tm-menu-button-ink)';
+    document.body.appendChild(expectedInkNode);
+    const expectedInk=getComputedStyle(expectedInkNode).color;
+    expectedInkNode.remove();
+    const gate=document.querySelector('#tavEntrance .tav-gate-actions button:not([hidden])');
+    out[id]={
+     panel,
+     scene:getComputedStyle(document.querySelector('#sceneWelcome')).backgroundImage,
+     buttonBg:getComputedStyle(btn).backgroundImage,
+     expectedInk,
+     buttonColor:getComputedStyle(btn).color,
+     buttonNode:btn?.outerHTML?.slice(0,400),
+     labelNode:nested?.outerHTML?.slice(0,300),
+     labelColor:nested?getComputedStyle(nested).color:null,
+     gateColor:gate?getComputedStyle(gate).color:null,
+     gateBg:gate?getComputedStyle(gate).backgroundImage:null,
+     buttonShadow:getComputedStyle(btn).textShadow,
+     originalPanel:getComputedStyle(document.querySelector('#sceneGame .game-header')).backgroundImage
+    };
+   }
+   window.TavernaThemeSystem.setPalette('neon-pink');
+   return out;
+  });
+  const cleaned=['neon-blue','neon-green','neon-pink','neon-aero','neon-amber'];
+  const panelSelectors=['#tavEntrance .tav-gate-identity-card','#sceneWelcome .welcome-panel',
+   '#sceneMultiplayer .multiplayer-panel','#sceneMenu .book-page',
+   '#tavAppearanceOverlay .tav-appearance-card',
+   '#alphaAccountsOverlay .alpha-accounts-panel'];
+  for(const id of cleaned){
+   for(const selector of panelSelectors){
+    const panel=menuSurfaces[id].panel[selector];
+    assert(panel!==null,'Caixa de menu ausente: '+selector);
+    assert(!panel.bg.includes('repeating-linear-gradient'),
+      'Riscas diagonais permaneceram em '+id+' '+selector);
+    assert(panel.bg.includes('radial-gradient')||panel.bg.includes('linear-gradient'),
+      'Material de menu ausente: '+id+' '+selector);
+   }
+   assert(menuSurfaces[id].scene.includes('theme-backdrops/'+id+'.svg'),
+    'Cenário estrelado/natural alterado indevidamente: '+id);
+   assert(menuSurfaces[id].buttonBg.includes('gradient'),'Fundo de botão apagado: '+id);
+   assert.equal(menuSurfaces[id].labelColor,menuSurfaces[id].expectedInk,
+    'Título do botão não recebeu a tinta do tema: '+id+' '+JSON.stringify(menuSurfaces[id]));
+   assert(menuSurfaces[id].buttonColor!=='rgb(255, 215, 0)',
+    'Botão herdou amarelo clássico: '+id);
+   assert(menuSurfaces[id].buttonShadow!=='none','Falta sombra para contraste: '+id);
+  }
+  assert(menuSurfaces['neon-aero'].panel['#sceneWelcome .welcome-panel'].filter.includes('blur(10px)'),
+   'Painel Aero não foi vitrificado');
+  assert(menuSurfaces['neon-aero'].panel['#tavEntrance .tav-gate-identity-card'].filter.includes('blur(10px)'),
+   'Vidro do painel da entrada está ausente');
+  assert(menuSurfaces['neon-aero'].panel['#sceneWelcome .welcome-panel'].bg.includes('rgba('),
+   'Vidro Aero sem transparência real');
+  assert.equal(menuSurfaces.classic.panel['#sceneWelcome .welcome-panel'].bg,
+   data.samples.classic['#sceneWelcome .welcome-panel'].split('|')[0],
+   'Taverna Clássica mudou ao alternar os temas');
+  for(const id of ['neon-blue','neon-green','neon-pink','neon-aero','neon-amber']){
+   assert.notEqual(menuSurfaces[id].originalPanel,'none','HUD não deve desaparecer: '+id);
+  }
   const pref=await page.evaluate(()=>localStorage.getItem('taverna:appearance:palette:v1'));
   assert.equal(pref,'neon-pink');
   await page.reload({waitUntil:'domcontentloaded'});

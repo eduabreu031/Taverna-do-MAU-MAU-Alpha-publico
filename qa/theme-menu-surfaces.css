@@ -1,0 +1,199 @@
+/* Taverna do MAU MAU — 0.5.0.32: painéis de menu, sem riscas diagonais.
+   Camada DEPOIS de theme-materials.css. O cenário de tela inteira, feltro,
+   baralhos, naipes, HUD, halos, lógica e fundos de botões não são alterados.
+   Taverna Clássica / Sombria / Imperial continuam intocadas. */
+
+/* Superfícies discretas, sem repeating-linear-gradient:
+   Neon = névoa difusa sobre tonalidade sólida; Âmbar = pedra/areia suave.
+   A paleta é aplicada só aos CONTEXTOS DE MENU, não ao tabuleiro. */
+:root[data-tav-palette="neon-blue"]{
+ --tm-menu-surface:
+  radial-gradient(ellipse at 20% 0%,#676dc052 0%,transparent 65%),
+  radial-gradient(ellipse at 96% 93%,#214fa42a 0%,transparent 52%),
+  linear-gradient(155deg,#20275bf0,#131c47f7 62%,#0b1234f9);
+ --tm-menu-ink:#f3f7ff;
+ --tm-menu-stroke:#868cfa;
+ --tm-menu-shadow:inset 0 1px 0 #aab7ff3e,inset 0 -13px 32px #080e2d8a,0 15px 36px #03071cbc;
+ --tm-menu-button-ink:#f1f6ff;
+}
+:root[data-tav-palette="neon-green"]{
+ --tm-menu-surface:
+  radial-gradient(ellipse at 22% 0%,#52bd9670 0%,transparent 66%),
+  radial-gradient(ellipse at 87% 94%,#2b8d6b29 0%,transparent 55%),
+  linear-gradient(155deg,#165447f1,#0b3d35f8 57%,#072a29fc);
+ --tm-menu-ink:#f0fff5;
+ --tm-menu-stroke:#72dabb;
+ --tm-menu-shadow:inset 0 1px 0 #b1ffdf38,inset 0 -13px 29px #05251a9c,0 15px 35px #021711ad;
+ --tm-menu-button-ink:#eefff6;
+}
+:root[data-tav-palette="neon-pink"]{
+ --tm-menu-surface:
+  radial-gradient(ellipse at 21% -7%,#de70b15c 0%,transparent 69%),
+  radial-gradient(ellipse at 90% 92%,#813aa72c 0%,transparent 56%),
+  linear-gradient(155deg,#63265def,#42194af7 63%,#280e35fa);
+ --tm-menu-ink:#fff3fc;
+ --tm-menu-stroke:#e595d5;
+ --tm-menu-shadow:inset 0 1px 0 #ffd2f03d,inset 0 -13px 30px #27072594,0 15px 35px #17071cbc;
+ --tm-menu-button-ink:#fff0fb;
+}
+:root[data-tav-palette="neon-aero"]{
+ /* Verde-água escuro e translucidez controlada: o fundo atrás fica visível,
+    mas textos continuam claros e legíveis mesmo em regiões luminosas. */
+ --tm-menu-surface:
+  radial-gradient(ellipse at 18% -8%,#d6fff45e 0%,transparent 61%),
+  linear-gradient(166deg,#266f7dc9 0%,#205f77c9 54%,#173e59df 100%);
+ --tm-menu-ink:#f3ffff;
+ --tm-menu-stroke:#bcfff1;
+ --tm-menu-shadow:inset 0 1px 0 #ffffff90,inset 0 0 0 1px #e4fff71c,
+                   inset 0 -10px 35px #0b41565c,0 14px 35px #0a415787,0 0 20px #dbfff14d;
+ --tm-menu-button-ink:#f7ffff;
+}
+:root[data-tav-palette="neon-amber"]{
+ --tm-menu-surface:
+  radial-gradient(circle at 16% 22%,#f9ddb71a 0 1.2px,transparent 2.5px),
+  radial-gradient(circle at 83% 73%,#1c120e16 0 1px,transparent 2.2px),
+  radial-gradient(ellipse at 29% 0%,#d1a66d78 0%,transparent 65%),
+  linear-gradient(157deg,#80603ff5,#63492ff9 57%,#402c1efb);
+ --tm-menu-ink:#fff2dd;
+ --tm-menu-stroke:#d2af7b;
+ --tm-menu-shadow:inset 0 1px 0 #ffe8bd3b,inset 0 -14px 30px #35201491,0 15px 34px #1b100aa8;
+ --tm-menu-button-ink:#fff3df;
+}
+
+/* Bloco de contextos reais das telas: boas bordas e sombra, nenhuma risca.
+   O seletor de naipes #overlay:has(.suit-list) permanece original.
+   Não estilizar .book, .felt, .seat, .portrait-medallion ou cartões do baralho. */
+:root[data-tav-palette="neon-blue"],
+:root[data-tav-palette="neon-green"],
+:root[data-tav-palette="neon-pink"],
+:root[data-tav-palette="neon-aero"],
+:root[data-tav-palette="neon-amber"]{
+ --tm-menu-radius:16px;
+}
+:root:is(
+ [data-tav-palette="neon-blue"],[data-tav-palette="neon-green"],
+ [data-tav-palette="neon-pink"],[data-tav-palette="neon-aero"],
+ [data-tav-palette="neon-amber"]
+) :is(
+ #tavEntrance .tav-gate-identity-card,
+ #sceneWelcome .welcome-panel,#sceneWelcome .welcome-crest,
+ #sceneMultiplayer .multiplayer-panel,
+ #sceneMultiplayer #alphaAccountsBar,
+ #sceneMultiplayer .multiplayer-state,
+ #sceneMultiplayer #onlineLobby,
+ #sceneMultiplayer .multiplayer-preview>div,
+ #sceneMenu .book-page,#sceneMenu .left-page,#sceneMenu .right-page,
+ #tavAppearanceOverlay .tav-appearance-card,
+ #alphaAccountsOverlay .alpha-accounts-panel,
+ .alpha-info-card,.alpha-release,
+ .tav-central-panel,.tav-central-counter,.tav-central-report,
+ .tav-admin-panel,.tav-bots-sheet-inner,.tav-vip-password-sheet,
+ #rulesModalDEV .rules-book,
+ #tavSocialMenu,#tavSocialVote
+){
+ background:var(--tm-menu-surface)!important;
+ border-color:var(--tm-menu-stroke)!important;
+ color:var(--tm-menu-ink)!important;
+ box-shadow:var(--tm-menu-shadow)!important;
+}
+/* O cartão de retrato/seleção offline é uma opção clicável, e não um
+   painel de contexto: conservar o fundo e os estados escolhidos originais. */
+
+/* Aero: vidro fosco só onde há painel grande. Nunca aplicar blur à mesa,
+   aos botões ou à cena inteira. Moderação para celulares antigos. */
+:root[data-tav-palette="neon-aero"] :is(
+ #tavEntrance .tav-gate-identity-card,
+ #sceneWelcome .welcome-panel,
+ #sceneMultiplayer .multiplayer-panel,
+ #sceneMenu .book-page,
+ #tavAppearanceOverlay .tav-appearance-card,
+ #alphaAccountsOverlay .alpha-accounts-panel,
+ .alpha-info-card,.tav-central-panel,#rulesModalDEV .rules-book
+){
+ -webkit-backdrop-filter:blur(10px) saturate(1.15)!important;
+ backdrop-filter:blur(10px) saturate(1.15)!important;
+}
+
+/* Botões preservam integralmente seus backgrounds, sombras e hitboxes
+   aprovados na 0.5.0.30; unificamos SÓ as cores de letras. */
+:root[data-tav-palette="neon-tavern-dark"]{--tm-menu-button-ink:#f7e5e0}
+:root[data-tav-palette="neon-imperial"]{--tm-menu-button-ink:#fff1ee}
+:root[data-tav-palette="neon-aero"]{--tm-menu-button-ink:#f7ffff}
+:root[data-tav-palette="neon-amber"]{--tm-menu-button-ink:#fff3df}
+:root[data-tav-palette^="neon-"] :is(
+ #sceneWelcome,#sceneMultiplayer,#sceneMenu,
+ #tavEntrance,#alphaAccountsOverlay,#tavAppearanceOverlay,
+ #rulesModalDEV,.tav-central-panel,.tav-admin-panel,.tav-bots-sheet-inner
+) button:not(.suit-choice):not([data-suit]){
+ color:var(--tm-menu-button-ink)!important;
+}
+/* Textos internos possuem em alguns menus CSS antigo dourado com !important.
+   Não pintar ícones, selo de selecionado, efeitos nem rótulos de naipes. */
+:root[data-tav-palette^="neon-"] :is(
+ #sceneWelcome,#sceneMultiplayer,#sceneMenu,
+ #tavEntrance,#alphaAccountsOverlay,#tavAppearanceOverlay,
+ #rulesModalDEV,.tav-central-panel,.tav-admin-panel,.tav-bots-sheet-inner
+) button:not(.suit-choice):not([data-suit])
+  :is(strong,small,span:not(.tav-palette-check):not(.tav-palette-swatch),b,em){
+ color:var(--tm-menu-button-ink)!important;
+}
+/* Nos botões Aero e Âmbar o topo tem reflexo claro: preservar o
+   acabamento, usando contorno de sombra discreto para leitura constante. */
+:root[data-tav-palette="neon-aero"]{--tm-menu-button-shadow:0 1px 2px #063447ed,0 0 5px #063447a8}
+:root[data-tav-palette="neon-amber"]{--tm-menu-button-shadow:0 1px 2px #241308f5,0 0 5px #241308ce}
+:root[data-tav-palette="neon-blue"],
+:root[data-tav-palette="neon-green"],
+:root[data-tav-palette="neon-pink"],
+:root[data-tav-palette="neon-tavern-dark"],
+:root[data-tav-palette="neon-imperial"]{
+ --tm-menu-button-shadow:0 1px 2px #050b1bbd;
+}
+:root[data-tav-palette^="neon-"] :is(
+ #sceneWelcome,#sceneMultiplayer,#sceneMenu,
+ #tavEntrance,#alphaAccountsOverlay,#tavAppearanceOverlay,
+ #rulesModalDEV,.tav-central-panel,.tav-admin-panel,.tav-bots-sheet-inner
+) button:not(.suit-choice):not([data-suit]){
+ text-shadow:var(--tm-menu-button-shadow)!important;
+}
+:root[data-tav-palette^="neon-"] :is(
+ #sceneWelcome,#sceneMultiplayer,#sceneMenu,
+ #tavEntrance,#alphaAccountsOverlay,#tavAppearanceOverlay,
+ #rulesModalDEV,.tav-central-panel,.tav-admin-panel,.tav-bots-sheet-inner
+) button:not(.suit-choice):not([data-suit])
+  :is(strong,small,span:not(.tav-palette-check):not(.tav-palette-swatch),b,em){
+ text-shadow:var(--tm-menu-button-shadow)!important;
+}
+/* Alguns "botões" do saguão são cartões clicáveis com classe
+   .welcome-mode e não necessariamente <button>. A cor do <strong>
+   possuía estilo próprio dourado: nivelar texto e rótulo explicitamente. */
+:root[data-tav-palette^="neon-"] #sceneWelcome .welcome-mode,
+:root[data-tav-palette^="neon-"] #sceneWelcome .welcome-mode :is(strong,span,small,b,em),
+:root[data-tav-palette^="neon-"] #sceneMultiplayer .tav-vip-enter,
+:root[data-tav-palette^="neon-"] #sceneMultiplayer .tav-vip-enter :is(strong,span,small,b),
+:root[data-tav-palette^="neon-"] #sceneMenu .engraved-btn,
+:root[data-tav-palette^="neon-"] #sceneMenu .engraved-btn :is(strong,span,small,b),
+:root[data-tav-palette^="neon-"] .tav-bots-choice,
+:root[data-tav-palette^="neon-"] .tav-bots-choice :is(strong,span,small,b),
+:root[data-tav-palette^="neon-"] :is(.alpha-primary,.alpha-secondary){
+ color:var(--tm-menu-button-ink)!important;
+ text-shadow:var(--tm-menu-button-shadow)!important;
+}
+/* Entrada inicial tem botões originalmente marrons/dourados, inclusive
+   ação principal: adequar ao tema para que letras claras não percam contraste.
+   Não toca botões já tematizados do restante das cenas. */
+:root[data-tav-palette^="neon-"] #tavEntrance .tav-gate-actions :is(
+ button,#tavEntrancePrimary:not([hidden]),#tavEntranceAccount:first-child:not([hidden])
+){
+ background:var(--tp-button)!important;
+ border-color:var(--tp-edge)!important;
+ color:var(--tm-menu-button-ink)!important;
+ text-shadow:0 1px 2px #04151a86!important;
+}
+:root[data-tav-palette^="neon-"] #tavEntrance .tav-gate-actions button:focus-visible{
+ outline-color:var(--tp-bright)!important;
+}
+@media (prefers-reduced-transparency:reduce){
+ :root[data-tav-palette="neon-aero"]{
+  --tm-menu-surface:linear-gradient(155deg,#276879f7,#16445df9);
+ }
+}

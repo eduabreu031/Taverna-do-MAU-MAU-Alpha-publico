@@ -1,7 +1,19 @@
 {
-  "current": "alpha-0.5.0.31",
+  "current": "alpha-0.5.0.32",
   "issuesRepo": "eduabreu031/Taverna-do-MAU-MAU-Alpha-publico",
   "entries": [
+    {
+      "id": "alpha-0.5.0.32",
+      "label": "0.5.0.32-alpha",
+      "date": "2026-10-25",
+      "title": "Menus mais limpos e vitrificados",
+      "items": [
+        "Removidas as riscas diagonais das caixas de menu nos temas Noite Neon Azul, Verde e Rosa, Brisa Aero e Âmbar do Deserto, substituídas por névoa suave, vidro e tons minerais.",
+        "Brisa Aero ganhou superfícies de menu translúcidas com vidro fosco e leve visão da textura de fundo, mantendo contraste em telas pequenas.",
+        "Letras dos botões em todas as paletas alternativas foram harmonizadas para evitar amarelo herdado, com sombras sutis para leitura nos reflexos Aero e Âmbar.",
+        "Preservados os sete cenários completos da versão anterior, as cores e acabamentos dos botões, Taverna Clássica, Sombria e Imperial, cartas, naipes, HUD e regras de jogo."
+      ]
+    },
     {
       "id": "alpha-0.5.0.31",
       "label": "0.5.0.31-alpha",
