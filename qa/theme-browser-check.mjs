@@ -10,7 +10,7 @@ try{
   await page.goto('http://127.0.0.1:8765/',{waitUntil:'domcontentloaded',timeout:45000});
   await page.waitForFunction(()=>!!window.TavernaThemeSystem&&!!window.TavernaAppearance,{timeout:20000});
   const data=await page.evaluate(()=>{
-   const themes=['classic','neon-blue','neon-green','neon-pink'];
+   const themes=['classic','neon-blue','neon-green','neon-pink','neon-tavern-dark','neon-aero','neon-imperial','neon-amber'];
    const selectors=[
     '#sceneWelcome .welcome-panel','#tavCentralOpen',
     '#sceneMultiplayer .multiplayer-panel','#sceneMultiplayer #alphaAccountsBar',
@@ -41,7 +41,7 @@ try{
    const options=document.querySelectorAll('.tav-palette-option').length;
    return {samples,facesColorBefore,facesColorAfter,count,options};
   });
-  assert.equal(data.options,4,'O menu de aparência precisa listar quatro escolhas');
+  assert.equal(data.options,8,'O menu de aparência precisa listar oito escolhas');
   assert(data.count>=3,'Faltam atalhos de aparência nas cenas');
   const must=[
    '#sceneWelcome .welcome-panel','#tavCentralOpen',
@@ -55,7 +55,7 @@ try{
   for(const selector of must){
    const classic=data.samples.classic[selector];
    assert(classic!==null,'Falta componente real: '+selector);
-   for(const variant of ['neon-blue','neon-green','neon-pink']){
+   for(const variant of ['neon-blue','neon-green','neon-pink','neon-tavern-dark','neon-aero','neon-imperial','neon-amber']){
     assert.notEqual(data.samples[variant][selector],classic,'Tema '+variant+' não alterou '+selector);
    }
   }
@@ -74,7 +74,7 @@ try{
   assert.equal(selected,'neon-pink');
   await page.evaluate(()=>window.TavernaAppearance.open());
   assert.equal(await page.locator('#tavAppearanceOverlay').isVisible(),true);
-  assert.equal(await page.locator('#tavAppearanceOverlay .tav-palette-option').count(),4);
+  assert.equal(await page.locator('#tavAppearanceOverlay .tav-palette-option').count(),8);
   assert.equal(await page.locator('#tavAppearanceOverlay .tav-appearance-card > p').count(),0,'Seletor deve exibir apenas os temas, sem recados');
   await page.locator('.tav-palette-option[data-palette="neon-green"]').click();
   assert.equal(await page.evaluate(()=>window.TavernaThemeSystem.getPalette().id),'neon-green');
@@ -97,7 +97,7 @@ try{
    return {parents,related};
   });
   if(width===390)console.log('THEME_HAND_AUDIT',JSON.stringify(hierarchy));
-  console.log('THEME_BROWSER_OK',width,must.length,'áreas; 4 paletas; preferências; menu interativo');
+  console.log('THEME_BROWSER_OK',width,must.length,'áreas; 8 paletas; preferências; menu interativo');
   await page.evaluate(()=>window.TavernaThemeSystem.setPalette('neon-green'));
   await page.screenshot({path:'/tmp/tav-theme-neon-'+width+'.png'});
   // Hotfix: player wrappers must be transparent, whilst visual chips are themed.
@@ -117,7 +117,7 @@ try{
     const mini=document.createElement('div');mini.className='mini-card';
     cardBox.append(back,front,mini);document.getElementById('sceneGame').append(cardBox);
     const pick=[];
-    for(const palette of ['classic','neon-blue','neon-green','neon-pink']){
+    for(const palette of ['classic','neon-blue','neon-green','neon-pink','neon-tavern-dark','neon-aero','neon-imperial','neon-amber']){
       window.TavernaThemeSystem.setPalette(palette);
       const get=node=>getComputedStyle(node);
       pick.push({
@@ -159,7 +159,7 @@ try{
     const el=[dialog,dialog.querySelector('.parchment-modal'),dialog.querySelector('#modalTitle'),
       dialog.querySelector('.suit-list'),...dialog.querySelectorAll('.suit-choice')];
     const map={};
-    for(const name of ['classic','neon-blue','neon-green','neon-pink']){
+    for(const name of ['classic','neon-blue','neon-green','neon-pink','neon-tavern-dark','neon-aero','neon-imperial','neon-amber']){
       window.TavernaThemeSystem.setPalette(name);
       const attrs=el.map(node=>{
         const b=node.getBoundingClientRect(),s=getComputedStyle(node);
@@ -172,7 +172,7 @@ try{
     }
     return map;
   });
-  for(const name of ['neon-blue','neon-green','neon-pink']){
+  for(const name of ['neon-blue','neon-green','neon-pink','neon-tavern-dark','neon-aero','neon-imperial','neon-amber']){
     // #dialog is a transparent full-screen layout wrapper: its inherited
     // computed color/border may differ although nothing is painted there.
     // Every visible element and every dimension must remain identical.
@@ -187,7 +187,7 @@ try{
   // é mais confiável que inferir cliques a partir do fixture sem listeners.
   console.log('NATIVE_SUIT_BUTTONS',width,JSON.stringify(picker.classic.style.slice(-4).map(s=>({size:s.rect.slice(2),pointer:s.pointer}))));
   assert.equal(picker.classic.style.slice(-4).length,4,'Todos os naipes precisam existir');
-  console.log('THEME_SUIT_NATIVE_LAYOUT_OK',width,'layout clássico idêntico em três neons; só backdrop colorido');
+  console.log('THEME_SUIT_NATIVE_LAYOUT_OK',width,'layout clássico idêntico em sete paletas; só backdrop colorido');
   await page.evaluate(()=>window.TavernaThemeSystem.setPalette('neon-green'));
   await page.screenshot({path:'/tmp/tav-suit-hotfix-green-'+width+'.png'});
   await page.evaluate(()=>{document.getElementById('overlay').classList.add('hidden');document.getElementById('dialog').replaceChildren();});
