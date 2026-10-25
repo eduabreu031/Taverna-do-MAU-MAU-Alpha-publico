@@ -91,7 +91,7 @@
 /* Mesa de mão do jogador: suporte coeso, sem fibras listradas.
    #humanZone também existe durante partida on-line. */
 :root[data-tav-palette^="neon-"] #sceneGame #humanZone,
-:root[data-tav-palette^="neon-"] #sceneGame :is(
+:root[data-tav-palette^="neon-"] #sceneGame:is(#sceneGame) :is(
  .human-leather,.human-area,.human-panel,.human-dock,.human-hand-zone,
  .human-tray,.human-base,.hand-base,.hand-panel,.hand-tray,
  .human-hand-container,.hand-container,.human-bottom,.human-footer
@@ -107,7 +107,7 @@
 }
 /* Faixas escuras soltas: só os suportes reais, nunca os botões nem o HUD
    de timer. Mantêm profundidade sem borda preta residual. */
-:root[data-tav-palette^="neon-"] #sceneGame :is(
+:root[data-tav-palette^="neon-"] #sceneGame:is(#sceneGame) :is(
  .game-header,.control-bar,.utility-toolbar,.control-divider,
  .human-topline,.control-guide,.history-drawer
 ){
@@ -116,17 +116,17 @@
  color:var(--tp-text)!important;
  box-shadow:inset 0 1px 0 var(--tg-sheen),0 4px 12px var(--tg-shadow)!important;
 }
-:root[data-tav-palette^="neon-"] #sceneGame :is(.action-list,.action-list::before,.action-list::after){
+:root[data-tav-palette^="neon-"] #sceneGame:is(#sceneGame) :is(.action-list,.action-list::before,.action-list::after){
  background:var(--tg-actions)!important;
  border-color:var(--tg-line)!important;
 }
-:root[data-tav-palette^="neon-"] #sceneGame .action-list{
+:root[data-tav-palette^="neon-"] #sceneGame:is(#sceneGame) .action-list{
  box-shadow:inset 0 1px 0 var(--tg-sheen),0 4px 12px var(--tg-shadow)!important;
 }
 /* Três botões permanecem com sua aparência e destaque de acionamento
    próprios. Não recolorir ícones, feedback nem zonas de clique. */
 /* Montras de informação e estruturas secundárias de partida. */
-:root[data-tav-palette^="neon-"] #sceneGame :is(
+:root[data-tav-palette^="neon-"] #sceneGame:is(#sceneGame) :is(
  .center-crest,.active-suit,.round-pill,.table-status-medallion,
  .score-tally,.score-header
 ){
@@ -149,3 +149,8 @@
   -webkit-backdrop-filter:none;backdrop-filter:none;
  }
 }
+
+/* Nota: :is(#sceneGame) repete apenas o ID do próprio contêiner;
+   o seletor casa os mesmos elementos, mas vence uma antiga regra do
+   tema-base que tinha especificidade alta por incluir .seat .name .count
+   no mesmo :is(). Sem alteração de classe, estrutura ou hitbox. */
