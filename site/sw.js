@@ -1,7 +1,7 @@
 /* Taverna do MAU MAU — atualização automática e modo offline.
    Rede primeiro: cada nova navegação procura o HTML mais recente.
    O jogo aberto nunca é recarregado à força durante uma partida. */
-const CACHE = 'taverna-pwa-alpha-0.5.0.31';
+const CACHE = 'taverna-pwa-preview-4temas-v1';
 const PREFIXES = ['taverna-v73-pwa-', 'taverna-v84-', 'taverna-pwa-'];
 const ASSETS = [
   './', './index.html', './manifest.webmanifest',
@@ -13,6 +13,11 @@ const ASSETS = [
   './theme-decks/neon-aero.svg',
   './theme-decks/neon-imperial.svg',
   './theme-decks/neon-amber.svg',
+  './theme-decks/neon-forge.svg',
+  './theme-decks/neon-abyss.svg',
+  './theme-decks/neon-forest.svg',
+  './theme-decks/neon-porcelain.svg',
+  './theme-backdrops/neon-forge.svg', './theme-backdrops/neon-abyss.svg', './theme-backdrops/neon-forest.svg', './theme-backdrops/neon-porcelain.svg',
   // As texturas de cenário devem existir mesmo quando a PWA abre offline.
   './theme-backdrops/neon-blue.svg', './theme-backdrops/neon-green.svg',
   './theme-backdrops/neon-pink.svg', './theme-backdrops/neon-tavern-dark.svg',
