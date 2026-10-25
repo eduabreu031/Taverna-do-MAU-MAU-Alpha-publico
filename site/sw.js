@@ -1,10 +1,22 @@
 /* Taverna do MAU MAU — atualização automática e modo offline.
    Rede primeiro: cada nova navegação procura o HTML mais recente.
    O jogo aberto nunca é recarregado à força durante uma partida. */
-const CACHE = 'taverna-pwa-preview-4temas-v1';
+const CACHE = 'taverna-pwa-alpha-0.5.0.38';
 const PREFIXES = ['taverna-v73-pwa-', 'taverna-v84-', 'taverna-pwa-'];
 const ASSETS = [
   './', './index.html', './manifest.webmanifest',
+  // Versos RGB opacos para compatibilidade mobile (mantêm a arte SVG fonte).
+  './theme-decks-raster/neon-blue.webp',
+  './theme-decks-raster/neon-green.webp',
+  './theme-decks-raster/neon-pink.webp',
+  './theme-decks-raster/neon-tavern-dark.webp',
+  './theme-decks-raster/neon-aero.webp',
+  './theme-decks-raster/neon-imperial.webp',
+  './theme-decks-raster/neon-amber.webp',
+  './theme-decks-raster/neon-forge.webp',
+  './theme-decks-raster/neon-abyss.webp',
+  './theme-decks-raster/neon-forest.webp',
+  './theme-decks-raster/neon-porcelain.webp',
   // Versos vetoriais temáticos: os sete arquivos ficam disponíveis offline.
   './theme-decks/neon-blue.svg',
   './theme-decks/neon-green.svg',
