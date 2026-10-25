@@ -14,7 +14,8 @@
         "Âmbar do Deserto: areia quente, bronze dourado e feltro âmbar, com contraste confortável para leitura.",
         "Agora são oito paletas opcionais; os quatro temas anteriores continuam disponíveis, incluindo a Taverna Clássica sem alteração.",
         "A aparência escolhida permanece salva no dispositivo; cartas, retratos, moldura do turno, formulários, seleções de naipe e menus seguem a arquitetura temática original, sem modificar regras, contas ou salas multiplayer.",
-        "Validação de empacotamento ajustada para reconhecer os temas com camadas adicionais de textura, sem afetar opções existentes."
+        "Validação de empacotamento ajustada para reconhecer os temas com camadas adicionais de textura, sem afetar opções existentes.",
+        "Auditoria de entrada autenticada passou a verificar visibilidade real dos botões, sem depender de redação exata da saudação."
       ]
     },
     {
