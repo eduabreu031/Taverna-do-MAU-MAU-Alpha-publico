@@ -9,6 +9,7 @@ on:
       - 'qa/theme-menu-surfaces.css'
       - 'qa/theme-game-surfaces.css'
       - 'qa/theme-parity-performance.css'
+      - 'qa/theme-expansion-preview.css'
       - 'site/theme-decks/**'
       - 'site/theme-backdrops/**'
       - 'site/sw.js'
@@ -16,6 +17,7 @@ on:
       - 'qa/theme-card-decks.css'
       - 'qa/theme-game-surfaces.css'
       - 'qa/theme-parity-performance.css'
+      - 'qa/theme-expansion-preview.css'
       - 'site/theme-decks/**'
       - 'qa/theme-gameplay-hotfix.css'
       - 'qa/theme-turn-highlights.css'
@@ -42,6 +44,7 @@ on:
       - 'qa/theme-menu-surfaces.css'
       - 'qa/theme-game-surfaces.css'
       - 'qa/theme-parity-performance.css'
+      - 'qa/theme-expansion-preview.css'
       - 'site/theme-decks/**'
       - 'site/theme-backdrops/**'
       - 'site/sw.js'
@@ -95,6 +98,19 @@ jobs:
           node qa/theme-real-game-audit.mjs
           node qa/theme-form-audit.mjs
           node qa/entrance-browser-check.mjs
+      - name: Gerar pacote de teste experimental sem publicar no site
+        uses: actions/upload-artifact@v4
+        with:
+          name: Taverna-Quatro-Temas-TESTE-SEM-PUBLICAR
+          path: |
+            site/index.html
+            site/theme-backdrops/
+            site/theme-decks/
+            site/icons/
+            site/sw.js
+            site/manifest.webmanifest
+          if-no-files-found: error
+          retention-days: 14
       - name: Guardar capturas apenas para diagnóstico
         if: always()
         uses: actions/upload-artifact@v4
