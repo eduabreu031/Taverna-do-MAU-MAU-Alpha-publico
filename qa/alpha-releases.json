@@ -1,7 +1,19 @@
 {
-  "current": "alpha-0.5.0.32",
+  "current": "alpha-0.5.0.33",
   "issuesRepo": "eduabreu031/Taverna-do-MAU-MAU-Alpha-publico",
   "entries": [
+    {
+      "id": "alpha-0.5.0.33",
+      "label": "0.5.0.33-alpha",
+      "date": "2026-10-25",
+      "title": "Saudação e ornamento no tom de cada tema",
+      "items": [
+        "Corrigido o texto 'Seja bem-vindo, viajante. Como devemos chamá-lo nesta taverna?' que permanecia dourado nos temas alternativos.",
+        "A instrução 'Escolha como deseja jogar' e o rótulo de nome agora usam cores contrastantes harmonizadas com cada tema.",
+        "O ornamento ❦ sob o título e suas duas linhas laterais deixam de herdar o amarelo clássico e recebem acentos de cada paleta.",
+        "Mantidos intactos a Taverna Clássica, os cenários da 0.5.0.31, os painéis e botões da 0.5.0.32, as cartas, o seletor de naipes e todas as regras."
+      ]
+    },
     {
       "id": "alpha-0.5.0.32",
       "label": "0.5.0.32-alpha",
