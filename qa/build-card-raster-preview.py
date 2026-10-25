@@ -48,6 +48,8 @@ for ident in ids:
         'linear-gradient(150deg,var(--deck-core2),var(--deck-core)) !important;}')
 css.extend([
     ':root[data-tav-palette^="neon-"] :is(.card-back,.big-card.card-back,.mini-card){',
+    ':root[data-tav-palette^="neon-"] #sceneGame:is(#sceneGame) :is(.card-back,.big-card.card-back,.mini-card),',
+    ':root[data-tav-palette^="neon-"] #sceneGame:is(#sceneGame) #seats .seat .mini-card{',
     'background-color:var(--deck-core,#13283a)!important;',
     'background-size:100% 100%!important;background-repeat:no-repeat!important;',
     'background-position:center!important;}',
