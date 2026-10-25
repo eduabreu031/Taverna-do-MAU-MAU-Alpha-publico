@@ -405,8 +405,8 @@ try{
         'A superfície não pode ser igual à clássica: '+id+' '+sel);
       }
     }
-    assert(state.back.bg.includes('theme-decks/'+id+'.svg'),'Verso sem arte própria: '+id);
-    assert(state.mini.bg.includes('theme-decks/'+id+'.svg'),'Miniverso sem a arte própria: '+id);
+    assert(state.back.bg.includes('theme-decks-raster/'+id+'.webp'),'Verso sem arte própria: '+id);
+    assert(state.mini.bg.includes('theme-decks-raster/'+id+'.webp'),'Miniverso sem a arte própria: '+id);
     assert(state.face.bg.includes('gradient'),'Carta da frente perdeu papel temático: '+id);
     assert(!state.face.bg.includes('repeating-linear-gradient'),'Frente ainda listrada: '+id);
     assert.equal(state.backBefore,'none','Losango compartilhado sobrepõe arte SVG: '+id);
