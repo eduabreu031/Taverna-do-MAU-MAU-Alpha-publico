@@ -73,7 +73,7 @@ try{
     const panel=getComputedStyle(document.querySelector('#sceneWelcome .welcome-panel'));
     const button=getComputedStyle(document.querySelector('#sceneWelcome .welcome-mode'));
     out[id]={
-     scenes:Object.fromEntries(['body','#tavEntrance','#sceneWelcome','#sceneMultiplayer','#sceneMenu','#sceneGame'].map(s=>[s,getComputedStyle(document.querySelector(s)).backgroundImage])),
+     scenes:Object.fromEntries(['body','#tavEntrance','#alphaAccountsOverlay','#sceneWelcome','#sceneMultiplayer','#sceneMenu','#sceneGame'].map(s=>[s,getComputedStyle(document.querySelector(s)).backgroundImage])),
      sky:scene.backgroundImage,
      skySize:scene.backgroundSize,
      panel:panel.backgroundImage,
