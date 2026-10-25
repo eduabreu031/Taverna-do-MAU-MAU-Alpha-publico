@@ -18,6 +18,22 @@ try{
    return {ok,art:art.backgroundImage,door:[box.x,box.y,box.width,box.height],viewport:innerWidth};
   });
   assert(facade.ok.every(Boolean),'Recursos locais 2.5D não carregaram');
+  const imageCheck=await page.evaluate(async()=>{
+    const res=await fetch('./art/tavern-door-v2.svg');
+    const svg=await res.text();
+    const img=new Image();
+    img.src=URL.createObjectURL(new Blob([svg],{type:'image/svg+xml'}));
+    try{
+      await img.decode();
+      const canvas=document.createElement('canvas');canvas.width=260;canvas.height=462;
+      const ctx=canvas.getContext('2d',{willReadFrequently:true});
+      ctx.drawImage(img,0,0,260,462);
+      const pixel=ctx.getImageData(130,230,1,1).data;
+      return {complete:img.complete,width:img.naturalWidth,pixel:[...pixel],embedded:svg.includes('data:image/webp;base64,')};
+    }finally{URL.revokeObjectURL(img.src)}
+  });
+  assert(imageCheck.embedded&&imageCheck.complete&&imageCheck.width>0,'Imagem cinematográfica não foi incorporada corretamente');
+  assert(imageCheck.pixel[3]===255&&imageCheck.pixel.slice(0,3).some(n=>n>12),'A porta fotográfica apareceu em branco');
   assert(!facade.art.includes('tavern-facade'),'O fundo não deve carregar uma fachada ilustrada');
   assert(await page.locator('#tavEntranceDoor').evaluate(x=>getComputedStyle(x).backgroundImage.includes('tavern-door-v2.svg')),'Porta detalhada não está aplicada');
   assert(facade.door[2]>=width*(width<=390?.86:.25)&&facade.door[3]>=650,'Porta não ocupa a tela como previsto');
