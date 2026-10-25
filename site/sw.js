@@ -5,6 +5,14 @@ const CACHE = 'taverna-pwa-alpha-0.5.0.31';
 const PREFIXES = ['taverna-v73-pwa-', 'taverna-v84-', 'taverna-pwa-'];
 const ASSETS = [
   './', './index.html', './manifest.webmanifest',
+  // Versos vetoriais temáticos: os sete arquivos ficam disponíveis offline.
+  './theme-decks/neon-blue.svg',
+  './theme-decks/neon-green.svg',
+  './theme-decks/neon-pink.svg',
+  './theme-decks/neon-tavern-dark.svg',
+  './theme-decks/neon-aero.svg',
+  './theme-decks/neon-imperial.svg',
+  './theme-decks/neon-amber.svg',
   // As texturas de cenário devem existir mesmo quando a PWA abre offline.
   './theme-backdrops/neon-blue.svg', './theme-backdrops/neon-green.svg',
   './theme-backdrops/neon-pink.svg', './theme-backdrops/neon-tavern-dark.svg',
