@@ -9,6 +9,68 @@ try{
   page.on('pageerror',error=>errors.push(error.message));
   await page.goto('http://127.0.0.1:8765/',{waitUntil:'domcontentloaded',timeout:45000});
   await page.waitForFunction(()=>!!window.TavernaThemeSystem&&!!window.TavernaAppearance,{timeout:20000});
+  // 0.5.0.36: verificar a placa REAL do nome (fora de .book-page),
+  // o botão alterar nome e textos exteriores ao livro nos sete temas.
+  const offlineIdentity=await page.evaluate(()=>{
+    const root=document.querySelector('#sceneMenu');
+    const banner=root.querySelector('.offline-player-banner');
+    const nameButton=root.querySelector('#changePlayerName');
+    const heading=root.querySelector('.offline-setup-heading');
+    const prelude=root.querySelector('.v72-welcome-prelude');
+    const allLabels=[...banner.querySelectorAll('span,small,strong,b,em,label,p')]
+      .filter(el=>!el.closest('button'));
+    const read=el=>{
+     if(!el)return null;
+     const s=getComputedStyle(el);
+     return {color:s.color,bg:s.backgroundImage,bgColor:s.backgroundColor,
+       border:s.borderTopColor,shadow:s.boxShadow,
+       text:(el.textContent||'').trim().slice(0,45)};
+    };
+    const token=key=>{
+     const probe=document.createElement('i');
+     probe.style.color='var('+key+')';document.body.append(probe);
+     const color=getComputedStyle(probe).color;probe.remove();return color;
+    };
+    const ids=['classic','neon-blue','neon-green','neon-pink',
+      'neon-tavern-dark','neon-aero','neon-imperial','neon-amber'];
+    const out={};
+    for(const id of ids){
+     window.TavernaThemeSystem.setPalette(id);
+     out[id]={banner:read(banner),button:read(nameButton),
+       heading:read(heading),prelude:read(prelude),
+       labels:allLabels.map(read),expectedInk:token('--tq-ink'),
+       expectedCaption:token('--tq-caption'),expectedOrnament:token('--tq-ornament')};
+    }
+    window.TavernaThemeSystem.setPalette('classic');
+    out.classicAfter={banner:read(banner),button:read(nameButton),
+      heading:read(heading),prelude:read(prelude)};
+    window.TavernaThemeSystem.setPalette('neon-pink');
+    return out;
+  });
+  assert(offlineIdentity.classic.banner&&offlineIdentity.classic.button,
+    'Placa ou botão de nome offline não encontrado');
+  for(const key of ['banner','button','heading','prelude']){
+    assert.deepEqual(offlineIdentity.classicAfter[key],offlineIdentity.classic[key],
+      'O tema Clássico mudou ao retornar à seleção de personagem: '+key);
+  }
+  for(const id of ['neon-blue','neon-green','neon-pink','neon-tavern-dark',
+    'neon-aero','neon-imperial','neon-amber']){
+    const x=offlineIdentity[id],orig=offlineIdentity.classic;
+    assert(x.banner.bg.includes('gradient'),
+      'Plaquinha ainda marrom em '+id+' '+JSON.stringify(x.banner));
+    assert.notEqual(x.banner.bg,orig.banner.bg,'Placa não mudou: '+id);
+    assert.notEqual(x.banner.border,orig.banner.border,'Borda marrom da placa: '+id);
+    assert.equal(x.banner.color,x.expectedInk,'Letra na placa não acompanha tema: '+id);
+    assert(x.button.bg.includes('gradient'),'Botão Alterar nome ainda marrom em '+id);
+    assert.notEqual(x.button.bgColor,orig.button.bgColor,'Fundo antigo do botão: '+id);
+    assert.notEqual(x.button.border,orig.button.border,'Borda antiga do botão: '+id);
+    assert.equal(x.heading.color,x.expectedInk,'Cabeçalho offline ainda amarelo: '+id);
+    assert.equal(x.prelude.color,x.expectedCaption,'Prepare sua aventura ainda amarelo: '+id);
+    assert(x.labels.length>=2,'Nome/identificação do aventureiro não encontrados: '+id);
+    assert(x.labels.every(v=>[x.expectedInk,x.expectedOrnament].includes(v.color)),
+      'Texto interno da identificação ainda dourado: '+id+' '+JSON.stringify(x.labels));
+  }
+  console.log('THEME_OFFLINE_NAME_AND_HEADERS_OK',width);
   const data=await page.evaluate(()=>{
    const themes=['classic','neon-blue','neon-green','neon-pink','neon-tavern-dark','neon-aero','neon-imperial','neon-amber'];
    const selectors=[
