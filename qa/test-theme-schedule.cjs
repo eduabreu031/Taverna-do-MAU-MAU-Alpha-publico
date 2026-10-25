@@ -17,7 +17,7 @@ const menuScript=html.match(/<script id="tav-appearance-menu">([\s\S]*?)<\/scrip
 const css=html.match(/<style id="tav-seasonal-themes">([\s\S]*?)<\/style>/)?.[1];
 assert(script&&css&&menuScript,'As duas camadas e as opções do jogador precisam estar no build');
 new vm.Script(script);new vm.Script(menuScript);
-for(const id of ['neon-blue','neon-green','neon-pink'])
+for(const id of ['neon-blue','neon-green','neon-pink',...["neon-tavern-dark","neon-aero","neon-imperial","neon-amber"]])
  assert(css.includes(':root[data-tav-palette="'+id+'"]'),'Paleta ausente '+id);
 assert(css.includes(':root[data-tav-event="neon-test"]'),'Evento de administrador ausente');
 assert(!css.includes(':root[data-tav-theme="neon-test"]'),'CSS antigo misturado com paletas');
@@ -69,7 +69,7 @@ vm.runInNewContext(script,{
  URL,console,setInterval:fn=>{interval=fn;return 1},setTimeout:(fn,t)=>{timers.push(t);return 8},clearTimeout(){},
 },{timeout:1200});
 const api=window.TavernaThemeSystem;assert(api);
-assert.equal(api.getChoices().length,4);
+assert.equal(api.getChoices().length,8);
 assert.equal(typeof interval,'function');
 function assertState(at,expectedPalette,active){
  clock=at;api.refresh();
@@ -90,6 +90,11 @@ assertState(end-1,'neon-pink',true);
 assertState(end,'neon-pink',false);
 assertState(end+DAY(),'neon-pink',false);
 assert.equal(store.get('taverna:appearance:palette:v1'),'neon-pink');
+for(const id of ["neon-tavern-dark","neon-aero","neon-imperial","neon-amber"]){
+ assert(api.setPalette(id),'Novo tema não selecionável: '+id);
+ assertState(end+3600000,id,false);
+ assert.equal(store.get('taverna:appearance:palette:v1'),id,'Tema não persistiu: '+id);
+}
 assert(api.setPalette('classic'));
 assertState(end+3600000,'classic',false);
 assert.equal(api.setPalette('not-a-palette'),false);
@@ -97,5 +102,5 @@ assertState(end+3600000,'classic',false);
 assert.equal(api.getStatus(end-1000).endsAt,end);
 assert.equal(api.getSchedule()[0].end,end);
 assert(!script.includes('GameEngine')&&!script.includes('game.players')&&!script.includes('WebSocket'),'Motor não pode ser tocado pelo tema');
-console.log('THEME_SCHEDULE_OK: 4 paletas, usuário persistente, evento independente, prazo absoluto, Clássico original');
+console.log('THEME_SCHEDULE_OK: 8 paletas, usuário persistente, evento independente, prazo absoluto, Clássico original');
 function DAY(){return 86400000}
