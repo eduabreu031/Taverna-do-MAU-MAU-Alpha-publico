@@ -71,22 +71,89 @@ try{
       'Texto interno da identificação ainda dourado: '+id+' '+JSON.stringify(x.labels));
   }
   console.log('THEME_OFFLINE_NAME_AND_HEADERS_OK',width);
-  if(width===390){
-   const heroAudit=await page.evaluate(()=>{
-     const root=document.querySelector('#sceneMenu'),cards=root.querySelector('#heroChoiceCards');
-     const back=root.querySelector('#offlineBackBtn');
-     const elems=[...root.querySelectorAll('h1,h2,h3,header,.book-page [class],.book-page button')].filter(x=>/Escolha seu personagem|Abra a partida|❦|Voltar aos modos de jogo|hero-choice|book-title|book-tab/.test(x.textContent||'')&&(x.textContent||'').length<450);
-     const describe=x=>{const s=getComputedStyle(x),rr=x.getBoundingClientRect();return {tag:x.tagName,cls:x.className,id:x.id,text:(x.innerText||x.textContent||'').slice(0,125),html:x.outerHTML.slice(0,1700),color:s.color,bg:s.backgroundImage,fw:s.fontWeight,border:s.borderTopColor,display:s.display,grid:s.gridTemplateColumns,flex:s.flexDirection,rect:[Math.round(rr.x),Math.round(rr.y),Math.round(rr.width),Math.round(rr.height)]}};
-     const themes=['classic','neon-blue','neon-aero','neon-imperial'],out={};
-     for(const id of themes){
-       window.TavernaThemeSystem.setPalette(id);
-       out[id]={cards:[...cards.children].map(describe),head:elems.slice(0,26).map(describe),back:back?describe(back):null,container:cards.outerHTML.slice(0,7000)};
-     }
-     window.TavernaThemeSystem.setPalette('neon-pink');
-     return out;
-   });
-   console.log('OFFLINE_HERO_REDESIGN_AUDIT',JSON.stringify(heroAudit));
+  // v0.5.0.37: validar layout efetivamente VISÍVEL, retratos,
+  // escolha funcional, título/ornamento temáticos e retorno sem glifo.
+  const heroCards=await page.evaluate(()=>{
+    const scene=document.querySelector('#sceneMenu');
+    const initialHidden=scene.classList.contains('hidden');
+    scene.classList.remove('hidden');
+    const root=document.querySelector('#heroChoiceCards');
+    const cards=[...root.querySelectorAll('.hero-choice')];
+    const filigree=scene.querySelector('.book-page .filigree');
+    const picker=scene.querySelector('.book-page .character-pick-label');
+    const back=scene.querySelector('#offlineBackBtn');
+    const read=el=>{
+      const s=getComputedStyle(el),b=el.getBoundingClientRect();
+      return {display:s.display,color:s.color,bg:s.backgroundImage,
+        columns:s.gridTemplateColumns,dir:s.flexDirection,
+        rect:[b.x,b.y,b.width,b.height], text:(el.innerText||'').trim(),
+        before:getComputedStyle(el,'::before').content,
+        after:getComputedStyle(el,'::after').content};
+    };
+    const colorOfToken=key=>{
+      const p=document.createElement('span');
+      p.style.color='var('+key+')';document.body.append(p);
+      const v=getComputedStyle(p).color;p.remove();return v;
+    };
+    const out={};
+    const themes=['classic','neon-blue','neon-green','neon-pink','neon-tavern-dark',
+      'neon-aero','neon-imperial','neon-amber'];
+    for(const theme of themes){
+      window.TavernaThemeSystem.setPalette(theme);
+      out[theme]={
+        cards:cards.map(button=>({
+          button:read(button),photo:read(button.querySelector('.hero-medallion')),
+          image:read(button.querySelector('.hero-medallion img')),
+          title:read(button.querySelector('strong')),
+          desc:read(button.querySelector('.hero-choice-desc')),
+          pressed:button.getAttribute('aria-pressed'),
+          hero:button.dataset.hero
+        })),
+        group:read(root),filigree:read(filigree),picker:read(picker),
+        back:read(back),accent:colorOfToken('--tq-ornament')
+      };
+    }
+    const original=cards.map(btn=>btn.getAttribute('aria-pressed'));
+    cards[1].click();
+    const selected=cards.map(btn=>({chosen:btn.classList.contains('chosen'),pressed:btn.getAttribute('aria-pressed')}));
+    cards[0].click();
+    const restored=cards.map(btn=>({chosen:btn.classList.contains('chosen'),pressed:btn.getAttribute('aria-pressed')}));
+    if(initialHidden)scene.classList.add('hidden');
+    window.TavernaThemeSystem.setPalette('neon-pink');
+    return {out,initialHidden,original,selected,restored};
+  });
+  for(const [theme,row] of Object.entries(heroCards.out)){
+    assert.equal(row.cards.length,3,'Devem existir três personagens: '+theme);
+    assert.equal(row.group.display,'grid','Lista deve ficar vertical: '+theme);
+    assert(!row.back.text.includes('←')&&!row.back.text.includes('⚜')&&!row.back.text.includes('❦'),
+       'Retorno offline ainda contém símbolo: '+theme+' '+row.back.text);
+    assert.equal(row.back.before,'none','Botão voltar tem símbolo ::before: '+theme);
+    assert.equal(row.back.after,'none','Botão voltar tem símbolo ::after: '+theme);
+    for(const card of row.cards){
+       assert.equal(card.button.display,'grid','Cartão deve alinhar foto e texto: '+theme);
+       assert(card.button.rect[3]>=62&&card.button.rect[3]<=98,
+         'Altura do personagem não compacta: '+theme+' '+card.hero+' '+card.button.rect);
+       assert(card.photo.rect[2]>=40&&card.photo.rect[2]<=55,
+         'Retrato não está compacto: '+theme+' '+card.hero);
+       assert(card.image.rect[2]<=55&&card.image.rect[3]<=55,
+         'Imagem do personagem é grande demais: '+theme);
+       assert(card.photo.rect[0]+card.photo.rect[2]<card.title.rect[0],
+         'Retrato não ficou à esquerda do texto: '+theme+' '+card.hero);
+       assert(card.title.rect[3]>0&&card.desc.rect[3]>0,
+         'Nome ou descrição do personagem não estão visíveis: '+theme+' '+card.hero);
+    }
+    if(theme!=='classic'){
+      assert.equal(row.filigree.color,row.accent,
+        'Símbolo sob Abra a partida ainda dourado: '+theme);
+      assert.equal(row.picker.color,row.accent,
+        'Escolha seu personagem ainda amarelo: '+theme);
+    }
   }
+  assert(heroCards.selected[1].chosen&&heroCards.selected[1].pressed==='true',
+    'Selecionar Taverneiro não responde ao clique');
+  assert(heroCards.restored[0].chosen&&heroCards.restored[0].pressed==='true',
+    'Seleção original não foi restaurada');
+  console.log('OFFLINE_COMPACT_HERO_LIST_OK',width);
   const data=await page.evaluate(()=>{
    const themes=['classic','neon-blue','neon-green','neon-pink','neon-tavern-dark','neon-aero','neon-imperial','neon-amber'];
    const selectors=[
