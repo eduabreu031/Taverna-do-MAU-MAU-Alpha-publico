@@ -1,7 +1,19 @@
 {
-  "current": "alpha-0.5.0.26",
+  "current": "alpha-0.5.0.27",
   "issuesRepo": "eduabreu031/Taverna-do-MAU-MAU-Alpha-publico",
   "entries": [
+    {
+      "id": "alpha-0.5.0.27",
+      "label": "0.5.0.27-alpha",
+      "date": "2026-10-24",
+      "title": "Porta cinematográfica com imagem aprovada",
+      "items": [
+        "A porta de entrada agora reproduz a arte cinematográfica aprovada: madeira de carvalho entalhada, ferro antigo discreto, letreiro integrado, arco de pedra e iluminação quente.",
+        "Removidos a fechadura geométrica antiga, os ornamentos infantis e a legenda duplicada; preservada a instrução de tocar gravada na própria arte.",
+        "A imagem está incorporada ao SVG local do aplicativo para funcionar offline, sem depender de imagens externas nem aumentar a lógica do jogo.",
+        "Mantidos o toque em toda a porta, a animação de entrada, a identificação por conta e Forasteiro, as oito opções de tema e o multiplayer."
+      ]
+    },
     {
       "id": "alpha-0.5.0.26",
       "label": "0.5.0.26-alpha",
