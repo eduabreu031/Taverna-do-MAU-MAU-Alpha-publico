@@ -28,7 +28,7 @@ const assetUrls=[...materials.matchAll(/url\("([^"]+)"\)/g)].map(m=>m[1]);
 assert.deepEqual(assetUrls,backdropPaths,'CSS do cenário só pode referenciar os sete SVG locais');
 assert(!materials.includes('https://')&&!materials.includes('http://'),'Cenário não deve baixar imagens remotas');
 const sw=fs.readFileSync(path.join(base,'sw.js'),'utf8');
-assert(sw.includes('taverna-pwa-textured-scenery-20261025-1'),'O PWA precisa atualizar seu cache');
+assert(sw.includes('taverna-pwa-'+release.current),'O PWA precisa atualizar o cache para esta versão');
 for(const id of backdropIds){
  const svg=fs.readFileSync(path.join(base,'theme-backdrops',id+'.svg'),'utf8');
  assert(svg.startsWith('<svg xmlns="http://www.w3.org/2000/svg"')&&svg.trimEnd().endsWith('</svg>'),'Fundo SVG inválido: '+id);
