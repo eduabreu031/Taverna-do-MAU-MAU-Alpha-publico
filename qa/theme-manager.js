@@ -8,7 +8,11 @@ const PALETTES=Object.freeze([
  Object.freeze({id:'classic',label:'Taverna Clássica',description:'Feltro vinho, madeira e luz de velas'}),
  Object.freeze({id:'neon-blue',label:'Noite Neon Azul',description:'Azul elétrico e roxo arcano'}),
  Object.freeze({id:'neon-green',label:'Noite Neon Verde',description:'Esmeralda, verde e magia alquímica'}),
- Object.freeze({id:'neon-pink',label:'Noite Neon Rosa',description:'Rosa luminoso e violeta encantado'})
+ Object.freeze({id:'neon-pink',label:'Noite Neon Rosa',description:'Rosa luminoso e violeta encantado'}),
+ Object.freeze({id:'neon-tavern-dark',label:'Taverna Sombria',description:'Madeira negra e feltro vermelho intenso'}),
+ Object.freeze({id:'neon-aero',label:'Brisa Aero',description:'Azul céu, água e natureza, brilho discreto'}),
+ Object.freeze({id:'neon-imperial',label:'Veludo Imperial',description:'Veludo púrpura, ouro antigo e elegância'}),
+ Object.freeze({id:'neon-amber',label:'Âmbar do Deserto',description:'Areia dourada, bronze e luz de âmbar'})
 ]);
 const validIds=new Set(PALETTES.map(p=>p.id));
 function validate(config){
