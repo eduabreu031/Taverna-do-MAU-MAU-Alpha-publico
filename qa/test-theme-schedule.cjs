@@ -43,7 +43,7 @@ for(const id of backdropIds){
 }
 for(const id of backdropIds)
  assert(materials.includes('url("./theme-backdrops/'+id+'.svg")'),'Paleta sem arte de fundo: '+id);
-assert(materials.includes('#sceneWelcome')&&materials.includes('#sceneMultiplayer')&&materials.includes('#sceneMenu')&&materials.includes('#sceneGame'),
+assert(materials.includes('#tavEntrance')&&materials.includes('#sceneWelcome')&&materials.includes('#sceneMultiplayer')&&materials.includes('#sceneMenu')&&materials.includes('#sceneGame'),
  'O fundo precisa cobrir todas as cenas e não apenas os cartões internos');
 assert(!materials.includes('#overlay:has(.suit-list)'),'O seletor original de naipes não pode mudar');
 assert(!materials.includes('animation:')&&!materials.includes('pointer-events:auto'),'Tema não pode iniciar animações nem interceptar toques');
