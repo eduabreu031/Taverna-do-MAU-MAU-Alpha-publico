@@ -36,6 +36,17 @@
  background:linear-gradient(130deg,#55f9ab,#23977c 56%,#083c39)}
 .tav-palette-option[data-palette=neon-pink] .tav-palette-swatch{
  background:linear-gradient(130deg,#ffa7ee,#ea57b6 56%,#441452)}
+
+/* Amostras fiéis às quatro novas mesas; sem imagens ou transparência pesada. */
+.tav-palette-option[data-palette="neon-tavern-dark"] .tav-palette-swatch{
+ background:linear-gradient(105deg,#170d0c 0 23%,#4b2a1f 24% 31%,#bb1f28 32% 70%,#24130f 72% 100%)}
+.tav-palette-option[data-palette="neon-aero"] .tav-palette-swatch{
+ background:linear-gradient(145deg,#d8f8ec 0%,#9ad7d7 42%,#52a8bb 72%,#347e9e 100%)}
+.tav-palette-option[data-palette="neon-imperial"] .tav-palette-swatch{
+ background:linear-gradient(130deg,#2d1c39,#714f78 54%,#d2b077 100%)}
+.tav-palette-option[data-palette="neon-amber"] .tav-palette-swatch{
+ background:linear-gradient(130deg,#53381f,#b58b4e 57%,#f2ce88)}
+
 .tav-palette-copy{min-width:0;flex:1;display:grid;gap:4px}
 .tav-palette-copy strong{font-size:16px}
 .tav-palette-copy small{font-size:12px;line-height:1.25;opacity:.87;font-weight:400}
