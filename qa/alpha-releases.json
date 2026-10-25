@@ -1,7 +1,21 @@
 {
-  "current": "alpha-0.5.0.25",
+  "current": "alpha-0.5.0.26",
   "issuesRepo": "eduabreu031/Taverna-do-MAU-MAU-Alpha-publico",
   "entries": [
+    {
+      "id": "alpha-0.5.0.26",
+      "label": "0.5.0.26-alpha",
+      "date": "2026-10-24",
+      "title": "Quatro novos temas opcionais para a Taverna",
+      "items": [
+        "Taverna Sombria: cenário de madeira escura com veios aparentes e feltro vermelho intenso, detalhes de cobre e ferro envelhecido.",
+        "Brisa Aero: inspirado na estética Frutiger Aero, azul-claro, água e vegetação em gradientes leves, sem efeitos pesados de transparência.",
+        "Veludo Imperial: púrpura profundo, textura de veludo, detalhes de ouro antigo e cartas coordenadas.",
+        "Âmbar do Deserto: areia quente, bronze dourado e feltro âmbar, com contraste confortável para leitura.",
+        "Agora são oito paletas opcionais; os quatro temas anteriores continuam disponíveis, incluindo a Taverna Clássica sem alteração.",
+        "A aparência escolhida permanece salva no dispositivo; cartas, retratos, moldura do turno, formulários, seleções de naipe e menus seguem a arquitetura temática original, sem modificar regras, contas ou salas multiplayer."
+      ]
+    },
     {
       "id": "alpha-0.5.0.25",
       "label": "0.5.0.25-alpha",
