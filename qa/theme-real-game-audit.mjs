@@ -73,7 +73,7 @@ try{
   const avatar=seat.querySelector('.bot-avatar');
   const hu=document.getElementById('humanZone');
   const before=[];
-  for(const theme of ['neon-blue','neon-green','neon-pink']){
+  for(const theme of ['neon-blue','neon-green','neon-pink','neon-tavern-dark','neon-aero','neon-imperial','neon-amber']){
    window.TavernaThemeSystem.setPalette(theme);
    const c=getComputedStyle(label),h=getComputedStyle(hu);
    const humanWasActive=hu.classList.contains('turn-active');
