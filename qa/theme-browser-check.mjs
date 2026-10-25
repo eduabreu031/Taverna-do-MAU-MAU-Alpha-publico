@@ -177,7 +177,7 @@ try{
    const options=document.querySelectorAll('.tav-palette-option').length;
    return {samples,facesColorBefore,facesColorAfter,count,options};
   });
-  assert.equal(data.options,8,'O menu de aparência precisa listar oito escolhas');
+  assert.equal(data.options,12,'O menu de aparência precisa listar oito escolhas');
   assert(data.count>=3,'Faltam atalhos de aparência nas cenas');
   const must=[
    '#sceneWelcome .welcome-panel','#tavCentralOpen',
@@ -583,7 +583,7 @@ try{
   assert.equal(selected,'neon-pink');
   await page.evaluate(()=>window.TavernaAppearance.open());
   assert.equal(await page.locator('#tavAppearanceOverlay').isVisible(),true);
-  assert.equal(await page.locator('#tavAppearanceOverlay .tav-palette-option').count(),8);
+  assert.equal(await page.locator('#tavAppearanceOverlay .tav-palette-option').count(),12);
   assert.equal(await page.locator('#tavAppearanceOverlay .tav-appearance-card > p').count(),0,'Seletor deve exibir apenas os temas, sem recados');
   await page.locator('.tav-palette-option[data-palette="neon-green"]').click();
   assert.equal(await page.evaluate(()=>window.TavernaThemeSystem.getPalette().id),'neon-green');
