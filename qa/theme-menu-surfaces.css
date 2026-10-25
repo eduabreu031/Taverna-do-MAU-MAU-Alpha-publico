@@ -116,9 +116,6 @@
 
 /* Botões preservam integralmente seus backgrounds, sombras e hitboxes
    aprovados na 0.5.0.30; unificamos SÓ as cores de letras. */
-:root[data-tav-palette^="neon-"]{
- --tm-menu-button-ink:var(--tp-text);
-}
 :root[data-tav-palette="neon-tavern-dark"]{--tm-menu-button-ink:#f7e5e0}
 :root[data-tav-palette="neon-imperial"]{--tm-menu-button-ink:#fff1ee}
 :root[data-tav-palette="neon-aero"]{--tm-menu-button-ink:#f7ffff}
