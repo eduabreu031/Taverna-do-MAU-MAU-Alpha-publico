@@ -50,7 +50,8 @@
 }
 :root[data-tav-palette^="neon-"] #tavEntrance .tav-gate-rule::after{
  color:var(--tq-ornament)!important;
- background:var(--tp-dark)!important;
+ background:radial-gradient(ellipse at center,
+  color-mix(in srgb,var(--tp-dark) 42%,transparent),transparent 80%)!important;
  padding:0 8px!important;border-radius:100px!important;
  box-shadow:none!important;
 }
