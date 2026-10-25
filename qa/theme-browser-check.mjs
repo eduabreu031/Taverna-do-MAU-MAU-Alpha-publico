@@ -9,6 +9,31 @@ try{
   page.on('pageerror',error=>errors.push(error.message));
   await page.goto('http://127.0.0.1:8765/',{waitUntil:'domcontentloaded',timeout:45000});
   await page.waitForFunction(()=>!!window.TavernaThemeSystem&&!!window.TavernaAppearance,{timeout:20000});
+  if(width===390){
+   const audit=await page.evaluate(()=>{
+    const result={};
+    const selectors=['#tavEntrance','#sceneMenu','#sceneMultiplayer','#sceneGame'];
+    for(const scene of selectors){
+     const root=document.querySelector(scene);
+     const isRelevant=x=>/boas.vindas|escolha como|aventur|hero|convide|amigos|c[oó]digo|criar sala|online|multiplayer|elimina|rodada|nome|tempo|naipes/i.test(x||'');
+     const found=[...root.querySelectorAll('*')].filter(el=>el.children.length===0&&isRelevant(el.textContent)&&el.textContent?.length<140).slice(0,25);
+     const special=[...root.querySelectorAll('[class],[id]')].filter(el=>/active-suit|suit.indicator|action-list|control-guide|control-bar|medallion|game-header|round|elimin|score|crest|hero|hero-frame|book-page|multiplayer/i.test(el.className+' '+el.id)).slice(0,55);
+     const read=el=>{const s=getComputedStyle(el);return {tag:el.tagName,id:el.id,cls:String(el.className).slice(0,110),text:el.textContent?.trim().slice(0,62),bg:s.backgroundImage?.slice(0,120),color:s.color,border:s.borderTopColor,shadow:s.boxShadow?.slice(0,80),filter:s.backdropFilter,pseudo:getComputedStyle(el,'::before').content}};
+     result[scene]={texts:found.map(read),parts:special.map(read)};
+    }
+    const out={};
+    for(const theme of ['classic','neon-blue','neon-aero','neon-imperial']){
+     window.TavernaThemeSystem.setPalette(theme);
+     out[theme]=Object.fromEntries(Object.entries(result).map(([scene,v])=>[scene,{
+      texts:v.texts.map(x=>{const el=[...document.querySelector(scene).querySelectorAll('*')].find(z=>z.id===x.id && z.tagName===x.tag && String(z.className).slice(0,110)===x.cls && z.textContent?.trim().slice(0,62)===x.text);return {...x,color:el?getComputedStyle(el).color:'?'}}),
+      parts:v.parts.map(x=>{const el=[...document.querySelector(scene).querySelectorAll('*')].find(z=>z.id===x.id && String(z.className).slice(0,110)===x.cls);return {...x,color:el?getComputedStyle(el).color:'?',bg:el?getComputedStyle(el).backgroundImage.slice(0,125):'?',shadow:el?getComputedStyle(el).boxShadow.slice(0,70):'?'}})
+     }]));
+    }
+    window.TavernaThemeSystem.setPalette('classic');
+    return out;
+   });
+   console.log('THEME_PARITY_DIAG',JSON.stringify(audit));
+  }
   const data=await page.evaluate(()=>{
    const themes=['classic','neon-blue','neon-green','neon-pink','neon-tavern-dark','neon-aero','neon-imperial','neon-amber'];
    const selectors=[
