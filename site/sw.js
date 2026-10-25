@@ -1,7 +1,7 @@
 /* Taverna do MAU MAU — atualização automática e modo offline.
    Rede primeiro: cada nova navegação procura o HTML mais recente.
    O jogo aberto nunca é recarregado à força durante uma partida. */
-const CACHE = 'taverna-pwa-textured-scenery-20261025-1';
+const CACHE = 'taverna-pwa-alpha-0.5.0.31';
 const PREFIXES = ['taverna-v73-pwa-', 'taverna-v84-', 'taverna-pwa-'];
 const ASSETS = [
   './', './index.html', './manifest.webmanifest',
