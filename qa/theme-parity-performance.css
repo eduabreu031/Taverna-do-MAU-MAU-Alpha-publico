@@ -205,3 +205,58 @@
   box-shadow:inset 0 4px 12px #04081521,0 0 5px var(--tp-glow)!important;
  }
 }
+
+/* 0.5.0.36 — faixa de identificação e cabeçalho do modo bots.
+   São elementos à parte das páginas do livro, logo escapavam da
+   herança de cores 0.5.0.35 e ficavam em madeira marrom/dourado clássico.
+   Mudar apenas pintura: sem tamanho, posição, hitbox, blur ou animação. */
+:root[data-tav-palette^="neon-"] #sceneMenu .offline-player-banner{
+ background:var(--tq-surface)!important;
+ border-color:var(--tq-stroke)!important;
+ color:var(--tq-ink)!important;
+ box-shadow:inset 0 1px 0 var(--tg-sheen,var(--tp-glow)),
+  0 3px 10px #03091852!important;
+}
+:root[data-tav-palette^="neon-"] #sceneMenu .offline-player-banner :is(
+ span,small,strong,b,em,label,p
+){
+ color:var(--tq-ink)!important;
+ text-shadow:0 1px 2px #080a155c!important;
+}
+:root[data-tav-palette^="neon-"] #sceneMenu .offline-player-banner :is(
+ span:first-child,small:first-child
+){
+ color:var(--tq-ornament)!important;
+}
+:root[data-tav-palette^="neon-"] #sceneMenu #changePlayerName{
+ background:var(--tp-button)!important;
+ border-color:var(--tq-stroke)!important;
+ color:var(--tm-menu-button-ink,var(--tp-text))!important;
+ box-shadow:inset 0 1px 0 var(--tg-sheen,var(--tp-glow)),
+  0 2px 7px #03071850!important;
+ text-shadow:0 1px 2px #0509177d!important;
+}
+:root[data-tav-palette^="neon-"] #sceneMenu .offline-setup-heading{
+ color:var(--tq-ink)!important;
+}
+:root[data-tav-palette^="neon-"] #sceneMenu .offline-setup-heading :is(
+ h1,h2,h3,p,strong,b,small,span:not(.tav-appearance-trigger),em
+){
+ color:var(--tq-ink)!important;
+ text-shadow:0 1px 2px #060b185c!important;
+}
+:root[data-tav-palette^="neon-"] #sceneMenu :is(
+ .v72-welcome-prelude,.offline-setup-heading .v72-welcome-prelude
+){
+ color:var(--tq-caption)!important;
+ text-shadow:0 1px 2px #060b185c!important;
+}
+/* Títulos/ornamentos que ficam fora da página do livro, mas na
+   seleção offline: mesmos materiais, sem amarelo genérico. */
+:root[data-tav-palette^="neon-"] #sceneMenu :is(
+ .offline-setup-heading .v46-welcome-title,
+ .offline-setup-heading .v46-welcome-subtitle,
+ .offline-setup-heading .v46-welcome-mark
+){
+ color:var(--tq-ornament)!important;
+}
