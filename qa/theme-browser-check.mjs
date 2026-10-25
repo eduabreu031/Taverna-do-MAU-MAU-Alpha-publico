@@ -158,6 +158,8 @@ try{
      scene:getComputedStyle(document.querySelector('#sceneWelcome')).backgroundImage,
      buttonBg:getComputedStyle(btn).backgroundImage,
      buttonColor:getComputedStyle(btn).color,
+     buttonNode:btn?.outerHTML?.slice(0,400),
+     labelNode:nested?.outerHTML?.slice(0,300),
      labelColor:nested?getComputedStyle(nested).color:null,
      gateColor:gate?getComputedStyle(gate).color:null,
      gateBg:gate?getComputedStyle(gate).backgroundImage:null,
@@ -186,7 +188,7 @@ try{
     'Cenário estrelado/natural alterado indevidamente: '+id);
    assert(menuSurfaces[id].buttonBg.includes('gradient'),'Fundo de botão apagado: '+id);
    assert(menuSurfaces[id].buttonColor===menuSurfaces[id].labelColor,
-    'Texto interior do botão diverge da paleta: '+id);
+    'Texto interior do botão diverge da paleta: '+id+' '+JSON.stringify({button:menuSurfaces[id].buttonColor,label:menuSurfaces[id].labelColor,buttonNode:menuSurfaces[id].buttonNode,labelNode:menuSurfaces[id].labelNode}));
    assert(menuSurfaces[id].buttonColor!=='rgb(255, 215, 0)',
     'Botão herdou amarelo clássico: '+id);
    assert(menuSurfaces[id].buttonShadow!=='none','Falta sombra para contraste: '+id);
