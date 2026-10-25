@@ -1,102 +1,23 @@
-/* Entrada minimalista — uma única porta esculpida e clicável em tela cheia.
-   Nenhuma foto/fachada. Somente madeira, ferro, aro de pedra e luz interna. */
+/* Entrada direta: somente painel de identificação, sem porta ou cenário fotográfico. */
 #tavEntrance,#tavEntrance *{box-sizing:border-box}
 #tavEntrance[hidden],#tavEntrance [hidden]{display:none!important}
 #tavEntrance{
  position:fixed;inset:0;z-index:2147480000;isolation:isolate;overflow:hidden;
- background:radial-gradient(ellipse at 50% 43%,#30251f 0%,#171316 51%,#08090b 100%);
+ background:radial-gradient(ellipse at 50% 42%,#33251f 0%,#1b1518 50%,#09090c 100%);
  color:#f4e4cb;font-family:Georgia,'Times New Roman',serif;
  overscroll-behavior:contain;
 }
 #tavEntrance::before{
  content:"";position:absolute;inset:0;pointer-events:none;
- background:repeating-linear-gradient(100deg,#a17d4c08 0 1px,transparent 2px 8px),
- radial-gradient(ellipse at 50% 35%,#ca936222 0%,transparent 60%);
+ background:radial-gradient(ellipse at 50% 48%,#c78d5430,transparent 68%);
 }
-#tavEntrance::after{
- content:"";position:absolute;inset:0;pointer-events:none;z-index:3;
- background:linear-gradient(90deg,#07050778,transparent 13%,transparent 87%,#07050778),
- linear-gradient(0deg,#070507ba,transparent 16%,transparent 92%,#0006);
-}
-#tavEntrance .tav-gate-art{
- position:absolute;inset:0;z-index:2;
- margin:auto;width:min(100vw,660px);height:100dvh;
- background:linear-gradient(90deg,#080809,#51403a 3%,#201b1c 6%,#201b1c 94%,#51403a 97%,#080809);
- box-shadow:0 0 0 4px #08080a,0 0 95px 14px #000c,inset 0 0 32px 11px #070609;
-}
-#tavEntrance .tav-gate-art::before{
- content:"";position:absolute;z-index:1;pointer-events:none;
- inset:3.2% 3% 7.2%;border-radius:46% 46% 1% 1%/11% 11% 0 0;
- border:clamp(8px,2.1vw,18px) solid #3f3230;
- background:linear-gradient(105deg,#100b09,#57311e 36%,#e8a45d 50%,#462b1d 69%,#0b090a);
- box-shadow:0 0 0 5px #161113,inset 0 0 42px 15px #090608,
-  0 7px 32px #000d;
-}
-#tavEntrance .tav-gate-art::after{
- content:"";position:absolute;pointer-events:none;z-index:6;
- inset:0;background:radial-gradient(ellipse at 50% 44%,transparent 48%,#0a080b94 100%);
-}
-#tavEntrance .tav-gate-threshold{
- position:absolute;z-index:2;inset:4.8% 5.8% 9.3%;
- border-radius:47% 47% 1% 1%/10% 10% 0 0;
- background:radial-gradient(ellipse at 56% 56%,#ffdda0,#c58144 38%,#361a13 69%,#09080a 100%);
- opacity:.11;box-shadow:inset 0 0 35px 20px #0009;
- transition:opacity 900ms,filter 900ms;pointer-events:none;
-}
-#tavEntrance .tav-gate-door{
- position:absolute;z-index:5;left:5%;top:4.5%;width:90%;height:87%;
- border:0;appearance:none;padding:0;
- border-radius:47% 47% 1% 1%/11% 11% 0 0;
- overflow:hidden;cursor:pointer;touch-action:manipulation;
- background:#241610 url("./art/tavern-door-v2.svg") center/100% 100% no-repeat;
- box-shadow:inset 0 0 0 2px #aa8355,inset -19px 0 36px #060508c9,
-   9px 13px 26px #000d,-7px 0 19px #070608ce;
- transform-origin:3% 52%;backface-visibility:hidden;
- transition:transform 970ms cubic-bezier(.24,.69,.14,1),filter 280ms ease,box-shadow 970ms;
-}
-#tavEntrance .tav-gate-door::before{
- content:"";position:absolute;inset:0;pointer-events:none;
- background:linear-gradient(90deg,#000a,transparent 16%,#e3b66c10 55%,#000a 100%);
-}
-#tavEntrance .tav-gate-door::after{
- content:"";position:absolute;inset:0;border:3px solid #705537;
- border-top-color:#af895b;border-radius:inherit;opacity:.7;pointer-events:none;
-}
-#tavEntrance .tav-gate-door:hover{filter:brightness(1.09)}
-#tavEntrance .tav-gate-door:focus-visible{outline:4px solid #ffe4aa;outline-offset:2px}
-/* O letreiro já está gravado nas tábuas do SVG: nenhum texto flutuante. */
-#tavEntrance .tav-gate-door span{display:none!important}
-#tavEntrance .tav-gate-embers{
- position:absolute;inset:0;z-index:4;pointer-events:none;
- background:radial-gradient(ellipse at 50% 80%,#e8a15e15,transparent 50%);
- animation:tavGateBreath 5s ease-in-out infinite alternate;
-}
-#tavEntrance .tav-gate-caption{
- position:absolute;z-index:8;left:6%;right:6%;
- bottom:max(1.7dvh,env(safe-area-inset-bottom));
- display:flex;flex-direction:column;align-items:center;justify-content:center;
- gap:0;text-align:center;pointer-events:none;
-}
-#tavEntrance .tav-gate-caption span{
- font:600 clamp(11px,1.65dvh,15px) Georgia,serif;
- letter-spacing:.14em;color:#f6dfb5;padding:7px 10px;
- text-shadow:0 2px 8px #000;
-}
-#tavEntrance .tav-gate-caption small{display:none}
-#tavEntrance.tav-gate-opened .tav-gate-door{
- transform:perspective(950px) rotateY(-104deg) rotateZ(-1deg);
- box-shadow:-25px 10px 40px #000e;pointer-events:none;
-}
-#tavEntrance.tav-gate-opened .tav-gate-threshold{opacity:1;filter:brightness(1.4)}
-#tavEntrance.tav-gate-opened .tav-gate-caption{opacity:0;transition:opacity 250ms}
-
 #tavEntrance .tav-gate-identity{
- position:absolute;inset:0;z-index:20;
+ position:absolute;inset:0;z-index:2;
  display:grid;place-items:center;padding:16px;
- background:radial-gradient(ellipse at 50% 48%,#130c0c9e,#050506bf 79%);
- backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
- animation:tavGateReveal 350ms ease both;
+ background:radial-gradient(ellipse at 50% 48%,#130c0c55,#0505069c 82%);
+ animation:tavGateReveal 320ms ease both;
 }
+
 #tavEntrance .tav-gate-identity-card{
  position:relative;isolation:isolate;overflow-y:auto;overscroll-behavior:contain;
  max-height:min(92dvh,740px);width:min(92vw,440px);
@@ -169,70 +90,24 @@
  border-color:#e8c69a;color:#21160f;text-shadow:0 1px 0 #ffe3a155;
  box-shadow:inset 0 1px 2px #fff3d288,0 4px 16px #0007;
 }
-#tavEntrance .tav-gate-actions #tavEntranceBack{
- background:transparent!important;border-color:transparent!important;
- box-shadow:none!important;font-size:13px;color:#c5a989!important;
- min-height:39px!important;padding:6px;
-}
 #tavEntrance .tav-gate-error{min-height:16px;color:#ffd39f!important;
  margin:7px 0 0!important;font-size:12px!important;}
-#tavEntrance.tav-gate-departing{
- opacity:0;transform:scale(1.04);pointer-events:none;
- transition:opacity 880ms ease,transform 880ms ease;
-}
-@keyframes tavGateBreath{0%{opacity:.45}100%{opacity:.94}}
-@keyframes tavGateReveal{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:translateY(0)}}
 
+
+#tavEntrance.tav-gate-departing{opacity:0;pointer-events:none;transition:opacity 300ms ease}
+@keyframes tavGateReveal{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
 @media(max-width:640px){
- #tavEntrance .tav-gate-art{width:100vw;height:100dvh}
- #tavEntrance .tav-gate-door{left:4%;width:92%;top:3%;height:89%}
- #tavEntrance .tav-gate-art::before{inset:2% 2% 7%}
  #tavEntrance .tav-gate-identity-card{max-height:89dvh;padding:25px 24px 18px}
  #tavEntrance .tav-gate-crest{width:54px;height:54px;font-size:27px}
  #tavEntrance .tav-gate-identity-card h2{font-size:28px}
  #tavEntrance .tav-gate-identity-card p{margin-bottom:18px}
 }
 @media(max-height:570px){
- #tavEntrance .tav-gate-caption{bottom:4px}
  #tavEntrance .tav-gate-identity-card{padding-top:14px}
  #tavEntrance .tav-gate-crest{display:none}
  #tavEntrance .tav-gate-identity-card h2{font-size:24px}
 }
 @media(prefers-reduced-motion:reduce){
- #tavEntrance .tav-gate-embers{animation:none}
- #tavEntrance .tav-gate-door,#tavEntrance.tav-gate-departing{transition-duration:.01ms}
+ #tavEntrance.tav-gate-departing{transition-duration:.01ms}
  #tavEntrance .tav-gate-identity{animation:none}
-}
-
-/* Porta cinematográfica aprovada: fotografia incorporada ao próprio SVG local.
-   A imagem é 100% offline, não usa rede, e NÃO altera a área de clique.
-   O letreiro já está entalhado na arte; a instrução também está na madeira. */
-#tavEntrance .tav-gate-art{
- width:min(100vw,640px);
- height:100dvh;
- background:#100c0a;
- box-shadow:0 0 0 2px #080705,0 0 90px 22px #000c;
-}
-#tavEntrance .tav-gate-art::before{
- inset:0;border:0;border-radius:0;
- background:radial-gradient(ellipse at 52% 48%,#f6b46a 0%,#81401e 29%,#100808 65%);
- box-shadow:inset 0 0 35px #000;
-}
-#tavEntrance .tav-gate-door{
- inset:0!important;left:0!important;top:0!important;
- width:100%!important;height:100%!important;
- border:0;border-radius:0!important;
- background:#1b110d url("./art/tavern-door-v2.svg") center/100% 100% no-repeat;
- box-shadow:inset 0 0 0 2px #21150e,0 12px 24px #000b;
- transform-origin:13% 50%;
-}
-#tavEntrance .tav-gate-door::before{
- background:linear-gradient(90deg,#08050229,transparent 17%,transparent 82%,#08050232);
-}
-#tavEntrance .tav-gate-door::after{
- border:0;border-radius:0;box-shadow:inset 0 0 19px #04020365;
-}
-#tavEntrance .tav-gate-caption{display:none!important}
-@media(min-width:650px){
- #tavEntrance .tav-gate-door{background-size:100% 100%}
 }
