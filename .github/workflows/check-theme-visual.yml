@@ -10,6 +10,7 @@ on:
       - 'qa/theme-game-surfaces.css'
       - 'qa/theme-parity-performance.css'
       - 'qa/theme-expansion-preview.css'
+      - 'qa/build-card-raster-preview.py'
       - 'site/theme-decks/**'
       - 'site/theme-backdrops/**'
       - 'site/sw.js'
@@ -67,7 +68,7 @@ jobs:
         with:
           node-version: '22'
       - name: Preparar pacotes gráficos
-        run: python3 -m pip install cairosvg
+        run: python3 -m pip install cairosvg pillow
       - name: Montar jogo da Alpha
         run: |
           python3 qa/merge-beta-frontend.py
@@ -83,6 +84,7 @@ jobs:
           python3 qa/apply-online-abandon.py site
           python3 qa/apply-seasonal-theme.py site
           python3 qa/apply-tavern-entrance.py site
+          python3 qa/build-card-raster-preview.py site
       - name: Validar materiais e motor de paletas sem navegador
         run: node qa/test-theme-schedule.cjs site
       - name: Analisar baralhos e seletor de naipes antes das correções
@@ -107,6 +109,7 @@ jobs:
             site/index.html
             site/theme-backdrops/
             site/theme-decks/
+            site/theme-decks-raster/
             site/icons/
             site/sw.js
             site/manifest.webmanifest
