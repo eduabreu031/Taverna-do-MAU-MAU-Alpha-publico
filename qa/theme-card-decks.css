@@ -20,6 +20,27 @@
  --deck-ink:#352139;--deck-red:#b62355;--deck-glow:#fa83e885;
  --deck-rune:"✥";
 }
+/* Quatro novos baralhos, apenas visual: verso, borda, papel e ornamento. */
+:root[data-tav-palette="neon-tavern-dark"]{
+ --deck-edge:#79533d;--deck-accent:#d6ab79;--deck-secondary:#a35e41;
+ --deck-core:#190f0d;--deck-core2:#493024;--deck-paper:#f4e9d8;
+ --deck-ink:#241b17;--deck-red:#ae1725;--deck-glow:#a7643b45;--deck-rune:"⚜";
+}
+:root[data-tav-palette="neon-aero"]{
+ --deck-edge:#5a9eae;--deck-accent:#e2f8ec;--deck-secondary:#8ed4c6;
+ --deck-core:#316a84;--deck-core2:#65b4b8;--deck-paper:#f4fdff;
+ --deck-ink:#203d4a;--deck-red:#b3293f;--deck-glow:#9debd175;--deck-rune:"❀";
+}
+:root[data-tav-palette="neon-imperial"]{
+ --deck-edge:#89627e;--deck-accent:#ebcf9a;--deck-secondary:#b39265;
+ --deck-core:#231429;--deck-core2:#50364e;--deck-paper:#fff6ea;
+ --deck-ink:#302438;--deck-red:#ab2947;--deck-glow:#ba956870;--deck-rune:"♛";
+}
+:root[data-tav-palette="neon-amber"]{
+ --deck-edge:#956e3d;--deck-accent:#f7d798;--deck-secondary:#c69b5e;
+ --deck-core:#302012;--deck-core2:#81603b;--deck-paper:#fff7df;
+ --deck-ink:#40321f;--deck-red:#ac3027;--deck-glow:#dca85e61;--deck-rune:"✶";
+}
 /* Verso físico e monte de compra; mini cartas são os versos dos bots.
    Alto contraste com o feltro: bordas claras, núcleo mais escuro, dobra metálica. */
 :root[data-tav-palette^="neon-"] :is(.big-card.card-back,.card-back,.mini-card){
