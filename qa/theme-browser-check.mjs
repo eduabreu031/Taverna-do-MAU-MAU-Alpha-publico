@@ -95,7 +95,7 @@ try{
    assert(materials[id].depth.includes('inset'),'Botão sem relevo: '+id);
    assert.notEqual(materials[id].sky,materials.classic.sky,'Cenário igual ao clássico: '+id);
   }
-  assert(materials['neon-aero'].glass.includes('blur(8px)'),'Vidro Aero sem translucidez');
+  assert(materials['neon-aero'].glass.includes('blur(10px)'),'Vidro Aero sem translucidez');
   assert.notEqual(materials['neon-blue'].sky,materials['neon-green'].sky);
   assert.notEqual(materials['neon-green'].sky,materials['neon-pink'].sky);
 
