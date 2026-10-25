@@ -651,8 +651,8 @@ try{
     assert.notEqual(item.back,hotfix[0].back,'Verso da carta não mudou '+item.palette);
     assert.notEqual(item.mini,hotfix[0].mini,'Verso pequeno do bot não mudou '+item.palette);
     assert(item.red.startsWith('rgb('),'Naipe vermelho sem cor');
-    assert(item.symbol==='none'&&item.back.includes('theme-decks/'+item.palette+'.svg'),
-      'Símbolo autoral deve estar no SVG sem duplicação em CSS: '+item.palette);
+    assert(item.symbol==='none'&&item.back.includes('theme-decks-raster/'+item.palette+'.webp'),
+      'Símbolo autoral deve vir da arte WebP sem duplicação em CSS: '+item.palette);
   }
   for(let i=1;i<hotfix.length;i++)for(let j=i+1;j<hotfix.length;j++)
     assert.notEqual(hotfix[i].back,hotfix[j].back,'Baralhos com versos idênticos');
