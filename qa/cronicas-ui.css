@@ -1,0 +1,197 @@
+/* Crônicas — camada isolada. Nunca modificar cartas, jogo ou seletor de naipes. */
+#tavCronicasOverlay[hidden]{display:none!important}
+#tavCronicasOverlay{
+ --tc-bg:linear-gradient(152deg,#482735,#23141f 68%,#1a1521);
+ --tc-surface:#321e2a;--tc-line:#b28d63;--tc-ink:#fbe9d1;
+ --tc-sub:#d4b8a0;--tc-accent:#efd09b;--tc-button:linear-gradient(#785045,#4d2c35);
+ box-sizing:border-box;position:fixed;inset:0;z-index:2147483520;
+ display:grid;place-items:center;overflow:auto;padding:12px;
+ background:#080610e8;color:var(--tc-ink);font:15px/1.5 Georgia,serif;
+}
+#tavCronicasOverlay *,#tavCronicasOverlay *::before,#tavCronicasOverlay *::after{box-sizing:border-box}
+#tavCronicasOverlay .tav-cronicas-panel{
+ width:min(940px,100%);max-height:min(92dvh,900px);display:flex;flex-direction:column;min-height:0;
+ background:var(--tc-bg);border:2px solid var(--tc-line);border-radius:18px;
+ box-shadow:0 24px 70px #0009,inset 0 1px 0 #ffffff22;overflow:hidden
+}
+#tavCronicasOverlay .tav-cronicas-header{
+ display:flex;gap:14px;align-items:start;justify-content:space-between;
+ padding:20px 23px 13px;border-bottom:1px solid color-mix(in srgb,var(--tc-line) 55%,transparent)
+}
+#tavCronicasOverlay .tav-cronicas-header small{letter-spacing:1.7px;color:var(--tc-accent);font-size:10px}
+#tavCronicasOverlay .tav-cronicas-header h2{
+ margin:3px 0 2px;font-size:clamp(24px,4vw,33px);line-height:1.2;color:var(--tc-ink);
+}
+#tavCronicasOverlay .tav-cronicas-header p{margin:5px 0 0;color:var(--tc-sub);font-size:13px}
+#tavCronicasOverlay button,#tavCronicasOverlay select{
+ color:var(--tc-ink);font:600 14px/1.3 Georgia,serif;cursor:pointer;min-height:42px;
+ border:1px solid var(--tc-line);border-radius:9px;background:var(--tc-button);
+}
+#tavCronicasOverlay button:disabled{opacity:.58;cursor:default}
+#tavCronicasOverlay button:focus-visible,#tavCronicasOverlay select:focus-visible,
+.tav-cronicas-trigger:focus-visible{outline:3px solid #70dbfb;outline-offset:3px}
+#tavCronicasOverlay .tav-cronicas-close{
+ width:45px;height:45px;flex:0 0 45px;padding:0;font-size:29px;line-height:1;
+}
+#tavCronicasOverlay #tavCronicasStatus{
+ flex:none;margin:11px 23px 0;padding:10px 13px;border-radius:8px;
+ border:1px solid var(--tc-line);color:var(--tc-sub);
+ background:var(--tc-surface);font-size:13px
+}
+#tavCronicasOverlay #tavCronicasStatus[hidden]{display:none!important}
+#tavCronicasOverlay #tavCronicasStatus[data-state=warning]{border-style:dashed}
+#tavCronicasOverlay .tav-cronicas-tabs{
+ display:flex;gap:7px;flex:none;overflow-x:auto;scrollbar-width:thin;
+ padding:13px 23px 11px;
+}
+#tavCronicasOverlay .tav-cronicas-tabs button{
+ flex:1 0 auto;padding:10px 12px;background:var(--tc-surface);
+ white-space:nowrap;min-width:0;
+}
+#tavCronicasOverlay .tav-cronicas-tabs button[aria-pressed=true]{
+ border:2px solid var(--tc-accent);color:var(--tc-accent);padding:9px 11px;
+ box-shadow:inset 0 -2px 0 var(--tc-accent);
+}
+#tavCronicasOverlay .tav-cronicas-body{
+ overflow-y:auto;overflow-x:hidden;min-height:0;flex:1;padding:10px 23px 23px;
+ overscroll-behavior:contain;scrollbar-width:thin;
+}
+#tavCronicasOverlay .tav-cronicas-body h3{
+ color:var(--tc-accent);font-size:clamp(20px,3vw,26px);margin:4px 0 7px
+}
+#tavCronicasOverlay .tav-cronicas-intro{margin:0 0 18px;color:var(--tc-sub)}
+#tavCronicasOverlay .tav-cronicas-metrics{
+ display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:11px;margin-bottom:17px;
+}
+#tavCronicasOverlay .tav-cronicas-metric{
+ border:1px solid var(--tc-line);border-radius:12px;padding:13px 11px;
+ display:grid;align-content:start;gap:5px;min-width:0;background:var(--tc-surface)
+}
+#tavCronicasOverlay .tav-cronicas-metric small{font:600 10px/1.3 Georgia,serif;letter-spacing:1.2px;color:var(--tc-sub)}
+#tavCronicasOverlay .tav-cronicas-metric strong{
+ font-size:clamp(17px,2.4vw,23px);line-height:1.25;color:var(--tc-accent);overflow-wrap:anywhere;
+}
+#tavCronicasOverlay .tav-cronicas-metric span{font-size:12px;color:var(--tc-sub)}
+#tavCronicasOverlay .tav-cronicas-platinum{
+ display:flex;align-items:center;gap:17px;
+ background:var(--tc-surface);border:1px solid var(--tc-line);padding:19px;
+ border-radius:12px;margin:12px 0 15px;
+}
+#tavCronicasOverlay .tav-cronicas-platinum-icon{font-size:46px;color:var(--tc-accent)}
+#tavCronicasOverlay .tav-cronicas-platinum strong{font-size:20px}
+#tavCronicasOverlay .tav-cronicas-platinum p{margin:4px 0;color:var(--tc-sub)}
+#tavCronicasOverlay .tav-cronicas-platinum small{color:var(--tc-accent)}
+#tavCronicasOverlay .tav-cronicas-note{
+ color:var(--tc-sub);font-size:13px;margin:11px 0 15px;
+}
+#tavCronicasOverlay .tav-cronicas-primary,#tavCronicasOverlay .tav-cronicas-more{
+ min-height:46px;padding:10px 17px;
+}
+#tavCronicasOverlay .tav-cronicas-filters{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:10px}
+#tavCronicasOverlay .tav-cronicas-filters label{display:grid;gap:4px;flex:1 1 160px;color:var(--tc-sub);font-size:12px}
+#tavCronicasOverlay .tav-cronicas-filters select{
+ width:100%;padding:9px 10px;background:var(--tc-surface);color:var(--tc-ink)
+}
+#tavCronicasOverlay .tav-cronicas-results{font-size:12px;color:var(--tc-sub);margin:6px 0 13px}
+#tavCronicasOverlay .tav-cronicas-achievement-grid{
+ display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px
+}
+#tavCronicasOverlay .tav-cronicas-achievement{
+ display:flex;flex-direction:column;min-width:0;gap:5px;
+ border:1px solid var(--tc-line);border-radius:12px;padding:13px;background:var(--tc-surface);
+}
+#tavCronicasOverlay .tav-cronicas-achievement-top{
+ display:flex;justify-content:space-between;align-items:center;gap:8px;
+ color:var(--tc-sub);font-size:11px;
+}
+#tavCronicasOverlay .tav-cronicas-rarity{
+ border:1px solid var(--tc-line);border-radius:6px;padding:2px 8px;letter-spacing:.3px
+}
+#tavCronicasOverlay .tav-cronicas-glory{font-weight:bold;color:var(--tc-accent)}
+#tavCronicasOverlay .tav-cronicas-achievement strong{font-size:17px;margin:4px 0 0;color:var(--tc-ink)}
+#tavCronicasOverlay .tav-cronicas-achievement small{font-size:11px;color:var(--tc-sub)}
+#tavCronicasOverlay .tav-cronicas-achievement[data-tier=ouro],
+#tavCronicasOverlay .tav-cronicas-achievement[data-tier=lendaria]{border-width:2px}
+#tavCronicasOverlay .tav-cronicas-progress{display:grid;gap:4px;margin-top:auto;padding-top:12px}
+#tavCronicasOverlay .tav-cronicas-progress-bar{
+ height:7px;background:#0005;border:1px solid var(--tc-line);border-radius:8px;overflow:hidden
+}
+#tavCronicasOverlay .tav-cronicas-progress-bar span{
+ display:block;height:100%;background:var(--tc-accent);border-radius:8px;transition:width .2s
+}
+#tavCronicasOverlay .tav-cronicas-progress>span{color:var(--tc-sub);font-size:12px;text-align:right}
+#tavCronicasOverlay .tav-cronicas-achievement em{font:normal 12px/1.3 Georgia,serif;color:var(--tc-sub)}
+#tavCronicasOverlay .tav-cronicas-unlocked .tav-cronicas-achievement-top{color:var(--tc-accent)}
+#tavCronicasOverlay .tav-cronicas-more{display:block;margin:17px auto 0}
+#tavCronicasOverlay .tav-cronicas-order-grid{
+ display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;
+}
+#tavCronicasOverlay .tav-cronicas-order{
+ display:grid;gap:13px;align-content:start;min-width:0;
+ background:var(--tc-surface);border:1px solid var(--tc-line);border-radius:12px;padding:17px
+}
+#tavCronicasOverlay .tav-cronicas-order-head{display:flex;gap:13px;align-items:start}
+#tavCronicasOverlay .tav-cronicas-order-mark{
+ flex:0 0 auto;display:grid;place-items:center;font-size:27px;width:51px;height:51px;
+ border:1px solid var(--tc-line);border-radius:10px;color:var(--tc-accent)
+}
+#tavCronicasOverlay .tav-cronicas-order-head strong{font-size:18px}
+#tavCronicasOverlay .tav-cronicas-order-head p{color:var(--tc-sub);font-size:12px;margin:4px 0 0}
+#tavCronicasOverlay .tav-cronicas-order-level{
+ display:flex;justify-content:space-between;align-items:center;gap:6px;flex-wrap:wrap
+}
+#tavCronicasOverlay .tav-cronicas-order-level strong{font-size:17px;color:var(--tc-accent)}
+#tavCronicasOverlay .tav-cronicas-order-level span{color:var(--tc-sub);font-size:12px}
+#tavCronicasOverlay .tav-cronicas-milestones{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+#tavCronicasOverlay .tav-cronicas-milestones span{
+ color:var(--tc-sub);padding:8px;border:1px dashed var(--tc-line);border-radius:7px;font-size:12px
+}
+#tavCronicasOverlay .tav-cronicas-order-select{padding:10px 12px}
+#tavCronicasOverlay .tav-cronicas-order-select[aria-pressed=true]{border-width:2px;color:var(--tc-accent)}
+#tavCronicasOverlay .tav-cronicas-footer{
+ display:flex;align-items:center;justify-content:space-between;gap:10px;flex:none;
+ padding:10px 23px 14px;border-top:1px solid var(--tc-line)
+}
+#tavCronicasOverlay .tav-cronicas-footer span{color:var(--tc-sub);font-size:12px}
+#tavCronicasOverlay .tav-cronicas-footer button{flex:0 0 auto;padding:8px 13px}
+.tav-cronicas-trigger{
+ min-height:40px;min-width:110px;border:1px solid #b89462;border-radius:9px;
+ background:linear-gradient(#6e4550,#362332);color:#ffefd4;
+ font:700 14px/1.2 Georgia,serif;cursor:pointer;padding:8px 12px;
+ box-shadow:0 3px 12px #0004;
+}
+#sceneWelcome #alphaTopTools .tav-cronicas-trigger{position:relative;inset:auto}
+#sceneMenu .offline-setup-heading>.tav-cronicas-trigger{position:relative;inset:auto}
+:root[data-tav-palette^="neon-"] #tavCronicasOverlay{
+ --tc-bg:var(--tp-panel);--tc-surface:var(--tp-dark);
+ --tc-line:var(--tp-edge);--tc-ink:var(--tp-text);
+ --tc-sub:var(--tp-muted);--tc-accent:var(--tp-bright);
+ --tc-button:var(--tp-button);
+}
+:root[data-tav-palette^="neon-"] .tav-cronicas-trigger{
+ border-color:var(--tp-edge);background:var(--tp-button);color:var(--tp-text)
+}
+@media(max-width:740px){
+ #tavCronicasOverlay .tav-cronicas-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}
+ #tavCronicasOverlay .tav-cronicas-achievement-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ #tavCronicasOverlay .tav-cronicas-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}
+ #tavCronicasOverlay .tav-cronicas-order-grid{grid-template-columns:1fr}
+}
+@media(max-width:460px){
+ #tavCronicasOverlay{padding:4px}
+ #tavCronicasOverlay .tav-cronicas-panel{max-height:99dvh;border-radius:12px}
+ #tavCronicasOverlay .tav-cronicas-header{padding:12px 13px 9px}
+ #tavCronicasOverlay #tavCronicasStatus{margin:8px 13px 0}
+ #tavCronicasOverlay .tav-cronicas-tabs{padding:9px 13px;gap:5px}
+ #tavCronicasOverlay .tav-cronicas-tabs button{font-size:12px;padding:9px 6px}
+ #tavCronicasOverlay .tav-cronicas-body{padding:10px 13px 16px}
+ #tavCronicasOverlay .tav-cronicas-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}
+ #tavCronicasOverlay .tav-cronicas-achievement-grid{grid-template-columns:1fr}
+ #tavCronicasOverlay .tav-cronicas-footer{padding:8px 13px;flex-wrap:wrap}
+ #tavCronicasOverlay .tav-cronicas-footer button{width:100%}
+ #tavCronicasOverlay .tav-cronicas-order{padding:12px}
+ .tav-cronicas-trigger{min-width:auto;padding:8px;font-size:12px}
+}
+@media(prefers-reduced-motion:reduce){
+ #tavCronicasOverlay .tav-cronicas-progress-bar span{transition:none!important}
+}
