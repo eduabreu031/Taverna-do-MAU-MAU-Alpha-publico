@@ -163,6 +163,21 @@
   :is(strong,small,span:not(.tav-palette-check):not(.tav-palette-swatch),b,em){
  text-shadow:var(--tm-menu-button-shadow)!important;
 }
+/* Alguns "botões" do saguão são cartões clicáveis com classe
+   .welcome-mode e não necessariamente <button>. A cor do <strong>
+   possuía estilo próprio dourado: nivelar texto e rótulo explicitamente. */
+:root[data-tav-palette^="neon-"] #sceneWelcome .welcome-mode,
+:root[data-tav-palette^="neon-"] #sceneWelcome .welcome-mode :is(strong,span,small,b,em),
+:root[data-tav-palette^="neon-"] #sceneMultiplayer .tav-vip-enter,
+:root[data-tav-palette^="neon-"] #sceneMultiplayer .tav-vip-enter :is(strong,span,small,b),
+:root[data-tav-palette^="neon-"] #sceneMenu .engraved-btn,
+:root[data-tav-palette^="neon-"] #sceneMenu .engraved-btn :is(strong,span,small,b),
+:root[data-tav-palette^="neon-"] .tav-bots-choice,
+:root[data-tav-palette^="neon-"] .tav-bots-choice :is(strong,span,small,b),
+:root[data-tav-palette^="neon-"] :is(.alpha-primary,.alpha-secondary){
+ color:var(--tm-menu-button-ink)!important;
+ text-shadow:var(--tm-menu-button-shadow)!important;
+}
 /* Entrada inicial tem botões originalmente marrons/dourados, inclusive
    ação principal: adequar ao tema para que letras claras não percam contraste.
    Não toca botões já tematizados do restante das cenas. */
