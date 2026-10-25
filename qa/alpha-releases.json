@@ -1,7 +1,19 @@
 {
-  "current": "alpha-0.5.0.27",
+  "current": "alpha-0.5.0.28",
   "issuesRepo": "eduabreu031/Taverna-do-MAU-MAU-Alpha-publico",
   "entries": [
+    {
+      "id": "alpha-0.5.0.28",
+      "label": "0.5.0.28-alpha",
+      "date": "2026-10-24",
+      "title": "Entrada direta sem porta",
+      "items": [
+        "Retirada completamente a tela da porta e sua imagem cinematográfica: agora o aplicativo abre diretamente no painel de identificação.",
+        "Mantidas as opções Continuar com conta, Trocar conta, Entrar/criar conta e entrar como Forasteiro, com nomes e sessões anteriores preservados.",
+        "O arquivo antigo da porta não é mais distribuído nem pré-carregado offline, deixando a entrada mais leve.",
+        "Preservados os oito temas de aparência, menu principal, motor das partidas offline e online, Rádio e Arauto; atualizados os testes da entrada direta."
+      ]
+    },
     {
       "id": "alpha-0.5.0.27",
       "label": "0.5.0.27-alpha",
