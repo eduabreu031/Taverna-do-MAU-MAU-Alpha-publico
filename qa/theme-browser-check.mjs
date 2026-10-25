@@ -81,6 +81,7 @@ try{
      glass:panel.backdropFilter||panel.webkitBackdropFilter
     };
    }
+   window.TavernaThemeSystem.setPalette('neon-pink'); // preservar estado esperado pelo teste de persistência
    return out;
   });
   for(const id of ['neon-blue','neon-green','neon-pink']){
