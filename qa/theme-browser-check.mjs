@@ -95,7 +95,7 @@ try{
    assert(materials[id].depth.includes('inset'),'Botão sem relevo: '+id);
    assert.notEqual(materials[id].sky,materials.classic.sky,'Cenário igual ao clássico: '+id);
   }
-  assert(materials['neon-aero'].glass.includes(width<=650?'blur(5px)':'blur(10px)'),'Vidro Aero sem translucidez');
+  assert(width<=760?materials['neon-aero'].glass==='none':materials['neon-aero'].glass.includes('blur(10px)'),'Vidro Aero: móvel deve manter transparência sem blur caro');
   assert.notEqual(materials['neon-blue'].sky,materials['neon-green'].sky);
   assert.notEqual(materials['neon-green'].sky,materials['neon-pink'].sky);
 
@@ -199,9 +199,9 @@ try{
     'Botão herdou amarelo clássico: '+id);
    assert(menuSurfaces[id].buttonShadow!=='none','Falta sombra para contraste: '+id);
   }
-  assert(menuSurfaces['neon-aero'].panel['#sceneWelcome .welcome-panel'].filter.includes(width<=650?'blur(5px)':'blur(10px)'),
+  assert(width<=760?menuSurfaces['neon-aero'].panel['#sceneWelcome .welcome-panel'].filter==='none':menuSurfaces['neon-aero'].panel['#sceneWelcome .welcome-panel'].filter.includes('blur(10px)'),
    'Painel Aero não foi vitrificado');
-  assert(menuSurfaces['neon-aero'].panel['#tavEntrance .tav-gate-identity-card'].filter.includes(width<=650?'blur(5px)':'blur(10px)'),
+  assert(width<=760?menuSurfaces['neon-aero'].panel['#tavEntrance .tav-gate-identity-card'].filter==='none':menuSurfaces['neon-aero'].panel['#tavEntrance .tav-gate-identity-card'].filter.includes('blur(10px)'),
    'Vidro do painel da entrada está ausente');
   assert(menuSurfaces['neon-aero'].panel['#sceneWelcome .welcome-panel'].bg.includes('rgba('),
    'Vidro Aero sem transparência real');
