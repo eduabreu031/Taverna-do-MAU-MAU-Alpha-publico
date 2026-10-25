@@ -78,9 +78,9 @@ for(const needle of ['#sceneMenu #heroChoiceCards','grid-template-columns:minmax
 }
 assert(!parityCSS.includes('animation:none!important'),
  'Não alterar animações existentes');
-assert(css.includes('id="offlineBackBtn" type="button">Voltar aos modos de jogo</button>'),
+assert(html.includes('id="offlineBackBtn" type="button">Voltar aos modos de jogo</button>'),
  'O botão voltar deve ter só texto, sem seta/símbolo antigo');
-assert(!css.includes('id="offlineBackBtn" type="button">←'),
+assert(!html.includes('id="offlineBackBtn" type="button">←'),
  'Ainda existe a seta antiga no botão Voltar');
 assert(parityCSS.includes('#sceneMenu .offline-player-banner'),
  'Painel de nome do aventureiro sem superfície do tema');
