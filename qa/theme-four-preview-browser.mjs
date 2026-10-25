@@ -28,7 +28,7 @@ try{
       const items=[];
       for(const el of [draw,mini]){
         const cs=getComputedStyle(el),bg=cs.backgroundImage;
-        const url=bg.match(/url\\(["']?(.*?)["']?\\)/)?.[1];
+        const url=bg.includes('url("')?bg.split('url("')[1].split('")')[0]:null;
         let ok=false,dimensions=[0,0];
         if(url){
           const im=new Image();im.src=url;
