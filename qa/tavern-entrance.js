@@ -125,7 +125,8 @@ const observer=new MutationObserver(()=>{
 observer.observe(document.body,{subtree:true,attributes:true,attributeFilter:['class']});
 window.TavernaEntrance=Object.freeze({
  isOpen:()=>stage!=='done',
- skipVisualOnly:dismissVisualOnly
+ skipVisualOnly:dismissVisualOnly,
+ refreshLabels:labels
 });
 if(welcome.classList.contains('hidden'))dismissVisualOnly();
 })();
