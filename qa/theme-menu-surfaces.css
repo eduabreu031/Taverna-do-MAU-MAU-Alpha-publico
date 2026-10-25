@@ -60,6 +60,27 @@
  --tm-menu-button-ink:#fff3df;
 }
 
+/* 0.5.0.34 — duas identidades de menu antes não retrabalhadas.
+   Sombria: couro escuro com luz bordô. Imperial: veludo púrpura macio,
+   costura sugerida por realce contínuo, sem faixas diagonais repetidas. */
+:root[data-tav-palette="neon-tavern-dark"]{
+ --tm-menu-surface:
+  radial-gradient(ellipse at 24% 0%,#97515e44,transparent 64%),
+  radial-gradient(ellipse at 89% 92%,#51233036,transparent 55%),
+  linear-gradient(159deg,#38202af7,#21141dfb 59%,#140f18fd);
+ --tm-menu-ink:#f7e4e6;
+ --tm-menu-stroke:#a36b78;
+ --tm-menu-shadow:inset 0 1px 0 #d5a0a22c,inset 0 -11px 30px #0c080cb5,0 12px 30px #08060aaf;
+}
+:root[data-tav-palette="neon-imperial"]{
+ --tm-menu-surface:
+  radial-gradient(ellipse at 26% 0%,#b080a15a,transparent 67%),
+  radial-gradient(ellipse at 92% 82%,#78507335,transparent 56%),
+  linear-gradient(155deg,#563650f7,#352440fa 61%,#241a33fc);
+ --tm-menu-ink:#f9ebf7;
+ --tm-menu-stroke:#cfac90;
+ --tm-menu-shadow:inset 0 1px 0 #f0d6b74b,inset 0 -12px 28px #190c20a1,0 13px 32px #120b1ab4;
+}
 /* Bloco de contextos reais das telas: boas bordas e sombra, nenhuma risca.
    O seletor de naipes #overlay:has(.suit-list) permanece original.
    Não estilizar .book, .felt, .seat, .portrait-medallion ou cartões do baralho. */
@@ -73,7 +94,8 @@
 :root:is(
  [data-tav-palette="neon-blue"],[data-tav-palette="neon-green"],
  [data-tav-palette="neon-pink"],[data-tav-palette="neon-aero"],
- [data-tav-palette="neon-amber"]
+ [data-tav-palette="neon-amber"],[data-tav-palette="neon-tavern-dark"],
+ [data-tav-palette="neon-imperial"]
 ) :is(
  #tavEntrance .tav-gate-identity-card,
  #sceneWelcome .welcome-panel,#sceneWelcome .welcome-crest,
@@ -250,4 +272,29 @@
  background:linear-gradient(90deg,transparent,
    color-mix(in srgb,var(--tm-welcome-ornament) 60%,transparent),
    transparent)!important;
+}
+
+/* O livro offline possui capa de madeira e páginas com contexto. Refinar
+   ambas nas paletas de couro e veludo sem alterar botões nem retratos. */
+:root[data-tav-palette="neon-tavern-dark"] #sceneMenu .book{
+ background:radial-gradient(ellipse at 30% 0%,#68464a3c,transparent 51%),
+  linear-gradient(159deg,#35252a,#171116)!important;
+ border-color:#895662!important;
+}
+:root[data-tav-palette="neon-imperial"] #sceneMenu .book{
+ background:radial-gradient(ellipse at 28% 0%,#a37a9958,transparent 57%),
+  linear-gradient(159deg,#5d3c58,#241a32)!important;
+ border-color:#bd9d80!important;
+}
+/* Vidro do menu Aero continua expressivo; blur menos custoso em celular. */
+@media(max-width:650px){
+ :root[data-tav-palette="neon-aero"] :is(
+  #tavEntrance .tav-gate-identity-card,#sceneWelcome .welcome-panel,
+  #sceneMultiplayer .multiplayer-panel,#sceneMenu .book-page,
+  #tavAppearanceOverlay .tav-appearance-card,#alphaAccountsOverlay .alpha-accounts-panel,
+  .alpha-info-card,.tav-central-panel,#rulesModalDEV .rules-book
+ ){
+  -webkit-backdrop-filter:blur(5px) saturate(1.07)!important;
+  backdrop-filter:blur(5px) saturate(1.07)!important;
+ }
 }
