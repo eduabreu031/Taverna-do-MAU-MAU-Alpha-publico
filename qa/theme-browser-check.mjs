@@ -197,8 +197,9 @@ try{
    'Vidro do painel da entrada está ausente');
   assert(menuSurfaces['neon-aero'].panel['#sceneWelcome .welcome-panel'].bg.includes('rgba('),
    'Vidro Aero sem transparência real');
-  assert.deepEqual(menuSurfaces.classic.panel['#sceneWelcome .welcome-panel'],
-   data.samples.classic['#sceneWelcome .welcome-panel']?menuSurfaces.classic.panel['#sceneWelcome .welcome-panel']:null);
+  assert.equal(menuSurfaces.classic.panel['#sceneWelcome .welcome-panel'].bg,
+   data.samples.classic['#sceneWelcome .welcome-panel'].split('|')[0],
+   'Taverna Clássica mudou ao alternar os temas');
   for(const id of ['neon-blue','neon-green','neon-pink','neon-aero','neon-amber']){
    assert.notEqual(menuSurfaces[id].originalPanel,'none','HUD não deve desaparecer: '+id);
   }
