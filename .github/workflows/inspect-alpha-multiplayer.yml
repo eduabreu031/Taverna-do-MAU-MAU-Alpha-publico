@@ -29,5 +29,16 @@ jobs:
         run: python3 qa/apply-vip-bots-ui.py site
       - name: Ativar visitantes sem cache e aviso de remoção
         run: python3 qa/apply-visitor-entry.py site
+      # O validador exige o pacote inteiro: antes, este workflow
+      # examinava um HTML parcial e falhava mesmo sem alteração de gameplay.
+      - name: Completar camadas da Alpha para teste de regressão
+        run: |
+          python3 qa/apply-rematch-lobby.py site
+          python3 qa/apply-online-skip-final.py site
+          python3 qa/apply-social-features.py site
+          python3 qa/apply-online-abandon.py site
+          python3 qa/apply-seasonal-theme.py site
+          python3 qa/apply-tavern-entrance.py site
+          python3 qa/apply-online-resume.py site
       - name: Validar motor e sintaxe de scripts
         run: node qa/validar.js site
