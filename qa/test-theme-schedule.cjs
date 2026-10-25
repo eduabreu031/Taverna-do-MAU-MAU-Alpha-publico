@@ -67,6 +67,21 @@ assert(parityCSS.includes('#sceneGame:is(#sceneGame) .action-list'),
 assert(parityCSS.includes('#activeSuit'),'Indicador de naipe ainda com placa');
 assert(parityCSS.includes('#sceneMenu .book-page'),
   'Texto do aventureiro offline não acompanha a paleta');
+
+/* v0.5.0.37: organização só visual dos botões de personagem.
+   Clássica também recebe o layout compacto, sem alterar materiais. */
+for(const needle of ['#sceneMenu #heroChoiceCards','grid-template-columns:minmax(0,1fr)',
+ '#sceneMenu #heroChoiceCards>.hero-choice','grid-template-columns:52px minmax(0,1fr)',
+ '.portrait-medallion.hero-medallion','.hero-choice-desc','.filigree,.character-pick-label',
+ '#sceneMenu #offlineBackBtn::before']){
+ assert(parityCSS.includes(needle),'Novo design offline incompleto: '+needle);
+}
+assert(!parityCSS.includes('animation:none!important'),
+ 'Não alterar animações existentes');
+assert(html.includes('id="offlineBackBtn" type="button">Voltar aos modos de jogo</button>'),
+ 'O botão voltar deve ter só texto, sem seta/símbolo antigo');
+assert(!html.includes('id="offlineBackBtn" type="button">←'),
+ 'Ainda existe a seta antiga no botão Voltar');
 assert(parityCSS.includes('#sceneMenu .offline-player-banner'),
  'Painel de nome do aventureiro sem superfície do tema');
 assert(parityCSS.includes('#sceneMenu #changePlayerName'),

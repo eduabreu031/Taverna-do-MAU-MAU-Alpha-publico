@@ -71,6 +71,80 @@ try{
       'Texto interno da identificação ainda dourado: '+id+' '+JSON.stringify(x.labels));
   }
   console.log('THEME_OFFLINE_NAME_AND_HEADERS_OK',width);
+  // v0.5.0.37: validar layout efetivamente VISÍVEL, retratos,
+  // escolha funcional, título/ornamento temáticos e retorno sem glifo.
+  const heroCards=await page.evaluate(()=>{
+    const scene=document.querySelector('#sceneMenu');
+    const initialHidden=scene.classList.contains('hidden');
+    scene.classList.remove('hidden');
+    const root=document.querySelector('#heroChoiceCards');
+    const cards=[...root.querySelectorAll('.hero-choice')];
+    const filigree=scene.querySelector('.book-page .filigree');
+    const picker=scene.querySelector('.book-page .character-pick-label');
+    const back=scene.querySelector('#offlineBackBtn');
+    const read=el=>{
+      const s=getComputedStyle(el),b=el.getBoundingClientRect();
+      return {display:s.display,color:s.color,bg:s.backgroundImage,
+        columns:s.gridTemplateColumns,dir:s.flexDirection,
+        rect:[b.x,b.y,b.width,b.height], text:(el.innerText||'').trim(),
+        before:getComputedStyle(el,'::before').content,
+        after:getComputedStyle(el,'::after').content};
+    };
+    const colorOfToken=key=>{
+      const p=document.createElement('span');
+      p.style.color='var('+key+')';document.body.append(p);
+      const v=getComputedStyle(p).color;p.remove();return v;
+    };
+    const out={};
+    const themes=['classic','neon-blue','neon-green','neon-pink','neon-tavern-dark',
+      'neon-aero','neon-imperial','neon-amber'];
+    for(const theme of themes){
+      window.TavernaThemeSystem.setPalette(theme);
+      out[theme]={
+        cards:cards.map(button=>({
+          button:read(button),photo:read(button.querySelector('.hero-medallion')),
+          image:read(button.querySelector('.hero-medallion img')),
+          title:read(button.querySelector('strong')),
+          desc:read(button.querySelector('.hero-choice-desc')),
+          pressed:button.getAttribute('aria-pressed'),
+          hero:button.dataset.hero
+        })),
+        group:read(root),filigree:read(filigree),picker:read(picker),
+        back:read(back),accent:colorOfToken('--tq-ornament')
+      };
+    }
+    if(initialHidden)scene.classList.add('hidden');
+    window.TavernaThemeSystem.setPalette('neon-pink');
+    return {out,initialHidden};
+  });
+  for(const [theme,row] of Object.entries(heroCards.out)){
+    assert.equal(row.cards.length,3,'Devem existir três personagens: '+theme);
+    assert.equal(row.group.display,'grid','Lista deve ficar vertical: '+theme);
+    assert(!row.back.text.includes('←')&&!row.back.text.includes('⚜')&&!row.back.text.includes('❦'),
+       'Retorno offline ainda contém símbolo: '+theme+' '+row.back.text);
+    assert.equal(row.back.before,'none','Botão voltar tem símbolo ::before: '+theme);
+    assert.equal(row.back.after,'none','Botão voltar tem símbolo ::after: '+theme);
+    for(const card of row.cards){
+       assert.equal(card.button.display,'grid','Cartão deve alinhar foto e texto: '+theme);
+       assert(card.button.rect[3]>=62&&card.button.rect[3]<=98,
+         'Altura do personagem não compacta: '+theme+' '+card.hero+' '+card.button.rect);
+       assert(card.photo.rect[2]>=40&&card.photo.rect[2]<=55,
+         'Retrato não está compacto: '+theme+' '+card.hero);
+       assert(card.image.rect[2]<=55&&card.image.rect[3]<=55,
+         'Imagem do personagem é grande demais: '+theme);
+       assert(card.photo.rect[0]+card.photo.rect[2]<card.title.rect[0],
+         'Retrato não ficou à esquerda do texto: '+theme+' '+card.hero);
+       assert(card.title.rect[3]>0&&card.desc.rect[3]>0,
+         'Nome ou descrição do personagem não estão visíveis: '+theme+' '+card.hero);
+    }
+    if(theme!=='classic'){
+      assert.equal(row.filigree.color,row.accent,
+        'Símbolo sob Abra a partida ainda dourado: '+theme);
+      assert.equal(row.picker.color,row.accent,
+        'Escolha seu personagem ainda amarelo: '+theme);
+    }
+  }
+  console.log('OFFLINE_COMPACT_HERO_LIST_OK',width);
   const data=await page.evaluate(()=>{
    const themes=['classic','neon-blue','neon-green','neon-pink','neon-tavern-dark','neon-aero','neon-imperial','neon-amber'];
    const selectors=[

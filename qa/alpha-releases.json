@@ -1,7 +1,19 @@
 {
-  "current": "alpha-0.5.0.36",
+  "current": "alpha-0.5.0.37",
   "issuesRepo": "eduabreu031/Taverna-do-MAU-MAU-Alpha-publico",
   "entries": [
+    {
+      "id": "alpha-0.5.0.37",
+      "label": "0.5.0.37-alpha",
+      "date": "2026-10-25",
+      "title": "Personagens offline compactos e ornamentos harmonizados",
+      "items": [
+        "Seleção offline redesenhada como três opções horizontais compactas, com retratos circulares à esquerda, nome e descrição à direita, mantendo o clique e a indicação de personagem escolhido.",
+        "Ornamento abaixo de Abra a partida e texto Escolha seu personagem adotam as cores corretas de cada um dos sete temas alternativos, em vez do dourado da Taverna Clássica.",
+        "Removida a seta decorativa do botão Voltar aos modos de jogo; mantida a função de retorno.",
+        "Layout compacto disponível também na Taverna Clássica, preservando os materiais do tema. Sem alterações no motor, multiplayer, baralhos ou animações."
+      ]
+    },
     {
       "id": "alpha-0.5.0.36",
       "label": "0.5.0.36-alpha",

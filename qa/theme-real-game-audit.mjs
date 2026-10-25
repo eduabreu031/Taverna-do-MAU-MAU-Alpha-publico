@@ -11,6 +11,19 @@ try{
  const init=await page.evaluate(()=>[...document.querySelectorAll('#sceneWelcome button,#sceneMenu button')].map(x=>({id:x.id,cls:x.className,text:x.textContent.trim().slice(0,65)})).slice(0,65));
  console.log('AUDIT_BUTTONS_INIT',JSON.stringify(init));
  await page.locator('#chooseOffline').click({timeout:3000});
+ // Testar seleção de personagem DE VERDADE, após abrir a cena offline.
+ await page.locator('#sceneMenu #heroChoiceCards .hero-choice[data-hero="TAVERNEIRO"]').click({timeout:3000});
+ const second=await page.evaluate(()=>[...document.querySelectorAll('#heroChoiceCards .hero-choice')]
+  .map(el=>({hero:el.dataset.hero,pressed:el.getAttribute('aria-pressed'),chosen:el.classList.contains('chosen')})));
+ assert(second.find(x=>x.hero==='TAVERNEIRO'&&x.pressed==='true'&&x.chosen),
+  'Clique no retrato compacto deve escolher Taverneiro');
+ await page.locator('#sceneMenu #heroChoiceCards .hero-choice[data-hero="HERÓI"]').click({timeout:3000});
+ const first=await page.evaluate(()=>[...document.querySelectorAll('#heroChoiceCards .hero-choice')]
+  .map(el=>({hero:el.dataset.hero,pressed:el.getAttribute('aria-pressed'),chosen:el.classList.contains('chosen')})));
+ assert(first.find(x=>x.hero==='HERÓI'&&x.pressed==='true'&&x.chosen),
+  'Voltar ao Herói deve restaurar seleção normal');
+ console.log('OFFLINE_HERO_CLICK_REAL_OK',second,first);
+
  await page.locator('#playerCount').selectOption('2');
  console.log('AUDIT_MENU',JSON.stringify(await page.evaluate(()=>({
   html:document.querySelector('#sceneMenu')?.innerText?.slice(0,1600),
