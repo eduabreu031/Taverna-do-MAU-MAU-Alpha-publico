@@ -382,4 +382,20 @@
   url("./theme-backdrops/neon-amber.svg"),
   linear-gradient(160deg,#8b6236,#302015);
 }
+/* IDENTIFICACAO INICIAL 0.5.0.31: a primeira tela real do aplicativo
+   é #tavEntrance, que ocupa o viewport inteiro e escondia o fundo
+   dos temas por ser uma camada fixa. Aplicar o MESMO cenário aqui. */
+:root[data-tav-palette^="neon-"] #tavEntrance{
+ background-image:var(--tm-scene)!important;
+ background-size:var(--tm-scene-size)!important;
+ background-position:center center!important;
+ background-repeat:no-repeat!important;
+}
+/* O escurecimento serve só para legibilidade do cartão de identificação;
+   mantém estrelas, couro e ondas visíveis ao redor do painel. */
+:root[data-tav-palette^="neon-"] #tavEntrance .tav-gate-identity{
+ background:linear-gradient(180deg,
+  color-mix(in srgb,var(--tp-space) 20%,transparent),
+  color-mix(in srgb,var(--tp-space) 55%,transparent))!important;
+}
 /* Nenhuma regra toca a Taverna Clássica ou muda a opacidade dos painéis. */
