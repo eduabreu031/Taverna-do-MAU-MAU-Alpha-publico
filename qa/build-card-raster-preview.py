@@ -47,7 +47,7 @@ for ident in ids:
         'radial-gradient(ellipse at center,var(--deck-accent) 0 10%,transparent 12%),'
         'linear-gradient(150deg,var(--deck-core2),var(--deck-core)) !important;}')
 css.extend([
-    ':root[data-tav-palette^="neon-"] :is(.card-back,.big-card.card-back,.mini-card){',
+    ':root[data-tav-palette^="neon-"] :is(.card-back,.big-card.card-back,.mini-card),',
     ':root[data-tav-palette^="neon-"] #sceneGame:is(#sceneGame) :is(.card-back,.big-card.card-back,.mini-card),',
     ':root[data-tav-palette^="neon-"] #sceneGame:is(#sceneGame) #seats .seat .mini-card{',
     'background-color:var(--deck-core,#13283a)!important;',
