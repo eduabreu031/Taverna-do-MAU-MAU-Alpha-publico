@@ -240,7 +240,7 @@
  color:var(--tq-ink)!important;
 }
 :root[data-tav-palette^="neon-"] #sceneMenu .offline-setup-heading :is(
- h1,h2,h3,p,strong,b,small,span:not(.tav-appearance-trigger),em
+ h1,h2,h3,p,strong,b,small,span:not(.v72-welcome-prelude):not(.tav-appearance-trigger),em
 ){
  color:var(--tq-ink)!important;
  text-shadow:0 1px 2px #060b185c!important;
