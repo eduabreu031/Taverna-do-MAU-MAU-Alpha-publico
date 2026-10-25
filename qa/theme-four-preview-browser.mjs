@@ -32,6 +32,7 @@ try{
      const back=getComputedStyle(probe.querySelector('.card-back'));
      const face=getComputedStyle(probe.querySelector('.card-face'));
      const before=getComputedStyle(probe.querySelector('.card-back'),'::before').content;
+     const cardback=back.backgroundImage, paper=face.backgroundImage;
      probe.remove();
      const assets=[];
      for(const dir of ['theme-backdrops','theme-decks']){
@@ -49,7 +50,7 @@ try{
        rack:computed('#sceneGame #humanZone').backgroundImage,
        action:computed('#sceneGame .action-list').backgroundImage,
        controls:computed('#sceneGame .control-bar').backgroundImage,
-       paper:face.backgroundImage,cardback:back.backgroundImage,before,
+       paper,cardback,before,
        mediaFilter:computed('#sceneWelcome .welcome-panel').backdropFilter,
        assets};
    },id);
