@@ -96,6 +96,7 @@ jobs:
           python3 -m http.server 8765 -d site >/tmp/taverna-theme-http.log 2>&1 &
           node qa/theme-browser-check.mjs
           node qa/theme-real-game-audit.mjs
+          node qa/theme-four-preview-browser.mjs
           node qa/theme-form-audit.mjs
           node qa/entrance-browser-check.mjs
       - name: Gerar pacote de teste experimental sem publicar no site
