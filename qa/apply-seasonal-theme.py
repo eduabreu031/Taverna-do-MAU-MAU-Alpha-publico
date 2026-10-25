@@ -35,7 +35,8 @@ turn_css=(root/'qa/theme-turn-highlights.css').read_text(encoding='utf-8')
 forms_css=(root/'qa/theme-form-surfaces.css').read_text(encoding='utf-8')
 appearance_js=(root/'qa/appearance-menu.js').read_text(encoding='utf-8')
 manager=(root/'qa/theme-manager.js').read_text(encoding='utf-8')
-assert palettes.count(':root[data-tav-palette="neon-')==7, 'As sete paletas opcionais precisam de tokens'
+for palette_id in ('neon-blue','neon-green','neon-pink','neon-tavern-dark','neon-aero','neon-imperial','neon-amber'):
+ assert f':root[data-tav-palette="{palette_id}"]' in palettes, f'Paleta ausente: {palette_id}'
 assert ':root[data-tav-palette^="neon-"]' in palettes
 assert 'data-tav-event' in events_css
 for style in (palettes,events_css,appearance_css,decks_css,hotfix_css,turn_css,forms_css):
