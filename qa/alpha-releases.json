@@ -1,7 +1,20 @@
 {
-  "current": "alpha-0.5.0.29",
+  "current": "alpha-0.5.0.30",
   "issuesRepo": "eduabreu031/Taverna-do-MAU-MAU-Alpha-publico",
   "entries": [
+    {
+      "id": "alpha-0.5.0.30",
+      "label": "0.5.0.30-alpha",
+      "date": "2026-10-25",
+      "title": "Texturas e profundidade nos sete temas alternativos",
+      "items": [
+        "Noites Neon Azul, Verde e Rosa ganharam fundos escuros texturizados com estrelas e pontos de luz distintos.",
+        "Taverna Sombria ganhou materiais de couro envelhecido, feltro vinho escuro e acabamento gótico na madeira e nos painéis.",
+        "Brisa Aero ganhou textura abstrata inspirada em água e natureza, vidro translúcido e reflexos suaves nos controles.",
+        "Veludo Imperial e Âmbar do Deserto receberam, respectivamente, tramas de tecido e textura mineral, com botões em relevo.",
+        "A Taverna Clássica, o seletor original de naipes, as cartas, os retratos, o destaque de turno e o motor de jogo foram preservados."
+      ]
+    },
     {
       "id": "alpha-0.5.0.29",
       "label": "0.5.0.29-alpha",

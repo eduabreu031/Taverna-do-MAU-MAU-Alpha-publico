@@ -5,6 +5,7 @@ on:
     paths:
       - '.github/workflows/check-theme-visual.yml'
       - 'qa/theme-neon.css'
+      - 'qa/theme-materials.css'
       - 'qa/theme-player-palettes.css'
       - 'qa/theme-card-decks.css'
       - 'qa/theme-gameplay-hotfix.css'
@@ -25,6 +26,15 @@ on:
       - 'qa/tavern-entrance.js'
       - 'qa/apply-tavern-entrance.py'
       - 'qa/entrance-browser-check.mjs'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'qa/theme-materials.css'
+      - 'qa/theme-browser-check.mjs'
+      - 'qa/theme-player-palettes.css'
+      - 'qa/test-theme-schedule.cjs'
+      - 'qa/apply-seasonal-theme.py'
+      - '.github/workflows/check-theme-visual.yml'
   workflow_dispatch:
 permissions:
   contents: read
@@ -55,6 +65,8 @@ jobs:
           python3 qa/apply-online-abandon.py site
           python3 qa/apply-seasonal-theme.py site
           python3 qa/apply-tavern-entrance.py site
+      - name: Validar materiais e motor de paletas sem navegador
+        run: node qa/test-theme-schedule.cjs site
       - name: Analisar baralhos e seletor de naipes antes das correções
         run: |
           python3 qa/inspect-card-theme.py

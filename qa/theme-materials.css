@@ -1,0 +1,317 @@
+/* Materiais das sete paletas alternativas — 0.5.0.29+.
+   Apenas fundos, bordas e sombras. Sem alteração da Taverna Clássica,
+   de cartas, faces, retratos, HUD de turno, naipes, layout ou eventos.
+   As texturas são CSS locais: nenhuma imagem/rede, animação ou canvas. */
+
+/* A ambientação preenche o cenário, não fica sobre controles ou cartas.
+   Background-size incomensuráveis criam pontos de luz sem um padrão de grade visível. */
+:root[data-tav-palette^="neon-"] :is(body,#sceneWelcome,#sceneMultiplayer,#sceneMenu,#sceneGame){
+ background:var(--tm-scene)!important;
+ background-size:var(--tm-scene-size,cover)!important;
+ background-repeat:repeat!important;
+}
+
+/* A base dos sete materiais tem brilho rasante, microfibras e profundidade.
+   Todas as superfícies já existentes continuam recebendo --tp-panel,
+   --tp-button, --tp-felt e --tp-shadow do gerenciador atual. */
+:root[data-tav-palette^="neon-"]{
+ --tm-felt-fibers:
+  repeating-linear-gradient(111deg,#ffffff08 0 1px,transparent 1px 5px),
+  repeating-linear-gradient(17deg,#0000000b 0 1px,transparent 1px 7px);
+ --tm-control-shadow:
+  inset 0 1px 0 #ffffff43,inset 0 -3px 7px #05081953,
+  0 3px 0 #03061855,0 8px 19px #03061883,0 0 12px var(--tp-glow);
+ --tm-control-hover:
+  inset 0 1px 0 #ffffff7a,inset 0 -2px 8px #05081968,
+  0 5px 20px #0306188c,0 0 17px var(--tp-glow-hi);
+}
+
+/* Fundo de feltro: mantém a textura abaixo dos elementos interativos. */
+:root[data-tav-palette^="neon-"] #sceneGame #tableShell>.felt::before,
+:root[data-tav-palette^="neon-"] #sceneGame #tableShell>.felt::after{
+ pointer-events:none!important;
+}
+:root[data-tav-palette^="neon-"] #sceneGame #tableShell>.felt::before{
+ background:var(--tm-felt-fibers)!important;
+}
+
+/* Botões reais de saguão, livro, multiplayer, sala VIP, modais e partida.
+   Não incluir o seletor de naipes, nem as cartas, os NPCs e o temporizador. */
+:root[data-tav-palette^="neon-"] :is(
+ #sceneWelcome .welcome-mode,#sceneWelcome #alphaTopTools button,
+ #sceneMultiplayer .multiplayer-back,#sceneMultiplayer .tav-vip-enter,
+ #sceneMultiplayer .tav-bots-open,#sceneMultiplayer #alphaAccountsLogout,
+ #sceneMultiplayer #tavVipAdminOpen,#tavVipRequestAccess,
+ #sceneMenu .engraved-btn,#sceneMenu .book-tab,
+ #tavCentralOpen,.tav-central-panel button,.tav-admin-panel button,
+ .tav-bots-actions button,.tav-bots-choice,#alphaAccountsOverlay button,
+ .tav-vip-kick,#tavSocialLauncher,#tavSocialMenu button,#tavSocialVote button,
+ #tavAbandonOverlay button,#alphaTopTools button,.alpha-primary,.alpha-secondary,
+ #rulesModalDEV .rules-tabs button,#rulesModalDEV #rulesCloseDEV,
+ #sceneGame .control-bar button,#sceneGame .utility-toolbar button,
+ #sceneGame .action-list button,#sceneGame .action-btn,
+ #tavAppearanceOverlay .tav-appearance-finish,
+ #tavAppearanceOverlay .tav-appearance-close,.tav-appearance-trigger
+){
+ background:var(--tp-button)!important;
+ border-color:var(--tp-edge)!important;
+ color:var(--tp-text)!important;
+ box-shadow:var(--tm-control-shadow)!important;
+ background-clip:padding-box!important;
+}
+:root[data-tav-palette^="neon-"] :is(
+ #sceneWelcome .welcome-mode,#sceneMultiplayer .tav-vip-enter,
+ #sceneMenu .engraved-btn,.tav-central-panel button,
+ #sceneGame .control-bar button,#sceneGame .action-list button,
+ #tavAppearanceOverlay .tav-appearance-finish
+):hover:not(:disabled){
+ box-shadow:var(--tm-control-hover)!important;
+ border-color:var(--tp-bright)!important;
+}
+:root[data-tav-palette^="neon-"] :is(
+ #sceneWelcome .welcome-mode,#sceneMultiplayer button,
+ #sceneMenu .engraved-btn,#sceneGame .action-list button,
+ #sceneGame .control-bar button,#tavAppearanceOverlay button
+):focus-visible{
+ outline:2px solid var(--tp-bright)!important;
+ outline-offset:2px!important;
+}
+
+/* NEON AZUL — noite cósmica fria, estrelas finas e névoa elétrica. */
+:root[data-tav-palette="neon-blue"]{
+ --tm-scene:
+  radial-gradient(circle at 17% 22%,#e2f7ffcf 0 1px,transparent 1.8px),
+  radial-gradient(circle at 77% 71%,#b7b9ffb8 0 .9px,transparent 1.7px),
+  radial-gradient(circle at 41% 82%,#ffffff8d 0 .65px,transparent 1.5px),
+  radial-gradient(ellipse at 72% 11%,#5943b35e,transparent 47%),
+  radial-gradient(ellipse at 15% 73%,#1166ab44,transparent 46%),
+  linear-gradient(155deg,#100e38 0%,#121b49 51%,#050b25 100%);
+ --tm-scene-size:263px 289px,373px 331px,467px 419px,cover,cover,cover;
+ --tp-panel:
+  repeating-linear-gradient(107deg,#c1c6ff08 0 1px,transparent 1px 8px),
+  radial-gradient(ellipse at 15% 0%,#6b69b057,transparent 62%),
+  linear-gradient(158deg,#242365,#12163f 66%,#0a0d2c);
+ --tp-button:
+  radial-gradient(ellipse at 35% -12%,#bceaff70,transparent 53%),
+  linear-gradient(177deg,#6251b8 0%,#403391 13%,#28236c 62%,#18274f 100%);
+ --tp-felt:
+  radial-gradient(ellipse at 32% 16%,#5c56a884,transparent 44%),
+  repeating-linear-gradient(115deg,#ffffff09 0 1px,transparent 1px 5px),
+  repeating-linear-gradient(18deg,#03081918 0 1px,transparent 1px 9px),
+  radial-gradient(ellipse at 51% 51%,#384199,#262868 57%,#101a40 100%);
+ --tp-shadow:inset 0 1px 1px #b3aafa57,inset 0 -9px 22px #080a2a87,0 8px 24px #04061bba,0 0 11px #5a4cbb34;
+}
+
+/* NEON VERDE — céu noturno alquímico: estrelas, névoa e vagalumes. */
+:root[data-tav-palette="neon-green"]{
+ --tm-scene:
+  radial-gradient(circle at 15% 17%,#d4fff0cf 0 1px,transparent 2px),
+  radial-gradient(circle at 71% 75%,#a8ffe0a8 0 1.4px,transparent 2.8px),
+  radial-gradient(circle at 39% 48%,#e7ffb0b2 0 .75px,transparent 1.6px),
+  radial-gradient(ellipse at 76% 16%,#28aa7e58,transparent 43%),
+  radial-gradient(ellipse at 12% 75%,#8eea6b28,transparent 51%),
+  linear-gradient(154deg,#051716,#092e2b 52%,#031513);
+ --tm-scene-size:293px 307px,419px 367px,347px 433px,cover,cover,cover;
+ --tp-panel:
+  repeating-linear-gradient(101deg,#c5ffe708 0 1px,transparent 1px 7px),
+  radial-gradient(ellipse at 20% 0%,#5ac8aa45,transparent 61%),
+  linear-gradient(162deg,#17594d,#0b3d35 54%,#082522);
+ --tp-button:
+  radial-gradient(ellipse at 29% -14%,#d7ffcd70,transparent 54%),
+  linear-gradient(177deg,#309a79 0%,#208268 17%,#145d50 67%,#0b3b36 100%);
+ --tp-felt:
+  radial-gradient(ellipse at 26% 17%,#58d2a566,transparent 43%),
+  repeating-linear-gradient(115deg,#c0ffdf0b 0 1px,transparent 1px 6px),
+  repeating-linear-gradient(20deg,#02160d16 0 1px,transparent 1px 9px),
+  radial-gradient(ellipse at center,#1c7866,#10594b 62%,#07372f);
+ --tp-shadow:inset 0 1px 1px #b6f7d254,inset 0 -9px 22px #0019109a,0 8px 24px #011a15af,0 0 12px #51d9a92e;
+}
+
+/* NEON ROSA — firmamento violeta e poeira estelar rosada. */
+:root[data-tav-palette="neon-pink"]{
+ --tm-scene:
+  radial-gradient(circle at 19% 21%,#ffe9fbdd 0 1px,transparent 2px),
+  radial-gradient(circle at 79% 66%,#ffa3e7bf 0 1.3px,transparent 2.1px),
+  radial-gradient(circle at 42% 83%,#c8afffb3 0 .8px,transparent 1.7px),
+  radial-gradient(ellipse at 78% 12%,#a7349b66,transparent 51%),
+  radial-gradient(ellipse at 20% 79%,#564da14f,transparent 47%),
+  linear-gradient(155deg,#240d31,#411344 53%,#170922);
+ --tm-scene-size:271px 307px,379px 349px,443px 397px,cover,cover,cover;
+ --tp-panel:
+  repeating-linear-gradient(109deg,#ffe6f509 0 1px,transparent 1px 8px),
+  radial-gradient(ellipse at 18% 0%,#c658b552,transparent 62%),
+  linear-gradient(158deg,#642565,#3d184c 59%,#270e36);
+ --tp-button:
+  radial-gradient(ellipse at 29% -12%,#ffe0f67b,transparent 54%),
+  linear-gradient(177deg,#dc70b7 0%,#ab439d 16%,#792d7a 62%,#4a1a55 100%);
+ --tp-felt:
+  radial-gradient(ellipse at 30% 21%,#f58ecd5b,transparent 48%),
+  repeating-linear-gradient(114deg,#ffe0fc0b 0 1px,transparent 1px 6px),
+  repeating-linear-gradient(21deg,#1a032d16 0 1px,transparent 1px 8px),
+  radial-gradient(ellipse at center,#a0448a,#752c6d 58%,#3b1848);
+ --tp-shadow:inset 0 1px 1px #ffc5ef66,inset 0 -9px 22px #21052594,0 8px 24px #16061db8,0 0 11px #d34eaf3b;
+}
+
+/* TAVERNA SOMBRIA — couro preto envelhecido, feltro de vinho escuro,
+   filamentos góticos e madeira carbonizada. Sem granulação importada. */
+:root[data-tav-palette="neon-tavern-dark"]{
+ --tp-edge:#82505a;--tp-accent:#c16b78;--tp-bright:#ffbac0;
+ --tp-glow:#a7354850;--tp-glow-hi:#e1778172;
+ --tm-scene:
+  radial-gradient(ellipse at 23% 5%,#722b393c,transparent 49%),
+  repeating-linear-gradient(101deg,#ffffff05 0 1px,transparent 1px 13px),
+  repeating-linear-gradient(9deg,#00000017 0 1px,transparent 1px 7px),
+  radial-gradient(ellipse at center,#27171e,#130d13 63%,#09080c);
+ --tm-scene-size:cover,cover,cover,cover;
+ --tp-panel:
+  repeating-linear-gradient(102deg,#d1a6ac0a 0 1px,transparent 1px 7px),
+  repeating-linear-gradient(9deg,#00000024 0 1px,transparent 1px 11px),
+  radial-gradient(ellipse at 16% 0%,#70414b59,transparent 58%),
+  linear-gradient(155deg,#332129,#21151e 52%,#120e16);
+ --tp-button:
+  radial-gradient(ellipse at 35% -14%,#e4b5a74d,transparent 46%),
+  repeating-linear-gradient(102deg,#ffffff07 0 1px,transparent 1px 7px),
+  linear-gradient(178deg,#68404b,#452732 19%,#301e27 65%,#1b131b);
+ --tp-wood:
+  repeating-linear-gradient(91deg,#0c0b0d 0 4px,#38252a 5px 10px,#624047 11px 12px,#1a1117 13px 26px),
+  linear-gradient(180deg,#301d23,#100c10);
+ --tp-felt:
+  radial-gradient(ellipse at 37% 19%,#922f4774,transparent 47%),
+  repeating-linear-gradient(111deg,#f3a4b00a 0 1px,transparent 1px 5px),
+  repeating-linear-gradient(15deg,#00000021 0 1px,transparent 1px 7px),
+  radial-gradient(ellipse at 52% 41%,#65202f 0%,#451522 57%,#1b101a 100%);
+ --tp-shadow:inset 0 1px 1px #deb2af26,inset 0 -12px 25px #050206ba,0 8px 27px #030205db,0 0 9px #96374a21;
+ --tm-control-shadow:inset 0 1px 0 #f4b2b13e,inset 0 -4px 8px #09040b9e,0 3px 0 #0a050b,0 8px 21px #040306c9;
+ --tm-control-hover:inset 0 1px 0 #ffd2c470,inset 0 -4px 9px #0803089c,0 4px 21px #000d,0 0 13px #bb526354;
+}
+
+/* BRISA AERO — vidro verde-água com transparência real, névoa de
+   manhã, reflexos d'água e fibras abstratas de folhagem. */
+:root[data-tav-palette="neon-aero"]{
+ --tp-space:#c2e8df;--tp-accent:#aff0b8;--tp-edge:#9befe5;
+ --tm-scene:
+  radial-gradient(circle at 17% 32%,#ffffff9a 0 1.4px,transparent 2.8px),
+  radial-gradient(circle at 81% 73%,#e8ffdcab 0 2px,transparent 4px),
+  repeating-linear-gradient(124deg,#ffffff15 0 1px,transparent 1px 20px),
+  radial-gradient(ellipse at 80% 7%,#f6ffe7e0,transparent 42%),
+  radial-gradient(ellipse at 13% 82%,#3c9c7f80,transparent 53%),
+  linear-gradient(155deg,#c6f1dc 0%,#81c7ba 41%,#348d92 79%,#236577 100%);
+ --tm-scene-size:179px 233px,347px 293px,cover,cover,cover,cover;
+ --tp-panel:
+  radial-gradient(ellipse at 24% -5%,#eafff487,transparent 56%),
+  repeating-linear-gradient(118deg,#e5fff60a 0 1px,transparent 1px 11px),
+  linear-gradient(156deg,#287f83e3,#135568d9 59%,#16425adf);
+ --tp-button:
+  radial-gradient(ellipse at 29% -20%,#ffffffc7,transparent 59%),
+  linear-gradient(180deg,#cefff49c 0%,#62cbbdba 10%,#268e9bcf 47%,#1b6383d9 100%);
+ --tp-felt:
+  radial-gradient(ellipse at 31% 16%,#e4ffc685,transparent 47%),
+  repeating-linear-gradient(111deg,#d5fff12a 0 1px,transparent 1px 10px),
+  repeating-linear-gradient(18deg,#166b6210 0 1px,transparent 1px 15px),
+  radial-gradient(ellipse at 59% 52%,#8dccb0,#60b2b5 54%,#317e98);
+ --tp-wood:
+  radial-gradient(ellipse at 20% 0%,#e5fff36b,transparent 52%),
+  repeating-linear-gradient(108deg,#d0fbed1c 0 1px,transparent 1px 16px),
+  linear-gradient(160deg,#4ea9a9,#2d7b93);
+ --tp-shadow:inset 0 1px 1px #ffffff85,inset 0 -10px 24px #06395166,0 8px 22px #0646587a,0 0 10px #a9ffe44d;
+ --tm-control-shadow:inset 0 2px 1px #ffffffab,inset 0 -3px 9px #07495b73,0 4px 0 #174f6680,0 8px 17px #154b657b,0 0 14px #d0fff397;
+ --tm-control-hover:inset 0 2px 1px #ffffffea,inset 0 -3px 8px #1653688a,0 5px 18px #0f56777a,0 0 19px #dcfff9c4;
+}
+/* Backdrop-filter SOMENTE em painéis e botões do Aero; não na mesa/cena:
+   protege a taxa de quadros em celulares e mantém contraste suficiente. */
+:root[data-tav-palette="neon-aero"] :is(
+ #sceneWelcome .welcome-panel,#sceneMultiplayer .multiplayer-panel,
+ #sceneMultiplayer #alphaAccountsBar,#sceneMenu .book-page,
+ #tavAppearanceOverlay .tav-appearance-card,#alphaAccountsOverlay .alpha-accounts-panel
+){
+ -webkit-backdrop-filter:blur(8px) saturate(1.12);
+ backdrop-filter:blur(8px) saturate(1.12);
+}
+:root[data-tav-palette="neon-aero"] :is(
+ #sceneWelcome .welcome-mode,#sceneMultiplayer .tav-vip-enter,
+ #sceneMenu .engraved-btn,#tavAppearanceOverlay .tav-appearance-finish
+){
+ -webkit-backdrop-filter:blur(4px);
+ backdrop-filter:blur(4px);
+}
+
+/* VELUDO IMPERIAL — trama jacquard, brilho púrpura e seda dourada. */
+:root[data-tav-palette="neon-imperial"]{
+ --tm-scene:
+  radial-gradient(ellipse at 23% 6%,#c2989244,transparent 48%),
+  repeating-linear-gradient(90deg,#dbb78808 0 1px,transparent 1px 24px),
+  repeating-linear-gradient(0deg,#0000000c 0 1px,transparent 1px 12px),
+  radial-gradient(ellipse at 56% 51%,#4b2e52,#24182f 71%,#130e1d);
+ --tm-scene-size:cover,cover,cover,cover;
+ --tp-panel:
+  repeating-linear-gradient(115deg,#f4d39e0b 0 1px,transparent 1px 9px),
+  repeating-linear-gradient(65deg,#00000015 0 1px,transparent 1px 9px),
+  radial-gradient(ellipse at 29% 0%,#aa73945e,transparent 61%),
+  linear-gradient(159deg,#583652,#39253f 57%,#20182c);
+ --tp-button:
+  radial-gradient(ellipse at 34% -15%,#f7dfbc73,transparent 53%),
+  linear-gradient(177deg,#8c6374,#6c485f 16%,#4f3450 69%,#332439);
+ --tp-felt:
+  radial-gradient(ellipse at 30% 19%,#b48ab35d,transparent 47%),
+  repeating-linear-gradient(113deg,#f7dfdc0b 0 1px,transparent 1px 6px),
+  repeating-linear-gradient(69deg,#07031119 0 1px,transparent 1px 8px),
+  radial-gradient(ellipse at center,#805979,#5c3f60 62%,#312239);
+ --tp-shadow:inset 0 1px 1px #ffe9be59,inset 0 -9px 18px #160b218e,0 9px 24px #0b0615bd,0 0 11px #ccad8140;
+}
+
+/* ÂMBAR DO DESERTO — grãos de areia, camadas minerais e bronze entalhado. */
+:root[data-tav-palette="neon-amber"]{
+ --tm-scene:
+  radial-gradient(circle at 15% 19%,#ffe3aa5a 0 1px,transparent 1.8px),
+  radial-gradient(circle at 77% 63%,#eac18158 0 .85px,transparent 1.8px),
+  repeating-linear-gradient(102deg,#f8d6a009 0 1px,transparent 1px 13px),
+  radial-gradient(ellipse at 67% 9%,#b87d3752,transparent 49%),
+  linear-gradient(163deg,#6e4b2d,#493220 55%,#211810);
+ --tm-scene-size:167px 231px,283px 197px,cover,cover,cover;
+ --tp-panel:
+  repeating-linear-gradient(98deg,#ffe3b711 0 1px,transparent 1px 9px),
+  radial-gradient(ellipse at 31% -7%,#daac6d68,transparent 55%),
+  linear-gradient(160deg,#856137,#5d4329 56%,#392819);
+ --tp-button:
+  radial-gradient(ellipse at 31% -10%,#fff0bf8a,transparent 55%),
+  linear-gradient(176deg,#d1a364,#a67b43 16%,#795732 66%,#4b3522);
+ --tp-felt:
+  radial-gradient(ellipse at 28% 17%,#ecd0a271,transparent 43%),
+  repeating-linear-gradient(111deg,#fff9e114 0 1px,transparent 1px 6px),
+  repeating-linear-gradient(16deg,#5833131b 0 1px,transparent 1px 8px),
+  radial-gradient(ellipse at center,#b48e57,#927044 59%,#58422a);
+ --tp-shadow:inset 0 1px 1px #ffe8ba6e,inset 0 -9px 19px #2d1a0ba0,0 8px 25px #140c05b3,0 0 9px #e0b77b3a;
+}
+
+/* Amostras de material: o seletor de aparência já antecipa o acabamento.
+   A Taverna Clássica mantém sua amostra original. */
+.tav-palette-option[data-palette="neon-blue"] .tav-palette-swatch{
+ background:radial-gradient(circle at 74% 25%,#ebffff 0 1px,transparent 2px),radial-gradient(circle at 22% 66%,#e0ceff 0 1px,transparent 2px),linear-gradient(148deg,#5045ab,#181843 72%);
+}
+.tav-palette-option[data-palette="neon-green"] .tav-palette-swatch{
+ background:radial-gradient(circle at 76% 26%,#d2ffcb 0 1.5px,transparent 3px),radial-gradient(circle at 20% 73%,#e8ffee 0 1px,transparent 2px),linear-gradient(148deg,#287e65,#092923 78%);
+}
+.tav-palette-option[data-palette="neon-pink"] .tav-palette-swatch{
+ background:radial-gradient(circle at 22% 25%,#ffebf9 0 1px,transparent 2px),radial-gradient(circle at 80% 71%,#ffc7fa 0 1px,transparent 2px),linear-gradient(148deg,#a646a4,#2a133b 79%);
+}
+.tav-palette-option[data-palette="neon-tavern-dark"] .tav-palette-swatch{
+ background:repeating-linear-gradient(111deg,#e8c2b710 0 1px,transparent 1px 5px),radial-gradient(ellipse at 30% 23%,#9b39495c,transparent 61%),linear-gradient(147deg,#4d2833,#110d14 86%);
+}
+.tav-palette-option[data-palette="neon-aero"] .tav-palette-swatch{
+ background:radial-gradient(ellipse at 25% 12%,#ffffffb5,transparent 47%),repeating-linear-gradient(120deg,#eaffec45 0 1px,transparent 1px 9px),linear-gradient(145deg,#b4efd3,#58adac 55%,#246c85);
+}
+.tav-palette-option[data-palette="neon-imperial"] .tav-palette-swatch{
+ background:repeating-linear-gradient(114deg,#ffe3b42e 0 1px,transparent 1px 8px),linear-gradient(145deg,#705273,#311d3b 73%,#c5a576);
+}
+.tav-palette-option[data-palette="neon-amber"] .tav-palette-swatch{
+ background:radial-gradient(circle at 16% 39%,#ffe3ad75 0 1px,transparent 2px),repeating-linear-gradient(110deg,#ffe0a01b 0 1px,transparent 1px 8px),linear-gradient(145deg,#d6ac70,#4d331c);
+}
+
+/* Menos recomposição em aparelhos que solicitam desempenho/animação reduzida.
+   O Aero continua translúcido mesmo quando o desfoque é removido. */
+@media (prefers-reduced-motion:reduce){
+ :root[data-tav-palette="neon-aero"] :is(
+  #sceneWelcome .welcome-panel,#sceneMultiplayer .multiplayer-panel,
+  #sceneMenu .book-page,#tavAppearanceOverlay .tav-appearance-card
+ ){backdrop-filter:none;-webkit-backdrop-filter:none}
+}

@@ -16,6 +16,29 @@ const script=html.match(/<script id="tav-theme-manager">([\s\S]*?)<\/script>/)?.
 const menuScript=html.match(/<script id="tav-appearance-menu">([\s\S]*?)<\/script>/)?.[1];
 const css=html.match(/<style id="tav-seasonal-themes">([\s\S]*?)<\/style>/)?.[1];
 assert(script&&css&&menuScript,'As duas camadas e as opções do jogador precisam estar no build');
+
+/* Garantir que a textura final sobreviva à montagem e preserve a geometria
+   original: zero imagens, zero mudanças em cartas, naipes, turnos ou cliques. */
+const materials=fs.readFileSync(path.join(root,'qa/theme-materials.css'),'utf8').trim();
+assert(css.includes(materials),'Camada dos materiais não foi embutida no HTML gerado');
+assert(!materials.includes(':root[data-tav-palette="classic"]'),'Taverna Clássica deve ficar intocada');
+assert(!materials.includes('url('),'Os fundos devem funcionar offline, sem baixar imagens');
+assert(!materials.includes('#overlay:has(.suit-list)'),'O seletor original de naipes não pode mudar');
+assert(!materials.includes('animation:')&&!materials.includes('pointer-events:auto'),'Tema não pode iniciar animações nem interceptar toques');
+for(const id of ['neon-blue','neon-green','neon-pink','neon-tavern-dark','neon-aero','neon-imperial','neon-amber']){
+ const start=materials.indexOf(':root[data-tav-palette="'+id+'"]{');
+ assert(start!==-1,'Textura ausente: '+id);
+ const end=materials.indexOf('\n}',start);
+ assert(end>start,'Bloco de material sem fechamento: '+id);
+ const block=materials.slice(start,end);
+ for(const token of ['--tm-scene:','--tp-panel:','--tp-button:','--tp-felt:','--tp-shadow:'])
+  assert(block.includes(token),'Material incompleto ('+token+'): '+id);
+}
+for(const id of ['neon-blue','neon-green','neon-pink'])
+ assert(materials.includes(':root[data-tav-palette="'+id+'"]{'),'Céu noturno ausente: '+id);
+assert(materials.includes('backdrop-filter:blur(8px)'),'Faltou vidro fosco Aero');
+assert(materials.includes('#sceneGame .action-list button'),'Acabamento de botões da partida ausente');
+
 new vm.Script(script);new vm.Script(menuScript);
 for(const id of ['neon-blue','neon-green','neon-pink',...["neon-tavern-dark","neon-aero","neon-imperial","neon-amber"]])
  assert(css.includes(':root[data-tav-palette="'+id+'"]'),'Paleta ausente '+id);
