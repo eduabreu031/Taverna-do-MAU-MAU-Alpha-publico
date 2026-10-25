@@ -118,6 +118,9 @@ try{
   assert.equal(backs.size,4,'Quatro versos precisam ser diferentes');
   if(width===390){
    await page.evaluate(()=>window.TavernaEntrance?.skipVisualOnly?.());
+   // O modal de novidades cobre os modos no primeiro acesso; fechar
+   // somente durante o teste evita que intercepte o clique real.
+   await page.evaluate(()=>{const el=document.querySelector('#alphaInformationOverlay');if(el)el.style.display='none';});
    await page.locator('#chooseOffline').click({timeout:5000});
    for(const id of ids){
     await page.evaluate(id=>window.TavernaThemeSystem.setPalette(id),id);
