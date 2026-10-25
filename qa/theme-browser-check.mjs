@@ -152,11 +152,17 @@ try{
     }
     const btn=document.querySelector('#sceneWelcome .welcome-mode');
     const nested=btn?.querySelector('strong');
+    const expectedInkNode=document.createElement('span');
+    expectedInkNode.style.color='var(--tm-menu-button-ink)';
+    document.body.appendChild(expectedInkNode);
+    const expectedInk=getComputedStyle(expectedInkNode).color;
+    expectedInkNode.remove();
     const gate=document.querySelector('#tavEntrance .tav-gate-actions button:not([hidden])');
     out[id]={
      panel,
      scene:getComputedStyle(document.querySelector('#sceneWelcome')).backgroundImage,
      buttonBg:getComputedStyle(btn).backgroundImage,
+     expectedInk,
      buttonColor:getComputedStyle(btn).color,
      buttonNode:btn?.outerHTML?.slice(0,400),
      labelNode:nested?.outerHTML?.slice(0,300),
@@ -187,8 +193,8 @@ try{
    assert(menuSurfaces[id].scene.includes('theme-backdrops/'+id+'.svg'),
     'Cenário estrelado/natural alterado indevidamente: '+id);
    assert(menuSurfaces[id].buttonBg.includes('gradient'),'Fundo de botão apagado: '+id);
-   assert(menuSurfaces[id].buttonColor===menuSurfaces[id].labelColor,
-    'Texto interior do botão diverge da paleta: '+id+' '+JSON.stringify({button:menuSurfaces[id].buttonColor,label:menuSurfaces[id].labelColor,buttonNode:menuSurfaces[id].buttonNode,labelNode:menuSurfaces[id].labelNode}));
+   assert.equal(menuSurfaces[id].labelColor,menuSurfaces[id].expectedInk,
+    'Título do botão não recebeu a tinta do tema: '+id+' '+JSON.stringify(menuSurfaces[id]));
    assert(menuSurfaces[id].buttonColor!=='rgb(255, 215, 0)',
     'Botão herdou amarelo clássico: '+id);
    assert(menuSurfaces[id].buttonShadow!=='none','Falta sombra para contraste: '+id);
