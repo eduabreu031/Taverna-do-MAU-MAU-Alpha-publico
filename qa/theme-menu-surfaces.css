@@ -197,3 +197,57 @@
   --tm-menu-surface:linear-gradient(155deg,#276879f7,#16445df9);
  }
 }
+
+/* v0.5.0.33 — saudação do saguão e arabesco logo abaixo do título.
+   O HTML original tem cores douradas FIXAS em .welcome-intro,
+   .welcome-name-notice e .welcome-rule b/span que não são botões.
+   Corrigir por tema, mantendo cores/estilos clássicos quando a raiz
+   não possui data-tav-palette. Não altera o brasão acima do título. */
+:root[data-tav-palette="neon-blue"]{
+ --tm-welcome-copy:#edf4ff;--tm-welcome-note:#c8dafa;
+ --tm-welcome-ornament:#9ecdfd;
+}
+:root[data-tav-palette="neon-green"]{
+ --tm-welcome-copy:#effff5;--tm-welcome-note:#c3efdc;
+ --tm-welcome-ornament:#86eec4;
+}
+:root[data-tav-palette="neon-pink"]{
+ --tm-welcome-copy:#fff0fa;--tm-welcome-note:#f1cde7;
+ --tm-welcome-ornament:#f8a5dd;
+}
+:root[data-tav-palette="neon-tavern-dark"]{
+ --tm-welcome-copy:#f6e6e3;--tm-welcome-note:#dab4ae;
+ --tm-welcome-ornament:#d9949d;
+}
+:root[data-tav-palette="neon-aero"]{
+ --tm-welcome-copy:#f1ffff;--tm-welcome-note:#d1f5f3;
+ --tm-welcome-ornament:#b2f9ea;
+}
+:root[data-tav-palette="neon-imperial"]{
+ --tm-welcome-copy:#f8edff;--tm-welcome-note:#e6d0ed;
+ --tm-welcome-ornament:#d9b2ef;
+}
+:root[data-tav-palette="neon-amber"]{
+ --tm-welcome-copy:#fff2dd;--tm-welcome-note:#efdab9;
+ --tm-welcome-ornament:#dcb98c;
+}
+:root[data-tav-palette^="neon-"] #sceneWelcome .welcome-intro{
+ color:var(--tm-welcome-copy)!important;
+ text-shadow:0 1px 2px #090a1a65!important;
+}
+:root[data-tav-palette^="neon-"] #sceneWelcome :is(.welcome-name-notice,.welcome-name-label){
+ color:var(--tm-welcome-note)!important;
+ text-shadow:0 1px 2px #090a1a48!important;
+}
+:root[data-tav-palette^="neon-"] #sceneWelcome .welcome-rule,
+:root[data-tav-palette^="neon-"] #sceneWelcome .welcome-rule > b{
+ color:var(--tm-welcome-ornament)!important;
+}
+:root[data-tav-palette^="neon-"] #sceneWelcome .welcome-rule > b{
+ text-shadow:0 0 10px color-mix(in srgb,var(--tm-welcome-ornament) 24%,transparent)!important;
+}
+:root[data-tav-palette^="neon-"] #sceneWelcome .welcome-rule > span{
+ background:linear-gradient(90deg,transparent,
+   color-mix(in srgb,var(--tm-welcome-ornament) 60%,transparent),
+   transparent)!important;
+}
