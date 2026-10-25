@@ -260,3 +260,121 @@
 ){
  color:var(--tq-ornament)!important;
 }
+
+/* v0.5.0.37 — Seleção offline como lista compacta de retratos.
+   Escopo só da seleção de personagens, para oito temas (inclusive
+   Clássico por pedido explícito). Não substitui retrato, identidade,
+   aria-pressed nem o listener real de cada botão. */
+#sceneMenu #heroChoiceCards{
+ display:grid!important;
+ grid-template-columns:minmax(0,1fr)!important;
+ gap:8px!important;
+ align-items:stretch!important;
+ width:100%!important;
+ max-width:100%!important;
+}
+#sceneMenu #heroChoiceCards>.hero-choice{
+ display:grid!important;
+ grid-template-columns:52px minmax(0,1fr)!important;
+ grid-template-rows:minmax(20px,auto) minmax(16px,auto)!important;
+ align-items:center!important;
+ align-content:center!important;
+ justify-items:start!important;
+ column-gap:12px!important;
+ row-gap:2px!important;
+ width:100%!important;
+ max-width:100%!important;
+ min-height:72px!important;
+ height:auto!important;
+ box-sizing:border-box!important;
+ padding:8px 12px!important;
+ margin:0!important;
+ text-align:left!important;
+ border-radius:13px!important;
+ overflow:hidden!important;
+ cursor:pointer;
+}
+#sceneMenu #heroChoiceCards>.hero-choice>.portrait-medallion.hero-medallion{
+ grid-column:1!important;
+ grid-row:1 / span 2!important;
+ display:block!important;
+ place-self:center!important;
+ width:49px!important;
+ height:49px!important;
+ min-width:49px!important;
+ min-height:49px!important;
+ max-width:49px!important;
+ max-height:49px!important;
+ aspect-ratio:1!important;
+ margin:0!important;
+ padding:0!important;
+ border-radius:50%!important;
+ overflow:hidden!important;
+ box-sizing:border-box!important;
+ flex:none!important;
+}
+#sceneMenu #heroChoiceCards>.hero-choice>.hero-medallion img{
+ display:block!important;
+ width:100%!important;
+ height:100%!important;
+ object-fit:cover!important;
+ object-position:center!important;
+ border-radius:50%!important;
+}
+#sceneMenu #heroChoiceCards>.hero-choice>strong{
+ grid-column:2!important;
+ grid-row:1!important;
+ display:block!important;
+ margin:0!important;
+ padding:0!important;
+ line-height:1.16!important;
+ text-align:left!important;
+ white-space:normal!important;
+ font-size:clamp(.89rem,2.9vw,1.02rem)!important;
+ font-weight:750!important;
+ min-width:0!important;
+}
+#sceneMenu #heroChoiceCards>.hero-choice>.hero-choice-desc{
+ grid-column:2!important;
+ grid-row:2!important;
+ display:-webkit-box!important;
+ -webkit-box-orient:vertical!important;
+ -webkit-line-clamp:2!important;
+ line-clamp:2!important;
+ overflow:hidden!important;
+ margin:0!important;
+ padding:0!important;
+ line-height:1.28!important;
+ text-align:left!important;
+ font-size:clamp(.69rem,2.3vw,.78rem)!important;
+ min-width:0!important;
+}
+#sceneMenu #heroChoiceCards>.hero-choice:focus-visible{
+ outline-offset:2px!important;
+}
+@media(max-width:370px){
+ #sceneMenu #heroChoiceCards>.hero-choice{
+  grid-template-columns:44px minmax(0,1fr)!important;
+  gap:2px 9px!important;
+  min-height:65px!important;
+  padding:6px 8px!important;
+ }
+ #sceneMenu #heroChoiceCards>.hero-choice>.portrait-medallion.hero-medallion{
+  width:43px!important;height:43px!important;
+  min-width:43px!important;min-height:43px!important;
+  max-width:43px!important;max-height:43px!important;
+ }
+}
+/* Heranças de ouro fixo no ornamento sob 'Abra a partida' e
+   no título da seleção. Somente paletas alternativas. */
+:root[data-tav-palette^="neon-"] #sceneMenu .book-page :is(
+ .filigree,.character-pick-label
+){
+ color:var(--tq-ornament)!important;
+ text-shadow:0 1px 3px #08101d70!important;
+}
+/* Remover enfeite pseudo associado ao retorno; o texto permanece legível. */
+#sceneMenu #offlineBackBtn::before,
+#sceneMenu #offlineBackBtn::after{
+ content:none!important;
+}
