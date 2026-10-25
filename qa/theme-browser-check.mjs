@@ -71,6 +71,22 @@ try{
       'Texto interno da identificação ainda dourado: '+id+' '+JSON.stringify(x.labels));
   }
   console.log('THEME_OFFLINE_NAME_AND_HEADERS_OK',width);
+  if(width===390){
+   const heroAudit=await page.evaluate(()=>{
+     const root=document.querySelector('#sceneMenu'),cards=root.querySelector('#heroChoiceCards');
+     const back=root.querySelector('#offlineBackBtn');
+     const elems=[...root.querySelectorAll('h1,h2,h3,header,.book-page [class],.book-page button')].filter(x=>/Escolha seu personagem|Abra a partida|❦|Voltar aos modos de jogo|hero-choice|book-title|book-tab/.test(x.textContent||'')&&(x.textContent||'').length<450);
+     const describe=x=>{const s=getComputedStyle(x),rr=x.getBoundingClientRect();return {tag:x.tagName,cls:x.className,id:x.id,text:(x.innerText||x.textContent||'').slice(0,125),html:x.outerHTML.slice(0,1700),color:s.color,bg:s.backgroundImage,fw:s.fontWeight,border:s.borderTopColor,display:s.display,grid:s.gridTemplateColumns,flex:s.flexDirection,rect:[Math.round(rr.x),Math.round(rr.y),Math.round(rr.width),Math.round(rr.height)]}};
+     const themes=['classic','neon-blue','neon-aero','neon-imperial'],out={};
+     for(const id of themes){
+       window.TavernaThemeSystem.setPalette(id);
+       out[id]={cards:[...cards.children].map(describe),head:elems.slice(0,26).map(describe),back:back?describe(back):null,container:cards.outerHTML.slice(0,7000)};
+     }
+     window.TavernaThemeSystem.setPalette('neon-pink');
+     return out;
+   });
+   console.log('OFFLINE_HERO_REDESIGN_AUDIT',JSON.stringify(heroAudit));
+  }
   const data=await page.evaluate(()=>{
    const themes=['classic','neon-blue','neon-green','neon-pink','neon-tavern-dark','neon-aero','neon-imperial','neon-amber'];
    const selectors=[
