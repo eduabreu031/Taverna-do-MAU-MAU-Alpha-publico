@@ -50,6 +50,31 @@ assert(menus.includes(':not(.suit-choice):not([data-suit])'),'Botões de naipes 
    sem carga de animação extra e sem afetar o motor. */
 const swAssets=fs.readFileSync(path.join(base,'sw.js'),'utf8');
 const gameSurfaces=fs.readFileSync(path.join(root,'qa/theme-game-surfaces.css'),'utf8').trim();
+const parityCSS=fs.readFileSync(path.join(root,'qa/theme-parity-performance.css'),'utf8').trim();
+assert(css.includes(parityCSS),'Paridade visual/performance não entrou no build');
+assert(css.indexOf(parityCSS)>css.indexOf(gameSurfaces),
+  'A auditoria visual final deve vencer heranças da mesa');
+assert(!parityCSS.includes(':root[data-tav-palette="classic"]'),
+  'Taverna Clássica jamais deve ser alterada');
+assert(!parityCSS.includes('pointer-events:none')&&!parityCSS.includes('touch-action:'),
+  'Botões e cartas devem continuar clicáveis');
+assert(!parityCSS.includes('animation:none')&&!parityCSS.includes('transform:'),
+  'Turnos e animações originais não podem ser suprimidos');
+assert(parityCSS.includes('#overlay:not(:has(.suit-list))'),
+  'Tela de eliminação tematizada sem alterar seletor de naipes');
+assert(parityCSS.includes('#sceneGame:is(#sceneGame) .action-list'),
+  'Borda escura residual atrás de MAU MAU / OPA!!! / PASSAR');
+assert(parityCSS.includes('#activeSuit'),'Indicador de naipe ainda com placa');
+assert(parityCSS.includes('#sceneMenu .book-page'),
+  'Texto do aventureiro offline não acompanha a paleta');
+assert(parityCSS.includes('multiplayer-mark')&&parityCSS.includes('multiplayer-intro'),
+  'Marca e saudações multiplayer devem acompanhar a paleta');
+assert(parityCSS.includes('.tav-gate-rule::after')&&parityCSS.includes('.tav-gate-crest'),
+  'Caixa preta e dourado na entrada precisam de correção');
+assert(parityCSS.includes('@media(max-width:760px)')&&
+  parityCSS.includes('backdrop-filter:none!important'),
+  'Vidro pesado não pode reter blur em telefone');
+
 const deckSource=fs.readFileSync(path.join(root,'qa/theme-card-decks.css'),'utf8').trim();
 assert(css.includes(gameSurfaces),'Polimento de mesa ausente no HTML de produção');
 assert(css.indexOf(gameSurfaces)>css.indexOf(menus),'Camada de mesa deve vir após a dos menus');

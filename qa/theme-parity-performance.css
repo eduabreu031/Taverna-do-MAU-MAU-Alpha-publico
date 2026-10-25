@@ -1,0 +1,207 @@
+/* 0.5.0.35 — Paridade visual e custo de pintura: sete temas alternativos.
+   Mantém Taverna Clássica, cartas físicas, turno, naipes, ações e geometria.
+   O objetivo é material TEMÁTICO real em cada fluxo, sem remendos retangulares. */
+
+/* Tipografia, decoração, borda e material do saguão e dos diálogos
+   compartilham tokens da paleta. As sete identidades já têm tokens próprios
+   --tm-menu-surface, --tm-menu-ink, --tm-menu-stroke e --tm-menu-shadow. */
+:root[data-tav-palette^="neon-"]{
+ --tq-caption:var(--tp-muted);
+ --tq-ornament:var(--tp-bright);
+ --tq-ink:var(--tm-menu-ink,var(--tp-text));
+ --tq-stroke:var(--tm-menu-stroke,var(--tp-edge));
+ --tq-surface:var(--tm-menu-surface,var(--tp-panel));
+ --tq-overlay:color-mix(in srgb,var(--tp-space) 87%,transparent);
+}
+/* Identificação inicial é gerada DEPOIS das folhas temáticas no build.
+   Regras particulares vencem os dourados literais sem mexer no Clássico. */
+:root[data-tav-palette^="neon-"] #tavEntrance .tav-gate-identity-card{
+ color:var(--tq-ink)!important;border-color:var(--tq-stroke)!important;
+ background:var(--tq-surface)!important;
+ box-shadow:inset 0 1px 0 var(--tg-sheen,var(--tp-glow)),0 11px 26px #060b1a75!important;
+}
+:root[data-tav-palette^="neon-"] #tavEntrance .tav-gate-identity-card::before{
+ border-color:var(--tq-stroke)!important;opacity:.5!important;
+ box-shadow:none!important;
+}
+:root[data-tav-palette^="neon-"] #tavEntrance .tav-gate-identity-card::after{
+ color:var(--tq-ornament)!important;opacity:.48!important;
+}
+:root[data-tav-palette^="neon-"] #tavEntrance .tav-gate-crest{
+ color:var(--tq-ornament)!important;
+ background:radial-gradient(circle at 34% 18%,var(--tp-glow-hi),transparent 58%),
+  var(--tg-control,var(--tp-panel))!important;
+ border-color:var(--tq-stroke)!important;
+ box-shadow:inset 0 0 0 2px var(--tp-glow),0 3px 11px #04081470!important;
+ text-shadow:0 1px 3px #0307127d!important;
+}
+:root[data-tav-palette^="neon-"] #tavEntrance :is(
+ .tav-gate-eyebrow,.tav-gate-identity-card h2
+){
+ color:var(--tq-ornament)!important;
+ text-shadow:0 1px 2px #09101b77!important;
+}
+:root[data-tav-palette^="neon-"] #tavEntrance .tav-gate-identity-card p{
+ color:var(--tq-caption)!important;
+}
+:root[data-tav-palette^="neon-"] #tavEntrance .tav-gate-rule::before{
+ background:linear-gradient(90deg,transparent,var(--tq-stroke) 22%,
+  var(--tq-stroke) 78%,transparent)!important;opacity:.56!important;
+}
+:root[data-tav-palette^="neon-"] #tavEntrance .tav-gate-rule::after{
+ color:var(--tq-ornament)!important;
+ background:radial-gradient(ellipse at center,
+  color-mix(in srgb,var(--tp-dark) 42%,transparent),transparent 80%)!important;
+ padding:0 8px!important;border-radius:100px!important;
+ box-shadow:none!important;
+}
+/* Offline: cabeçalhos AVENTUREIRO, escolha de personagens e instruções
+   saem do cobre/amarelo clássico. Retratos continuam intactos. */
+:root[data-tav-palette^="neon-"] #sceneMenu .book-page :is(
+ h1,h2,h3,h4,h5,p,label,legend,small,em,strong,
+ span:not(.portrait-medallion):not(.tav-palette-swatch),
+ .book-kicker,.book-label,.hero-choice-title,.hero-choice-desc,
+ .player-name-label,.player-name-display
+){
+ color:var(--tq-ink)!important;
+ text-shadow:0 1px 2px #08111b50!important;
+}
+:root[data-tav-palette^="neon-"] #sceneMenu .book-page :is(
+ .book-kicker,.book-label,.illuminated-letter
+){color:var(--tq-ornament)!important}
+:root[data-tav-palette^="neon-"] #sceneMenu .book-page :is(
+ .hero-choice,.hero-choice.chosen,.hero-choice .hero-frame
+){
+ background:var(--tq-surface)!important;
+ border-color:var(--tq-stroke)!important;
+ box-shadow:inset 0 1px 0 var(--tg-sheen,var(--tp-glow)),
+    0 3px 12px #08071559!important;
+}
+:root[data-tav-palette^="neon-"] #sceneMenu .hero-choice.chosen{
+ outline-color:var(--tq-ornament)!important;
+ box-shadow:inset 0 1px 0 var(--tp-glow-hi),0 0 0 1px var(--tp-edge),
+  0 0 10px var(--tp-glow)!important;
+}
+:root[data-tav-palette^="neon-"] #sceneMenu .hero-choice .hero-choice-desc{
+ color:var(--tq-caption)!important;
+}
+/* Multiplayer: os textos comprovadamente dourados não eram filhos de
+   botões. Aplicar a TODOS os temas com paleta, inclusive Sombria/Imperial. */
+:root[data-tav-palette^="neon-"] #sceneMultiplayer :is(
+ .multiplayer-mark,.multiplayer-eyebrow,.multiplayer-panel h1,
+ .multiplayer-panel h2,.multiplayer-panel h3
+){
+ color:var(--tq-ornament)!important;
+ text-shadow:0 1px 2px #070d1766!important;
+}
+:root[data-tav-palette^="neon-"] #sceneMultiplayer :is(
+ .multiplayer-intro,.multiplayer-copy,.multiplayer-preview,
+ .multiplayer-preview p,.multiplayer-preview small,.multiplayer-preview strong,
+ .multiplayer-panel small,#multiplayerGreeting
+){
+ color:var(--tq-caption)!important;
+ text-shadow:0 1px 2px #090b1760!important;
+}
+:root[data-tav-palette^="neon-"] #sceneMultiplayer .multiplayer-preview :is(
+ div:not(.multiplayer-preview),span,h4,label
+){
+ color:var(--tq-caption)!important;
+}
+:root[data-tav-palette^="neon-"] #sceneMultiplayer :is(
+ .multiplayer-panel .engraved-btn,.multiplayer-panel button
+){
+ color:var(--tm-menu-button-ink,var(--tp-text))!important;
+}
+/* HUD de jogo: botões individuais sim, placas de fundo não.
+   .action-list (incluindo quando alguém é eliminado) mantém a geometria,
+   borda e botões clicáveis; apenas seu material de fundo some. */
+:root[data-tav-palette^="neon-"] #sceneGame:is(#sceneGame) .action-list,
+:root[data-tav-palette^="neon-"] #sceneGame:is(#sceneGame) .action-list::before,
+:root[data-tav-palette^="neon-"] #sceneGame:is(#sceneGame) .action-list::after{
+ background:none!important;background-image:none!important;
+ border-color:transparent!important;
+ box-shadow:none!important;
+}
+:root[data-tav-palette^="neon-"] #sceneGame:is(#sceneGame) :is(
+ .control-bar,.control-divider,.control-guide,.utility-toolbar
+){
+ background:transparent!important;background-image:none!important;
+ border-color:transparent!important;box-shadow:none!important;
+}
+:root[data-tav-palette^="neon-"] #sceneGame:is(#sceneGame) :is(
+ #activeSuit,.active-suit,#roundPill,.round-pill,#centerCrest,.center-crest
+){
+ background:none!important;background-image:none!important;
+ border-color:transparent!important;box-shadow:none!important;
+}
+/* Não alterar dimensões, formato, cores dos naipes ou os marcadores internos
+   (#activeSuit conserva sua tipografia e o feedback do estado ativo). */
+:root[data-tav-palette^="neon-"] #sceneGame #activeSuit::before,
+:root[data-tav-palette^="neon-"] #sceneGame #activeSuit::after{
+ background:transparent!important;
+}
+/* Eliminação / fim de rodada / placar: o modal do motor é desenhado depois
+   do início da partida. Não tocar no seletor original de naipes. */
+:root[data-tav-palette^="neon-"] #overlay:not(:has(.suit-list)){
+ background:var(--tq-overlay)!important;
+}
+:root[data-tav-palette^="neon-"] #overlay:not(:has(.suit-list)) #dialog :is(
+ .parchment-modal,.wood-scoreboard,.scoreboard,.score-tally,
+ .score-header,.score-row,.round-results,.round-end,.elimination-panel,
+ .elimination-card,.round-summary,.result-panel,.results-panel,
+ .tav-removed-card
+){
+ background:var(--tq-surface)!important;
+ border-color:var(--tq-stroke)!important;
+ color:var(--tq-ink)!important;
+ box-shadow:inset 0 1px 0 var(--tp-glow),0 12px 28px #03060f87!important;
+}
+:root[data-tav-palette^="neon-"] #overlay:not(:has(.suit-list)) #dialog :is(
+ .parchment-modal,.wood-scoreboard,.scoreboard,.round-results,
+ .round-end,.elimination-panel,.round-summary,.results-panel
+) :is(h1,h2,h3,h4,p,header,strong,small){
+ color:var(--tq-ink)!important;text-shadow:0 1px 2px #04091677!important;
+}
+:root[data-tav-palette^="neon-"] #overlay:not(:has(.suit-list)) #dialog :is(
+ button,.engraved-btn
+){
+ background:var(--tp-button)!important;border-color:var(--tp-edge)!important;
+ color:var(--tm-menu-button-ink,var(--tp-text))!important;
+}
+/* Também há alguns placares fora de #dialog quando a rodada termina. */
+:root[data-tav-palette^="neon-"] #sceneGame :is(
+ .wood-scoreboard,.round-results,.score-tally,.score-header
+){
+ background:var(--tq-surface)!important;color:var(--tq-ink)!important;
+ border-color:var(--tq-stroke)!important;
+}
+/* Política móvel de performance:
+   - SVGs dos versos continuam únicos; rasterizados e cacheados pelo browser.
+   - manter a beleza de gradientes estáticos, simplificar só sombras repetidas.
+   - vidro Aero é translúcido pelo preenchimento sem blur caro em telas móveis.
+   - animações de cartas, tempo e turno NÃO são suprimidas. */
+@media(max-width:760px){
+ :root[data-tav-palette^="neon-"] :is(
+  #sceneWelcome .welcome-panel,#sceneMultiplayer .multiplayer-panel,
+  #sceneMenu .book-page,#tavAppearanceOverlay .tav-appearance-card,
+  #alphaAccountsOverlay .alpha-accounts-panel,
+  #tavEntrance .tav-gate-identity-card,.alpha-info-card,.tav-central-panel
+ ){
+  backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
+ }
+ :root[data-tav-palette^="neon-"] #sceneGame :is(
+  .mini-card,#seats .seat .mini-card
+ ){
+  box-shadow:0 1px 2px #070e1b65!important;
+ }
+ :root[data-tav-palette^="neon-"] #sceneGame .playing-card:not(.selected) .card-face,
+ :root[data-tav-palette^="neon-"] #sceneGame .playing-card:not(.selected) .card-back{
+  box-shadow:inset 0 0 0 1px #ffffff30,0 2px 5px #09112265!important;
+ }
+ :root[data-tav-palette^="neon-"] #sceneGame #humanZone{
+  backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
+ }
+ :root[data-tav-palette^="neon-"] #sceneGame #tableShell>.felt{
+  box-shadow:inset 0 4px 12px #04081521,0 0 5px var(--tp-glow)!important;
+ }
+}
