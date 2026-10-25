@@ -22,7 +22,7 @@ try{
     '#sceneMultiplayer input'
    ];
    const output={};
-   for(const theme of ['classic','neon-blue','neon-green','neon-pink']){
+   for(const theme of ['classic','neon-blue','neon-green','neon-pink','neon-tavern-dark','neon-aero','neon-imperial','neon-amber']){
     window.TavernaThemeSystem.setPalette(theme);
     output[theme]={};
     for(const selector of selectors){
@@ -46,7 +46,7 @@ try{
    assert(values.output.classic[selector],'Campo essencial não existe: '+selector);
   const found=Object.keys(values.output.classic);
   assert(found.length>=6,'Insuficientes superfícies reais de formulários para auditoria');
-  for(const theme of ['neon-blue','neon-green','neon-pink']){
+  for(const theme of ['neon-blue','neon-green','neon-pink','neon-tavern-dark','neon-aero','neon-imperial','neon-amber']){
    for(const selector of found.filter(x=>!x.includes('Status'))){
     const a=values.output.classic[selector],b=values.output[theme][selector];
     assert.notEqual(b.background,a.background,'Fundo não responde à paleta '+theme+': '+selector);
