@@ -124,7 +124,24 @@ async function restoreSilently(){
  try{const data=await request('/api/auth/me');if(data.user?.role==='guest')return null;user=data.user;syncAdventureName();return user;}
  catch{return null;}
 }
-window.TavernaAuth={requireUser,restoreSilently,roomRequest,pass,logout,enterAsGuest,syncAdventureName,getUser:()=>user,getToken:()=>token};
+// Retomada efêmera após F5/puxar para atualizar: aceita SOMENTE a credencial
+// de visitante desta aba e verifica a identidade no servidor antes de conectar.
+async function resumeGuestForRoom(savedToken){
+ if(!savedToken||localStorage.getItem(KEY)||user?.role&&user.role!=='guest')return null;
+ const oldToken=token,oldUser=user;
+ token=savedToken;
+ try{
+  const data=await request('/api/auth/me');
+  if(data.user?.role!=='guest')throw Error('Sessão de visitante encerrada');
+  user=data.user;
+  syncAdventureName();
+  return user;
+ }catch{
+  token=oldToken;user=oldUser;
+  return null;
+ }
+}
+window.TavernaAuth={requireUser,restoreSilently,resumeGuestForRoom,roomRequest,pass,logout,enterAsGuest,syncAdventureName,getUser:()=>user,getToken:()=>token};
 const portal=query('sceneMultiplayer');
 if(portal){
  const bar=el('div',{id:'alphaAccountsBar'}),status=el('span',{id:'alphaAccountsStatus'}),
