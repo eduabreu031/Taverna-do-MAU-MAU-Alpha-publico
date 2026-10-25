@@ -22,8 +22,8 @@ def change(old,new):
 helper=(root/'qa/online-resume-snippet.js').read_text(encoding='utf-8')
 assert '</script' not in helper.lower()
 change('const setStatus=s=>st.textContent=s;',helper+'\nconst setStatus=s=>st.textContent=s;')
-change('function close(leave=false){closing=true;',
-       'function close(leave=false){closing=true;++connectSerial;clearResume();')
+change('function close(leave=false){',
+       'function close(leave=false){++connectSerial;clearResume();')
 change("async function connect(code,existingToken=''){",
        "async function connect(code,existingToken=''){\n const serial=++connectSerial;")
 change('socket=new WebSocket(url)',
