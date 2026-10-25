@@ -46,6 +46,42 @@ for(const key of ['#tavEntrance .tav-gate-identity-card','#sceneWelcome .welcome
 assert(menus.includes('backdrop-filter:blur(10px)'),'Aero sem desfoque de vidro');
 assert(menus.includes(':not(.suit-choice):not([data-suit])'),'Botões de naipes não devem ser afetados');
 
+/* v0.5.0.34: sete artes SVG exclusivas, uma superfície única por tema,
+   sem carga de animação extra e sem afetar o motor. */
+const gameSurfaces=fs.readFileSync(path.join(root,'qa/theme-game-surfaces.css'),'utf8').trim();
+const deckSource=fs.readFileSync(path.join(root,'qa/theme-card-decks.css'),'utf8').trim();
+assert(css.includes(gameSurfaces),'Polimento de mesa ausente no HTML de produção');
+assert(css.indexOf(gameSurfaces)>css.indexOf(menus),'Camada de mesa deve vir após a dos menus');
+assert(css.includes(deckSource),'Redesign dos baralhos ausente no HTML');
+assert(!gameSurfaces.includes(':root[data-tav-palette="classic"]'),'Mesa clássica não pode ser alterada');
+assert(!gameSurfaces.includes('repeating-linear-gradient'),'Mesa não pode usar listras repetidas');
+assert(!gameSurfaces.includes('animation:')&&!gameSurfaces.includes('touch-action:')&&!gameSurfaces.includes('transform:'),
+ 'Tema da mesa não pode mudar animação nem interatividade');
+assert(!gameSurfaces.includes('filter:blur('),'Blur grande no feltro é proibido');
+assert(!gameSurfaces.includes('backdrop-filter:blur(10px)'),'Blur excessivo dentro da partida');
+assert(!gameSurfaces.includes('.card-back')&&!gameSurfaces.includes('.card-face'),
+ 'Camada da mesa não deve alterar cartas; cada deck tem sua camada');
+assert(gameSurfaces.includes('@media(max-width:650px)'),'Celular precisa reduzir o custo do Aero');
+for(const sel of ['#sceneGame #tableShell>.felt','#sceneGame #humanZone',
+ '#sceneGame .action-list','#sceneGame .control-bar','#sceneGame .game-header'])
+ assert(gameSurfaces.includes(sel),'Região da mesa ficou sem material: '+sel);
+for(const id of ['neon-blue','neon-green','neon-pink','neon-tavern-dark',
+ 'neon-aero','neon-imperial','neon-amber']){
+ assert(gameSurfaces.includes(':root[data-tav-palette="'+id+'"]'),
+  'A mesa não tem identidade específica: '+id);
+ assert(deckSource.includes('--tg-deck-image:url("./theme-decks/'+id+'.svg")'),
+  'Skin sem verso SVG exclusivo: '+id);
+ const svg=fs.readFileSync(path.join(base,'theme-decks',id+'.svg'),'utf8');
+ assert(svg.startsWith('<svg xmlns="http://www.w3.org/2000/svg"')&&svg.includes('</svg>'),'SVG inválido: '+id);
+ assert(svg.length>700&&svg.length<4500,'Arte vetorial de cartas fora do orçamento móvel: '+id);
+ assert(!/<script|foreignObject|<image|href=/i.test(svg),'SVG não pode conter recursos externos: '+id);
+ assert(sw.includes("'./theme-decks/"+id+".svg'"),'Cache offline do verso ausente: '+id);
+}
+assert(deckSource.includes('.card-back::before')&&deckSource.includes('content:none!important'),
+ 'Remover a moldura única antiga dos sete decks');
+assert(deckSource.includes('.mini-card::before'),'Versos de NPCs não podem usar ícones genéricos');
+
+
 assert(!materials.includes(':root[data-tav-palette="classic"]'),'Taverna Clássica deve ficar intocada');
 const backdropIds=['neon-blue','neon-green','neon-pink','neon-tavern-dark','neon-aero','neon-imperial','neon-amber'];
 const backdropPaths=backdropIds.map(id=>'./theme-backdrops/'+id+'.svg');
