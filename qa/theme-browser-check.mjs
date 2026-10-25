@@ -64,6 +64,38 @@ try{
    assert.notEqual(data.samples['neon-pink'][selector],data.samples['neon-green'][selector],'Rosa igual ao verde em '+selector);
   }
   assert.deepEqual(data.facesColorBefore,data.facesColorAfter,'As cartas não devem mudar visualmente');
+  // Avaliar CSS COMPUTADO, não apenas presença de regras na folha.
+  const materials=await page.evaluate(()=>{
+   const out={};
+   for(const id of ['classic','neon-blue','neon-green','neon-pink','neon-tavern-dark','neon-aero','neon-imperial','neon-amber']){
+    window.TavernaThemeSystem.setPalette(id);
+    const scene=getComputedStyle(document.querySelector('#sceneWelcome'));
+    const panel=getComputedStyle(document.querySelector('#sceneWelcome .welcome-panel'));
+    const button=getComputedStyle(document.querySelector('#sceneWelcome .welcome-mode'));
+    out[id]={
+     sky:scene.backgroundImage,
+     skySize:scene.backgroundSize,
+     panel:panel.backgroundImage,
+     depth:button.boxShadow,
+     button:button.backgroundImage,
+     glass:panel.backdropFilter||panel.webkitBackdropFilter
+    };
+   }
+   return out;
+  });
+  for(const id of ['neon-blue','neon-green','neon-pink']){
+   assert(materials[id].sky.includes('radial-gradient'),'Céu sem estrelas em '+id);
+   assert(materials[id].skySize.includes('px'),'Pontos luminosos sem escala própria: '+id);
+   assert.notEqual(materials[id].sky,materials.classic.sky,'Céu igual ao clássico: '+id);
+  }
+  for(const id of ['neon-tavern-dark','neon-aero','neon-imperial','neon-amber']){
+   assert(materials[id].panel.includes('repeating-linear-gradient')||materials[id].panel.includes('radial-gradient'),'Painel sem textura: '+id);
+   assert(materials[id].depth.includes('inset'),'Botão sem relevo: '+id);
+   assert.notEqual(materials[id].sky,materials.classic.sky,'Cenário igual ao clássico: '+id);
+  }
+  assert(materials['neon-aero'].glass.includes('blur(8px)'),'Vidro Aero sem translucidez');
+  assert.notEqual(materials['neon-blue'].sky,materials['neon-green'].sky);
+  assert.notEqual(materials['neon-green'].sky,materials['neon-pink'].sky);
   const pref=await page.evaluate(()=>localStorage.getItem('taverna:appearance:palette:v1'));
   assert.equal(pref,'neon-pink');
   await page.reload({waitUntil:'domcontentloaded'});
