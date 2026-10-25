@@ -28,6 +28,46 @@
  --tp-input:#2c123a;--tp-btn1:#b53aa0;--tp-btn2:#632172;
  --tp-screen:radial-gradient(ellipse at 20% 6%,#872879 0%,#481850 46%,#220a2c 100%);
 }
+/* Quatro temas adicionais. Os IDs mantêm o prefixo interno "neon-"
+   exclusivamente para reutilizar os seletores CSS existentes dos controles,
+   sem mudar seus estilos próprios, cartas ou comportamento do jogo. */
+:root[data-tav-palette="neon-tavern-dark"]{
+ --tp-space:#0e0a09;--tp-dark:#17100f;--tp-deep:#231613;--tp-mid:#3d2821;
+ --tp-hi:#6c4535;--tp-accent:#e2a36b;--tp-glow:#9e542c39;--tp-glow-hi:#ec9a4663;
+ --tp-edge:#916047;--tp-text:#f5e7d6;--tp-muted:#d4baa1;--tp-bright:#ffbf7c;
+ --tp-soft:#42291e;--tp-wood1:#110d0b;--tp-wood2:#3b241b;--tp-wood3:#231713;
+ --tp-felt1:#bf252c;--tp-felt2:#a0141c;--tp-felt3:#650b15;
+ --tp-input:#211613;--tp-btn1:#613c2e;--tp-btn2:#2b1b18;
+ --tp-screen:radial-gradient(ellipse at 20% 5%,#513024 0%,#231614 49%,#0e0a09 100%);
+}
+:root[data-tav-palette="neon-aero"]{
+ --tp-space:#c2e6ed;--tp-dark:#21536d;--tp-deep:#367995;--tp-mid:#569fb4;
+ --tp-hi:#a6e3bf;--tp-accent:#e0ffbd;--tp-glow:#78c7cb40;--tp-glow-hi:#d1fff48c;
+ --tp-edge:#91d7d6;--tp-text:#f4fcff;--tp-muted:#e1f3fa;--tp-bright:#e5fff5;
+ --tp-soft:#3c8b9e;--tp-wood1:#2b647e;--tp-wood2:#58a0aa;--tp-wood3:#366f89;
+ --tp-felt1:#95cfd0;--tp-felt2:#70b5c2;--tp-felt3:#478ca7;
+ --tp-input:#23566d;--tp-btn1:#63b9d0;--tp-btn2:#397d9b;
+ --tp-screen:radial-gradient(ellipse at 22% 5%,#e0f8ed 0%,#a0d9e4 40%,#5dacc9 84%,#367b9a 100%);
+}
+:root[data-tav-palette="neon-imperial"]{
+ --tp-space:#120d19;--tp-dark:#21152b;--tp-deep:#302139;--tp-mid:#4a3253;
+ --tp-hi:#765569;--tp-accent:#e8c68a;--tp-glow:#aa80553f;--tp-glow-hi:#e8bb7b75;
+ --tp-edge:#c3a071;--tp-text:#fbf0e2;--tp-muted:#ddcad6;--tp-bright:#f7dca5;
+ --tp-soft:#4a3052;--tp-wood1:#221625;--tp-wood2:#50304c;--tp-wood3:#2d2035;
+ --tp-felt1:#805879;--tp-felt2:#65415f;--tp-felt3:#37223c;
+ --tp-input:#291b31;--tp-btn1:#72506a;--tp-btn2:#3d2b42;
+ --tp-screen:radial-gradient(ellipse at 19% 9%,#654963 0%,#2f223a 54%,#120d19 100%);
+}
+:root[data-tav-palette="neon-amber"]{
+ --tp-space:#23180f;--tp-dark:#3a2919;--tp-deep:#55402a;--tp-mid:#755535;
+ --tp-hi:#b6874b;--tp-accent:#f6cb82;--tp-glow:#db9e4e44;--tp-glow-hi:#ffe6a26e;
+ --tp-edge:#c19a64;--tp-text:#fff1d5;--tp-muted:#e5caa1;--tp-bright:#ffdf9c;
+ --tp-soft:#795734;--tp-wood1:#34281b;--tp-wood2:#876744;--tp-wood3:#483321;
+ --tp-felt1:#b98e54;--tp-felt2:#947042;--tp-felt3:#64472d;
+ --tp-input:#392918;--tp-btn1:#a27a49;--tp-btn2:#5f432a;
+ --tp-screen:radial-gradient(ellipse at 22% 5%,#a8834f 0%,#5d4229 48%,#23180f 100%);
+}
+
 /* Gradientes e tokens semânticos compartilhados por todas as paletas. */
 :root[data-tav-palette^="neon-"]{
  color-scheme:dark;
@@ -218,3 +258,33 @@
  border-color:var(--tp-edge)!important;
  box-shadow:0 0 10px var(--tp-glow)!important;
 }
+
+/* Sombria: a madeira tem veios finos, naturais e contrastantes; o pano é
+   vermelho vivo e fosco (não bordô). Sem assets, texturas pesadas ou blur. */
+:root[data-tav-palette="neon-tavern-dark"]{
+ --tp-wood:
+  radial-gradient(ellipse at 18% 7%,#a66f4640,transparent 37%),
+  repeating-linear-gradient(92deg,#0a0808 0 3px,#3c271d 4px 9px,#69452f 10px 11px,#1d1511 13px 21px,#4c3024 23px 25px,#130e0d 26px 36px),
+  linear-gradient(180deg,#40271d,#140d0b);
+ --tp-felt:
+  radial-gradient(ellipse at 47% 34%,#d72e3688,transparent 56%),
+  repeating-linear-gradient(111deg,#ffb8b806 0 1px,transparent 2px 6px),
+  radial-gradient(ellipse at 50% 48%,#bb2028 0%,#a91420 56%,#640910 100%);
+ --tp-panel:linear-gradient(151deg,#3c2b24,#211714 52%,#120e0d);
+ --tp-button:linear-gradient(155deg,#654434,#2c1d18);
+ --tp-shadow:inset 0 1px 11px #b07d4b35,0 5px 15px #0905049c;
+}
+/* Aero: leveza de vidro polido sem transparências fortes nem backdrop-filter.
+   Água/vegetação no feltro com brilho discreto e bom contraste nos textos. */
+:root[data-tav-palette="neon-aero"]{
+ --tp-panel:linear-gradient(165deg,#72b4c6,#397d99 48%,#235872);
+ --tp-button:linear-gradient(180deg,#8ecfd5 0%,#60adbe 10%,#4087a2 60%,#2a607d 100%);
+ --tp-wood:radial-gradient(ellipse at 15% 7%,#d9fff276,transparent 35%),repeating-linear-gradient(91deg,#32718b 0 14px,#528ea2 16px 29px,#367991 31px 42px);
+ --tp-felt:radial-gradient(ellipse at 35% 23%,#d7f5b281,transparent 35%),radial-gradient(ellipse at 54% 44%,#92d2ca,#71b5c6 52%,#468ea7 100%);
+ --tp-shadow:inset 0 1px 2px #e7ffed7a,0 5px 14px #214e6670;
+}
+:root[data-tav-palette="neon-aero"] :is(#sceneWelcome .welcome-mode,#sceneMultiplayer .tav-vip-enter,#tavAppearanceOverlay .tav-palette-option){
+ border-radius:13px!important;
+}
+/* Paletas opcionais não devem mudar a cor dos naipes, bloquear toques
+   ou modificar animações; todas compartilham o contrato de layout existente. */
