@@ -283,5 +283,5 @@ assertState(end+3600000,'classic',false);
 assert.equal(api.getStatus(end-1000).endsAt,end);
 assert.equal(api.getSchedule()[0].end,end);
 assert(!script.includes('GameEngine')&&!script.includes('game.players')&&!script.includes('WebSocket'),'Motor não pode ser tocado pelo tema');
-console.log('THEME_SCHEDULE_OK: 12 paletas (prévia), usuário persistente, evento independente, prazo absoluto, Clássico original');
+console.log('THEME_SCHEDULE_OK: 12 paletas, usuário persistente, evento independente, prazo absoluto, Clássico original');
 function DAY(){return 86400000}
