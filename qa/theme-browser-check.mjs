@@ -9,31 +9,6 @@ try{
   page.on('pageerror',error=>errors.push(error.message));
   await page.goto('http://127.0.0.1:8765/',{waitUntil:'domcontentloaded',timeout:45000});
   await page.waitForFunction(()=>!!window.TavernaThemeSystem&&!!window.TavernaAppearance,{timeout:20000});
-  if(width===390){
-   const audit=await page.evaluate(()=>{
-    const result={};
-    const selectors=['#tavEntrance','#sceneMenu','#sceneMultiplayer','#sceneGame'];
-    for(const scene of selectors){
-     const root=document.querySelector(scene);
-     const isRelevant=x=>/boas.vindas|escolha como|aventur|hero|convide|amigos|c[oó]digo|criar sala|online|multiplayer|elimina|rodada|nome|tempo|naipes/i.test(x||'');
-     const found=[...root.querySelectorAll('*')].filter(el=>el.children.length===0&&isRelevant(el.textContent)&&el.textContent?.length<140).slice(0,25);
-     const special=[...root.querySelectorAll('[class],[id]')].filter(el=>/active-suit|suit.indicator|action-list|control-guide|control-bar|medallion|game-header|round|elimin|score|crest|hero|hero-frame|book-page|multiplayer/i.test(el.className+' '+el.id)).slice(0,55);
-     const read=el=>{const s=getComputedStyle(el);return {tag:el.tagName,id:el.id,cls:String(el.className).slice(0,110),text:el.textContent?.trim().slice(0,62),bg:s.backgroundImage?.slice(0,120),color:s.color,border:s.borderTopColor,shadow:s.boxShadow?.slice(0,80),filter:s.backdropFilter,pseudo:getComputedStyle(el,'::before').content}};
-     result[scene]={texts:found.map(read),parts:special.map(read)};
-    }
-    const out={};
-    for(const theme of ['classic','neon-blue','neon-aero','neon-imperial']){
-     window.TavernaThemeSystem.setPalette(theme);
-     out[theme]=Object.fromEntries(Object.entries(result).map(([scene,v])=>[scene,{
-      texts:v.texts.map(x=>{const el=[...document.querySelector(scene).querySelectorAll('*')].find(z=>z.id===x.id && z.tagName===x.tag && String(z.className).slice(0,110)===x.cls && z.textContent?.trim().slice(0,62)===x.text);return {...x,color:el?getComputedStyle(el).color:'?'}}),
-      parts:v.parts.map(x=>{const el=[...document.querySelector(scene).querySelectorAll('*')].find(z=>z.id===x.id && String(z.className).slice(0,110)===x.cls);return {...x,color:el?getComputedStyle(el).color:'?',bg:el?getComputedStyle(el).backgroundImage.slice(0,125):'?',shadow:el?getComputedStyle(el).boxShadow.slice(0,70):'?'}})
-     }]));
-    }
-    window.TavernaThemeSystem.setPalette('classic');
-    return out;
-   });
-   console.log('THEME_PARITY_DIAG',JSON.stringify(audit));
-  }
   const data=await page.evaluate(()=>{
    const themes=['classic','neon-blue','neon-green','neon-pink','neon-tavern-dark','neon-aero','neon-imperial','neon-amber'];
    const selectors=[
@@ -285,9 +260,14 @@ try{
       assert(surface,'Região do jogo não encontrada: '+sel);
       assert(!surface.bg.includes('repeating-linear-gradient'),
         'Ainda existem listras na área '+sel+' do tema '+id+' computed='+surface.bg.slice(0,550));
-      assert(surface.bg.includes('gradient'),'Superfície temática ausente: '+id+' '+sel);
-      assert.notEqual(surface.bg,gameStyle.classic.panels[sel]?.bg,
+      if(['#sceneGame .action-list','#sceneGame .control-bar'].includes(sel)){
+       assert.equal(surface.bg,'none','Placa retangular continua atrás dos controles: '+id+' '+sel);
+       assert.equal(surface.shadow,'none','Sombra retangular continua atrás dos controles: '+id+' '+sel);
+      }else{
+       assert(surface.bg.includes('gradient'),'Superfície temática ausente: '+id+' '+sel);
+       assert.notEqual(surface.bg,gameStyle.classic.panels[sel]?.bg,
         'A superfície não pode ser igual à clássica: '+id+' '+sel);
+      }
     }
     assert(state.back.bg.includes('theme-decks/'+id+'.svg'),'Verso sem arte própria: '+id);
     assert(state.mini.bg.includes('theme-decks/'+id+'.svg'),'Miniverso sem a arte própria: '+id);
@@ -323,6 +303,83 @@ try{
     assert(s.bytes<4500,'SVG pesado demais para celular: '+s.id);
   }
   console.log('THEME_GAME_SURFACES_AND_SEVEN_DECKS_OK',width,deckAssets.map(x=>x.bytes));
+  // 0.5.0.35: componentes REAIS relatados, sete paletas, clássico estável.
+  const parity=await page.evaluate(()=>{
+    const get=sel=>document.querySelector(sel);
+    const token=key=>{
+      const el=document.createElement('span');
+      el.style.color='var('+key+')';document.body.append(el);
+      const value=getComputedStyle(el).color;el.remove();return value;
+    };
+    const paint=el=>{
+     if(!el)return null;
+     const s=getComputedStyle(el);
+     return {color:s.color,bg:s.backgroundImage,shadow:s.boxShadow,
+       border:s.borderTopColor,filter:s.backdropFilter||s.webkitBackdropFilter};
+    };
+    const offlineSpan=[...document.querySelectorAll('#sceneMenu .book-page span')]
+      .find(el=>el.textContent.trim()==='AVENTUREIRO');
+    const invite=[...document.querySelectorAll('#sceneMultiplayer small')]
+      .find(el=>/Convide seus amigos pelo código/.test(el.textContent));
+    const overlays=get('#overlay'),dia=get('#dialog'),saved=dia.innerHTML;
+    dia.innerHTML='<div class="wood-scoreboard"><h2>Eliminado!</h2>'+
+      '<div class="score-tally">Resultado da rodada</div></div>';
+    const themes=['classic','neon-blue','neon-green','neon-pink',
+      'neon-tavern-dark','neon-aero','neon-imperial','neon-amber'],out={};
+    for(const id of themes){
+      window.TavernaThemeSystem.setPalette(id);
+      out[id]={
+        expectedInk:token('--tq-ink'),expectedCaption:token('--tq-caption'),
+        expectedOrnament:token('--tq-ornament'),
+        entrance:paint(get('#tavEntrance .tav-gate-crest')),
+        entranceCopy:paint(get('#tavEntrance .tav-gate-identity-card p')),
+        entranceRule:getComputedStyle(get('#tavEntrance .tav-gate-rule'),'::after').color,
+        offline:paint(offlineSpan),heroes:[...document.querySelectorAll('#sceneMenu .hero-choice')].map(paint),
+        onlineMark:paint(get('#sceneMultiplayer .multiplayer-mark')),
+        onlineIntro:paint(get('#multiplayerGreeting')),invite:paint(invite),
+        action:paint(get('#sceneGame .action-list')),
+        controls:paint(get('#sceneGame .control-bar')),
+        suit:paint(get('#activeSuit')),round:paint(get('#roundPill')),
+        scoreboard:paint(dia.querySelector('.wood-scoreboard')),
+        eliminationOverlay:paint(overlays),
+        aeroPanels:[...document.querySelectorAll('#sceneWelcome .welcome-panel,#sceneMenu .book-page,#sceneMultiplayer .multiplayer-panel')]
+          .map(el=>(getComputedStyle(el).backdropFilter||getComputedStyle(el).webkitBackdropFilter))
+      };
+    }
+    dia.innerHTML=saved;
+    window.TavernaThemeSystem.setPalette('neon-pink');
+    return out;
+  });
+  for(const id of ['neon-blue','neon-green','neon-pink','neon-tavern-dark',
+    'neon-aero','neon-imperial','neon-amber']){
+    const p=parity[id];
+    assert(p.offline&&p.invite,'Texto dos menus não localizado: '+id);
+    for(const [name,actual,expected] of [
+      ['brasão entrada',p.entrance.color,p.expectedOrnament],
+      ['texto entrada',p.entranceCopy.color,p.expectedCaption],
+      ['adorno entrada',p.entranceRule,p.expectedOrnament],
+      ['AVENTUREIRO offline',p.offline.color,p.expectedInk],
+      ['espadas multiplayer',p.onlineMark.color,p.expectedOrnament],
+      ['Bem-vindo online',p.onlineIntro.color,p.expectedCaption],
+      ['Convide amigos',p.invite.color,p.expectedCaption]
+    ])assert.equal(actual,expected,name+' ainda está dourado no tema '+id);
+    assert(p.heroes.length>=3,'Cartões dos heróis ausentes: '+id);
+    assert(p.heroes.every(x=>!x.bg.includes('repeating-linear-gradient')),
+      'Listras antigas nos personagens offline: '+id);
+    for(const element of ['action','controls','suit','round']){
+      assert.equal(p[element].bg,'none','Retângulo residual atrás de '+element+' no tema '+id);
+      assert.equal(p[element].shadow,'none','Sombra retangular atrás de '+element+' no tema '+id);
+    }
+    assert(p.scoreboard.bg.includes('gradient'),'Eliminação mantém madeira clássica: '+id);
+    assert.equal(p.scoreboard.color,p.expectedInk,'Texto de eliminação clássico: '+id);
+    assert.notEqual(p.eliminationOverlay.bg,parity.classic.eliminationOverlay.bg,
+      'Overlay de eliminação sem paleta: '+id);
+    if(width===390)assert(p.aeroPanels.every(x=>x==='none'),
+      'Filtro de vidro caro ativo no telefone em '+id);
+  }
+  assert(!parity.classic.scoreboard.bg.includes('theme-decks/'),
+    'Não aplicar decoração dos decks no resultado clássico');
+  console.log('THEME_PARITY_ELIMINATION_HUD_PERF_OK',width);
   // v0.5.0.33: reproduz o relato real (saudação, instrução e ornamento
   // entre o título e a saudação), calculando CSS de cada tema no Chromium.
   const welcomeColors=await page.evaluate(()=>{
