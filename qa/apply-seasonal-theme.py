@@ -51,6 +51,13 @@ assert manager.count('/*TAVERNA_THEME_SCHEDULE*/')==1
 serialized=json.dumps(config,ensure_ascii=False,separators=(',',':')).replace('</','<\\/')
 manager=manager.replace('/*TAVERNA_THEME_SCHEDULE*/',serialized)
 styles=palettes+'\n'+events_css+'\n'+appearance_css+'\n'+decks_css+'\n'+hotfix_css+'\n'+turn_css+'\n'+forms_css+'\n'+materials_css+'\n'+menu_surfaces_css+'\n'+game_surfaces_css+'\n'+parity_css
+# O marcador direcional do botão de retorno pertence ao HTML antigo.
+# Remover o glifo na fonte estática (não usar pseudo-elemento visual, nem JS
+# de runtime) preserva a ação existente e a leitura por acessibilidade.
+old_back='<button class="engraved-btn offline-return" id="offlineBackBtn" type="button">← &nbsp; Voltar aos modos de jogo</button>'
+new_back='<button class="engraved-btn offline-return" id="offlineBackBtn" type="button">Voltar aos modos de jogo</button>'
+assert html.count(old_back)==1, 'Botão offline alterado, revisar seletor antes de prosseguir'
+html=html.replace(old_back,new_back,1)
 html=html.replace('</head>','<style id="tav-seasonal-themes">\n'+styles+'\n</style>\n</head>',1)
 html=html.replace('</body>','<script id="tav-theme-manager">\n'+manager+'\n</script>\n<script id="tav-appearance-menu">\n'+appearance_js+'\n</script>\n</body>',1)
 path.write_text(html,encoding='utf-8')
