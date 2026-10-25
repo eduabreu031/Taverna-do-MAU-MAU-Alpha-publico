@@ -1,7 +1,19 @@
 {
-  "current": "alpha-0.5.0.35",
+  "current": "alpha-0.5.0.36",
   "issuesRepo": "eduabreu031/Taverna-do-MAU-MAU-Alpha-publico",
   "entries": [
+    {
+      "id": "alpha-0.5.0.36",
+      "label": "0.5.0.36-alpha",
+      "date": "2026-10-25",
+      "title": "Identidade do aventureiro offline no tema escolhido",
+      "items": [
+        "Corrigido o painel de nome do aventureiro na seleção offline, que permanecia com o fundo e a borda marrons em todas as paletas alternativas.",
+        "O botão Alterar nome agora acompanha os materiais e as cores de cada tema, mantendo o funcionamento e a posição originais.",
+        "Os textos Prepare sua aventura, os cabeçalhos e os rótulos de identificação offline deixam de herdar o amarelo clássico nos sete temas.",
+        "Preservados o tema Taverna Clássica, os personagens, as regras e a otimização móvel da versão anterior."
+      ]
+    },
     {
       "id": "alpha-0.5.0.35",
       "label": "0.5.0.35-alpha",
