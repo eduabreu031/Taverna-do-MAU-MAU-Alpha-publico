@@ -64,7 +64,7 @@ assert(!gameSurfaces.includes('.card-back')&&!gameSurfaces.includes('.card-face'
  'Camada da mesa não deve alterar cartas; cada deck tem sua camada');
 assert(gameSurfaces.includes('@media(max-width:650px)'),'Celular precisa reduzir o custo do Aero');
 for(const sel of ['#sceneGame #tableShell>.felt','#sceneGame #humanZone',
- '#sceneGame .action-list','#sceneGame .control-bar','#sceneGame .game-header'])
+ '.action-list','.control-bar','.game-header'])
  assert(gameSurfaces.includes(sel),'Região da mesa ficou sem material: '+sel);
 for(const id of ['neon-blue','neon-green','neon-pink','neon-tavern-dark',
  'neon-aero','neon-imperial','neon-amber']){
