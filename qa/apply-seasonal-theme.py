@@ -37,20 +37,21 @@ materials_css=(root/'qa/theme-materials.css').read_text(encoding='utf-8')
 menu_surfaces_css=(root/'qa/theme-menu-surfaces.css').read_text(encoding='utf-8')
 game_surfaces_css=(root/'qa/theme-game-surfaces.css').read_text(encoding='utf-8')
 parity_css=(root/'qa/theme-parity-performance.css').read_text(encoding='utf-8')
+expansion_css=(root/'qa/theme-expansion-preview.css').read_text(encoding='utf-8')
 appearance_js=(root/'qa/appearance-menu.js').read_text(encoding='utf-8')
 manager=(root/'qa/theme-manager.js').read_text(encoding='utf-8')
 for palette_id in ('neon-blue','neon-green','neon-pink','neon-tavern-dark','neon-aero','neon-imperial','neon-amber'):
  assert f':root[data-tav-palette="{palette_id}"]' in palettes, f'Paleta ausente: {palette_id}'
 assert ':root[data-tav-palette^="neon-"]' in palettes
 assert 'data-tav-event' in events_css
-for style in (palettes,events_css,appearance_css,decks_css,hotfix_css,turn_css,forms_css,materials_css,menu_surfaces_css,game_surfaces_css,parity_css):
+for style in (palettes,events_css,appearance_css,decks_css,hotfix_css,turn_css,forms_css,materials_css,menu_surfaces_css,game_surfaces_css,parity_css,expansion_css):
  assert '</style' not in style.lower()
 for js in (manager,appearance_js):
  assert '</script' not in js.lower()
 assert manager.count('/*TAVERNA_THEME_SCHEDULE*/')==1
 serialized=json.dumps(config,ensure_ascii=False,separators=(',',':')).replace('</','<\\/')
 manager=manager.replace('/*TAVERNA_THEME_SCHEDULE*/',serialized)
-styles=palettes+'\n'+events_css+'\n'+appearance_css+'\n'+decks_css+'\n'+hotfix_css+'\n'+turn_css+'\n'+forms_css+'\n'+materials_css+'\n'+menu_surfaces_css+'\n'+game_surfaces_css+'\n'+parity_css
+styles=palettes+'\n'+events_css+'\n'+appearance_css+'\n'+decks_css+'\n'+hotfix_css+'\n'+turn_css+'\n'+forms_css+'\n'+materials_css+'\n'+menu_surfaces_css+'\n'+game_surfaces_css+'\n'+parity_css+'\n'+expansion_css
 # O marcador direcional do botão de retorno pertence ao HTML antigo.
 # Remover o glifo na fonte estática (não usar pseudo-elemento visual, nem JS
 # de runtime) preserva a ação existente e a leitura por acessibilidade.
@@ -61,4 +62,4 @@ html=html.replace(old_back,new_back,1)
 html=html.replace('</head>','<style id="tav-seasonal-themes">\n'+styles+'\n</style>\n</head>',1)
 html=html.replace('</body>','<script id="tav-theme-manager">\n'+manager+'\n</script>\n<script id="tav-appearance-menu">\n'+appearance_js+'\n</script>\n</body>',1)
 path.write_text(html,encoding='utf-8')
-print('APPEARANCE_READY: 8 paletas (original + 7 alternativas); seasonal events:',','.join(known))
+print('APPEARANCE_READY: 12 paletas (8 existentes + 4 novas); seasonal events:',','.join(known))

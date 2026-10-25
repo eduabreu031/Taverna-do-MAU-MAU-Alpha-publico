@@ -12,7 +12,11 @@ const PALETTES=Object.freeze([
  Object.freeze({id:'neon-tavern-dark',label:'Taverna Sombria',description:'Madeira negra e feltro vermelho intenso'}),
  Object.freeze({id:'neon-aero',label:'Brisa Aero',description:'Azul céu, água e natureza, brilho discreto'}),
  Object.freeze({id:'neon-imperial',label:'Veludo Imperial',description:'Veludo púrpura, ouro antigo e elegância'}),
- Object.freeze({id:'neon-amber',label:'Âmbar do Deserto',description:'Areia dourada, bronze e luz de âmbar'})
+ Object.freeze({id:'neon-amber',label:'Âmbar do Deserto',description:'Areia dourada, bronze e luz de âmbar'}),
+ Object.freeze({id:'neon-forge',label:'Forja dos Dragões',description:'Obsidiana, metal forjado e brasas'}),
+ Object.freeze({id:'neon-abyss',label:'Reino Abissal',description:'Safira, madrepérola e luz submarina'}),
+ Object.freeze({id:'neon-forest',label:'Bosque dos Sussurros',description:'Musgo, madeira ancestral e linho'}),
+ Object.freeze({id:'neon-porcelain',label:'Solar de Porcelana',description:'Marfim, cobalto e cerâmica esmaltada'})
 ]);
 const validIds=new Set(PALETTES.map(p=>p.id));
 function validate(config){

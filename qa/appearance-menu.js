@@ -22,6 +22,7 @@ menu.innerHTML='<div class="tav-appearance-card">'+
 
  '<button type="button" class="tav-appearance-finish">Concluir</button></div>';
 doc.body.append(menu);
+
 const buttons=[];
 for(const [sceneId,selector] of targets){
  const scene=doc.getElementById(sceneId),parent=scene?.querySelector(selector);

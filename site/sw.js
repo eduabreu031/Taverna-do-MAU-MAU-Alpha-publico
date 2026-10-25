@@ -1,10 +1,22 @@
 /* Taverna do MAU MAU — atualização automática e modo offline.
    Rede primeiro: cada nova navegação procura o HTML mais recente.
    O jogo aberto nunca é recarregado à força durante uma partida. */
-const CACHE = 'taverna-pwa-alpha-0.5.0.31';
+const CACHE = 'taverna-pwa-alpha-0.5.0.38';
 const PREFIXES = ['taverna-v73-pwa-', 'taverna-v84-', 'taverna-pwa-'];
 const ASSETS = [
   './', './index.html', './manifest.webmanifest',
+  // Versos RGB opacos para compatibilidade mobile (mantêm a arte SVG fonte).
+  './theme-decks-raster/neon-blue.webp',
+  './theme-decks-raster/neon-green.webp',
+  './theme-decks-raster/neon-pink.webp',
+  './theme-decks-raster/neon-tavern-dark.webp',
+  './theme-decks-raster/neon-aero.webp',
+  './theme-decks-raster/neon-imperial.webp',
+  './theme-decks-raster/neon-amber.webp',
+  './theme-decks-raster/neon-forge.webp',
+  './theme-decks-raster/neon-abyss.webp',
+  './theme-decks-raster/neon-forest.webp',
+  './theme-decks-raster/neon-porcelain.webp',
   // Versos vetoriais temáticos: os sete arquivos ficam disponíveis offline.
   './theme-decks/neon-blue.svg',
   './theme-decks/neon-green.svg',
@@ -13,6 +25,11 @@ const ASSETS = [
   './theme-decks/neon-aero.svg',
   './theme-decks/neon-imperial.svg',
   './theme-decks/neon-amber.svg',
+  './theme-decks/neon-forge.svg',
+  './theme-decks/neon-abyss.svg',
+  './theme-decks/neon-forest.svg',
+  './theme-decks/neon-porcelain.svg',
+  './theme-backdrops/neon-forge.svg', './theme-backdrops/neon-abyss.svg', './theme-backdrops/neon-forest.svg', './theme-backdrops/neon-porcelain.svg',
   // As texturas de cenário devem existir mesmo quando a PWA abre offline.
   './theme-backdrops/neon-blue.svg', './theme-backdrops/neon-green.svg',
   './theme-backdrops/neon-pink.svg', './theme-backdrops/neon-tavern-dark.svg',

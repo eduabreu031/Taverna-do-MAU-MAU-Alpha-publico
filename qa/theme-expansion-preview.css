@@ -1,0 +1,221 @@
+/* Quatro novos universos artísticos: Forja, Abissal, Bosque e Porcelana.
+   Compatíveis com o motor existente; sem retrabalho de DOM ou animações. */
+:root[data-tav-palette="neon-forge"]{
+ --tp-space:#160f14;--tp-dark:#28191f;--tp-deep:#482829;--tp-mid:#653529;--tp-hi:#ac593b;
+ --tp-accent:#efab6e;--tp-glow:#cb633b57;--tp-glow-hi:#ffb56777;
+ --tp-edge:#d9976c;--tp-text:#fff0da;--tp-muted:#e9cab1;--tp-bright:#ffd398;
+ --tp-soft:#653529;--tp-wood1:#28191f;--tp-wood2:#aa6040;--tp-wood3:#482829;
+ --tp-felt1:#643b31;--tp-felt2:#653529;--tp-felt3:#482829;
+ --tp-input:#271a1d;--tp-btn1:#aa6040;--tp-btn2:#28191f;
+ --tp-screen:radial-gradient(ellipse at 18% 14%,#ac593b85,#482829 65%,#160f14);
+ --tp-wood:linear-gradient(152deg,#aa6040,#28191f);
+ --tp-panel:radial-gradient(ellipse at 22% 0%,#ac593b39,transparent 58%),linear-gradient(159deg,#271a1d,#28191f);
+ --tp-felt:radial-gradient(ellipse at 33% 16%,#ac593b4d,transparent 56%),linear-gradient(157deg,#643b31,#482829);
+ --tp-button:linear-gradient(161deg,#aa6040,#28191f);
+ --tp-shadow:inset 0 1px 0 #ffb56777,0 5px 17px #160f149c;
+ --tm-scene:linear-gradient(180deg,#03040b2f,#02040970),url("./theme-backdrops/neon-forge.svg"),linear-gradient(154deg,#ac593b,#160f14);
+ --tm-scene-size:cover,cover,cover;
+ --tm-felt-fibers:radial-gradient(ellipse at 29% 21%,#ffb56777,transparent 65%);
+ --tm-menu-surface:radial-gradient(ellipse at 22% 0%,#ac593b42,transparent 67%),linear-gradient(161deg,#271a1d,#28191f);
+ --tm-menu-stroke:#d9976c;--tm-menu-ink:#fff0da;--tm-menu-button-ink:#fff0da;
+ --tm-menu-button-shadow:0 1px 2px #160f14;
+ --tm-menu-shadow:inset 0 1px 0 #ffb56777,0 9px 21px #160f1475;
+ --tm-welcome-copy:#fff0da;--tm-welcome-note:#e9cab1;--tm-welcome-ornament:#ffd398;
+ --tg-table:radial-gradient(ellipse at 30% 17%,#ac593b60,transparent 53%),linear-gradient(151deg,#643b31,#482829);
+ --tg-rack:radial-gradient(ellipse at 27% 0%,#ffb56777,transparent 67%),linear-gradient(158deg,#302126,#28191f);
+ --tg-control:linear-gradient(163deg,#aa6040,#28191f);
+ --tg-actions:linear-gradient(160deg,#aa6040,#28191f);
+ --tg-rail:linear-gradient(164deg,#aa6040,#28191f);
+ --tg-line:#d9976c;--tg-sheen:#ffb56777;--tg-shadow:#160f1496;
+ --deck-edge:#d9976c;--deck-accent:#efab6e;--deck-secondary:#ac593b;
+ --deck-core:#28191f;--deck-core2:#653529;--deck-paper:#fff6e3;
+ --deck-ink:#21364a;--deck-red:#b62f45;--deck-glow:#cb633b57;--deck-rune:"";
+ --tg-deck-image:url("./theme-decks/neon-forge.svg");
+ --tg-card-paper:radial-gradient(ellipse at 22% 7%,#ffffffef,transparent 55%),linear-gradient(162deg,#fff6e3,#efdfc6);
+ --tg-card-rim:#d9976c;--tg-card-orn:#ac593b;
+ }
+:root[data-tav-palette="neon-abyss"]{
+ --tp-space:#031923;--tp-dark:#0a3043;--tp-deep:#0f4962;--tp-mid:#145d76;--tp-hi:#298ca2;
+ --tp-accent:#a2f3e5;--tp-glow:#36baca66;--tp-glow-hi:#b9fff477;
+ --tp-edge:#80d3d5;--tp-text:#e9feff;--tp-muted:#c3e6ed;--tp-bright:#b9fff3;
+ --tp-soft:#145d76;--tp-wood1:#0a3043;--tp-wood2:#2d8290;--tp-wood3:#0f4962;
+ --tp-felt1:#1c677b;--tp-felt2:#145d76;--tp-felt3:#0f4962;
+ --tp-input:#0b3348;--tp-btn1:#2d8290;--tp-btn2:#0a3043;
+ --tp-screen:radial-gradient(ellipse at 18% 14%,#298ca285,#0f4962 65%,#031923);
+ --tp-wood:linear-gradient(152deg,#2d8290,#0a3043);
+ --tp-panel:radial-gradient(ellipse at 22% 0%,#298ca239,transparent 58%),linear-gradient(159deg,#0b3348,#0a3043);
+ --tp-felt:radial-gradient(ellipse at 33% 16%,#298ca24d,transparent 56%),linear-gradient(157deg,#1c677b,#0f4962);
+ --tp-button:linear-gradient(161deg,#2d8290,#0a3043);
+ --tp-shadow:inset 0 1px 0 #b9fff477,0 5px 17px #0319239c;
+ --tm-scene:linear-gradient(180deg,#03040b2f,#02040970),url("./theme-backdrops/neon-abyss.svg"),linear-gradient(154deg,#298ca2,#031923);
+ --tm-scene-size:cover,cover,cover;
+ --tm-felt-fibers:radial-gradient(ellipse at 29% 21%,#b9fff477,transparent 65%);
+ --tm-menu-surface:radial-gradient(ellipse at 22% 0%,#298ca242,transparent 67%),linear-gradient(161deg,#0b3348,#0a3043);
+ --tm-menu-stroke:#80d3d5;--tm-menu-ink:#e9feff;--tm-menu-button-ink:#e9feff;
+ --tm-menu-button-shadow:0 1px 2px #031923;
+ --tm-menu-shadow:inset 0 1px 0 #b9fff477,0 9px 21px #03192375;
+ --tm-welcome-copy:#e9feff;--tm-welcome-note:#c3e6ed;--tm-welcome-ornament:#b9fff3;
+ --tg-table:radial-gradient(ellipse at 30% 17%,#298ca260,transparent 53%),linear-gradient(151deg,#1c677b,#0f4962);
+ --tg-rack:radial-gradient(ellipse at 27% 0%,#b9fff477,transparent 67%),linear-gradient(158deg,#0d374e,#0a3043);
+ --tg-control:linear-gradient(163deg,#2d8290,#0a3043);
+ --tg-actions:linear-gradient(160deg,#2d8290,#0a3043);
+ --tg-rail:linear-gradient(164deg,#2d8290,#0a3043);
+ --tg-line:#80d3d5;--tg-sheen:#b9fff477;--tg-shadow:#03192396;
+ --deck-edge:#80d3d5;--deck-accent:#a2f3e5;--deck-secondary:#298ca2;
+ --deck-core:#0a3043;--deck-core2:#145d76;--deck-paper:#f7fffa;
+ --deck-ink:#21364a;--deck-red:#b62f45;--deck-glow:#36baca66;--deck-rune:"";
+ --tg-deck-image:url("./theme-decks/neon-abyss.svg");
+ --tg-card-paper:radial-gradient(ellipse at 22% 7%,#ffffffef,transparent 55%),linear-gradient(162deg,#f7fffa,#dbeef3);
+ --tg-card-rim:#80d3d5;--tg-card-orn:#298ca2;
+ }
+:root[data-tav-palette="neon-forest"]{
+ --tp-space:#142118;--tp-dark:#223227;--tp-deep:#324b35;--tp-mid:#466547;--tp-hi:#728d5e;
+ --tp-accent:#d4e3ae;--tp-glow:#a1bc7755;--tp-glow-hi:#d9eeb077;
+ --tp-edge:#9cb48a;--tp-text:#f8f4df;--tp-muted:#d3ddc1;--tp-bright:#e6f0be;
+ --tp-soft:#466547;--tp-wood1:#223227;--tp-wood2:#70895b;--tp-wood3:#324b35;
+ --tp-felt1:#53734c;--tp-felt2:#466547;--tp-felt3:#324b35;
+ --tp-input:#24362b;--tp-btn1:#70895b;--tp-btn2:#223227;
+ --tp-screen:radial-gradient(ellipse at 18% 14%,#728d5e85,#324b35 65%,#142118);
+ --tp-wood:linear-gradient(152deg,#70895b,#223227);
+ --tp-panel:radial-gradient(ellipse at 22% 0%,#728d5e39,transparent 58%),linear-gradient(159deg,#24362b,#223227);
+ --tp-felt:radial-gradient(ellipse at 33% 16%,#728d5e4d,transparent 56%),linear-gradient(157deg,#53734c,#324b35);
+ --tp-button:linear-gradient(161deg,#70895b,#223227);
+ --tp-shadow:inset 0 1px 0 #d9eeb077,0 5px 17px #1421189c;
+ --tm-scene:linear-gradient(180deg,#03040b2f,#02040970),url("./theme-backdrops/neon-forest.svg"),linear-gradient(154deg,#728d5e,#142118);
+ --tm-scene-size:cover,cover,cover;
+ --tm-felt-fibers:radial-gradient(ellipse at 29% 21%,#d9eeb077,transparent 65%);
+ --tm-menu-surface:radial-gradient(ellipse at 22% 0%,#728d5e42,transparent 67%),linear-gradient(161deg,#24362b,#223227);
+ --tm-menu-stroke:#9cb48a;--tm-menu-ink:#f8f4df;--tm-menu-button-ink:#f8f4df;
+ --tm-menu-button-shadow:0 1px 2px #142118;
+ --tm-menu-shadow:inset 0 1px 0 #d9eeb077,0 9px 21px #14211875;
+ --tm-welcome-copy:#f8f4df;--tm-welcome-note:#d3ddc1;--tm-welcome-ornament:#e6f0be;
+ --tg-table:radial-gradient(ellipse at 30% 17%,#728d5e60,transparent 53%),linear-gradient(151deg,#53734c,#324b35);
+ --tg-rack:radial-gradient(ellipse at 27% 0%,#d9eeb077,transparent 67%),linear-gradient(158deg,#263c2d,#223227);
+ --tg-control:linear-gradient(163deg,#70895b,#223227);
+ --tg-actions:linear-gradient(160deg,#70895b,#223227);
+ --tg-rail:linear-gradient(164deg,#70895b,#223227);
+ --tg-line:#9cb48a;--tg-sheen:#d9eeb077;--tg-shadow:#14211896;
+ --deck-edge:#9cb48a;--deck-accent:#d4e3ae;--deck-secondary:#728d5e;
+ --deck-core:#223227;--deck-core2:#466547;--deck-paper:#faf6e6;
+ --deck-ink:#21364a;--deck-red:#b62f45;--deck-glow:#a1bc7755;--deck-rune:"";
+ --tg-deck-image:url("./theme-decks/neon-forest.svg");
+ --tg-card-paper:radial-gradient(ellipse at 22% 7%,#ffffffef,transparent 55%),linear-gradient(162deg,#faf6e6,#e6ead3);
+ --tg-card-rim:#9cb48a;--tg-card-orn:#728d5e;
+ }
+:root[data-tav-palette="neon-porcelain"]{
+ --tp-space:#e8eced;--tp-dark:#dbe7ed;--tp-deep:#b7d4e1;--tp-mid:#adcbd9;--tp-hi:#729fbb;
+ --tp-accent:#3579a9;--tp-glow:#7fb3d955;--tp-glow-hi:#efffff99;
+ --tp-edge:#5e90b4;--tp-text:#1e4769;--tp-muted:#4a708b;--tp-bright:#2b6e9e;
+ --tp-soft:#adcbd9;--tp-wood1:#dbe7ed;--tp-wood2:#f9fcf8;--tp-wood3:#b7d4e1;
+ --tp-felt1:#6e9ab4;--tp-felt2:#adcbd9;--tp-felt3:#b7d4e1;
+ --tp-input:#eef3f2;--tp-btn1:#f9fcf8;--tp-btn2:#dbe7ed;
+ --tp-screen:radial-gradient(ellipse at 18% 14%,#729fbb85,#b7d4e1 65%,#e8eced);
+ --tp-wood:linear-gradient(152deg,#f9fcf8,#dbe7ed);
+ --tp-panel:radial-gradient(ellipse at 22% 0%,#729fbb39,transparent 58%),linear-gradient(159deg,#eef3f2,#dbe7ed);
+ --tp-felt:radial-gradient(ellipse at 33% 16%,#729fbb4d,transparent 56%),linear-gradient(157deg,#6e9ab4,#b7d4e1);
+ --tp-button:linear-gradient(161deg,#f9fcf8,#dbe7ed);
+ --tp-shadow:inset 0 1px 0 #efffff99,0 5px 17px #e8eced9c;
+ --tm-scene:linear-gradient(180deg,#ffffff0b,#2c557521),url("./theme-backdrops/neon-porcelain.svg"),linear-gradient(154deg,#729fbb,#e8eced);
+ --tm-scene-size:cover,cover,cover;
+ --tm-felt-fibers:radial-gradient(ellipse at 29% 21%,#efffff99,transparent 65%);
+ --tm-menu-surface:radial-gradient(ellipse at 22% 0%,#729fbb42,transparent 67%),linear-gradient(161deg,#eef3f2,#dbe7ed);
+ --tm-menu-stroke:#5e90b4;--tm-menu-ink:#1e4769;--tm-menu-button-ink:#1e4769;
+ --tm-menu-button-shadow:0 1px 2px #e8eced;
+ --tm-menu-shadow:inset 0 1px 0 #efffff99,0 9px 21px #e8eced75;
+ --tm-welcome-copy:#1e4769;--tm-welcome-note:#4a708b;--tm-welcome-ornament:#2b6e9e;
+ --tg-table:radial-gradient(ellipse at 30% 17%,#729fbb60,transparent 53%),linear-gradient(151deg,#6e9ab4,#b7d4e1);
+ --tg-rack:radial-gradient(ellipse at 27% 0%,#efffff99,transparent 67%),linear-gradient(158deg,#315d7e,#dbe7ed);
+ --tg-control:linear-gradient(163deg,#f9fcf8,#dbe7ed);
+ --tg-actions:linear-gradient(160deg,#f9fcf8,#dbe7ed);
+ --tg-rail:linear-gradient(164deg,#f9fcf8,#dbe7ed);
+ --tg-line:#5e90b4;--tg-sheen:#efffff99;--tg-shadow:#e8eced96;
+ --deck-edge:#5e90b4;--deck-accent:#3579a9;--deck-secondary:#729fbb;
+ --deck-core:#dbe7ed;--deck-core2:#adcbd9;--deck-paper:#fffffb;
+ --deck-ink:#21364a;--deck-red:#b62f45;--deck-glow:#7fb3d955;--deck-rune:"";
+ --tg-deck-image:url("./theme-decks/neon-porcelain.svg");
+ --tg-card-paper:radial-gradient(ellipse at 22% 7%,#ffffffef,transparent 55%),linear-gradient(162deg,#fffffb,#e7f2f5);
+ --tg-card-rim:#5e90b4;--tg-card-orn:#729fbb;
+ }
+
+/* O acabamento inicial da coleção usa uma enumeração estática de sete
+   paletas; repetir apenas as superfícies necessárias para os quatro novos. */
+:root:is([data-tav-palette="neon-forge"],[data-tav-palette="neon-abyss"],[data-tav-palette="neon-forest"],[data-tav-palette="neon-porcelain"]) :is(
+ #tavEntrance .tav-gate-identity-card,#sceneWelcome .welcome-panel,
+ #sceneWelcome .welcome-crest,#sceneMultiplayer .multiplayer-panel,
+ #sceneMultiplayer #alphaAccountsBar,#sceneMultiplayer .multiplayer-state,
+ #sceneMultiplayer #onlineLobby,#sceneMultiplayer .multiplayer-preview>div,
+ #sceneMenu .book-page,#sceneMenu .left-page,#sceneMenu .right-page,
+ #tavAppearanceOverlay .tav-appearance-card,#alphaAccountsOverlay .alpha-accounts-panel,
+ .alpha-info-card,.alpha-release,.tav-central-panel,.tav-central-counter,
+ .tav-central-report,.tav-admin-panel,.tav-bots-sheet-inner,
+ .tav-vip-password-sheet,#rulesModalDEV .rules-book,#tavSocialMenu,#tavSocialVote
+){
+ background:var(--tm-menu-surface)!important;
+ border-color:var(--tm-menu-stroke)!important;
+ color:var(--tm-menu-ink)!important;
+ box-shadow:var(--tm-menu-shadow)!important;
+}
+:root:is([data-tav-palette="neon-forge"],[data-tav-palette="neon-abyss"],[data-tav-palette="neon-forest"],[data-tav-palette="neon-porcelain"])
+ :is(body,#sceneWelcome,#sceneMultiplayer,#sceneMenu,#sceneGame,#tavEntrance,#alphaAccountsOverlay){
+ background-image:var(--tm-scene)!important;
+ background-size:cover,cover,cover!important;
+ background-position:center!important;
+ background-repeat:no-repeat!important;
+}
+:root:is([data-tav-palette="neon-forge"],[data-tav-palette="neon-abyss"],[data-tav-palette="neon-forest"],[data-tav-palette="neon-porcelain"])
+ #sceneGame #tableShell>.felt::before{
+ background:radial-gradient(ellipse at 31% 16%,var(--tg-sheen),transparent 67%)!important;
+}
+/* Três locais usam versos físicos: monte, mão virada e bot.
+   O artefato SVG original é reutilizado, sem repetir desenho entre temas. */
+:root:is([data-tav-palette="neon-forge"],[data-tav-palette="neon-abyss"],[data-tav-palette="neon-forest"],[data-tav-palette="neon-porcelain"])
+ :is(.card-back,.big-card.card-back,.mini-card),
+:root:is([data-tav-palette="neon-forge"],[data-tav-palette="neon-abyss"],[data-tav-palette="neon-forest"],[data-tav-palette="neon-porcelain"])
+ #sceneGame :is(.mini-card,#seats .seat .mini-card){
+ background-image:var(--tg-deck-image)!important;
+ background-repeat:no-repeat!important;
+ background-size:100% 100%!important;
+ background-position:center!important;
+ border-color:var(--deck-accent)!important;
+ box-shadow:inset 0 0 0 1px var(--deck-core),0 2px 7px #101b2761!important;
+}
+:root:is([data-tav-palette="neon-forge"],[data-tav-palette="neon-abyss"],[data-tav-palette="neon-forest"],[data-tav-palette="neon-porcelain"])
+ :is(.card-back::before,.card-back .coat::before,#sceneGame .mini-card::before){
+ content:none!important;
+}
+:root[data-tav-palette="neon-porcelain"]{color-scheme:light}
+:root[data-tav-palette="neon-porcelain"] #sceneMenu :is(select,input),
+:root[data-tav-palette="neon-porcelain"] #sceneMultiplayer :is(select,input){
+ background:#f9fbf8!important;color:#214b70!important;
+}
+:root[data-tav-palette="neon-porcelain"] #sceneGame #humanZone{color:#e9f3fc!important}
+.tav-palette-option[data-palette="neon-forge"] .tav-palette-swatch{
+ background:radial-gradient(ellipse at 75% 25%,#ffcf72,transparent 50%),linear-gradient(137deg,#24171b,#b7613e,#362025)}
+.tav-palette-option[data-palette="neon-abyss"] .tav-palette-swatch{
+ background:radial-gradient(ellipse at 25% 10%,#a9fff3,transparent 60%),linear-gradient(137deg,#084661,#2888a1,#0b294b)}
+.tav-palette-option[data-palette="neon-forest"] .tav-palette-swatch{
+ background:radial-gradient(ellipse at 20% 12%,#d8edb2,transparent 58%),linear-gradient(137deg,#183322,#77915f,#273c30)}
+.tav-palette-option[data-palette="neon-porcelain"] .tav-palette-swatch{
+ background:radial-gradient(ellipse at 19% 8%,#ffffff,transparent 52%),linear-gradient(137deg,#f9faf5,#b9d5e2,#396c99)}
+#tavAppearanceOverlay .tav-appearance-options{gap:7px}
+#tavAppearanceOverlay .tav-palette-option{min-height:61px}
+@media(max-width:760px){
+ :root:is([data-tav-palette="neon-forge"],[data-tav-palette="neon-abyss"],[data-tav-palette="neon-forest"],[data-tav-palette="neon-porcelain"])
+ :is(#tavEntrance .tav-gate-identity-card,#sceneWelcome .welcome-panel,
+ #sceneMultiplayer .multiplayer-panel,#sceneMenu .book-page,
+ #tavAppearanceOverlay .tav-appearance-card,#alphaAccountsOverlay .alpha-accounts-panel){
+ backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
+ }
+}
+
+/* Compatibilidade com cartas criadas dinamicamente: a aparência da frente
+   precisa ser explícita para evitar heranças de background da edição base. */
+:root:is([data-tav-palette="neon-forge"],[data-tav-palette="neon-abyss"],
+ [data-tav-palette="neon-forest"],[data-tav-palette="neon-porcelain"]) .card-face{
+ background:var(--tg-card-paper)!important;
+ border-color:var(--tg-card-rim)!important;
+}
+:root:is([data-tav-palette="neon-forge"],[data-tav-palette="neon-abyss"],
+ [data-tav-palette="neon-forest"],[data-tav-palette="neon-porcelain"]) .card-face .orn{
+ border-color:var(--tg-card-orn)!important;
+}

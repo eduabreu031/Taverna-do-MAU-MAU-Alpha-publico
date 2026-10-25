@@ -177,7 +177,7 @@ try{
    const options=document.querySelectorAll('.tav-palette-option').length;
    return {samples,facesColorBefore,facesColorAfter,count,options};
   });
-  assert.equal(data.options,8,'O menu de aparência precisa listar oito escolhas');
+  assert.equal(data.options,12,'O menu de aparência precisa listar oito escolhas');
   assert(data.count>=3,'Faltam atalhos de aparência nas cenas');
   const must=[
    '#sceneWelcome .welcome-panel','#tavCentralOpen',
@@ -405,8 +405,8 @@ try{
         'A superfície não pode ser igual à clássica: '+id+' '+sel);
       }
     }
-    assert(state.back.bg.includes('theme-decks/'+id+'.svg'),'Verso sem arte própria: '+id);
-    assert(state.mini.bg.includes('theme-decks/'+id+'.svg'),'Miniverso sem a arte própria: '+id);
+    assert(state.back.bg.includes('theme-decks-raster/'+id+'.webp'),'Verso sem arte própria: '+id);
+    assert(state.mini.bg.includes('theme-decks-raster/'+id+'.webp'),'Miniverso sem a arte própria: '+id);
     assert(state.face.bg.includes('gradient'),'Carta da frente perdeu papel temático: '+id);
     assert(!state.face.bg.includes('repeating-linear-gradient'),'Frente ainda listrada: '+id);
     assert.equal(state.backBefore,'none','Losango compartilhado sobrepõe arte SVG: '+id);
@@ -583,7 +583,7 @@ try{
   assert.equal(selected,'neon-pink');
   await page.evaluate(()=>window.TavernaAppearance.open());
   assert.equal(await page.locator('#tavAppearanceOverlay').isVisible(),true);
-  assert.equal(await page.locator('#tavAppearanceOverlay .tav-palette-option').count(),8);
+  assert.equal(await page.locator('#tavAppearanceOverlay .tav-palette-option').count(),12);
   assert.equal(await page.locator('#tavAppearanceOverlay .tav-appearance-card > p').count(),0,'Seletor deve exibir apenas os temas, sem recados');
   await page.locator('.tav-palette-option[data-palette="neon-green"]').click();
   assert.equal(await page.evaluate(()=>window.TavernaThemeSystem.getPalette().id),'neon-green');
@@ -651,8 +651,8 @@ try{
     assert.notEqual(item.back,hotfix[0].back,'Verso da carta não mudou '+item.palette);
     assert.notEqual(item.mini,hotfix[0].mini,'Verso pequeno do bot não mudou '+item.palette);
     assert(item.red.startsWith('rgb('),'Naipe vermelho sem cor');
-    assert(item.symbol==='none'&&item.back.includes('theme-decks/'+item.palette+'.svg'),
-      'Símbolo autoral deve estar no SVG sem duplicação em CSS: '+item.palette);
+    assert(item.symbol==='none'&&item.back.includes('theme-decks-raster/'+item.palette+'.webp'),
+      'Símbolo autoral deve vir da arte WebP sem duplicação em CSS: '+item.palette);
   }
   for(let i=1;i<hotfix.length;i++)for(let j=i+1;j<hotfix.length;j++)
     assert.notEqual(hotfix[i].back,hotfix[j].back,'Baralhos com versos idênticos');
