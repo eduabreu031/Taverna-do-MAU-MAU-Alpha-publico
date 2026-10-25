@@ -1,4 +1,4 @@
-/* Quatro novos universos artísticos, SOMENTE no teste isolado.
+/* Quatro novos universos artísticos: Forja, Abissal, Bosque e Porcelana.
    Compatíveis com o motor existente; sem retrabalho de DOM ou animações. */
 :root[data-tav-palette="neon-forge"]{
  --tp-space:#160f14;--tp-dark:#28191f;--tp-deep:#482829;--tp-mid:#653529;--tp-hi:#ac593b;
