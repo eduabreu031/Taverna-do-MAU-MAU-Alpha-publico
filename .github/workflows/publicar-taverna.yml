@@ -1,7 +1,7 @@
 name: Conferir e publicar Taverna do MAU MAU
 on:
   push:
-    branches: [main, master, fix/retomar-partida-apos-refresh]
+    branches: [main, master]
   workflow_dispatch:
 permissions:
   contents: read
