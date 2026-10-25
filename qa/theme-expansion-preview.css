@@ -207,3 +207,15 @@
  backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
  }
 }
+
+/* Compatibilidade com cartas criadas dinamicamente: a aparência da frente
+   precisa ser explícita para evitar heranças de background da edição base. */
+:root:is([data-tav-palette="neon-forge"],[data-tav-palette="neon-abyss"],
+ [data-tav-palette="neon-forest"],[data-tav-palette="neon-porcelain"]) .card-face{
+ background:var(--tg-card-paper)!important;
+ border-color:var(--tg-card-rim)!important;
+}
+:root:is([data-tav-palette="neon-forge"],[data-tav-palette="neon-abyss"],
+ [data-tav-palette="neon-forest"],[data-tav-palette="neon-porcelain"]) .card-face .orn{
+ border-color:var(--tg-card-orn)!important;
+}
