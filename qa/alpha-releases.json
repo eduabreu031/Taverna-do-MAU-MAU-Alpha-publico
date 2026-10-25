@@ -1,7 +1,21 @@
 {
-  "current": "alpha-0.5.0.34",
+  "current": "alpha-0.5.0.35",
   "issuesRepo": "eduabreu031/Taverna-do-MAU-MAU-Alpha-publico",
   "entries": [
+    {
+      "id": "alpha-0.5.0.35",
+      "label": "0.5.0.35-alpha",
+      "date": "2026-10-25",
+      "title": "Tema completo em menus, eliminação e partida, com otimização móvel",
+      "items": [
+        "Corrigidas as cores douradas clássicas na entrada da Taverna (mensagem, estrela, bordas e ornamentos), no título e nome de aventureiro offline e na apresentação/convites do multiplayer.",
+        "Botões MAU MAU, OPA!!! e PASSAR, controles superiores e indicador de naipe não ficam mais sobre retângulos sólidos; preservadas posições, alvos de toque e indicadores do motor.",
+        "Telas de eliminação, resultados e placares recebem material e texto de acordo com o tema ativo, sem alterar a escolha original de naipes.",
+        "Personagens do offline perderam as texturas diagonais herdadas; visual da Taverna Sombria e Veludo Imperial segue os materiais próprios refinados.",
+        "Menor custo gráfico em celular: sem backdrop-filter nos grandes painéis móveis, sombras simplificadas em cartas repetidas e preservação dos sete versos exclusivos em SVG offline.",
+        "Taverna Clássica e todas as regras, sincronização, animações de turno e identificação de cartas mantidas."
+      ]
+    },
     {
       "id": "alpha-0.5.0.34",
       "label": "0.5.0.34-alpha",
