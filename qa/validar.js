@@ -97,31 +97,26 @@ test('Número da Alpha e changelog seguem a versão publicada',()=>{
  assert(sw.includes("const CACHE = 'taverna-pwa-"+releases.current+"';"),'PWA precisa ter cache da versão corrente');
  assert(html.includes("version.textContent=current.label+' · testes públicos'"),'Selo de versão não acompanha o changelog');
 });
-test('Entrada cinematográfica não modifica motor e usa áudio original',()=>{
- assert(html.includes('id="tav-entrance-script"'),'Camada da porta ausente');
- assert(html.includes('id="tav-entrance-style"'),'Fachada da Taverna ausente');
- assert(html.includes("window.TavernaEntrance=Object.freeze"),'Controle isolado da porta ausente');
+test('Identificação direta não modifica motor e usa áudio original',()=>{
+ assert(html.includes('id="tav-entrance-script"'),'Camada de identificação ausente');
+ assert(html.includes('id="tav-entrance-style"'),'Estilos de identificação ausentes');
+ assert(html.includes("window.TavernaEntrance=Object.freeze"),'Controle isolado da entrada ausente');
  assert(html.includes("tavern-radio-preference"),'Preferência da Rádio ausente');
  assert(html.includes("taverna-interior-entered"),'Sinal da chegada ao interior ausente');
  assert(html.includes("arautoSpeak(16)"),'Saudação gravada do Arauto não foi ligada à entrada');
  assert(html.includes("async function enterAsGuest(signal)"),'Visitante não reutiliza autenticação original');
  assert(html.includes("const guestSessionStore="),'Sessão efêmera do visitante deve permanecer');
 });
-test('Fachada v2 utiliza recursos locais e não altera o baralho',()=>{
- for(const item of ['art/tavern-door-v2.svg']){
-  const contents=fs.readFileSync(path.join(site,item),'utf8');
-  assert(contents.includes('<svg')&&contents.includes('</svg>'),'Asset vetorial inválido: '+item);
-  assert(contents.length>7000,'Asset cinematográfico incompleto: '+item);
- }
- assert(!html.includes('tavern-facade-bc.webp'),'A fachada fotográfica não deve ser utilizada');
- assert(html.includes('tav-gate-art'),'A nova composição não foi instalada');
- assert(html.includes('tav-gate-threshold'),'A luz interna da porta está ausente');
- assert(html.includes('tav-gate-identity-card'),'Painel da entrada está ausente');
- assert(html.includes('tavern-door-v2.svg'),'Porta independente ausente da tela');
+test('Entrada direta só mostra identificação, sem carregar porta',()=>{
+ assert(html.includes('tav-gate-identity-card'),'Painel de identificação ausente');
+ assert(!html.includes('id="tavEntranceDoor"'),'A porta não deve estar no DOM');
+ assert(!html.includes('tav-gate-art'),'O cenário não deve estar no DOM');
+ assert(!html.includes('tavern-door-v2.svg'),'A imagem antiga não deve ser empacotada');
  const worker=fs.readFileSync(path.join(site,'sw.js'),'utf8');
-
- assert(worker.includes("'./art/tavern-door-v2.svg'"),'Porta não pré-carregada offline');
- assert(!worker.includes("'./art/tavern-facade-bc.webp'"),'Foto removida ainda no cache');
+ assert(!worker.includes("'./art/tavern-door-v2.svg'"),'Porta antiga ainda no cache offline');
+ assert(!fs.existsSync(path.join(site,'art/tavern-door-v2.svg')),'Imagem da porta ainda distribuída');
+ assert(html.includes('id="tavEntranceAccount"'),'Entrada por conta ausente');
+ assert(html.includes('id="tavEntranceGuest"'),'Entrada Forasteiro ausente');
 });
 test('Cache busca versão nova e mantém offline',()=>{
  const sw=fs.readFileSync(path.join(site,'sw.js'),'utf8');
