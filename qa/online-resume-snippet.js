@@ -6,7 +6,7 @@ function readResume(){
  try{
   const rec=JSON.parse(sessionStorage.getItem(TAV_RESUME_KEY)||'null');
   if(rec&&/^[A-HJ-NP-Z2-9]{6}$/.test(rec.room)&&typeof rec.seatToken==='string'&&rec.seatToken&&
-     typeof rec.identity==='string'&&['guest','user','admin'].includes(rec.role))return rec;
+     typeof rec.identity==='string'&&['guest','player','admin'].includes(rec.role))return rec;
  }catch{}
  return null;
 }
