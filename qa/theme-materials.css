@@ -398,4 +398,12 @@
   color-mix(in srgb,var(--tp-space) 20%,transparent),
   color-mix(in srgb,var(--tp-space) 55%,transparent))!important;
 }
+/* Cadastro e troca de conta ocupam a tela inteira: a mesma paisagem
+   aparece atrás do formulário, sem alterar a caixa ou seus controles. */
+:root[data-tav-palette^="neon-"] #alphaAccountsOverlay{
+ background-image:var(--tm-scene)!important;
+ background-size:var(--tm-scene-size)!important;
+ background-position:center center!important;
+ background-repeat:no-repeat!important;
+}
 /* Nenhuma regra toca a Taverna Clássica ou muda a opacidade dos painéis. */
