@@ -1,7 +1,20 @@
 {
-  "current": "alpha-0.5.0.37",
+  "current": "alpha-0.5.0.38",
   "issuesRepo": "eduabreu031/Taverna-do-MAU-MAU-Alpha-publico",
   "entries": [
+    {
+      "id": "alpha-0.5.0.38",
+      "label": "0.5.0.38-alpha",
+      "date": "2026-10-25",
+      "title": "Quatro novos temas aprovados com baralhos opacos otimizados",
+      "items": [
+        "Adicionados Forja dos Dragões, Reino Abissal, Bosque dos Sussurros e Solar de Porcelana ao menu Aparência: 12 temas disponíveis.",
+        "Cada novo tema tem cenário SVG próprio, materiais distintos nos menus, mesa e cartas, e ilustração exclusiva nos versos.",
+        "Versos das cartas dos 11 temas alternativos agora são imagens WebP RGB opacas para evitar transparência em navegadores móveis; cartas de compra e dos bots recebem fundo de segurança.",
+        "Novas artes compactas e armazenadas no cache offline; sem adicionar animações contínuas nem alterar a lógica das partidas.",
+        "Preservados o tema clássico, contas, sincronização multiplayer e retomada de partidas."
+      ]
+    },
     {
       "id": "alpha-0.5.0.37",
       "label": "0.5.0.37-alpha",
