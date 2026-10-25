@@ -58,6 +58,7 @@
    saem do cobre/amarelo clássico. Retratos continuam intactos. */
 :root[data-tav-palette^="neon-"] #sceneMenu .book-page :is(
  h1,h2,h3,h4,h5,p,label,legend,small,em,strong,
+ span:not(.portrait-medallion):not(.tav-palette-swatch),
  .book-kicker,.book-label,.hero-choice-title,.hero-choice-desc,
  .player-name-label,.player-name-display
 ){
@@ -95,7 +96,7 @@
 :root[data-tav-palette^="neon-"] #sceneMultiplayer :is(
  .multiplayer-intro,.multiplayer-copy,.multiplayer-preview,
  .multiplayer-preview p,.multiplayer-preview small,.multiplayer-preview strong,
- #multiplayerGreeting
+ .multiplayer-panel small,#multiplayerGreeting
 ){
  color:var(--tq-caption)!important;
  text-shadow:0 1px 2px #090b1760!important;
