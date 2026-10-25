@@ -1,0 +1,74 @@
+name: Crônicas 3C — prévia visual isolada (sem publicar)
+on:
+  push:
+    branches: [feature/cronicas-ui-private]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Preparar imagens e fontes do pacote do jogo
+        run: |
+          python3 -m pip install --disable-pip-version-check cairosvg pillow
+          if [ -f Taverna_do_MAU_MAU_Icones_Oficiais.zip ]; then
+            unzip -oq Taverna_do_MAU_MAU_Icones_Oficiais.zip -d .
+          fi
+      - name: Montar a Alpha apenas no diretório temporário de QA
+        run: |
+          set -e
+          python3 qa/merge-beta-frontend.py
+          python3 qa/apply-alpha-ui-v91.py site
+          python3 qa/apply-alpha-v92.py site
+          python3 qa/padronizar-nome.py site
+          python3 qa/apply-alpha-accounts.py site
+          python3 qa/apply-vip-bots-ui.py site
+          python3 qa/apply-visitor-entry.py site
+          python3 qa/apply-rematch-lobby.py site
+          python3 qa/apply-online-skip-final.py site
+          python3 qa/apply-social-features.py site
+          python3 qa/apply-online-abandon.py site
+          python3 qa/apply-seasonal-theme.py site
+          python3 qa/apply-tavern-entrance.py site
+          python3 qa/build-card-opaque-backs.py site
+          python3 qa/apply-online-resume.py site
+      - name: Injetar somente UI de Crônicas na cópia da branch
+        run: python3 qa/apply-cronicas-ui.py site
+      - name: Testes estáticos de regras, temas e Crônicas
+        run: |
+          node --check qa/cronicas-ui.js
+          node qa/validar.js site
+          node qa/test-online-resume.cjs site
+          node qa/test-theme-schedule.cjs site
+          node qa/test-cronicas-ui.cjs site
+      - name: Preparar Chromium para navegação mobile
+        run: |
+          npm install --no-save playwright@1.58.2
+          npx playwright install --with-deps chromium
+      - name: Testar 12 temas, celular, abas, filtros e API simulada
+        run: |
+          python3 -m http.server 8765 -d site >/tmp/cronicas-ui-http.log 2>&1 &
+          node qa/cronicas-browser-check.mjs
+      - name: Anexar cópia isolada do jogo para avaliação
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Taverna-Cronicas-Fase3C-Preview
+          path: site/
+          retention-days: 7
+      - name: Guardar capturas de tela de QA
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Cronicas-QA-capturas
+          path: /tmp/cronicas-*.png
+          if-no-files-found: ignore
+          retention-days: 7
