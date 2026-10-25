@@ -203,3 +203,36 @@
  #tavEntrance .tav-gate-door,#tavEntrance.tav-gate-departing{transition-duration:.01ms}
  #tavEntrance .tav-gate-identity{animation:none}
 }
+
+/* Porta cinematográfica aprovada: fotografia incorporada ao próprio SVG local.
+   A imagem é 100% offline, não usa rede, e NÃO altera a área de clique.
+   O letreiro já está entalhado na arte; a instrução também está na madeira. */
+#tavEntrance .tav-gate-art{
+ width:min(100vw,640px);
+ height:100dvh;
+ background:#100c0a;
+ box-shadow:0 0 0 2px #080705,0 0 90px 22px #000c;
+}
+#tavEntrance .tav-gate-art::before{
+ inset:0;border:0;border-radius:0;
+ background:radial-gradient(ellipse at 52% 48%,#f6b46a 0%,#81401e 29%,#100808 65%);
+ box-shadow:inset 0 0 35px #000;
+}
+#tavEntrance .tav-gate-door{
+ inset:0!important;left:0!important;top:0!important;
+ width:100%!important;height:100%!important;
+ border:0;border-radius:0!important;
+ background:#1b110d url("./art/tavern-door-v2.svg") center/100% 100% no-repeat;
+ box-shadow:inset 0 0 0 2px #21150e,0 12px 24px #000b;
+ transform-origin:13% 50%;
+}
+#tavEntrance .tav-gate-door::before{
+ background:linear-gradient(90deg,#08050229,transparent 17%,transparent 82%,#08050232);
+}
+#tavEntrance .tav-gate-door::after{
+ border:0;border-radius:0;box-shadow:inset 0 0 19px #04020365;
+}
+#tavEntrance .tav-gate-caption{display:none!important}
+@media(min-width:650px){
+ #tavEntrance .tav-gate-door{background-size:100% 100%}
+}
