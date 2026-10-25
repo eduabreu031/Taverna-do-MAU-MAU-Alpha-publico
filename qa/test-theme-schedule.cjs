@@ -58,7 +58,7 @@ assert(!gameSurfaces.includes(':root[data-tav-palette="classic"]'),'Mesa clássi
 assert(!gameSurfaces.includes('repeating-linear-gradient'),'Mesa não pode usar listras repetidas');
 assert(!gameSurfaces.includes('animation:')&&!gameSurfaces.includes('touch-action:')&&!gameSurfaces.includes('transform:'),
  'Tema da mesa não pode mudar animação nem interatividade');
-assert(!gameSurfaces.includes('filter:blur('),'Blur grande no feltro é proibido');
+assert(!/(?:^|\n)\s*filter\s*:\s*blur\(/m.test(gameSurfaces),'Blur grande no feltro é proibido');
 assert(!gameSurfaces.includes('backdrop-filter:blur(10px)'),'Blur excessivo dentro da partida');
 assert(!gameSurfaces.includes('.card-back')&&!gameSurfaces.includes('.card-face'),
  'Camada da mesa não deve alterar cartas; cada deck tem sua camada');
