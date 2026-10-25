@@ -314,7 +314,7 @@ try{
     const paint=el=>{
      if(!el)return null;
      const s=getComputedStyle(el);
-     return {color:s.color,bg:s.backgroundImage,shadow:s.boxShadow,
+     return {color:s.color,bg:s.backgroundImage,bgColor:s.backgroundColor,shadow:s.boxShadow,
        border:s.borderTopColor,filter:s.backdropFilter||s.webkitBackdropFilter};
     };
     const offlineSpan=[...document.querySelectorAll('#sceneMenu .book-page span')]
@@ -372,7 +372,7 @@ try{
     }
     assert(p.scoreboard.bg.includes('gradient'),'Eliminação mantém madeira clássica: '+id);
     assert.equal(p.scoreboard.color,p.expectedInk,'Texto de eliminação clássico: '+id);
-    assert.notEqual(p.eliminationOverlay.bg,parity.classic.eliminationOverlay.bg,
+    assert.notEqual(p.eliminationOverlay.bgColor,parity.classic.eliminationOverlay.bgColor,
       'Overlay de eliminação sem paleta: '+id);
     if(width===390)assert(p.aeroPanels.every(x=>x==='none'),
       'Filtro de vidro caro ativo no telefone em '+id);
