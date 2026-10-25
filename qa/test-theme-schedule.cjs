@@ -22,7 +22,29 @@ assert(script&&css&&menuScript,'As duas camadas e as opções do jogador precisa
 const materials=fs.readFileSync(path.join(root,'qa/theme-materials.css'),'utf8').trim();
 assert(css.includes(materials),'Camada dos materiais não foi embutida no HTML gerado');
 assert(!materials.includes(':root[data-tav-palette="classic"]'),'Taverna Clássica deve ficar intocada');
-assert(!materials.includes('url('),'Os fundos devem funcionar offline, sem baixar imagens');
+const backdropIds=['neon-blue','neon-green','neon-pink','neon-tavern-dark','neon-aero','neon-imperial','neon-amber'];
+const backdropPaths=backdropIds.map(id=>'./theme-backdrops/'+id+'.svg');
+const assetUrls=[...materials.matchAll(/url\("([^"]+)"\)/g)].map(m=>m[1]);
+assert.deepEqual(assetUrls,backdropPaths,'CSS do cenário só pode referenciar os sete SVG locais');
+assert(!materials.includes('https://')&&!materials.includes('http://'),'Cenário não deve baixar imagens remotas');
+const sw=fs.readFileSync(path.join(base,'sw.js'),'utf8');
+assert(sw.includes('taverna-pwa-textured-scenery-20261025-1'),'O PWA precisa atualizar seu cache');
+for(const id of backdropIds){
+ const svg=fs.readFileSync(path.join(base,'theme-backdrops',id+'.svg'),'utf8');
+ assert(svg.startsWith('<svg xmlns="http://www.w3.org/2000/svg"')&&svg.trimEnd().endsWith('</svg>'),'Fundo SVG inválido: '+id);
+ assert(svg.length>15000,'Fundo demasiado simples: '+id);
+ assert(!/<script|foreignObject|<image|href=/i.test(svg),'O fundo SVG não pode executar ou carregar recursos externos: '+id);
+ assert(sw.includes("'./theme-backdrops/"+id+".svg'"),'Imagem não incluída no cache offline: '+id);
+ const n=(svg.match(/<circle\s/g)||[]).length;
+ if(['neon-blue','neon-green','neon-pink'].includes(id))
+  assert(n>600,'Céu deveria ter centenas de estrelas: '+id+' ('+n+')');
+ else
+  assert(svg.includes('filter="url(#grain)"')||id==='neon-aero','Material sem granulação fina: '+id);
+}
+for(const id of backdropIds)
+ assert(materials.includes('url("./theme-backdrops/'+id+'.svg")'),'Paleta sem arte de fundo: '+id);
+assert(materials.includes('#sceneWelcome')&&materials.includes('#sceneMultiplayer')&&materials.includes('#sceneMenu')&&materials.includes('#sceneGame'),
+ 'O fundo precisa cobrir todas as cenas e não apenas os cartões internos');
 assert(!materials.includes('#overlay:has(.suit-list)'),'O seletor original de naipes não pode mudar');
 assert(!materials.includes('animation:')&&!materials.includes('pointer-events:auto'),'Tema não pode iniciar animações nem interceptar toques');
 for(const id of ['neon-blue','neon-green','neon-pink','neon-tavern-dark','neon-aero','neon-imperial','neon-amber']){
