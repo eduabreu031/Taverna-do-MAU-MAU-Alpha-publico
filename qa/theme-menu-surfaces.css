@@ -137,6 +137,32 @@
   :is(strong,small,span:not(.tav-palette-check):not(.tav-palette-swatch),b,em){
  color:var(--tm-menu-button-ink)!important;
 }
+/* Nos botões Aero e Âmbar o topo tem reflexo claro: preservar o
+   acabamento, usando contorno de sombra discreto para leitura constante. */
+:root[data-tav-palette="neon-aero"]{--tm-menu-button-shadow:0 1px 2px #063447ed,0 0 5px #063447a8}
+:root[data-tav-palette="neon-amber"]{--tm-menu-button-shadow:0 1px 2px #241308f5,0 0 5px #241308ce}
+:root[data-tav-palette="neon-blue"],
+:root[data-tav-palette="neon-green"],
+:root[data-tav-palette="neon-pink"],
+:root[data-tav-palette="neon-tavern-dark"],
+:root[data-tav-palette="neon-imperial"]{
+ --tm-menu-button-shadow:0 1px 2px #050b1bbd;
+}
+:root[data-tav-palette^="neon-"] :is(
+ #sceneWelcome,#sceneMultiplayer,#sceneMenu,
+ #tavEntrance,#alphaAccountsOverlay,#tavAppearanceOverlay,
+ #rulesModalDEV,.tav-central-panel,.tav-admin-panel,.tav-bots-sheet-inner
+) button:not(.suit-choice):not([data-suit]){
+ text-shadow:var(--tm-menu-button-shadow)!important;
+}
+:root[data-tav-palette^="neon-"] :is(
+ #sceneWelcome,#sceneMultiplayer,#sceneMenu,
+ #tavEntrance,#alphaAccountsOverlay,#tavAppearanceOverlay,
+ #rulesModalDEV,.tav-central-panel,.tav-admin-panel,.tav-bots-sheet-inner
+) button:not(.suit-choice):not([data-suit])
+  :is(strong,small,span:not(.tav-palette-check):not(.tav-palette-swatch),b,em){
+ text-shadow:var(--tm-menu-button-shadow)!important;
+}
 /* Entrada inicial tem botões originalmente marrons/dourados, inclusive
    ação principal: adequar ao tema para que letras claras não percam contraste.
    Não toca botões já tematizados do restante das cenas. */
