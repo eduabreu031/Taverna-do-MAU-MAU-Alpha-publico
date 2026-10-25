@@ -9,23 +9,6 @@ try{
   page.on('pageerror',error=>errors.push(error.message));
   await page.goto('http://127.0.0.1:8765/',{waitUntil:'domcontentloaded',timeout:45000});
   await page.waitForFunction(()=>!!window.TavernaThemeSystem&&!!window.TavernaAppearance,{timeout:20000});
-  // Diagnóstico da herança cromática real no saguão (texto + símbolo).
-  if(width===390){
-   const welcomeAudit=await page.evaluate(()=>{
-    const ids=['classic','neon-blue','neon-green','neon-pink','neon-tavern-dark','neon-aero','neon-imperial','neon-amber'];
-    const patterns=/bem.vindo|viajante|devemos cham|escolha como deseja jogar|✦|✥|❖|✧/i;
-    const elements=[...document.querySelectorAll('#sceneWelcome *')]
-      .filter(el=>el.children.length===0&&patterns.test(el.textContent||'')).slice(0,18);
-    const icons=[...document.querySelectorAll('#sceneWelcome .welcome-panel *')]
-      .filter(el=>/crest|ornament|separator|divider|rule|flourish|seal|symbol|brand/i.test(el.className||'')).slice(0,18);
-    return Object.fromEntries(ids.map(id=>{
-     window.TavernaThemeSystem.setPalette(id);
-     const inspect=el=>{const s=getComputedStyle(el),b=getComputedStyle(el,'::before'),a=getComputedStyle(el,'::after');return {tag:el.tagName,cls:el.className,id:el.id,txt:(el.textContent||'').trim().slice(0,90),color:s.color,shadow:s.textShadow,background:s.backgroundImage,before:{content:b.content,color:b.color},after:{content:a.content,color:a.color}};};
-     return [id,{matches:elements.map(inspect),icons:icons.map(inspect),welcomeClass:document.querySelector('#sceneWelcome .welcome-panel')?.outerHTML.slice(0,4000)}];
-    }));
-   });
-   console.log('WELCOME_COLOR_AUDIT',JSON.stringify(welcomeAudit));
-  }
   const data=await page.evaluate(()=>{
    const themes=['classic','neon-blue','neon-green','neon-pink','neon-tavern-dark','neon-aero','neon-imperial','neon-amber'];
    const selectors=[
@@ -227,6 +210,64 @@ try{
    'Taverna Clássica mudou ao alternar os temas');
   for(const id of ['neon-blue','neon-green','neon-pink','neon-aero','neon-amber']){
    assert.notEqual(menuSurfaces[id].originalPanel,'none','HUD não deve desaparecer: '+id);
+  }
+
+  // v0.5.0.33: reproduz o relato real (saudação, instrução e ornamento
+  // entre o título e a saudação), calculando CSS de cada tema no Chromium.
+  const welcomeColors=await page.evaluate(()=>{
+   const ids=['classic','neon-blue','neon-green','neon-pink',
+    'neon-tavern-dark','neon-aero','neon-imperial','neon-amber'];
+   const actual=sel=>getComputedStyle(document.querySelector(sel)).color;
+   const line=()=>[...document.querySelectorAll('#sceneWelcome .welcome-rule > span')]
+    .map(el=>getComputedStyle(el).backgroundImage);
+   const sampleToken=token=>{
+    const probe=document.createElement('span');
+    probe.style.color='var('+token+')';document.body.appendChild(probe);
+    const color=getComputedStyle(probe).color;probe.remove();return color;
+   };
+   const out={};
+   for(const id of ids){
+    window.TavernaThemeSystem.setPalette(id);
+    out[id]={
+     intro:actual('#sceneWelcome .welcome-intro'),
+     nameNotice:actual('#sceneWelcome .welcome-name-notice'),
+     nameLabel:actual('#sceneWelcome .welcome-name-label'),
+     ornament:actual('#sceneWelcome .welcome-rule > b'),
+     rule:actual('#sceneWelcome .welcome-rule'),
+     lines:line(),
+     expectedCopy:id==='classic'?null:sampleToken('--tm-welcome-copy'),
+     expectedNote:id==='classic'?null:sampleToken('--tm-welcome-note'),
+     expectedOrnament:id==='classic'?null:sampleToken('--tm-welcome-ornament')
+    };
+   }
+   window.TavernaThemeSystem.setPalette('classic');
+   const classicRoundTrip={
+    intro:actual('#sceneWelcome .welcome-intro'),
+    nameNotice:actual('#sceneWelcome .welcome-name-notice'),
+    ornament:actual('#sceneWelcome .welcome-rule > b'),
+    lines:line()
+   };
+   window.TavernaThemeSystem.setPalette('neon-pink');
+   return {out,classicRoundTrip};
+  });
+  const originalWelcome=welcomeColors.out.classic;
+  assert.equal(welcomeColors.classicRoundTrip.intro,originalWelcome.intro,'Saudação clássica alterada');
+  assert.equal(welcomeColors.classicRoundTrip.nameNotice,originalWelcome.nameNotice,'Aviso clássico alterado');
+  assert.equal(welcomeColors.classicRoundTrip.ornament,originalWelcome.ornament,'Arabesco clássico alterado');
+  assert.deepEqual(welcomeColors.classicRoundTrip.lines,originalWelcome.lines,'Linhas clássicas alteradas');
+  for(const id of ['neon-blue','neon-green','neon-pink','neon-tavern-dark','neon-aero','neon-imperial','neon-amber']){
+   const s=welcomeColors.out[id];
+   assert.equal(s.intro,s.expectedCopy,'Frase «Seja bem-vindo, viajante» herdou dourado: '+id);
+   assert.equal(s.nameNotice,s.expectedNote,'«Escolha como deseja jogar» herdou dourado: '+id);
+   assert.equal(s.nameLabel,s.expectedNote,'Rótulo do nome herdou dourado: '+id);
+   assert.equal(s.ornament,s.expectedOrnament,'Símbolo ❦ está dourado: '+id);
+   assert.equal(s.rule,s.expectedOrnament,'Divisor decorativo está dourado: '+id);
+   assert.equal(s.lines.length,2,'Arabesco deve manter as duas linhas: '+id);
+   assert(s.lines.every(x=>x.includes('linear-gradient')),'Linhas sem coloração por tema: '+id);
+   assert.notEqual(s.lines[0],originalWelcome.lines[0],'Linhas herdaram gradiente clássico: '+id);
+   assert.notEqual(s.intro,originalWelcome.intro,'Frase inicial continua clássica: '+id);
+   assert.notEqual(s.nameNotice,originalWelcome.nameNotice,'Instrução continua dourada: '+id);
+   assert.notEqual(s.ornament,originalWelcome.ornament,'Símbolo ❦ continua clássico: '+id);
   }
   const pref=await page.evaluate(()=>localStorage.getItem('taverna:appearance:palette:v1'));
   assert.equal(pref,'neon-pink');
