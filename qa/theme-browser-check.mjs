@@ -9,6 +9,31 @@ try{
   page.on('pageerror',error=>errors.push(error.message));
   await page.goto('http://127.0.0.1:8765/',{waitUntil:'domcontentloaded',timeout:45000});
   await page.waitForFunction(()=>!!window.TavernaThemeSystem&&!!window.TavernaAppearance,{timeout:20000});
+  if(width===390){
+   const audit=await page.evaluate(()=>{
+     const root=document.querySelector('#sceneMenu'), els=[...root.querySelectorAll('*')];
+     const key=els.filter(el=>/AVENTUREIRO|Alterar nome|QUANTOS VIAJANTES|ASTÚCIA DOS ADVERSÁRIOS|ESCOLHA SEU PERSONAGEM|Prepare sua aventura|O Herói|Taverneiro|Trapaceiro|Forasteiro/.test(el.textContent||'')&&(el.textContent||'').length<210);
+     const picks=[];
+     for(const el of key){
+      let x=el;
+      for(let n=0;n<3&&x;n++,x=x.parentElement)if(!picks.includes(x))picks.push(x);
+     }
+     const out={};
+     for(const id of ['classic','neon-blue','neon-aero','neon-imperial']){
+       window.TavernaThemeSystem.setPalette(id);
+       out[id]=picks.slice(0,75).map(el=>{
+        const st=getComputedStyle(el);
+        return {tag:el.tagName,id:el.id,cls:String(el.className).slice(0,85),
+         txt:(el.textContent||'').trim().slice(0,85),
+         bg:st.backgroundImage.slice(0,120),bgColor:st.backgroundColor,
+         color:st.color,border:st.borderTopColor,shadow:st.boxShadow.slice(0,90)};
+       });
+     }
+     window.TavernaThemeSystem.setPalette('neon-pink');
+     return out;
+   });
+   console.log('OFFLINE_NAME_DIAG',JSON.stringify(audit));
+  }
   const data=await page.evaluate(()=>{
    const themes=['classic','neon-blue','neon-green','neon-pink','neon-tavern-dark','neon-aero','neon-imperial','neon-amber'];
    const selectors=[
