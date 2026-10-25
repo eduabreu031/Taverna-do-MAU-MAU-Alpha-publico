@@ -1,7 +1,7 @@
 /* Crônicas da Taverna — Fase 3C, interface privada; sem tocar no gameplay. */
 (()=>{'use strict';
 if(window.TavernaCronicas||document.getElementById('tavCronicasOverlay'))return;
-const CATALOG=/*TAV_CRONICAS_CATALOG*/;
+const CATALOG=/*TAV_CRONICAS_CATALOG*/ null;
 const API='https://taverna-multiplayer-servidor.edulopes941.workers.dev';
 const ORDERS=[
  {id:'corvos',name:'Ordem dos Corvos',mark:'◈',desc:'OPA!!!, MAU MAU e malandragens desmascaradas'},
