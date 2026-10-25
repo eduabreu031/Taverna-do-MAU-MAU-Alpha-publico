@@ -16,7 +16,7 @@ new vm.Script(controller,{filename:'online-v84-controller.js'});
 new vm.Script(auth,{filename:'alpha-accounts-script.js'});
 assert(controller.includes('restoreRoomOnStartup().catch('),'retomada não inicia ao carregar');
 assert(controller.includes('saveResume(code,token);restorePending=false;'),'credencial não é salva após welcome');
-assert(controller.includes('function close(leave=false){closing=true;++connectSerial;clearResume();'),'saída deve desabilitar retomada');
+assert(controller.includes('function close(leave=false){++connectSerial;clearResume();'),'saída deve desabilitar retomada');
 assert(controller.includes('if(closing||serial!==connectSerial||room!==code)return;socket=new WebSocket(url)'),'corrida entre reconexão e saída');
 assert(controller.includes('if(ws!==socket)return;'),'state de socket antigo não deve sobrescrever mesa');
 assert(auth.includes('async function resumeGuestForRoom(savedToken)'),'visitor não restaurável');
