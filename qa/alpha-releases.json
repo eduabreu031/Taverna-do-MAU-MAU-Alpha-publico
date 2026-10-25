@@ -1,7 +1,20 @@
 {
-  "current": "alpha-0.5.0.33",
+  "current": "alpha-0.5.0.34",
   "issuesRepo": "eduabreu031/Taverna-do-MAU-MAU-Alpha-publico",
   "entries": [
+    {
+      "id": "alpha-0.5.0.34",
+      "label": "0.5.0.34-alpha",
+      "date": "2026-10-25",
+      "title": "Mesas redesenhadas e sete baralhos exclusivos",
+      "items": [
+        "Refinamento completo das mesas nas sete paletas alternativas: retiradas as listras diagonais do feltro, mão do jogador e das faixas de controle, com suportes coerentes por tema.",
+        "Brisa Aero ganhou vidro aquático translúcido; Veludo Imperial, veludo púrpura de salão; Taverna Sombria, couro escuro e feltro vinho; os demais temas receberam materiais astral, botânico, místico e mineral.",
+        "Menus do Veludo Imperial e da Taverna Sombria agora têm painéis de acabamento próprio, sem riscos artificiais e com bordas, contrastes e profundidade ajustados.",
+        "Sete versos SVG autorais diferentes, com identidades astral, botânica, mística, gótica, aquática, heráldica e solar, aplicados também a miniversos e monte de compra; frentes ganharam papel temático legível.",
+        "Assets vetoriais leves armazenados no cache offline, gradientes estáticos e transparência adaptativa em celulares; Taverna Clássica, motor do jogo, cartas e ações permanecem preservados."
+      ]
+    },
     {
       "id": "alpha-0.5.0.33",
       "label": "0.5.0.33-alpha",
