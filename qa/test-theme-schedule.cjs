@@ -48,6 +48,7 @@ assert(menus.includes(':not(.suit-choice):not([data-suit])'),'Botões de naipes 
 
 /* v0.5.0.34: sete artes SVG exclusivas, uma superfície única por tema,
    sem carga de animação extra e sem afetar o motor. */
+const swAssets=fs.readFileSync(path.join(base,'sw.js'),'utf8');
 const gameSurfaces=fs.readFileSync(path.join(root,'qa/theme-game-surfaces.css'),'utf8').trim();
 const deckSource=fs.readFileSync(path.join(root,'qa/theme-card-decks.css'),'utf8').trim();
 assert(css.includes(gameSurfaces),'Polimento de mesa ausente no HTML de produção');
@@ -75,7 +76,7 @@ for(const id of ['neon-blue','neon-green','neon-pink','neon-tavern-dark',
  assert(svg.startsWith('<svg xmlns="http://www.w3.org/2000/svg"')&&svg.includes('</svg>'),'SVG inválido: '+id);
  assert(svg.length>700&&svg.length<4500,'Arte vetorial de cartas fora do orçamento móvel: '+id);
  assert(!/<script|foreignObject|<image|href=/i.test(svg),'SVG não pode conter recursos externos: '+id);
- assert(sw.includes("'./theme-decks/"+id+".svg'"),'Cache offline do verso ausente: '+id);
+ assert(swAssets.includes("'./theme-decks/"+id+".svg'"),'Cache offline do verso ausente: '+id);
 }
 assert(deckSource.includes('.card-back::before')&&deckSource.includes('content:none!important'),
  'Remover a moldura única antiga dos sete decks');
