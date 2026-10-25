@@ -1,7 +1,19 @@
 {
-  "current": "alpha-0.5.0.28",
+  "current": "alpha-0.5.0.29",
   "issuesRepo": "eduabreu031/Taverna-do-MAU-MAU-Alpha-publico",
   "entries": [
+    {
+      "id": "alpha-0.5.0.29",
+      "label": "0.5.0.29-alpha",
+      "date": "2026-10-24",
+      "title": "Retomar a partida ao atualizar o navegador",
+      "items": [
+        "Ao puxar para atualizar ou recarregar a aba, o multiplayer retorna automaticamente à mesma sala e recupera do servidor o jogador, a mão e o estado atual da mesa.",
+        "A reconexão preserva contas cadastradas e a sessão efêmera do Forasteiro na mesma aba, sem armazenar as cartas no navegador.",
+        "Saída voluntária, identidade trocada e sessão expirada não recriam o jogador; a reconexão respeita a janela de abandono de 60 segundos já existente.",
+        "Regras, bots, interface de temas, modo offline, Arauto e Rádio permanecem inalterados; incluída verificação automática de retomada."
+      ]
+    },
     {
       "id": "alpha-0.5.0.28",
       "label": "0.5.0.28-alpha",
