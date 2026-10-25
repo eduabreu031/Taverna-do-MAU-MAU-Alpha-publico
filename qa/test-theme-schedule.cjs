@@ -99,6 +99,31 @@ assert(parityCSS.includes('@media(max-width:760px)')&&
   parityCSS.includes('backdrop-filter:none!important'),
   'Vidro pesado não pode reter blur em telefone');
 
+const previewCss=fs.readFileSync(path.join(root,'qa/theme-expansion-preview.css'),'utf8').trim();
+assert(css.includes(previewCss),'Tema de prévia não foi incorporado ao build');
+assert(css.indexOf(previewCss)>css.indexOf(parityCSS),'Os materiais de prévia precisam ser aplicados por último');
+for(const id of ['neon-forge','neon-abyss','neon-forest','neon-porcelain']){
+ const m=':root[data-tav-palette="'+id+'"]';
+ assert(previewCss.includes(m),'Paleta experimental não tem material: '+id);
+ for(const key of ['--tg-table:','--tm-scene:','--tm-menu-surface:','--tg-deck-image:','--tg-card-paper:'])
+   assert(previewCss.includes(key),'Material ausente: '+key);
+ for(const kind of ['theme-decks','theme-backdrops']){
+  const file=path.join(base,kind,id+'.svg');
+  const svg=fs.readFileSync(file,'utf8');
+  assert(svg.length>800&&svg.length<4200,'SVG fora do limite de peso: '+file);
+  assert(svg.startsWith('<svg')&&svg.includes('</svg>')&&!/<script|foreignObject|<image|href=/i.test(svg.replace('http://www.w3.org/2000/svg','')),
+    'SVG não isolado ou inválido: '+file);
+  assert(fs.readFileSync(path.join(base,'sw.js'),'utf8').includes("'./"+kind+"/"+id+".svg'"),
+    'SVG não empacotado para offline: '+file);
+ }
+}
+assert(!previewCss.includes('repeating-linear-gradient'),
+ 'Os novos temas não devem herdar listras diagonais');
+assert(!/(^|\n)\s*animation\s*:/.test(previewCss),
+ 'O redesign deve permanecer estático');
+assert(!previewCss.includes('touch-action:')&&!previewCss.includes('pointer-events:'),
+ 'Não alterar hitboxes de jogo na versão de prévia');
+console.log('FOUR_PREVIEW_STATIC_OK');
 const deckSource=fs.readFileSync(path.join(root,'qa/theme-card-decks.css'),'utf8').trim();
 assert(css.includes(gameSurfaces),'Polimento de mesa ausente no HTML de produção');
 assert(css.indexOf(gameSurfaces)>css.indexOf(menus),'Camada de mesa deve vir após a dos menus');
@@ -225,7 +250,7 @@ vm.runInNewContext(script,{
  URL,console,setInterval:fn=>{interval=fn;return 1},setTimeout:(fn,t)=>{timers.push(t);return 8},clearTimeout(){},
 },{timeout:1200});
 const api=window.TavernaThemeSystem;assert(api);
-assert.equal(api.getChoices().length,8);
+assert.equal(api.getChoices().length,12);
 assert.equal(typeof interval,'function');
 function assertState(at,expectedPalette,active){
  clock=at;api.refresh();
@@ -258,5 +283,5 @@ assertState(end+3600000,'classic',false);
 assert.equal(api.getStatus(end-1000).endsAt,end);
 assert.equal(api.getSchedule()[0].end,end);
 assert(!script.includes('GameEngine')&&!script.includes('game.players')&&!script.includes('WebSocket'),'Motor não pode ser tocado pelo tema');
-console.log('THEME_SCHEDULE_OK: 8 paletas, usuário persistente, evento independente, prazo absoluto, Clássico original');
+console.log('THEME_SCHEDULE_OK: 12 paletas (prévia), usuário persistente, evento independente, prazo absoluto, Clássico original');
 function DAY(){return 86400000}
