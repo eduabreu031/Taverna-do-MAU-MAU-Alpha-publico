@@ -10,7 +10,7 @@ on:
       - 'qa/theme-game-surfaces.css'
       - 'qa/theme-parity-performance.css'
       - 'qa/theme-expansion-preview.css'
-      - 'qa/build-card-raster-preview.py'
+      - 'qa/build-card-opaque-backs.py'
       - 'site/theme-decks/**'
       - 'site/theme-backdrops/**'
       - 'site/sw.js'
@@ -84,7 +84,7 @@ jobs:
           python3 qa/apply-online-abandon.py site
           python3 qa/apply-seasonal-theme.py site
           python3 qa/apply-tavern-entrance.py site
-          python3 qa/build-card-raster-preview.py site
+          python3 qa/build-card-opaque-backs.py site
       - name: Validar materiais e motor de paletas sem navegador
         run: node qa/test-theme-schedule.cjs site
       - name: Analisar baralhos e seletor de naipes antes das correções
@@ -101,20 +101,6 @@ jobs:
           node qa/theme-four-preview-browser.mjs
           node qa/theme-form-audit.mjs
           node qa/entrance-browser-check.mjs
-      - name: Gerar pacote de teste experimental sem publicar no site
-        uses: actions/upload-artifact@v4
-        with:
-          name: Taverna-Quatro-Temas-TESTE-SEM-PUBLICAR
-          path: |
-            site/index.html
-            site/theme-backdrops/
-            site/theme-decks/
-            site/theme-decks-raster/
-            site/icons/
-            site/sw.js
-            site/manifest.webmanifest
-          if-no-files-found: error
-          retention-days: 14
       - name: Guardar capturas apenas para diagnóstico
         if: always()
         uses: actions/upload-artifact@v4
