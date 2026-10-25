@@ -9,6 +9,23 @@ try{
   page.on('pageerror',error=>errors.push(error.message));
   await page.goto('http://127.0.0.1:8765/',{waitUntil:'domcontentloaded',timeout:45000});
   await page.waitForFunction(()=>!!window.TavernaThemeSystem&&!!window.TavernaAppearance,{timeout:20000});
+  // Diagnóstico da herança cromática real no saguão (texto + símbolo).
+  if(width===390){
+   const welcomeAudit=await page.evaluate(()=>{
+    const ids=['classic','neon-blue','neon-green','neon-pink','neon-tavern-dark','neon-aero','neon-imperial','neon-amber'];
+    const patterns=/bem.vindo|viajante|devemos cham|escolha como deseja jogar|✦|✥|❖|✧/i;
+    const elements=[...document.querySelectorAll('#sceneWelcome *')]
+      .filter(el=>el.children.length===0&&patterns.test(el.textContent||'')).slice(0,18);
+    const icons=[...document.querySelectorAll('#sceneWelcome .welcome-panel *')]
+      .filter(el=>/crest|ornament|separator|divider|rule|flourish|seal|symbol|brand/i.test(el.className||'')).slice(0,18);
+    return Object.fromEntries(ids.map(id=>{
+     window.TavernaThemeSystem.setPalette(id);
+     const inspect=el=>{const s=getComputedStyle(el),b=getComputedStyle(el,'::before'),a=getComputedStyle(el,'::after');return {tag:el.tagName,cls:el.className,id:el.id,txt:(el.textContent||'').trim().slice(0,90),color:s.color,shadow:s.textShadow,background:s.backgroundImage,before:{content:b.content,color:b.color},after:{content:a.content,color:a.color}};};
+     return [id,{matches:elements.map(inspect),icons:icons.map(inspect),welcomeClass:document.querySelector('#sceneWelcome .welcome-panel')?.outerHTML.slice(0,4000)}];
+    }));
+   });
+   console.log('WELCOME_COLOR_AUDIT',JSON.stringify(welcomeAudit));
+  }
   const data=await page.evaluate(()=>{
    const themes=['classic','neon-blue','neon-green','neon-pink','neon-tavern-dark','neon-aero','neon-imperial','neon-amber'];
    const selectors=[
