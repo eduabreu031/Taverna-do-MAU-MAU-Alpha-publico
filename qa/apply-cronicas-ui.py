@@ -21,7 +21,7 @@ css=(root/'qa/cronicas-ui.css').read_text(encoding='utf-8')
 assert js.count('/*TAV_CRONICAS_CATALOG*/')==1
 assert '</script' not in js.lower() and '</style' not in css.lower()
 serialized=json.dumps(catalog,ensure_ascii=False,separators=(',',':')).replace('<','\\u003c')
-js=js.replace('/*TAV_CRONICAS_CATALOG*/',serialized)
+js=js.replace('/*TAV_CRONICAS_CATALOG*/ null',serialized)
 html=html.replace('</head>','<style id="tav-cronicas-style">\n'+css+'\n</style>\n</head>',1)
 html=html.replace('</body>','<script id="tav-cronicas-script">\n'+js+'\n</script>\n</body>',1)
 path.write_text(html,encoding='utf-8')
