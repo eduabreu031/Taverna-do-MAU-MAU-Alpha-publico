@@ -259,7 +259,7 @@ try{
       const surface=state.panels[sel];
       assert(surface,'Região do jogo não encontrada: '+sel);
       assert(!surface.bg.includes('repeating-linear-gradient'),
-        'Ainda existem listras na área '+sel+' do tema '+id);
+        'Ainda existem listras na área '+sel+' do tema '+id+' computed='+surface.bg.slice(0,550));
       assert(surface.bg.includes('gradient'),'Superfície temática ausente: '+id+' '+sel);
       assert.notEqual(surface.bg,gameStyle.classic.panels[sel]?.bg,
         'A superfície não pode ser igual à clássica: '+id+' '+sel);
