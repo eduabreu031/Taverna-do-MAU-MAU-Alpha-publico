@@ -6,6 +6,7 @@ on:
       - '.github/workflows/check-theme-visual.yml'
       - 'qa/theme-neon.css'
       - 'qa/theme-materials.css'
+      - 'qa/theme-menu-surfaces.css'
       - 'site/theme-backdrops/**'
       - 'site/sw.js'
       - 'qa/theme-player-palettes.css'
@@ -32,6 +33,7 @@ on:
     branches: [main]
     paths:
       - 'qa/theme-materials.css'
+      - 'qa/theme-menu-surfaces.css'
       - 'site/theme-backdrops/**'
       - 'site/sw.js'
       - 'qa/theme-browser-check.mjs'
