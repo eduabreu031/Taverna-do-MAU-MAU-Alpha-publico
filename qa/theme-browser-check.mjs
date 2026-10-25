@@ -73,6 +73,7 @@ try{
     const panel=getComputedStyle(document.querySelector('#sceneWelcome .welcome-panel'));
     const button=getComputedStyle(document.querySelector('#sceneWelcome .welcome-mode'));
     out[id]={
+     scenes:Object.fromEntries(['body','#tavEntrance','#alphaAccountsOverlay','#sceneWelcome','#sceneMultiplayer','#sceneMenu','#sceneGame'].map(s=>[s,getComputedStyle(document.querySelector(s)).backgroundImage])),
      sky:scene.backgroundImage,
      skySize:scene.backgroundSize,
      panel:panel.backgroundImage,
@@ -85,8 +86,8 @@ try{
    return out;
   });
   for(const id of ['neon-blue','neon-green','neon-pink']){
-   assert(materials[id].sky.includes('radial-gradient'),'Céu sem estrelas em '+id);
-   assert(materials[id].skySize.includes('px'),'Pontos luminosos sem escala própria: '+id);
+   assert(materials[id].sky.includes('theme-backdrops/'+id+'.svg'),'Céu sem imagem de estrelas: '+id);
+   assert(materials[id].skySize.includes('cover'),'Textura não cobre a tela: '+id);
    assert.notEqual(materials[id].sky,materials.classic.sky,'Céu igual ao clássico: '+id);
   }
   for(const id of ['neon-tavern-dark','neon-aero','neon-imperial','neon-amber']){
@@ -97,6 +98,34 @@ try{
   assert(materials['neon-aero'].glass.includes('blur(8px)'),'Vidro Aero sem translucidez');
   assert.notEqual(materials['neon-blue'].sky,materials['neon-green'].sky);
   assert.notEqual(materials['neon-green'].sky,materials['neon-pink'].sky);
+
+  // Testar as imagens DE FUNDO (fora das caixas de menu) nas cinco cenas.
+  for(const id of ['neon-blue','neon-green','neon-pink','neon-tavern-dark','neon-aero','neon-imperial','neon-amber']){
+   for(const [scene,background] of Object.entries(materials[id].scenes))
+    assert(background.includes('theme-backdrops/'+id+'.svg'),'Fundo ausente atrás de '+scene+' no tema '+id);
+   assert(materials[id].sky.includes('theme-backdrops/'+id+'.svg'),'Fundo não aplicado no saguão: '+id);
+  }
+  const backdropStates=await page.evaluate(async()=>{
+   const ids=['neon-blue','neon-green','neon-pink','neon-tavern-dark','neon-aero','neon-imperial','neon-amber'];
+   return Promise.all(ids.map(async id=>{
+    const uri='./theme-backdrops/'+id+'.svg';
+    const response=await fetch(uri);
+    const source=await response.text();
+    const doc=new DOMParser().parseFromString(source,'image/svg+xml');
+    const image=new Image();
+    image.src=uri;
+    try{await image.decode()}catch{return {id,ok:false,status:response.status,problem:'Imagem não renderizou'}}
+    return {id,ok:response.ok&&doc.querySelector('svg')!==null&&doc.querySelector('parsererror')===null,status:response.status,
+     stars:doc.querySelectorAll('circle').length,width:image.naturalWidth,height:image.naturalHeight};
+   }));
+  });
+  for(const result of backdropStates){
+   assert(result.ok&&result.status===200,'Falha ao carregar SVG do fundo '+result.id+': '+JSON.stringify(result));
+   assert(result.width>=1200&&result.height>=1800,'Resolução insuficiente: '+result.id);
+   if(['neon-blue','neon-green','neon-pink'].includes(result.id))
+    assert(result.stars>=600,'Faltam estrelas no tema '+result.id);
+  }
+
   const pref=await page.evaluate(()=>localStorage.getItem('taverna:appearance:palette:v1'));
   assert.equal(pref,'neon-pink');
   await page.reload({waitUntil:'domcontentloaded'});

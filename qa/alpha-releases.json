@@ -1,7 +1,21 @@
 {
-  "current": "alpha-0.5.0.30",
+  "current": "alpha-0.5.0.31",
   "issuesRepo": "eduabreu031/Taverna-do-MAU-MAU-Alpha-publico",
   "entries": [
+    {
+      "id": "alpha-0.5.0.31",
+      "label": "0.5.0.31-alpha",
+      "date": "2026-10-25",
+      "title": "Cenários texturizados atrás de todos os menus",
+      "items": [
+        "Refeito o fundo que ocupa a tela inteira, por trás de menus e painéis, com sete artes SVG próprias e detalhadas, sem alterar os materiais internos aprovados na versão anterior.",
+        "Noite Neon Azul, Verde e Rosa exibem mais de 600 estrelas cada, com constelações discretas, halos luminosos e nuvens de luz.",
+        "Taverna Sombria ganha couro vinho gótico com microfibras e desgaste; Veludo Imperial tem trama jacquard e dobras; Âmbar do Deserto recebe areia fina e estratos minerais.",
+        "Brisa Aero traz reflexos aquáticos, folhagens abstratas, transparência e brilhos suaves.",
+        "Os fundos também aparecem na primeira tela de identificação, no lobby, no menu offline e na partida. Todos os SVGs entram no cache offline do aplicativo.",
+        "Taverna Clássica, cartas, naipes, layout, destaque de turno, lógica online e offline e demais acabamentos dos botões continuam como antes."
+      ]
+    },
     {
       "id": "alpha-0.5.0.30",
       "label": "0.5.0.30-alpha",

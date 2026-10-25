@@ -315,3 +315,95 @@
   #sceneMenu .book-page,#tavAppearanceOverlay .tav-appearance-card
  ){backdrop-filter:none;-webkit-backdrop-filter:none}
 }
+
+/* ================================================================
+   TAVERNA CENARIOS PROFUNDOS v0.5.0.31 — FUNDO DE TELA INTEIRA
+   Objetivo: a paisagem atrás de TODOS os menus, sem alterar caixas.
+   Cada textura SVG é autocontida e empacotada na PWA para uso offline.
+   Este bloco apenas redefine o cenário; --tp-panel/--tp-button,
+   cartas, modais, seletor de naipes e HUD ficam como na versão 0.5.0.30.
+   ================================================================ */
+:root[data-tav-palette^="neon-"]{
+ --tm-scene-size:cover,cover,cover;
+}
+/* O fundo precisa ocupar o cenário inteiro da primeira tela ao jogo,
+   independentemente da quantidade de caixas abertas no saguão. */
+:root[data-tav-palette^="neon-"] body,
+:root[data-tav-palette^="neon-"] #sceneWelcome,
+:root[data-tav-palette^="neon-"] #sceneMultiplayer,
+:root[data-tav-palette^="neon-"] #sceneMenu,
+:root[data-tav-palette^="neon-"] #sceneGame{
+ background-image:var(--tm-scene)!important;
+ background-size:var(--tm-scene-size)!important;
+ background-position:center center!important;
+ background-repeat:no-repeat!important;
+}
+/* Pseudo-iluminação existente continua por cima somente como nuance;
+   a textura fica na imagem de fundo dos cenários, atrás do conteúdo. */
+:root[data-tav-palette="neon-blue"]{
+ --tm-scene:
+  linear-gradient(160deg,#0a103321,#090d2e52),
+  url("./theme-backdrops/neon-blue.svg"),
+  linear-gradient(160deg,#10173a,#080c28);
+}
+:root[data-tav-palette="neon-green"]{
+ --tm-scene:
+  linear-gradient(160deg,#061d151a,#06151256),
+  url("./theme-backdrops/neon-green.svg"),
+  linear-gradient(160deg,#0d332b,#061b1a);
+}
+:root[data-tav-palette="neon-pink"]{
+ --tm-scene:
+  linear-gradient(160deg,#220a2b20,#120c255c),
+  url("./theme-backdrops/neon-pink.svg"),
+  linear-gradient(160deg,#381140,#180b2d);
+}
+:root[data-tav-palette="neon-tavern-dark"]{
+ --tm-scene:
+  radial-gradient(ellipse at center,#2a17200a,#08060c5c),
+  url("./theme-backdrops/neon-tavern-dark.svg"),
+  linear-gradient(160deg,#2a1721,#0e0b12);
+}
+:root[data-tav-palette="neon-aero"]{
+ --tm-scene:
+  linear-gradient(180deg,#134c6130,#0c53523a),
+  url("./theme-backdrops/neon-aero.svg"),
+  linear-gradient(160deg,#b5e6d0,#2f8389);
+}
+:root[data-tav-palette="neon-imperial"]{
+ --tm-scene:
+  radial-gradient(ellipse at center,#24132404,#10081878),
+  url("./theme-backdrops/neon-imperial.svg"),
+  linear-gradient(160deg,#593a56,#1a132a);
+}
+:root[data-tav-palette="neon-amber"]{
+ --tm-scene:
+  radial-gradient(ellipse at center,#5a351505,#130b0670),
+  url("./theme-backdrops/neon-amber.svg"),
+  linear-gradient(160deg,#8b6236,#302015);
+}
+/* IDENTIFICACAO INICIAL 0.5.0.31: a primeira tela real do aplicativo
+   é #tavEntrance, que ocupa o viewport inteiro e escondia o fundo
+   dos temas por ser uma camada fixa. Aplicar o MESMO cenário aqui. */
+:root[data-tav-palette^="neon-"] #tavEntrance{
+ background-image:var(--tm-scene)!important;
+ background-size:var(--tm-scene-size)!important;
+ background-position:center center!important;
+ background-repeat:no-repeat!important;
+}
+/* O escurecimento serve só para legibilidade do cartão de identificação;
+   mantém estrelas, couro e ondas visíveis ao redor do painel. */
+:root[data-tav-palette^="neon-"] #tavEntrance .tav-gate-identity{
+ background:linear-gradient(180deg,
+  color-mix(in srgb,var(--tp-space) 20%,transparent),
+  color-mix(in srgb,var(--tp-space) 55%,transparent))!important;
+}
+/* Cadastro e troca de conta ocupam a tela inteira: a mesma paisagem
+   aparece atrás do formulário, sem alterar a caixa ou seus controles. */
+:root[data-tav-palette^="neon-"] #alphaAccountsOverlay{
+ background-image:var(--tm-scene)!important;
+ background-size:var(--tm-scene-size)!important;
+ background-position:center center!important;
+ background-repeat:no-repeat!important;
+}
+/* Nenhuma regra toca a Taverna Clássica ou muda a opacidade dos painéis. */

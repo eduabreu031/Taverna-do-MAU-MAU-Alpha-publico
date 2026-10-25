@@ -6,6 +6,8 @@ on:
       - '.github/workflows/check-theme-visual.yml'
       - 'qa/theme-neon.css'
       - 'qa/theme-materials.css'
+      - 'site/theme-backdrops/**'
+      - 'site/sw.js'
       - 'qa/theme-player-palettes.css'
       - 'qa/theme-card-decks.css'
       - 'qa/theme-gameplay-hotfix.css'
@@ -30,6 +32,8 @@ on:
     branches: [main]
     paths:
       - 'qa/theme-materials.css'
+      - 'site/theme-backdrops/**'
+      - 'site/sw.js'
       - 'qa/theme-browser-check.mjs'
       - 'qa/theme-player-palettes.css'
       - 'qa/test-theme-schedule.cjs'
