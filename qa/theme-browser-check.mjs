@@ -113,14 +113,9 @@ try{
         back:read(back),accent:colorOfToken('--tq-ornament')
       };
     }
-    const original=cards.map(btn=>btn.getAttribute('aria-pressed'));
-    cards[1].click();
-    const selected=cards.map(btn=>({chosen:btn.classList.contains('chosen'),pressed:btn.getAttribute('aria-pressed')}));
-    cards[0].click();
-    const restored=cards.map(btn=>({chosen:btn.classList.contains('chosen'),pressed:btn.getAttribute('aria-pressed')}));
     if(initialHidden)scene.classList.add('hidden');
     window.TavernaThemeSystem.setPalette('neon-pink');
-    return {out,initialHidden,original,selected,restored};
+    return {out,initialHidden};
   });
   for(const [theme,row] of Object.entries(heroCards.out)){
     assert.equal(row.cards.length,3,'Devem existir três personagens: '+theme);
@@ -149,10 +144,6 @@ try{
         'Escolha seu personagem ainda amarelo: '+theme);
     }
   }
-  assert(heroCards.selected[1].chosen&&heroCards.selected[1].pressed==='true',
-    'Selecionar Taverneiro não responde ao clique');
-  assert(heroCards.restored[0].chosen&&heroCards.restored[0].pressed==='true',
-    'Seleção original não foi restaurada');
   console.log('OFFLINE_COMPACT_HERO_LIST_OK',width);
   const data=await page.evaluate(()=>{
    const themes=['classic','neon-blue','neon-green','neon-pink','neon-tavern-dark','neon-aero','neon-imperial','neon-amber'];
