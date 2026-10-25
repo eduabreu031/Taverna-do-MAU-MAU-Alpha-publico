@@ -65,7 +65,7 @@ try{
    assert.equal(data.action,'none','Há placa atrás de MAU MAU / OPA!!!: '+id);
    assert.equal(data.controls,'none','Faixa escura atrás dos controles: '+id);
    assert(data.paper.includes('gradient'),'Frente da carta não está no tema: '+id+' computed='+data.paper.slice(0,240));
-   assert(data.cardback.includes('theme-decks/'+id+'.svg'),'Verso SVG não aplicado: '+id);
+   assert(data.cardback.includes('theme-decks-raster/'+id+'.webp'),'Verso SVG não aplicado: '+id);
    assert.equal(data.before,'none','Desenho genérico duplicado no verso: '+id);
    assert(data.assets.every(a=>a.ok&&a.svg&&a.bytes<4200),'SVG fora do orçamento: '+JSON.stringify(data.assets));
    assert(data.assets[1].width===240&&data.assets[1].height===336,'Carta SVG com dimensões incorretas: '+id);
