@@ -1,7 +1,7 @@
 name: Conferir e publicar Taverna do MAU MAU
 on:
   push:
-    branches: [main, master]
+    branches: [main, master, fix/retomar-partida-apos-refresh]
   workflow_dispatch:
 permissions:
   contents: read
@@ -70,6 +70,7 @@ jobs:
       - name: Testar início, fim e reversão automática do tema
         run: node qa/test-theme-schedule.cjs site
   publicar:
+    if: github.ref == 'refs/heads/main'
     needs: validar
     runs-on: ubuntu-latest
     permissions:
