@@ -1,7 +1,18 @@
 {
-  "current": "alpha-0.5.0.43",
+  "current": "alpha-0.5.0.44",
   "issuesRepo": "eduabreu031/Taverna-do-MAU-MAU-Alpha-publico",
   "entries": [
+    {
+      "id": "alpha-0.5.0.44",
+      "label": "0.5.0.44-alpha",
+      "date": "2026-10-26",
+      "title": "Lista de Frequentadores volta a renderizar corretamente",
+      "items": [
+        "Corrigida variável não declarada que interrompia a atualização da lista de jogadores no navegador, mesmo quando o servidor retornava contas conectadas.",
+        "Adicionado teste de execução real do JavaScript com DOM simulado e duas contas, garantindo lista visível e busca pela conta administradora.",
+        "Preservados painel compacto, cores dos 12 temas, convites, salas, Sala VIP e regras do multiplayer."
+      ]
+    },
     {
       "id": "alpha-0.5.0.43",
       "label": "0.5.0.43-alpha",
