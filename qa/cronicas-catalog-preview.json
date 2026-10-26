@@ -1,0 +1,548 @@
+{
+  "schema": 1,
+  "edition": "cronicas-v1",
+  "totalCoreGlory": 1000,
+  "totalCoreAchievements": 60,
+  "achievements": [
+    {
+      "id": "EST_01",
+      "category": "estrategista",
+      "tier": "bronze",
+      "title": "Primeira Inversão",
+      "metric": "q_played",
+      "goal": 1,
+      "glory": 5
+    },
+    {
+      "id": "EST_02",
+      "category": "estrategista",
+      "tier": "bronze",
+      "title": "Virando a Mesa",
+      "metric": "q_played",
+      "goal": 10,
+      "glory": 5
+    },
+    {
+      "id": "EST_03",
+      "category": "estrategista",
+      "tier": "bronze",
+      "title": "Arquiteto das Voltas",
+      "metric": "q_played",
+      "goal": 30,
+      "glory": 5
+    },
+    {
+      "id": "EST_04",
+      "category": "estrategista",
+      "tier": "bronze",
+      "title": "Primeiro Pulo",
+      "metric": "ace_played",
+      "goal": 1,
+      "glory": 5
+    },
+    {
+      "id": "EST_05",
+      "category": "estrategista",
+      "tier": "bronze",
+      "title": "Salteador",
+      "metric": "ace_played",
+      "goal": 10,
+      "glory": 5
+    },
+    {
+      "id": "EST_06",
+      "category": "estrategista",
+      "tier": "bronze",
+      "title": "Combinação Inicial",
+      "metric": "combo_validated",
+      "goal": 1,
+      "glory": 5
+    },
+    {
+      "id": "EST_07",
+      "category": "estrategista",
+      "tier": "bronze",
+      "title": "Sequências de Ferro",
+      "metric": "combo_validated",
+      "goal": 10,
+      "glory": 5
+    },
+    {
+      "id": "EST_08",
+      "category": "estrategista",
+      "tier": "bronze",
+      "title": "Comando dos Naipes",
+      "metric": "suit_chosen",
+      "goal": 1,
+      "glory": 5
+    },
+    {
+      "id": "EST_09",
+      "category": "estrategista",
+      "tier": "bronze",
+      "title": "Alquimista das Cores",
+      "metric": "suit_chosen",
+      "goal": 20,
+      "glory": 5
+    },
+    {
+      "id": "EST_10",
+      "category": "estrategista",
+      "tier": "prata",
+      "title": "Dama Incansável",
+      "metric": "q_played",
+      "goal": 100,
+      "glory": 20
+    },
+    {
+      "id": "EST_11",
+      "category": "estrategista",
+      "tier": "prata",
+      "title": "Donos do Ritmo",
+      "metric": "ace_played",
+      "goal": 75,
+      "glory": 20
+    },
+    {
+      "id": "EST_12",
+      "category": "estrategista",
+      "tier": "prata",
+      "title": "Mestre das Combinações",
+      "metric": "combo_validated",
+      "goal": 75,
+      "glory": 20
+    },
+    {
+      "id": "EST_13",
+      "category": "estrategista",
+      "tier": "prata",
+      "title": "Quatro Naipes, Uma Vontade",
+      "metric": "suit_chosen",
+      "goal": 100,
+      "glory": 20
+    },
+    {
+      "id": "EST_14",
+      "category": "estrategista",
+      "tier": "ouro",
+      "title": "General das Inversões",
+      "metric": "q_played",
+      "goal": 400,
+      "glory": 50
+    },
+    {
+      "id": "EST_15",
+      "category": "estrategista",
+      "tier": "ouro",
+      "title": "Engenheiro das Jogadas",
+      "metric": "combo_validated",
+      "goal": 300,
+      "glory": 50
+    },
+    {
+      "id": "EST_16",
+      "category": "estrategista",
+      "tier": "lendaria",
+      "title": "Grão-Mestre das Cartas",
+      "metric": "special_played",
+      "goal": 1000,
+      "glory": 100
+    },
+    {
+      "id": "TRA_01",
+      "category": "trapaceiro",
+      "tier": "bronze",
+      "title": "OPA!!!",
+      "metric": "opa_correct",
+      "goal": 1,
+      "glory": 5
+    },
+    {
+      "id": "TRA_02",
+      "category": "trapaceiro",
+      "tier": "bronze",
+      "title": "Olhos Atentos",
+      "metric": "opa_correct",
+      "goal": 5,
+      "glory": 5
+    },
+    {
+      "id": "TRA_03",
+      "category": "trapaceiro",
+      "tier": "bronze",
+      "title": "Fiscal da Taverna",
+      "metric": "opa_correct",
+      "goal": 15,
+      "glory": 5
+    },
+    {
+      "id": "TRA_04",
+      "category": "trapaceiro",
+      "tier": "bronze",
+      "title": "Não Me Engana",
+      "metric": "opa_correct",
+      "goal": 30,
+      "glory": 5
+    },
+    {
+      "id": "TRA_05",
+      "category": "trapaceiro",
+      "tier": "bronze",
+      "title": "Primeiro MAU MAU",
+      "metric": "mau_correct",
+      "goal": 1,
+      "glory": 5
+    },
+    {
+      "id": "TRA_06",
+      "category": "trapaceiro",
+      "tier": "bronze",
+      "title": "Voz Firme",
+      "metric": "mau_correct",
+      "goal": 10,
+      "glory": 5
+    },
+    {
+      "id": "TRA_07",
+      "category": "trapaceiro",
+      "tier": "bronze",
+      "title": "Arauto do MAU MAU",
+      "metric": "mau_correct",
+      "goal": 30,
+      "glory": 5
+    },
+    {
+      "id": "TRA_08",
+      "category": "trapaceiro",
+      "tier": "bronze",
+      "title": "Última Carta",
+      "metric": "win_with_mau",
+      "goal": 1,
+      "glory": 5
+    },
+    {
+      "id": "TRA_09",
+      "category": "trapaceiro",
+      "tier": "bronze",
+      "title": "Vitória Anunciada",
+      "metric": "win_with_mau",
+      "goal": 10,
+      "glory": 5
+    },
+    {
+      "id": "TRA_10",
+      "category": "trapaceiro",
+      "tier": "prata",
+      "title": "Detetive da Mesa",
+      "metric": "opa_correct",
+      "goal": 60,
+      "glory": 20
+    },
+    {
+      "id": "TRA_11",
+      "category": "trapaceiro",
+      "tier": "prata",
+      "title": "Caçador de Infrações",
+      "metric": "opa_correct",
+      "goal": 120,
+      "glory": 20
+    },
+    {
+      "id": "TRA_12",
+      "category": "trapaceiro",
+      "tier": "prata",
+      "title": "Anunciante Experiente",
+      "metric": "mau_correct",
+      "goal": 100,
+      "glory": 20
+    },
+    {
+      "id": "TRA_13",
+      "category": "trapaceiro",
+      "tier": "prata",
+      "title": "Mau Mau Triunfante",
+      "metric": "win_with_mau",
+      "goal": 50,
+      "glory": 20
+    },
+    {
+      "id": "TRA_14",
+      "category": "trapaceiro",
+      "tier": "ouro",
+      "title": "Lenda do OPA!!!",
+      "metric": "opa_correct",
+      "goal": 300,
+      "glory": 50
+    },
+    {
+      "id": "TRA_15",
+      "category": "trapaceiro",
+      "tier": "ouro",
+      "title": "Arauto Impecável",
+      "metric": "mau_correct",
+      "goal": 300,
+      "glory": 50
+    },
+    {
+      "id": "CON_01",
+      "category": "conquistador",
+      "tier": "bronze",
+      "title": "À Mesa!",
+      "metric": "match_finished",
+      "goal": 1,
+      "glory": 5
+    },
+    {
+      "id": "CON_02",
+      "category": "conquistador",
+      "tier": "bronze",
+      "title": "Habitante da Taverna",
+      "metric": "match_finished",
+      "goal": 5,
+      "glory": 5
+    },
+    {
+      "id": "CON_03",
+      "category": "conquistador",
+      "tier": "bronze",
+      "title": "Veterano de Vinte",
+      "metric": "match_finished",
+      "goal": 20,
+      "glory": 5
+    },
+    {
+      "id": "CON_04",
+      "category": "conquistador",
+      "tier": "bronze",
+      "title": "Cinquenta Rodadas",
+      "metric": "match_finished",
+      "goal": 50,
+      "glory": 5
+    },
+    {
+      "id": "CON_05",
+      "category": "conquistador",
+      "tier": "bronze",
+      "title": "Uma Centena de Histórias",
+      "metric": "match_finished",
+      "goal": 100,
+      "glory": 5
+    },
+    {
+      "id": "CON_06",
+      "category": "conquistador",
+      "tier": "bronze",
+      "title": "Primeira Vitória",
+      "metric": "match_won",
+      "goal": 1,
+      "glory": 5
+    },
+    {
+      "id": "CON_07",
+      "category": "conquistador",
+      "tier": "bronze",
+      "title": "Cinco Triunfos",
+      "metric": "match_won",
+      "goal": 5,
+      "glory": 5
+    },
+    {
+      "id": "CON_08",
+      "category": "conquistador",
+      "tier": "bronze",
+      "title": "Vinte Triunfos",
+      "metric": "match_won",
+      "goal": 20,
+      "glory": 5
+    },
+    {
+      "id": "CON_09",
+      "category": "conquistador",
+      "tier": "bronze",
+      "title": "Cinquenta Vitórias",
+      "metric": "match_won",
+      "goal": 50,
+      "glory": 5
+    },
+    {
+      "id": "CON_10",
+      "category": "conquistador",
+      "tier": "prata",
+      "title": "Centurião",
+      "metric": "match_won",
+      "goal": 100,
+      "glory": 20
+    },
+    {
+      "id": "CON_11",
+      "category": "conquistador",
+      "tier": "prata",
+      "title": "Duzentos e Cinquenta Jogos",
+      "metric": "match_finished",
+      "goal": 250,
+      "glory": 20
+    },
+    {
+      "id": "CON_12",
+      "category": "conquistador",
+      "tier": "prata",
+      "title": "Vencedor das Grandes Mesas",
+      "metric": "wins_5_plus",
+      "goal": 10,
+      "glory": 20
+    },
+    {
+      "id": "CON_13",
+      "category": "conquistador",
+      "tier": "prata",
+      "title": "Rei dos Duelos",
+      "metric": "duel_wins",
+      "goal": 25,
+      "glory": 20
+    },
+    {
+      "id": "CON_14",
+      "category": "conquistador",
+      "tier": "ouro",
+      "title": "Senhor de Duzentas e Cinquenta Vitórias",
+      "metric": "match_won",
+      "goal": 250,
+      "glory": 50
+    },
+    {
+      "id": "CON_15",
+      "category": "conquistador",
+      "tier": "lendaria",
+      "title": "Imortal da Taverna",
+      "metric": "match_won",
+      "goal": 500,
+      "glory": 100
+    },
+    {
+      "id": "AVE_01",
+      "category": "aventureiro",
+      "tier": "bronze",
+      "title": "Cara a Cara",
+      "metric": "matches_2_players",
+      "goal": 1,
+      "glory": 5
+    },
+    {
+      "id": "AVE_02",
+      "category": "aventureiro",
+      "tier": "bronze",
+      "title": "Mesa Movimentada",
+      "metric": "matches_5_plus",
+      "goal": 1,
+      "glory": 5
+    },
+    {
+      "id": "AVE_03",
+      "category": "aventureiro",
+      "tier": "bronze",
+      "title": "Salão Lotado",
+      "metric": "matches_10_players",
+      "goal": 1,
+      "glory": 5
+    },
+    {
+      "id": "AVE_04",
+      "category": "aventureiro",
+      "tier": "bronze",
+      "title": "Duelo Repetido",
+      "metric": "matches_2_players",
+      "goal": 10,
+      "glory": 5
+    },
+    {
+      "id": "AVE_05",
+      "category": "aventureiro",
+      "tier": "bronze",
+      "title": "No Meio da Multidão",
+      "metric": "matches_5_plus",
+      "goal": 10,
+      "glory": 5
+    },
+    {
+      "id": "AVE_06",
+      "category": "aventureiro",
+      "tier": "bronze",
+      "title": "Grande Festa",
+      "metric": "matches_10_players",
+      "goal": 5,
+      "glory": 5
+    },
+    {
+      "id": "AVE_07",
+      "category": "aventureiro",
+      "tier": "bronze",
+      "title": "Vinte Duelos",
+      "metric": "matches_2_players",
+      "goal": 20,
+      "glory": 5
+    },
+    {
+      "id": "AVE_08",
+      "category": "aventureiro",
+      "tier": "bronze",
+      "title": "Vinte e Cinco Reuniões",
+      "metric": "matches_5_plus",
+      "goal": 25,
+      "glory": 5
+    },
+    {
+      "id": "AVE_09",
+      "category": "aventureiro",
+      "tier": "bronze",
+      "title": "Quinze Festas",
+      "metric": "matches_10_players",
+      "goal": 15,
+      "glory": 5
+    },
+    {
+      "id": "AVE_10",
+      "category": "aventureiro",
+      "tier": "prata",
+      "title": "Salão das Dez Cadeiras",
+      "metric": "matches_10_players",
+      "goal": 30,
+      "glory": 20
+    },
+    {
+      "id": "AVE_11",
+      "category": "aventureiro",
+      "tier": "prata",
+      "title": "Habitante das Grandes Mesas",
+      "metric": "matches_5_plus",
+      "goal": 100,
+      "glory": 20
+    },
+    {
+      "id": "AVE_12",
+      "category": "aventureiro",
+      "tier": "prata",
+      "title": "Especialista em Duelo",
+      "metric": "matches_2_players",
+      "goal": 100,
+      "glory": 20
+    },
+    {
+      "id": "AVE_13",
+      "category": "aventureiro",
+      "tier": "prata",
+      "title": "Colecionador de Mesas",
+      "metric": "distinct_table_sizes",
+      "goal": 4,
+      "glory": 20
+    },
+    {
+      "id": "AVE_14",
+      "category": "aventureiro",
+      "tier": "ouro",
+      "title": "Centenário das Mesas Cheias",
+      "metric": "matches_10_players",
+      "goal": 100,
+      "glory": 50
+    }
+  ]
+}
