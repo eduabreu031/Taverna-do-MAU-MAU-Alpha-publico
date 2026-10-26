@@ -66,6 +66,7 @@ function render(players,query){
   button.onclick=async()=>{
    button.disabled=true;
    try{
+    await window.TavernaPresence?.tick?.();
     const response=await api('invite','POST',{toId:p.id});
     button.textContent='Convite enviado';
     message('Convite enviado para '+p.username+'. Aguarde a resposta.');
@@ -127,6 +128,7 @@ async function inbox(){
   accept.onclick=async()=>{
    deny.disabled=accept.disabled=true;
    try{
+    await window.TavernaPresence?.tick?.();
     const result=await api('accept','POST',{id:pending.id});
     dismissed.add(pending.id);hideIncoming();
     if(result.accepted)joinRoom(result.room,pending.id);
