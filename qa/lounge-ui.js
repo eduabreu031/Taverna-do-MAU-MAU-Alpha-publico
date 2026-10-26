@@ -49,6 +49,12 @@ async function api(path,method='GET',body){
  return obj;
 }
 function message(value){state.textContent=value;}
+async function registerPresence(){
+ // A própria área Multiplayer registra a conta antes de ler os frequentadores.
+ // Não depende da ordem de execução do heartbeat administrativo.
+ const code=currentCode();
+ return api('ready','POST',{room:code==='TAVERN'?'TAVERN':code});
+}
 function canInvite(user){return user.inviteable===true}
 function render(players,query){
  list.replaceChildren();
@@ -66,7 +72,7 @@ function render(players,query){
   button.onclick=async()=>{
    button.disabled=true;
    try{
-    await window.TavernaPresence?.ensureAvailable?.();
+    await registerPresence();
     const response=await api('invite','POST',{toId:p.id});
     button.textContent='Convite enviado';
     message('Convite enviado para '+p.username+'.');
@@ -78,12 +84,13 @@ function render(players,query){
 }
 async function refresh(){
  if(!mobileReady()||document.hidden)return;
- const user=auth.getUser?.();
+ let user=auth.getUser?.();
+ if(!user)user=await auth.restoreSilently?.();
  if(!user||user.role==='guest'){message('Faça login numa conta cadastrada para ver os frequentadores.');list.replaceChildren();return;}
  const q=field.value.trim();
  if(q.length===1){message('Digite pelo menos duas letras para pesquisar.');list.replaceChildren();return;}
  const epoch=++fetchEpoch;lastQuery=q;
- try{const result=await api('players'+(q?'?q='+encodeURIComponent(q):''));if(epoch===fetchEpoch)render(result.players,q)}
+ try{await registerPresence();const result=await api('players'+(q?'?q='+encodeURIComponent(q):''));if(epoch===fetchEpoch)render(result.players,q)}
  catch(error){if(epoch===fetchEpoch)message(error.message)}
 }
 field.addEventListener('input',()=>{clearTimeout(searchTimer);searchTimer=setTimeout(refresh,360);});
@@ -128,7 +135,7 @@ async function inbox(){
   accept.onclick=async()=>{
    deny.disabled=accept.disabled=true;
    try{
-    await window.TavernaPresence?.ensureAvailable?.();
+    await registerPresence();
     const result=await api('accept','POST',{id:pending.id});
     dismissed.add(pending.id);hideIncoming();
     if(result.accepted)joinRoom(result.room,pending.id);
@@ -144,7 +151,7 @@ function reconcile(){
  if(wasInRoom!==inRoom){wasInRoom=inRoom;refresh();}
 }
 setInterval(reconcile,900);
-setInterval(refresh,10000);
+setInterval(refresh,6500);
 setInterval(inbox,3500);
 document.addEventListener('visibilitychange',()=>{if(!document.hidden){window.TavernaPresence?.tick?.();refresh();inbox();}});
 $('chooseMultiplayer')?.addEventListener('click',()=>setTimeout(()=>{window.TavernaPresence?.tick?.();refresh();inbox()},500));
