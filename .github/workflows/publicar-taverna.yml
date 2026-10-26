@@ -3,6 +3,8 @@ on:
   push:
     branches: [main, master]
   workflow_dispatch:
+  pull_request:
+    branches: [main]
 permissions:
   contents: read
 concurrency:
@@ -71,6 +73,8 @@ jobs:
         run: python3 qa/apply-lounge-ui.py site
       - name: Conferir jogo e integridade das regras
         run: node qa/validar.js site
+      - name: Testar presença, pesquisa, convites e entrada por código
+        run: node qa/test-lounge.cjs site
       - name: Testar reconexão automática de jogadores e Forasteiros
         run: node qa/test-online-resume.cjs site
       - name: Testar início, fim e reversão automática do tema
