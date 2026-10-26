@@ -42,23 +42,6 @@ try{
   assert(await page.locator('#sceneMenu').isVisible(),'O offline deixou de abrir');
   assert(await page.locator('#playerCountChoice').isVisible(),'Escolha de jogadores ausente');
   assert(await page.locator('#difficultyChoice').isVisible(),'Escolha de dificuldade ausente');
-  if(width===320){
-   const inspect=await page.evaluate(()=>{
-    const section=document.getElementById('heroChoiceCards');
-    return {html:section?.outerHTML.slice(0,14500),computed:[...(section?.children||[])].slice(0,6).map(el=>({
-     cls:el.className,outer:el.outerHTML.slice(0,1200),
-     width:Math.round(el.getBoundingClientRect().width),
-     height:Math.round(el.getBoundingClientRect().height),
-     descendants:[...el.querySelectorAll('*')].slice(0,15).map(x=>({
-      tag:x.tagName,cls:x.className,text:(x.textContent||'').trim().slice(0,80),
-      w:Math.round(x.getBoundingClientRect().width),h:Math.round(x.getBoundingClientRect().height),
-      overflow:getComputedStyle(x).overflow,white:getComputedStyle(x).whiteSpace,
-      display:getComputedStyle(x).display,clip:getComputedStyle(x).textOverflow
-     }))
-    }))};
-   });
-   console.log('HERO_LAYOUT_DIAG',JSON.stringify(inspect));
-  }
   for(const theme of palettes){
    await page.evaluate(name=>{if(name==='classic')document.documentElement.removeAttribute('data-tav-palette');
     else document.documentElement.setAttribute('data-tav-palette',name)},theme);
@@ -84,6 +67,44 @@ try{
    assert(offline.choices.every(c=>c.visible&&c.height>=35&&c.left>=-2&&c.right<=width+2),
      'Controles duplicados/invisíveis ou fora da tela: '+width+' '+theme+' '+JSON.stringify(offline));
    assert(offline.book&&offline.hero,'Estrutura offline incompleta');
+   const heroMetrics=await page.evaluate(()=>{
+    return [...document.querySelectorAll('#heroChoiceCards .hero-choice')].map(card=>{
+     const title=card.querySelector('strong'),desc=card.querySelector('.hero-choice-desc');
+     const portrait=card.querySelector('.hero-medallion');
+     const br=card.getBoundingClientRect(),tr=title?.getBoundingClientRect(),dr=desc?.getBoundingClientRect(),pr=portrait?.getBoundingClientRect();
+     return {
+      name:title?.textContent.trim(),description:desc?.textContent.trim(),
+      cardWidth:Math.round(br.width),cardHeight:Math.round(br.height),
+      titleWidth:Math.round(tr?.width||0),descWidth:Math.round(dr?.width||0),
+      titleScroll:Math.round(title?.scrollWidth||0),descScroll:Math.round(desc?.scrollWidth||0),
+      titleHeight:Math.round(tr?.height||0),descHeight:Math.round(dr?.height||0),
+      titleScrollHeight:Math.round(title?.scrollHeight||0),descScrollHeight:Math.round(desc?.scrollHeight||0),
+      titleWhite:title?getComputedStyle(title).whiteSpace:'',
+      titleOverflow:title?getComputedStyle(title).overflow:'',
+      descOverflow:desc?getComputedStyle(desc).overflow:'',
+      columns:getComputedStyle(card).gridTemplateColumns,
+      portraitWidth:Math.round(pr?.width||0),
+      portraitBeforeText:(pr?.right||Infinity)<=(tr?.left||0)+2,
+      titleInsideCard:(tr?.left||-99)>=br.left-2&&(tr?.right||Infinity)<=br.right+2,
+      descInsideCard:(dr?.left||-99)>=br.left-2&&(dr?.right||Infinity)<=br.right+2
+     };
+    });
+   });
+   assert.equal(heroMetrics.length,3,'Devem existir exatamente 3 heróis selecionáveis');
+   for(const hero of heroMetrics){
+    assert(hero.name&&hero.description,'Nome ou descrição apagados: '+JSON.stringify(hero));
+    assert(hero.cardWidth>=215,'Cartão de personagem ficou espremido: '+width+' '+theme+' '+JSON.stringify(hero));
+    assert(hero.titleWidth>=125&&hero.descWidth>=125,
+      'Nome/descrição sem espaço horizontal: '+width+' '+theme+' '+JSON.stringify(hero));
+    assert(hero.titleScroll<=hero.titleWidth+2&&hero.titleScrollHeight<=hero.titleHeight+2,
+      'Nome cortado: '+width+' '+theme+' '+JSON.stringify(hero));
+    assert(hero.descScroll<=hero.descWidth+2&&hero.descScrollHeight<=hero.descHeight+2,
+      'Descrição cortada: '+width+' '+theme+' '+JSON.stringify(hero));
+    assert(hero.portraitBeforeText&&hero.titleInsideCard&&hero.descInsideCard,
+      'Texto invade retrato ou bordas: '+width+' '+theme+' '+JSON.stringify(hero));
+   }
+   console.log('HERO_TEXT_FULLY_VISIBLE_OK',width,theme);
+
    assert(offline.book[0]>=-2&&offline.book[1]<=width+2,'Painel offline transborda: '+theme+' '+width);
    assert(offline.scroll<=width+3,'Offline com rolagem horizontal '+theme+' '+width+' '+JSON.stringify(offline));
    if(width===390)await page.screenshot({path:'qa/screenshots-offline-premium/offline-'+theme+'.png'});
