@@ -1,7 +1,20 @@
 {
-  "current": "alpha-0.5.0.41",
+  "current": "alpha-0.5.0.42",
   "issuesRepo": "eduabreu031/Taverna-do-MAU-MAU-Alpha-publico",
   "entries": [
+    {
+      "id": "alpha-0.5.0.42",
+      "label": "0.5.0.42-alpha",
+      "date": "2026-10-26",
+      "title": "Frequentadores: convites corrigidos e multiplayer compacto em todos os temas",
+      "items": [
+        "Administrador agora aparece na busca de jogadores e pode enviar ou aceitar convites, mas continua excluído dos números de acessos da Central.",
+        "Sincronização do estado de disponibilidade passa a esperar resposta do servidor antes de convidar ou aceitar, evitando falso aviso de estar fora do multiplayer.",
+        "Frequentadores redesenhados em painel compacto com busca e estados discretos, integrado aos materiais, botões, bordas e cores dos 12 temas.",
+        "Aviso de convite também respeita o tema atual, com ajuste para telas móveis e preservação das salas comuns, VIP, motor de cartas e modos offline.",
+        "Testes automatizados ampliados para conta administradora, confirmação de presença e integração temática."
+      ]
+    },
     {
       "id": "alpha-0.5.0.41",
       "label": "0.5.0.41-alpha",
