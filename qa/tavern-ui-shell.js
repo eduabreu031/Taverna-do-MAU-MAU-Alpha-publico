@@ -127,6 +127,17 @@ if(scene){
  if(header)header.textContent='Escolha sua mesa';
  const back=$('multiplayerBackBtn');
  if(back){back.textContent='←  Voltar';back.title='Voltar ao início'}
+ // O botão Voltar só pede confirmação quando realmente há uma sala aberta.
+ if(back){
+  let confirmedBack=false;
+  back.addEventListener('click',async e=>{
+   if(confirmedBack||!lobby||lobby.classList.contains('hidden'))return;
+   e.preventDefault();e.stopImmediatePropagation();
+   const approved=await ui.confirm({title:'Deixar esta sala?',message:'Você voltará ao início e sairá desta sala.',confirmLabel:'Sair da sala',danger:true});
+   if(!approved)return;
+   confirmedBack=true;try{back.click()}finally{confirmedBack=false}
+  },true);
+ }
  const leave=$('onlineLeave');
  if(leave){
   let acknowledged=false;
