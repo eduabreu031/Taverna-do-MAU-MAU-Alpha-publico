@@ -10,7 +10,7 @@ try{
   const nativeDialogs=[];
   page.on('dialog',d=>{nativeDialogs.push(d.type());d.dismiss()});
   await page.goto('http://127.0.0.1:8765/',{waitUntil:'domcontentloaded',timeout:30000});
-  await page.waitForSelector('#tavNativeSheet',{timeout:20000});
+  await page.waitForSelector('#tavNativeSheet',{state:'attached',timeout:20000});
   await page.evaluate(()=>{
    window.TavernaEntrance?.skipVisualOnly?.();
    document.getElementById('sceneWelcome')?.classList.add('hidden');
