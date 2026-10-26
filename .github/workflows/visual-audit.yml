@@ -22,16 +22,31 @@ jobs:
       - run: python3 qa/apply-alpha-accounts.py site
       - run: python3 qa/apply-vip-bots-ui.py site
       - run: python3 qa/apply-visitor-entry.py site
+      - name: Aplicar módulos completos antes da auditoria temática
+        run: |
+          python3 qa/apply-rematch-lobby.py site
+          python3 qa/apply-online-skip-final.py site
+          python3 qa/apply-social-features.py site
+          python3 qa/apply-online-abandon.py site
+          python3 qa/apply-seasonal-theme.py site
+          python3 qa/apply-tavern-entrance.py site
+          python3 qa/apply-online-resume.py site
+          python3 qa/apply-cronicas-ui.py site
+          python3 qa/apply-lounge-ui.py site
+          python3 qa/apply-tavern-ui-shell.py site
       - name: Instalar navegador de teste
         run: npm install --no-save playwright@1.58.2 && npx playwright install --with-deps chromium
       - name: Executar navegador e verificar layouts
         run: |
           python3 -m http.server 8765 -d site >/tmp/taverna-http.log 2>&1 &
+          node qa/test-premium-browser.mjs
           node qa/visual-audit.mjs
       - name: Guardar capturas para auditoria
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: capturas-menus-taverna
-          path: qa/screenshots/
+          path: |
+            qa/screenshots/
+            qa/screenshots-premium/
           if-no-files-found: ignore
