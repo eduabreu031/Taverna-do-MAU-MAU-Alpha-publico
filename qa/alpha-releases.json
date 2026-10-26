@@ -12,7 +12,8 @@
         "Busca por usuário cadastrado, inclusive offline, e envio de convite diretamente pelo nome.",
         "Convites autenticados com Aceitar/Recusar, validade de 30 segundos, proteção contra duplicatas e Sala VIP excluída.",
         "Ao aceitar, entrada na sala comum do convite ou criação automática de sala para os dois, preservando o sistema normal de códigos, bots e partidas.",
-        "Motor offline, regras e partidas online existentes não são modificados."
+        "Motor offline, regras e partidas online existentes não são modificados.",
+        "Disponibilidade e código da sala são sincronizados novamente antes de enviar ou aceitar convites, evitando convites para salas desatualizadas."
       ]
     },
     {
