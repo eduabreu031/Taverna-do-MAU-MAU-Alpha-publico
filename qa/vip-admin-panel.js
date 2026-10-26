@@ -42,7 +42,7 @@
    remove.type='button';
    remove.setAttribute('aria-label','Remover '+person.name+' da Sala VIP');
    remove.onclick=async()=>{
-    if(!window.confirm('Remover '+person.name+' da Sala VIP?'))return;
+    if(!await window.TavernaUI.confirm({title:'Remover participante?',message:'Remover '+person.name+' da Sala VIP?',confirmLabel:'Remover',danger:true}))return;
     remove.disabled=true;notice.textContent='Removendo '+person.name+'…';
     try{await auth.roomRequest('/api/vip/kick','POST',{id:person.id});notice.textContent='Participante removido.';await refresh();}
     catch(err){notice.textContent=err.message||'Não foi possível remover o participante.';remove.disabled=false;}
