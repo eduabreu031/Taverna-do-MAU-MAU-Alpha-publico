@@ -12,7 +12,8 @@
         "Preparação offline reorganizada em um único painel com personagens, identificação do jogador, quantidade de participantes, dificuldade e botão de iniciar mais equilibrados.",
         "Corrigidos seletores duplicados de quantidade de jogadores e dificuldade: somente as escolhas temáticas internas ficam visíveis; opções nativas do Android são ocultadas sem alterar os valores originais do motor.",
         "Paletas e detalhes revisados para os 12 temas, com foco em leitura e dimensões de celulares.",
-        "Testes de regressão e auditoria Chromium dedicados às três telas móveis e às doze paletas, preservando as partidas offline e online."
+        "Testes de regressão e auditoria Chromium dedicados às três telas móveis e às doze paletas, preservando as partidas offline e online.",
+        "Auditoria Chromium concluída com êxito para saguão e offline nas 12 paletas e em 3 larguras, incluindo testes de ocultação dos seletores Android e navegação."
       ]
     },
     {
