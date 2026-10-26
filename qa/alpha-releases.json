@@ -1,7 +1,20 @@
 {
-  "current": "alpha-0.5.0.42",
+  "current": "alpha-0.5.0.43",
   "issuesRepo": "eduabreu031/Taverna-do-MAU-MAU-Alpha-publico",
   "entries": [
+    {
+      "id": "alpha-0.5.0.43",
+      "label": "0.5.0.43-alpha",
+      "date": "2026-10-26",
+      "title": "Frequentadores novamente visíveis ao abrir Multiplayer",
+      "items": [
+        "Corrigido sincronismo entre menu multiplayer e servidor: a própria lista de Frequentadores confirma a presença autenticada antes de carregar jogadores.",
+        "Lista online e busca atualizadas periodicamente para mostrar outras contas conectadas sem depender do heartbeat da Central.",
+        "Convites e aceite também confirmam disponibilidade pelo mesmo caminho, preservando a Sala VIP e o mecanismo normal de entrada.",
+        "Mantido sem alterações o novo layout compacto e todos os acabamentos visuais dos 12 temas.",
+        "Testes de duas contas simultaneamente visíveis e pesquisa, convite, aceite e início de partida pelo servidor."
+      ]
+    },
     {
       "id": "alpha-0.5.0.42",
       "label": "0.5.0.42-alpha",
