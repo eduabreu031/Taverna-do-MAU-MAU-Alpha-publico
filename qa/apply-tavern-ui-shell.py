@@ -24,7 +24,7 @@ assert 'window.confirm(' not in html,'Remoções VIP ainda usam confirmação na
 assert not re.search(r'(?<![a-zA-Z0-9._])confirm\s*\(',html),'Restou confirmação nativa'
 assert not re.search(r'(?<![a-zA-Z0-9._])prompt\s*\(',html),'Restou prompt nativo'
 js=(root/'qa/tavern-ui-shell.js').read_text('utf-8')
-css=(root/'qa/tavern-ui-shell.css').read_text('utf-8')
+css=(root/'qa/tavern-ui-shell.css').read_text('utf-8')+'\n'+(root/'qa/offline-welcome-premium.css').read_text('utf-8')
 assert '</script' not in js.lower() and '</style' not in css.lower()
 html=html.replace('</head>','<style id="tav-native-ui-style">\n'+css+'\n</style>\n</head>',1)
 html=html.replace('</body>','<script id="tav-native-ui-script">\n'+js+'\n</script>\n</body>',1)
