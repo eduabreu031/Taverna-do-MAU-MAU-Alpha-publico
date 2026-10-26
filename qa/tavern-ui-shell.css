@@ -68,6 +68,8 @@
  display:grid!important;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr)!important;
  gap:9px!important;align-items:stretch!important
 }
+/* Quando uma sala está aberta, não mostrar novamente a entrada/criação. */
+#sceneMultiplayer.tav-mp-premium:has(#onlineLobby:not(.hidden)) .multiplayer-preview{display:none!important}
 #sceneMultiplayer.tav-mp-premium .multiplayer-preview>div{
  min-width:0!important;box-sizing:border-box!important;
  padding:11px!important;min-height:94px!important;margin:0!important;
