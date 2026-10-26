@@ -1,7 +1,19 @@
 {
-  "current": "alpha-0.5.0.38",
+  "current": "alpha-0.5.0.39",
   "issuesRepo": "eduabreu031/Taverna-do-MAU-MAU-Alpha-publico",
   "entries": [
+    {
+      "id": "alpha-0.5.0.39",
+      "label": "0.5.0.39-alpha",
+      "date": "2026-10-26",
+      "title": "Crônicas da Taverna e troféu compacto",
+      "items": [
+        "Interface das Crônicas integrada ao jogo público, com 60 conquistas, 1.000 G e quatro Ordens.",
+        "Botão de conquistas substituído por troféu compacto para telas móveis.",
+        "Progresso depende da API e não é inventado quando o servidor não disponibiliza dados.",
+        "Preservados modos offline e multiplayer, temas e demais recursos."
+      ]
+    },
     {
       "id": "alpha-0.5.0.38",
       "label": "0.5.0.38-alpha",
