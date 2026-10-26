@@ -8,6 +8,25 @@ const html=fs.readFileSync(htmlPath,'utf8');
 const scripts=[...html.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/gi)].map(m=>m[1]);
 function test(name,fn){ try{fn();console.log('OK ',name);}catch(e){console.error('FALHOU',name,':',e.stack||e);process.exitCode=1;} }
 const context={module:{exports:{}},console}; context.globalThis=context;
+
+test('Crônicas: popup só por conquistas verificadas no servidor',()=>{
+ const source=fs.readFileSync(path.join(root,'qa','cronicas-ui.js'),'utf8');
+ const style=fs.readFileSync(path.join(root,'qa','cronicas-ui.css'),'utf8');
+ new vm.Script(source,{filename:'cronicas-ui.js'});
+ assert(source.includes("a.unlocked===true&&verifiedCatalog.has(a.id)"),'Sem exigência de confirmação do servidor');
+ assert(source.includes("const response=await jsonGet('/api/cronicas/achievements',token)"),'Sem leitura autenticada do backend');
+ assert(source.includes("if(current?.id===account.id&&window.TavernaAuth?.getToken?.()===token)"),'Resposta pode atravessar contas');
+ assert(source.includes('if(previous===null)'), 'Não silencia conquistas antigas no primeiro acesso');
+ assert(source.includes('saveNotified(account,new Set([...previous,...confirmed]))'), 'Sem deduplicação persistente');
+ assert(source.includes("if(!recent.length)return;"),'Pode mostrar notificações repetidas');
+ assert(source.includes("getAttribute('aria-pressed')!=='true'"),'Som não respeita preferência do usuário');
+ assert(source.includes("doc.visibilityState==='hidden'"),'Polling em tela oculta');
+ assert(style.includes('@media(prefers-reduced-motion:reduce)'), 'Não respeita movimento reduzido');
+ assert(style.includes('pointer-events:none'), 'Popup pode bloquear interação com cartas');
+ assert(html.includes('id="tav-cronicas-script"'),'Crônicas não foram injetadas no build');
+ assert(html.includes('tavCronicasToastRegion'),'Popup não entrou no build final');
+});
+
 const coreScript=scripts.find(s=>s.includes('Mau-Mau 2.0 — núcleo novo')&&s.includes('GameEngine'));
 test('HTML, scripts e motor presentes',()=>{
  assert(fs.statSync(htmlPath).size>100000,'index.html ausente, vazio ou incompleto');
