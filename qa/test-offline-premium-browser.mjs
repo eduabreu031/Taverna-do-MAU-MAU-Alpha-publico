@@ -14,7 +14,11 @@ try{
   page.on('pageerror',e=>errors.push(e.message));
   await page.goto('http://127.0.0.1:8765/',{waitUntil:'domcontentloaded',timeout:30000});
   await page.waitForSelector('#tavNativeSheet',{state:'attached'});
-  await page.evaluate(()=>window.TavernaEntrance?.skipVisualOnly?.());
+  await page.evaluate(()=>{
+   window.TavernaEntrance?.skipVisualOnly?.();
+   const news=document.getElementById('alphaInformationOverlay');
+   if(news)news.hidden=true;
+  });
   await page.waitForSelector('#chooseOffline',{state:'visible'});
   for(const theme of palettes){
    await page.evaluate(name=>{if(name==='classic')document.documentElement.removeAttribute('data-tav-palette');
@@ -32,6 +36,8 @@ try{
    if(width===390)await page.screenshot({path:'qa/screenshots-offline-premium/saguao-'+theme+'.png'});
    console.log('WELCOME_PREMIUM_PALETTE_OK',width,theme);
   }
+  // O aviso de novidades automático não deve interceptar o toque da auditoria.
+  await page.evaluate(()=>{const news=document.getElementById('alphaInformationOverlay');if(news)news.hidden=true});
   await page.locator('#chooseOffline').click();
   assert(await page.locator('#sceneMenu').isVisible(),'O offline deixou de abrir');
   assert(await page.locator('#playerCountChoice').isVisible(),'Escolha de jogadores ausente');
