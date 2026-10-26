@@ -7,7 +7,7 @@ try{
  for(const width of [320,360,390,430,768,1024,1440]){
   const page=await browser.newPage({viewport:{width,height:800},deviceScaleFactor:1,isMobile:width<=430,hasTouch:width<=430});
   await page.goto('http://127.0.0.1:8765/',{waitUntil:'domcontentloaded',timeout:30000});
-  await page.evaluate(()=>window.TavernaEntrance?.skipVisualOnly());
+  await page.evaluate(()=>{window.TavernaEntrance?.skipVisualOnly?.();document.getElementById('tavEntrance')?.remove();});
   await page.waitForSelector('#chooseMultiplayer',{timeout:15000});
   await page.waitForTimeout(450);
   await page.evaluate(()=>{const news=document.getElementById('alphaInformationOverlay');if(news)news.hidden=true;});
