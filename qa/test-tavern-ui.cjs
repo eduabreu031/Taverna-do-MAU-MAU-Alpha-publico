@@ -26,8 +26,9 @@ for(const block of ['.multiplayer-preview','.multiplayer-panel','#onlineLobby','
 }
 // Runtime do componente, incluindo confirmar, cancelar, escolha e campo para copiar.
 class N{
- constructor(tag){this.tag=tag;this.children=[];this.attributes={};this.hidden=false;this.className='';this.textContent='';this.listeners={};}
+ constructor(tag){this.tag=tag;this.children=[];this.attributes={};this.hidden=false;this.className='';this.textContent='';this.listeners={};this.classList={add:name=>{this.className+=' '+name}};}
  append(...a){this.children.push(...a);}
+ prepend(...a){this.children.unshift(...a);}
  replaceChildren(...a){this.children=[...a];}
  setAttribute(k,v){this.attributes[k]=v;}
  addEventListener(k,fn){this.listeners[k]=fn;}
