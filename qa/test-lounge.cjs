@@ -22,4 +22,15 @@ assert(source.includes("if(currentCode()&&currentCode()!==code)"),'Proteção de
 assert(source.includes("joinRoom(invite.room,invite.id)"),'Entrada automática não integrada');
 assert(styles.includes('.tav-lounge-incoming'),'Aviso de convite ausente');
 assert(presence.includes('inviteAvailable:'),'Disponibilidade não é enviada');
+assert(source.includes("TavernaPresence?.ensureAvailable?.()"),'Convite deve aguardar sincronização de presença');
+assert(presence.includes("ensureAvailable:()=>tick(true)"),'Falta confirmação autoritativa do heartbeat');
+assert(presence.includes("await pending"),'Presença concorrente precisa aguardar requisição anterior');
+assert(styles.includes("--tm-menu-surface"),'Painel não está ligado ao tema vigente');
+assert(styles.includes("--tm-menu-ink"),'Texto não herda as cores do tema');
+assert(styles.includes("--tm-menu-stroke"),'Borda não herda cor do tema');
+assert(styles.includes("--tp-button"),'Botões devem reutilizar acabamento de cada paleta');
+const paletteSource=fs.readFileSync(path.join(root,'qa/theme-manager.js'),'utf8');
+for(const id of ['classic','neon-blue','neon-green','neon-pink','neon-tavern-dark','neon-aero','neon-imperial','neon-amber','neon-forge','neon-abyss','neon-forest','neon-porcelain'])
+ assert(paletteSource.includes("id:'"+id+"'"),'Paleta sem cobertura: '+id);
+console.log('TAVERN_LOUNGE_THEME_READY: 12 paletas + painel compacto + presença aguardada');
 console.log('TAVERN_LOUNGE_TEST_OK: UI, busca, convites, entrada normal e presença');
