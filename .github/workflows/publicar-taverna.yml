@@ -75,6 +75,8 @@ jobs:
         run: node qa/validar.js site
       - name: Testar presença, pesquisa, convites e entrada por código
         run: node qa/test-lounge.cjs site
+      - name: Executar interface real dos Frequentadores com duas contas simuladas
+        run: node qa/test-lounge-runtime.cjs
       - name: Testar reconexão automática de jogadores e Forasteiros
         run: node qa/test-online-resume.cjs site
       - name: Testar início, fim e reversão automática do tema
