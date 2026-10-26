@@ -1,7 +1,19 @@
 {
-  "current": "alpha-0.5.0.39",
+  "current": "alpha-0.5.0.40",
   "issuesRepo": "eduabreu031/Taverna-do-MAU-MAU-Alpha-publico",
   "entries": [
+    {
+      "id": "alpha-0.5.0.40",
+      "label": "0.5.0.40-alpha",
+      "date": "2026-10-26",
+      "title": "Avisos de conquista confirmada durante as partidas",
+      "items": [
+        "Novo pop-up de conquista com troféu, nome, raridade e Glória ao receber desbloqueio autenticado do servidor, respeitando as cores de todos os 12 temas.",
+        "Fila de conquistas com animação curta, som opcional conforme preferência de efeitos e acessibilidade com redução de movimento.",
+        "Progresso é consultado periodicamente, sem inventar desbloqueios; notificações antigas são silenciadas na primeira consulta e os IDs já vistos são deduplicados por conta no dispositivo.",
+        "Offline não concede conquistas sem confirmação autoritativa; telas, multiplayer, contas, cronômetro e regras preservados."
+      ]
+    },
     {
       "id": "alpha-0.5.0.39",
       "label": "0.5.0.39-alpha",
