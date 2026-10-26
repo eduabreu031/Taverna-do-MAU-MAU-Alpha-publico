@@ -22,8 +22,10 @@ assert(source.includes("if(currentCode()&&currentCode()!==code)"),'Proteção de
 assert(source.includes("joinRoom(invite.room,invite.id)"),'Entrada automática não integrada');
 assert(styles.includes('.tav-lounge-incoming'),'Aviso de convite ausente');
 assert(presence.includes('inviteAvailable:'),'Disponibilidade não é enviada');
-assert(source.includes("TavernaPresence?.ensureAvailable?.()"),'Convite deve aguardar sincronização de presença');
-assert(presence.includes("ensureAvailable:()=>tick(true)"),'Falta confirmação autoritativa do heartbeat');
+assert(source.includes("api('ready','POST'"),'Tela precisa registrar presença diretamente');
+assert(source.includes("await registerPresence();const result=await api('players'"),'Lista deve aguardar resposta do registro');
+assert(source.includes("await registerPresence();"),'Convite deve aguardar sincronização de presença');
+assert(presence.includes('inviteAvailable:'),'Presença administrativa deve continuar compatível');
 assert(presence.includes("await pending"),'Presença concorrente precisa aguardar requisição anterior');
 assert(styles.includes("--tm-menu-surface"),'Painel não está ligado ao tema vigente');
 assert(styles.includes("--tm-menu-ink"),'Texto não herda as cores do tema');
