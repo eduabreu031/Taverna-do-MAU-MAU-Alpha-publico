@@ -81,6 +81,7 @@ async function refresh(){
   profile=p.status==='fulfilled'?p.value?.profile:null;
   const possibleBook=b.status==='fulfilled'?b.value?.book:null;
   book=possibleBook&&Array.isArray(possibleBook.achievements)?possibleBook:null;
+  if(book)acceptConfirmedBook(account,book);
   const possibleOrders=o.status==='fulfilled'?o.value?.book:null;
   orders=possibleOrders&&Array.isArray(possibleOrders.orders)?possibleOrders:null;
   if(profile||book||orders){setStatus('Dados confirmados pelo servidor. Recompensas cosméticas ainda em desenvolvimento.','ok');}
@@ -258,6 +259,118 @@ function close(){
  if(previousFocus?.isConnected)previousFocus.focus();
  previousFocus=null;
 }
+
+// Desbloqueios são anunciados somente quando o livro autenticado do servidor
+// confirma unlocked=true. Nunca creditamos Glória, saldo ou metas no cliente.
+const toastRegion=node('aside','tav-cronicas-toast-region');
+toastRegion.id='tavCronicasToastRegion';
+toastRegion.setAttribute('aria-live','polite');
+toastRegion.setAttribute('aria-atomic','true');
+doc.body.append(toastRegion);
+const toastQueue=[];
+const seenFallback=new Map();
+let toastActive=false,unlockPollRunning=false;
+const verifiedCatalog=new Map(previewCatalog.map(a=>[a.id,a]));
+function notificationKey(account){return 'tavern-cronicas-notified-v1:'+account.id;}
+function readNotified(account){
+ const key=notificationKey(account);
+ try{
+  const raw=localStorage.getItem(key);
+  if(raw!==null){
+   const parsed=JSON.parse(raw);
+   if(Array.isArray(parsed))return new Set(parsed.filter(id=>verifiedCatalog.has(id)));
+  }
+ }catch{}
+ return seenFallback.has(key)?new Set(seenFallback.get(key)):null;
+}
+function saveNotified(account,ids){
+ const key=notificationKey(account);
+ const values=[...ids].filter(id=>verifiedCatalog.has(id));
+ seenFallback.set(key,values);
+ try{localStorage.setItem(key,JSON.stringify(values));}catch{}
+}
+function awardChime(){
+ try{
+  const button=doc.getElementById('soundBtn');
+  if(!button||button.getAttribute('aria-pressed')!=='true')return;
+  const Context=window.AudioContext||window.webkitAudioContext;
+  if(!Context)return;
+  const ctx=new Context();
+  if(ctx.state!=='running'){ctx.close().catch(()=>{});return;}
+  const now=ctx.currentTime;
+  [659.25,987.77].forEach((frequency,index)=>{
+   const oscillator=ctx.createOscillator(),gain=ctx.createGain();
+   oscillator.type='sine';oscillator.frequency.value=frequency;
+   const start=now+index*.13;
+   gain.gain.setValueAtTime(.0001,start);
+   gain.gain.exponentialRampToValueAtTime(.038,start+.025);
+   gain.gain.exponentialRampToValueAtTime(.0001,start+.54);
+   oscillator.connect(gain);gain.connect(ctx.destination);
+   oscillator.start(start);oscillator.stop(start+.56);
+  });
+  setTimeout(()=>ctx.close().catch(()=>{}),1100);
+ }catch{/* Áudio opcional; nunca bloqueia a conquista ou o turno. */}
+}
+function drainToasts(){
+ if(toastActive||!toastQueue.length)return;
+ toastActive=true;
+ const item=toastQueue.shift(),meta=verifiedCatalog.get(item);
+ if(!meta){toastActive=false;drainToasts();return;}
+ const toast=node('section','tav-cronicas-toast');
+ toast.dataset.tier=meta.tier;
+ toast.setAttribute('role','status');
+ const mark=node('span','tav-cronicas-toast-mark','🏆');
+ const info=node('div','tav-cronicas-toast-copy');
+ info.append(node('small','', 'CONQUISTA DESBLOQUEADA'),
+  node('strong','',meta.title),
+  node('span','','+'+meta.glory+' G · '+(tiers[meta.tier]||'')));
+ toast.append(mark,info);
+ toastRegion.replaceChildren(toast);
+ awardChime();
+ setTimeout(()=>{
+  toast.classList.add('tav-cronicas-toast-leave');
+  setTimeout(()=>{
+   toast.remove();toastActive=false;drainToasts();
+  },350);
+ },4300);
+}
+function acceptConfirmedBook(account,responseBook){
+ if(!account?.id||!responseBook||!Array.isArray(responseBook.achievements))return;
+ // O catálogo não é um comprovante: apenas IDs retornados como desbloqueados
+ // pela API autenticada geram avisos. Não confundir ready com unlocked.
+ const confirmed=responseBook.achievements.filter(a=>
+  a&&a.unlocked===true&&verifiedCatalog.has(a.id)).map(a=>a.id);
+ const previous=readNotified(account);
+ if(previous===null){
+  // Primeira consulta: silenciar conquistas antigas, não repetir dezenas
+  // de avisos só porque o jogador abriu o aplicativo pela primeira vez.
+  saveNotified(account,new Set(confirmed));return;
+ }
+ const recent=confirmed.filter(id=>!previous.has(id));
+ saveNotified(account,new Set([...previous,...confirmed]));
+ if(!recent.length)return;
+ for(const id of recent)if(toastQueue.length<20&&!toastQueue.includes(id))toastQueue.push(id);
+ drainToasts();
+}
+async function pollUnlocks(){
+ if(unlockPollRunning||doc.visibilityState==='hidden')return;
+ const account=authenticated();
+ if(!account?.id)return;
+ const token=window.TavernaAuth?.getToken?.();
+ if(!token)return;
+ unlockPollRunning=true;
+ try{
+  const response=await jsonGet('/api/cronicas/achievements',token);
+  const current=authenticated();
+  if(current?.id===account.id&&window.TavernaAuth?.getToken?.()===token)
+   acceptConfirmedBook(account,response?.book);
+ }catch{/* Servidor ausente/offline: nenhum desbloqueio presumido. */}
+ finally{unlockPollRunning=false;}
+}
+window.setInterval(pollUnlocks,12000);
+window.addEventListener('focus',pollUnlocks);
+doc.addEventListener('visibilitychange',()=>{if(doc.visibilityState==='visible')pollUnlocks();});
+setTimeout(pollUnlocks,1800);
 function trap(event){
  if(overlay.hidden)return;
  if(event.key==='Escape'){event.preventDefault();event.stopPropagation();close();return;}
