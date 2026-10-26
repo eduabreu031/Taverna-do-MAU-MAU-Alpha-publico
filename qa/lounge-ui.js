@@ -23,7 +23,7 @@ lobby?.prepend(roomToggle);
 roomToggle.onclick=()=>{panel.hidden=!panel.hidden;if(!panel.hidden){refresh();panel.scrollIntoView({behavior:'smooth',block:'nearest'});}};
 const floating=el('div','tav-lounge-incoming');floating.hidden=true;floating.setAttribute('role','alert');document.body.append(floating);
 const statusName={disponivel:'Disponível',em_sala:'Aguardando em sala',ocupado:'Ocupado',offline:'Offline'};
-let lastSeenInvite='',fetchEpoch=0,searchTimer=null;
+let lastSeenInvite='',lastQuery='',fetchEpoch=0,searchTimer=null;
 const joining=new Set(),dismissed=new Set();
 const mobileReady=()=>!portal.classList.contains('hidden')||!!lobby&&!lobby.classList.contains('hidden');
 function syncPlacement(){
