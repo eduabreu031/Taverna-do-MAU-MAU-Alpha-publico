@@ -6,23 +6,24 @@ if(!portal||!auth)return;
 const API='https://taverna-multiplayer-servidor.edulopes941.workers.dev';
 const el=(tag,cls='',text='')=>{const x=document.createElement(tag);if(cls)x.className=cls;if(text)x.textContent=text;return x};
 const panel=el('section','tav-lounge');panel.id='tavLounge';
-const heading=el('div','tav-lounge-heading');heading.append(el('h3','', 'Frequentadores da Taverna'),el('p','','Encontre alguém e convide para sua mesa.'));
+const heading=el('div','tav-lounge-heading');heading.append(el('h3','','Frequentadores'));
 const field=el('input','tav-lounge-search');
-field.type='search';field.placeholder='Procurar aventureiro...';field.maxLength=24;field.setAttribute('aria-label','Pesquisar jogadores pelo nome');
+field.type='search';field.placeholder='Buscar aventureiro...';field.maxLength=24;field.setAttribute('aria-label','Pesquisar jogadores pelo nome');
 const top=el('div','tav-lounge-search-row');top.append(field);
-const refreshBtn=el('button','tav-lounge-refresh','Atualizar');refreshBtn.type='button';top.append(refreshBtn);
-const state=el('p','tav-lounge-state','Procurando frequentadores...');state.setAttribute('role','status');
+const refreshBtn=el('button','tav-lounge-refresh','↻');refreshBtn.type='button';refreshBtn.setAttribute('aria-label','Atualizar frequentadores');refreshBtn.title='Atualizar lista';top.append(refreshBtn);
+const state=el('p','tav-lounge-state','');state.setAttribute('role','status');
 const list=el('div','tav-lounge-list');
 panel.append(heading,top,state,list);
 const originalParent=portal.querySelector('.multiplayer-panel')||portal;
-originalParent.append(panel);
-const roomToggle=el('button','tav-lounge-room-toggle','Convidar frequentadores');
+const accountBar=$('alphaAccountsBar');
+if(accountBar?.parentElement===originalParent)accountBar.after(panel);else originalParent.prepend(panel);
+const roomToggle=el('button','tav-lounge-room-toggle','♠  Frequentadores · Convidar');
 roomToggle.type='button';roomToggle.hidden=true;
 lobby?.prepend(roomToggle);
 roomToggle.onclick=()=>{panel.hidden=!panel.hidden;if(!panel.hidden){refresh();panel.scrollIntoView({behavior:'smooth',block:'nearest'});}};
 const floating=el('div','tav-lounge-incoming');floating.hidden=true;floating.setAttribute('role','alert');document.body.append(floating);
 const statusName={disponivel:'Disponível',em_sala:'Aguardando em sala',ocupado:'Ocupado',offline:'Offline'};
-let busy=false,lastQuery='',lastSeenInvite='',fetchEpoch=0,searchTimer=null;
+let lastSeenInvite='',fetchEpoch=0,searchTimer=null;
 const joining=new Set(),dismissed=new Set();
 const mobileReady=()=>!portal.classList.contains('hidden')||!!lobby&&!lobby.classList.contains('hidden');
 function syncPlacement(){
@@ -31,7 +32,7 @@ function syncPlacement(){
   if(panel.parentElement!==lobby)lobby.append(panel);
   if(roomToggle.hidden){panel.hidden=true;roomToggle.hidden=false;}
  }else{
-  if(panel.parentElement!==originalParent)originalParent.append(panel);
+  if(panel.parentElement!==originalParent){if(accountBar?.parentElement===originalParent)accountBar.after(panel);else originalParent.prepend(panel);}
   panel.hidden=false;roomToggle.hidden=true;
  }
 }
@@ -52,24 +53,23 @@ function canInvite(user){return user.inviteable===true}
 function render(players,query){
  list.replaceChildren();
  const clean=Array.isArray(players)?players:[];
- message(query?'Resultados encontrados: '+clean.length:'Frequentadores conectados: '+clean.length);
+ message(query?clean.length+' encontrado(s)':clean.length+' conectado(s)');
  if(!clean.length){list.append(el('p','tav-lounge-empty',query?'Nenhum aventureiro encontrado.':'Nenhum outro jogador conectado neste momento.'));return;}
  for(const p of clean){
   const row=el('div','tav-lounge-player');
-  row.append(el('span','tav-lounge-avatar','♠'));
   const info=el('div','tav-lounge-player-info');
   info.append(el('strong','',p.username),el('small','tav-lounge-status '+p.status,statusName[p.status]||'Indisponível'));
   row.append(info);
-  const button=el('button','tav-lounge-invite','Convidar');button.type='button';
+  const button=el('button','tav-lounge-invite',canInvite(p)?'Convidar':'—');button.type='button';
   button.disabled=!canInvite(p);
   button.setAttribute('aria-label','Convidar '+p.username);
   button.onclick=async()=>{
    button.disabled=true;
    try{
-    await window.TavernaPresence?.tick?.();
+    await window.TavernaPresence?.ensureAvailable?.();
     const response=await api('invite','POST',{toId:p.id});
     button.textContent='Convite enviado';
-    message('Convite enviado para '+p.username+'. Aguarde a resposta.');
+    message('Convite enviado para '+p.username+'.');
     if(!response.id)throw Error('Convite inválido');
    }catch(error){message(error.message);button.textContent='Convidar';button.disabled=false;}
   };
@@ -128,7 +128,7 @@ async function inbox(){
   accept.onclick=async()=>{
    deny.disabled=accept.disabled=true;
    try{
-    await window.TavernaPresence?.tick?.();
+    await window.TavernaPresence?.ensureAvailable?.();
     const result=await api('accept','POST',{id:pending.id});
     dismissed.add(pending.id);hideIncoming();
     if(result.accepted)joinRoom(result.room,pending.id);
