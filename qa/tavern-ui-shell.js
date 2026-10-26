@@ -89,7 +89,14 @@ window.TavernaUI=ui;
 for(const id of ['playerCount','difficulty','alphaReportType']){
  const select=$(id);if(!select||select.dataset.tavCustom==='1')continue;
  select.dataset.tavCustom='1';select.classList.add('tav-select-source');select.tabIndex=-1;
+// CSS antigo do livro usa seletor de ID + !important, mais específico que
+// .tav-select-source; esconder INLINE (com !important) impede a lista nativa
+// do Android sem perder o select como fonte de estado do jogo.
+select.style.setProperty('display','none','important');
+select.setAttribute('aria-hidden','true');
  const trigger=create('button','tav-choice-trigger');trigger.type='button';
+trigger.setAttribute('aria-haspopup','dialog');
+trigger.setAttribute('aria-controls','tavNativeSheet');
  trigger.id=id+'Choice';trigger.setAttribute('aria-label',select.getAttribute('aria-label')||'Escolher opção');
  const sync=()=>{
   const choice=Array.from(select.options).find(o=>o.value===select.value);

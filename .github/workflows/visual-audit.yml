@@ -41,6 +41,7 @@ jobs:
           python3 qa/apply-lounge-ui.py site
           python3 qa/apply-tavern-ui-shell.py site
           node qa/test-premium-browser.mjs
+          node qa/test-offline-premium-browser.mjs
       - name: Guardar capturas para auditoria
         if: always()
         uses: actions/upload-artifact@v4
@@ -49,4 +50,5 @@ jobs:
           path: |
             qa/screenshots/
             qa/screenshots-premium/
+            qa/screenshots-offline-premium/
           if-no-files-found: ignore
