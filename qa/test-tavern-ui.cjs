@@ -5,9 +5,10 @@ const html=fs.readFileSync(path.join(site,'index.html'),'utf8');
 const js=fs.readFileSync(path.join(root,'qa/tavern-ui-shell.js'),'utf8');
 const css=fs.readFileSync(path.join(root,'qa/tavern-ui-shell.css'),'utf8');
 new vm.Script(js,{filename:'tavern-ui-shell.js'});
-for(const id of ['onlineCreate','onlineJoin','onlineRoomCode','onlineLeave','onlineLobby','tavLounge','playerCount','difficulty','onlineBotsDEV','alphaReportType']){
+for(const id of ['onlineCreate','onlineJoin','onlineRoomCode','onlineLeave','onlineLobby','playerCount','difficulty','onlineBotsDEV','alphaReportType']){
  assert(html.includes('id="'+id+'"'),id+' desapareceu do HTML final');
 }
+assert(html.includes("panel.id='tavLounge'"),'Frequentadores não foram instalados');
 assert(html.includes('id="tav-native-ui-style"'),'CSS premium não injetado');
 assert(html.includes('id="tav-native-ui-script"'),'JS premium não injetado');
 assert(html.includes("window.TavernaUI.confirm({title:'Remover participante?'"),'Confirmações VIP não migraram para modal');
