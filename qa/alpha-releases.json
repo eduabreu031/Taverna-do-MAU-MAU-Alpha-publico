@@ -1,7 +1,21 @@
 {
-  "current": "alpha-0.5.0.40",
+  "current": "alpha-0.5.0.41",
   "issuesRepo": "eduabreu031/Taverna-do-MAU-MAU-Alpha-publico",
   "entries": [
+    {
+      "id": "alpha-0.5.0.41",
+      "label": "0.5.0.41-alpha",
+      "date": "2026-10-26",
+      "title": "Frequentadores da Taverna: pesquisa e convites online",
+      "items": [
+        "Lista de frequentadores conectados no multiplayer, com identificação de disponíveis, ocupados e em sala, sem expor dados privados.",
+        "Busca por usuário cadastrado, inclusive offline, e envio de convite diretamente pelo nome.",
+        "Convites autenticados com Aceitar/Recusar, validade de 30 segundos, proteção contra duplicatas e Sala VIP excluída.",
+        "Ao aceitar, entrada na sala comum do convite ou criação automática de sala para os dois, preservando o sistema normal de códigos, bots e partidas.",
+        "Motor offline, regras e partidas online existentes não são modificados.",
+        "Disponibilidade e código da sala são sincronizados novamente antes de enviar ou aceitar convites, evitando convites para salas desatualizadas."
+      ]
+    },
     {
       "id": "alpha-0.5.0.40",
       "label": "0.5.0.40-alpha",

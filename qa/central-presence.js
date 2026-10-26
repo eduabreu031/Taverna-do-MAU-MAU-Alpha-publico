@@ -24,8 +24,9 @@ async function tick(){
   const onTable=document.getElementById('sceneGame')?.classList.contains('online-live');
   const inLobby=!lobby?.classList.contains('hidden');
   const code=(onTable||inLobby)?(document.getElementById('onlineCode')?.textContent||'').trim().toUpperCase():'';
-  await fetch(API+'/api/central/presence',{method:'POST',headers:{'content-type':'application/json',...(token?{authorization:'Bearer '+token}:{})},body:JSON.stringify({session,room:/^[A-Z0-9]{6}$/.test(code)?code:'',playingOffline:!!document.getElementById('sceneGame')&&!document.getElementById('sceneGame').classList.contains('hidden')&&!onTable}),cache:'no-store'});
+  await fetch(API+'/api/central/presence',{method:'POST',headers:{'content-type':'application/json',...(token?{authorization:'Bearer '+token}:{})},body:JSON.stringify({session,room:/^[A-Z0-9]{6}$/.test(code)?code:'',playingOffline:!!document.getElementById('sceneGame')&&!document.getElementById('sceneGame').classList.contains('hidden')&&!onTable,inviteAvailable:!!logged&&logged.role!=='guest'&&!onTable&&!(document.getElementById('sceneGame')&&!document.getElementById('sceneGame').classList.contains('hidden'))&&((!document.getElementById('sceneMultiplayer')?.classList.contains('hidden'))||inLobby)}),cache:'no-store'});
  }catch{}finally{busy=false;}
 }
+window.TavernaPresence=Object.freeze({tick});
 setInterval(tick,15000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)tick();});tick();
 })();

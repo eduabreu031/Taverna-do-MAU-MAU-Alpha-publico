@@ -1,0 +1,27 @@
+/* Frequentadores da Taverna — interface isolada. */
+.tav-lounge{display:grid;gap:10px;margin:14px 0;padding:14px;border-radius:14px;border:1px solid rgba(204,160,121,.4);background:rgba(36,17,31,.70);color:inherit}
+.tav-lounge[hidden],.tav-lounge-room-toggle[hidden],.tav-lounge-incoming[hidden]{display:none!important}
+.tav-lounge-heading h3{font-size:18px;line-height:1.25;margin:0;color:inherit}
+.tav-lounge-heading p{font-size:12px;margin:3px 0 0;opacity:.85}
+.tav-lounge-search-row{display:flex;gap:7px}
+.tav-lounge-search{flex:1;min-width:0;min-height:40px;box-sizing:border-box;padding:9px;border:1px solid #bca09f70;border-radius:9px;background:rgba(0,0,0,.24);color:inherit;font:inherit}
+.tav-lounge-search::placeholder{color:inherit;opacity:.66}
+.tav-lounge-search-row button{flex:0 0 auto;font:inherit;font-size:12px}
+.tav-lounge-state{font-size:12px;min-height:18px;margin:0;opacity:.86}
+.tav-lounge-list{display:grid;max-height:300px;overflow-y:auto;gap:3px}
+.tav-lounge-player{display:flex;align-items:center;gap:9px;padding:7px 3px;border-bottom:1px solid #bca09f20}
+.tav-lounge-avatar{width:35px;height:35px;flex:0 0 35px;border-radius:8px;background:#ffffff10;display:grid;place-items:center;font-size:22px}
+.tav-lounge-player-info{min-width:0;display:grid;flex:1;gap:2px}
+.tav-lounge-player-info strong{font-size:13px;overflow-wrap:anywhere}
+.tav-lounge-player-info small{font-size:11px;opacity:.82}
+.tav-lounge-status.disponivel,.tav-lounge-status.em_sala{color:#9ae0b0}
+.tav-lounge-player button{padding:7px 9px;min-width:72px;font-size:12px}
+.tav-lounge-player button:disabled{opacity:.38;cursor:not-allowed}
+.tav-lounge-empty{margin:8px 0;opacity:.8;font-size:13px}
+.tav-lounge-room-toggle{display:block;width:100%;margin:8px 0;padding:10px}
+.tav-lounge-incoming{position:fixed;z-index:2147483550;top:max(70px,env(safe-area-inset-top));left:50%;transform:translateX(-50%);box-sizing:border-box;width:min(370px,calc(100vw - 20px));display:grid;gap:10px;padding:16px;border-radius:13px;border:2px solid #c7a577;background:linear-gradient(140deg,#4d2636,#231824);color:#f8ebdc;box-shadow:0 14px 40px #000b;font:14px/1.4 Georgia,serif}
+.tav-lounge-incoming strong{font-size:18px}
+.tav-lounge-incoming p{margin:0}
+.tav-lounge-incoming-controls{display:flex;gap:8px}
+.tav-lounge-incoming-controls button{flex:1;padding:10px;min-height:40px}
+@media(max-width:550px){.tav-lounge{padding:10px}.tav-lounge-player{gap:6px}.tav-lounge-player button{min-width:65px}}
