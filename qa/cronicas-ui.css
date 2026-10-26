@@ -196,3 +196,49 @@
  #tavCronicasOverlay .tav-cronicas-progress-bar span{transition:none!important}
 }
 .tav-cronicas-trigger{display:inline-flex!important;align-items:center!important;justify-content:center!important;flex:0 0 42px!important;width:42px!important;min-width:42px!important;max-width:42px!important;height:42px!important;padding:0!important;overflow:hidden!important;white-space:nowrap!important;font-size:22px!important;line-height:1!important}
+
+
+/* Avisos de conquistas: camada isolada do motor, sem capturar cliques. */
+.tav-cronicas-toast-region{
+ position:fixed;z-index:2147483580;right:max(12px,env(safe-area-inset-right));
+ top:max(68px,env(safe-area-inset-top));width:min(360px,calc(100vw - 24px));
+ pointer-events:none;display:grid;gap:8px;
+}
+.tav-cronicas-toast{
+ box-sizing:border-box;display:flex;align-items:center;gap:13px;
+ min-height:88px;padding:14px 16px;border:1px solid var(--tp-edge,#b89462);
+ border-left:4px solid var(--tp-bright,#e8bf79);border-radius:12px;
+ background:var(--tp-panel,linear-gradient(135deg,#4b2935,#211621 85%));
+ color:var(--tp-text,#fbe9d1);font:14px/1.35 Georgia,serif;
+ box-shadow:0 12px 32px #000a,0 0 18px color-mix(in srgb,var(--tp-bright,#e8bf79) 20%,transparent);
+ animation:tavCronicasToastIn .38s cubic-bezier(.18,.8,.25,1) both;
+ overflow:hidden;
+}
+.tav-cronicas-toast[data-tier=prata]{border-left-color:#c9d7ed}
+.tav-cronicas-toast[data-tier=ouro]{border-left-color:#ffca63}
+.tav-cronicas-toast[data-tier=lendaria]{border-left-color:#f394e8}
+.tav-cronicas-toast-mark{
+ display:grid;place-items:center;flex:0 0 50px;
+ width:50px;height:50px;border-radius:11px;
+ border:1px solid currentColor;background:#ffffff0c;font-size:25px;
+}
+.tav-cronicas-toast-copy{min-width:0;display:grid;gap:4px}
+.tav-cronicas-toast-copy small{color:var(--tp-bright,#e8bf79);letter-spacing:.7px;font-size:10px;font-weight:700}
+.tav-cronicas-toast-copy strong{overflow-wrap:anywhere;font-size:18px;line-height:1.2}
+.tav-cronicas-toast-copy span{font-size:12px;opacity:.88}
+.tav-cronicas-toast-leave{animation:tavCronicasToastOut .32s ease forwards}
+@keyframes tavCronicasToastIn{
+ from{opacity:0;transform:translate3d(24px,-8px,0) scale(.97)}
+ to{opacity:1;transform:translate3d(0,0,0) scale(1)}
+}
+@keyframes tavCronicasToastOut{
+ to{opacity:0;transform:translate3d(20px,-8px,0)}
+}
+@media(max-width:600px){
+ .tav-cronicas-toast-region{right:12px;left:12px;width:auto;top:max(68px,env(safe-area-inset-top))}
+ .tav-cronicas-toast{padding:11px 13px;min-height:77px}
+ .tav-cronicas-toast-copy strong{font-size:16px}
+}
+@media(prefers-reduced-motion:reduce){
+ .tav-cronicas-toast,.tav-cronicas-toast-leave{animation:none!important}
+}
