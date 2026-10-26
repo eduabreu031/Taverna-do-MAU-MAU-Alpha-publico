@@ -159,7 +159,7 @@ async function updatePresence(){
     const kick=make('button','engraved-btn tav-vip-kick','Remover');
     kick.type='button';kick.setAttribute('aria-label','Remover '+p.name+' da Sala VIP');
     kick.onclick=async()=>{
-     if(!window.confirm('Remover '+p.name+' da Sala VIP?'))return;
+     if(!await window.TavernaUI.confirm({title:'Remover participante?',message:'Remover '+p.name+' da Sala VIP?',confirmLabel:'Remover',danger:true}))return;
      kick.disabled=true;adminInfo.textContent='Removendo participante…';
      try{await window.TavernaAuth.roomRequest('/api/vip/kick','POST',{id:p.id});adminInfo.textContent='Participante removido da Sala VIP.';await updatePresence();}
      catch(e){adminInfo.textContent=e.message||'Não foi possível remover';kick.disabled=false;}

@@ -1,7 +1,21 @@
 {
-  "current": "alpha-0.5.0.44",
+  "current": "alpha-0.5.0.45",
   "issuesRepo": "eduabreu031/Taverna-do-MAU-MAU-Alpha-publico",
   "entries": [
+    {
+      "id": "alpha-0.5.0.45",
+      "label": "0.5.0.45-alpha",
+      "date": "2026-10-26",
+      "title": "Multiplayer elegante: mesas compactas e escolhas dentro da Taverna",
+      "items": [
+        "Redesign premium do menu multiplayer: cartões menores e proporcionais para criar sala e entrar por código, texto reduzido, melhor hierarquia e acabamento integrado aos 12 temas.",
+        "Lobby refinado com código em destaque, lista de participantes e ações alinhadas; Frequentadores preservados com visual mais discreto.",
+        "Diálogos internos substituem confirmações do navegador para sair da mesa, deixar sala e remover participantes da VIP; cópia do convite abre uma janela estilizada quando necessário.",
+        "Seletores de quantidade de jogadores, dificuldade e categoria de relato usam opções temáticas sem menus nativos do navegador; valores e eventos internos permanecem no motor original.",
+        "Botões, campos de texto, janelas VIP e confirmação de abandono compartilham as paletas existentes; testes novos executam fluxo de diálogos, seleção e integridade do HTML.",
+        "Auditoria visual Chromium concluída: regressões anteriores preservadas e 36 combinações de tela e paleta verificadas com capturas, sem rolagem horizontal."
+      ]
+    },
     {
       "id": "alpha-0.5.0.44",
       "label": "0.5.0.44-alpha",
