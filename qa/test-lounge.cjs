@@ -1,0 +1,25 @@
+/* Verificação da integração dos Frequentadores no build final Alpha. */
+const assert=require('node:assert/strict');
+const fs=require('node:fs'),vm=require('node:vm'),path=require('node:path');
+const root=path.resolve(__dirname,'..'),site=process.argv[2]||path.join(root,'site');
+const source=fs.readFileSync(path.join(root,'qa/lounge-ui.js'),'utf8');
+const html=fs.readFileSync(path.join(site,'index.html'),'utf8');
+const styles=fs.readFileSync(path.join(root,'qa/lounge-ui.css'),'utf8');
+const presence=fs.readFileSync(path.join(root,'qa/central-presence.js'),'utf8');
+new vm.Script(source,{filename:'lounge-ui.js'});
+new vm.Script(presence,{filename:'central-presence.js'});
+assert(html.includes('id="tav-lounge-script"'),'Script dos Frequentadores ausente do build');
+assert(html.includes('id="tav-lounge-style"'),'CSS dos Frequentadores ausente do build');
+assert(html.includes('id="alpha-accounts-script"'),'Cadastro de contas ausente');
+assert(html.includes('id="onlineLobby"'),'Lobby existente foi alterado');
+assert(html.includes('id="onlineJoin"'),'Entrada tradicional por código desapareceu');
+assert(html.includes('id="onlineRoomCode"'),'Campo de código desapareceu');
+assert(source.includes("auth.getToken?.()"),'Busca deve usar autenticação');
+assert(source.includes("api('invite','POST'"),'Convite não está integrado');
+assert(source.includes("api('accept','POST'"),'Aceite não está integrado');
+assert(source.includes("api('decline','POST'"),'Recusa não está integrada');
+assert(source.includes("if(currentCode()&&currentCode()!==code)"),'Proteção de sala atual ausente');
+assert(source.includes("joinRoom(invite.room,invite.id)"),'Entrada automática não integrada');
+assert(styles.includes('.tav-lounge-incoming'),'Aviso de convite ausente');
+assert(presence.includes('inviteAvailable:'),'Disponibilidade não é enviada');
+console.log('TAVERN_LOUNGE_TEST_OK: UI, busca, convites, entrada normal e presença');
