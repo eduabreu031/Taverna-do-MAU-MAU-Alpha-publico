@@ -42,6 +42,23 @@ try{
   assert(await page.locator('#sceneMenu').isVisible(),'O offline deixou de abrir');
   assert(await page.locator('#playerCountChoice').isVisible(),'Escolha de jogadores ausente');
   assert(await page.locator('#difficultyChoice').isVisible(),'Escolha de dificuldade ausente');
+  if(width===320){
+   const inspect=await page.evaluate(()=>{
+    const section=document.getElementById('heroChoiceCards');
+    return {html:section?.outerHTML.slice(0,14500),computed:[...(section?.children||[])].slice(0,6).map(el=>({
+     cls:el.className,outer:el.outerHTML.slice(0,1200),
+     width:Math.round(el.getBoundingClientRect().width),
+     height:Math.round(el.getBoundingClientRect().height),
+     descendants:[...el.querySelectorAll('*')].slice(0,15).map(x=>({
+      tag:x.tagName,cls:x.className,text:(x.textContent||'').trim().slice(0,80),
+      w:Math.round(x.getBoundingClientRect().width),h:Math.round(x.getBoundingClientRect().height),
+      overflow:getComputedStyle(x).overflow,white:getComputedStyle(x).whiteSpace,
+      display:getComputedStyle(x).display,clip:getComputedStyle(x).textOverflow
+     }))
+    }))};
+   });
+   console.log('HERO_LAYOUT_DIAG',JSON.stringify(inspect));
+  }
   for(const theme of palettes){
    await page.evaluate(name=>{if(name==='classic')document.documentElement.removeAttribute('data-tav-palette');
     else document.documentElement.setAttribute('data-tav-palette',name)},theme);
