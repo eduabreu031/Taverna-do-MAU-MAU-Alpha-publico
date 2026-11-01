@@ -1,7 +1,19 @@
 {
-  "current": "alpha-0.5.0.47",
+  "current": "alpha-0.5.0.48",
   "issuesRepo": "eduabreu031/Taverna-do-MAU-MAU-Alpha-publico",
   "entries": [
+    {
+      "id": "alpha-0.5.0.48",
+      "label": "0.5.0.48-alpha",
+      "date": "2026-11-01",
+      "title": "Bots com retratos individuais e revanche offline fiel",
+      "items": [
+        "Corrigidos os retratos repetidos de bots no multiplayer: cada bot recebe uma imagem própria do elenco, mesmo quando seu nome não consta do catálogo offline.",
+        "O retrato de cada bot online permanece associado à sua identidade durante a partida e na revanche enquanto a mesma cadeira estiver presente.",
+        "No modo offline, o botão Revanche preserva os nomes e os adversários da partida anterior, independentemente de vitória ou derrota.",
+        "Uma nova partida offline continua sorteando adversários diferentes; regras, servidor multiplayer e Beta isolada permanecem inalterados."
+      ]
+    },
     {
       "id": "alpha-0.5.0.47",
       "label": "0.5.0.47-alpha",
