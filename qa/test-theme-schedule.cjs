@@ -11,7 +11,7 @@ assert.equal(end-start,7200000,'O teste sazonal mantém 120 minutos absolutos');
 assert.equal(trial.start,'2026-10-24T15:50:00-03:00');
 assert.equal(trial.end,'2026-10-24T17:50:00-03:00');
 assert.equal(release.entries[0].id,release.current);
-assert(release.entries[0].items.some(s=>/aparência|neon|tema/i.test(s)));
+assert(release.entries.some(e=>e.items.some(s=>/aparência|neon|tema/i.test(s))), 'O histórico deve registrar os temas, sem exigir que toda atualização seja visual');
 const script=html.match(/<script id="tav-theme-manager">([\s\S]*?)<\/script>/)?.[1];
 const menuScript=html.match(/<script id="tav-appearance-menu">([\s\S]*?)<\/script>/)?.[1];
 const css=html.match(/<style id="tav-seasonal-themes">([\s\S]*?)<\/style>/)?.[1];
