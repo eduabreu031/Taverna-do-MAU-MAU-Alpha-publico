@@ -1,0 +1,138 @@
+/* 0.5.0.49 — apuracao e eliminacao offline.
+   O resultado continua sob responsabilidade do motor; aqui apenas a UI.
+   Nao interfere no seletor de naipes nem nas telas online. */
+
+#v28-score-stage .score-fast-forward{
+ position:fixed;z-index:500;left:50%;bottom:max(22px,env(safe-area-inset-bottom));
+ transform:translateX(-50%);min-width:172px;min-height:44px;padding:9px 18px;
+ border-radius:13px;border:2px solid #cba469;background:linear-gradient(#785035,#312019);
+ color:#fff0d6;box-shadow:0 5px 18px #000a;cursor:pointer;
+ pointer-events:auto!important;touch-action:manipulation;
+ font:700 14px Georgia,serif;letter-spacing:.025em;
+}
+#v28-score-stage .score-fast-forward:focus-visible{
+ outline:3px solid currentColor;outline-offset:3px;
+}
+#v28-score-stage .score-fast-forward:disabled{opacity:.8;cursor:default;}
+#v28-score-stage .score-tally{
+ min-width:0!important;width:max-content;max-width:min(25vw,120px)!important;
+ font-size:clamp(10px,2.8vw,13px)!important;
+ padding:5px 7px!important;overflow:hidden;text-overflow:ellipsis;
+ white-space:nowrap!important;line-height:1.18!important;
+}
+#v28-score-stage .score-tally strong{
+ display:block;font-size:clamp(14px,3.9vw,19px)!important;
+ line-height:1.18;white-space:nowrap;
+}
+#v28-score-stage .score-pending-back{
+ background-size:100% 100%!important;background-position:center!important;
+ background-repeat:no-repeat!important;
+}
+@media(max-width:460px){
+ #v28-score-stage .score-pending-back{width:34px;height:49px;}
+ #v28-score-stage .score-pending{gap:2px;font-size:10px;}
+ #v28-score-stage .score-tally{max-width:23vw!important;padding:4px 5px!important;}
+ #overlay:not(:has(.suit-list)) #dialog .parchment-modal{
+  width:min(96vw,660px);padding:16px 12px;
+ }
+ #overlay:not(:has(.suit-list)) #dialog .wood-scoreboard{padding:7px!important;}
+ #overlay:not(:has(.suit-list)) #dialog .score-row{
+  gap:12px;font-size:clamp(13px,3.5vw,16px);min-width:0;
+ }
+ #overlay:not(:has(.suit-list)) #dialog .score-row span{
+  min-width:0;overflow-wrap:anywhere;
+ }
+ #overlay:not(:has(.suit-list)) #dialog .score-row strong{
+  flex:none;white-space:nowrap;
+ }
+}
+:root[data-tav-palette^="neon-"] #v28-score-stage .score-fast-forward{
+ background:var(--tp-button)!important;border-color:var(--tp-edge)!important;
+ color:var(--tp-text)!important;
+ box-shadow:0 5px 16px #0008,0 0 17px var(--tp-glow)!important;
+}
+:root[data-tav-palette^="neon-"] #v28-score-stage .score-header,
+:root[data-tav-palette^="neon-"] #v28-score-stage .score-tally{
+ background:var(--tp-panel)!important;border-color:var(--tp-edge)!important;
+ color:var(--tp-text)!important;
+ box-shadow:0 4px 12px #0007,0 0 12px var(--tp-glow)!important;
+ text-shadow:0 1px 3px #0005!important;
+}
+:root[data-tav-palette^="neon-"] #v28-score-stage .score-sub,
+:root[data-tav-palette^="neon-"] #v28-score-stage .score-pending{
+ color:var(--tp-muted)!important;
+}
+:root[data-tav-palette^="neon-"] #v28-score-stage .score-tally.active{
+ border-color:var(--tp-bright)!important;
+ box-shadow:0 0 20px var(--tp-glow-hi),0 3px 12px #0008!important;
+}
+:root[data-tav-palette^="neon-"] #v28-score-stage .score-pending-back{
+ background:var(--tg-deck-image) center / 100% 100% no-repeat!important;
+ border:2px solid var(--tp-edge)!important;
+ color:transparent!important;text-shadow:none!important;
+ box-shadow:0 5px 10px #0007!important;
+}
+:root[data-tav-palette^="neon-"] #v28-score-stage .score-pending.active .score-pending-back{
+ box-shadow:0 0 13px var(--tp-glow-hi),0 4px 9px #0007!important;
+}
+/* Corrige o placar final sem alterar a aparencia do modal de escolher naipe. */
+:root[data-tav-palette^="neon-"] #overlay:not(:has(.suit-list)) #dialog .wood-scoreboard{
+ background:var(--tp-panel)!important;border-color:var(--tp-edge)!important;
+ box-shadow:inset 0 0 12px var(--tp-glow),0 5px 17px #0007!important;
+}
+:root[data-tav-palette^="neon-"] #overlay:not(:has(.suit-list)) #dialog .score-row{
+ border-color:var(--tp-edge)!important;color:var(--tp-text)!important;
+}
+:root[data-tav-palette^="neon-"] #overlay:not(:has(.suit-list)) #dialog .score-row.winner{
+ color:var(--tp-bright)!important;text-shadow:0 0 12px var(--tp-glow-hi)!important;
+}
+:root[data-tav-palette^="neon-"] #overlay:not(:has(.suit-list)) #dialog .score-row.dead{
+ color:var(--tp-muted)!important;opacity:.78;
+}
+/* Cartaz de eliminacao vira uma galeria de retratos com materiais do tema. */
+:root[data-tav-palette^="neon-"] #overlay:not(:has(.suit-list)) #dialog .wanted{
+ clip-path:none!important;background:var(--tp-panel)!important;
+ border:2px solid var(--tp-edge)!important;border-radius:15px!important;
+ max-width:100%!important;padding:12px!important;
+ color:var(--tp-text)!important;
+ box-shadow:inset 0 1px 0 var(--tp-glow),0 8px 18px #0008!important;
+}
+:root[data-tav-palette^="neon-"] #overlay:not(:has(.suit-list)) #dialog .wanted-gallery{
+ display:flex;align-items:stretch;justify-content:center;gap:10px;
+ flex-wrap:wrap;margin:0!important;
+}
+:root[data-tav-palette^="neon-"] #overlay:not(:has(.suit-list)) #dialog .wanted-person{
+ flex:0 1 130px;min-width:100px;max-width:150px;
+ padding:10px 8px;border-radius:12px;
+ border:1px solid var(--tp-edge)!important;
+ background:var(--tp-button)!important;
+ box-shadow:0 4px 10px #0005!important;
+ color:var(--tp-text)!important;
+}
+:root[data-tav-palette^="neon-"] #overlay:not(:has(.suit-list)) #dialog .wanted-picture{
+ width:92px;height:102px;max-width:100%;
+ border:3px solid var(--tp-edge)!important;border-radius:8px;
+ background:var(--tp-soft)!important;
+ box-shadow:0 3px 12px #0008,0 0 10px var(--tp-glow)!important;
+}
+:root[data-tav-palette^="neon-"] #overlay:not(:has(.suit-list)) #dialog .wanted-picture img{
+ filter:none!important;
+}
+:root[data-tav-palette^="neon-"] #overlay:not(:has(.suit-list)) #dialog .wanted-person b{
+ color:var(--tp-text)!important;font-size:13px;
+ max-width:100%;overflow-wrap:anywhere;text-align:center;
+}
+:root[data-tav-palette^="neon-"] #overlay:not(:has(.suit-list)) #dialog .wanted-person em{
+ color:var(--tp-bright)!important;font-size:11px;
+ text-shadow:0 1px 2px #0006!important;transform:none;
+ letter-spacing:.09em;
+}
+:root[data-tav-palette^="neon-"] #overlay:not(:has(.suit-list)) #dialog .eliminated-cross:before,
+:root[data-tav-palette^="neon-"] #overlay:not(:has(.suit-list)) #dialog .eliminated-cross:after{
+ border-color:var(--tp-deep)!important;
+ background:linear-gradient(90deg,var(--tp-hi),var(--tp-bright),var(--tp-hi))!important;
+ box-shadow:0 2px 5px #0008!important;
+}
+@media(prefers-reduced-motion:reduce){
+ #v28-score-stage .score-fast-forward{transition:none!important;}
+}
