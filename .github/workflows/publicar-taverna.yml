@@ -83,6 +83,10 @@ jobs:
         run: python3 qa/apply-gameplay-layout-v50.py site
       - name: Instalar pausa offline e atalho de conquistas v55
         run: python3 qa/apply-offline-pause-v55.py site
+      - name: Integrar halo regressivo e nomes oficiais dos bots v59
+        run: python3 qa/apply-bot-halo-names-v59.py site
+      - name: Testar relógio visual e identidade dos bots v59
+        run: node qa/test-bot-halo-names-v59.cjs site
       - name: Validar bots distintos e elenco preservado na revanche
         run: node qa/test-bot-identities.cjs site
       - name: Testar pulo imediato da contagem e visual tematico offline
@@ -186,6 +190,10 @@ jobs:
         run: python3 qa/apply-gameplay-layout-v50.py site
       - name: Instalar pausa offline e atalho de conquistas v55
         run: python3 qa/apply-offline-pause-v55.py site
+      - name: Integrar halo regressivo e nomes oficiais dos bots v59
+        run: python3 qa/apply-bot-halo-names-v59.py site
+      - name: Testar relógio visual e identidade dos bots v59
+        run: node qa/test-bot-halo-names-v59.cjs site
       - name: Validar bots distintos e elenco preservado na revanche
         run: node qa/test-bot-identities.cjs site
       - name: Revalidar todos os versos antes do deploy
