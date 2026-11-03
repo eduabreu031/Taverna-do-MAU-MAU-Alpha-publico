@@ -235,3 +235,61 @@
   animation:none!important;
  }
 }
+
+/* Alpha 0.5.0.51 — a partida ocupa a altura útil, sem um bloco vazio acima.
+   A mesa cresce ou encolhe entre o cabeçalho e a mão; não há altura
+   artificial reservada antes do cabeçalho. Scroll vertical só no limite
+   de telas fisicamente baixas, para manter todas as ações acessíveis. */
+@media (max-width:760px) and (orientation:portrait){
+ #sceneGame:not(.hidden){
+  justify-content:flex-start!important;
+  height:100dvh!important;
+  min-height:100dvh!important;
+  max-height:none!important;
+  overflow-x:hidden!important;
+  overflow-y:auto!important;
+  padding-top:max(6px,env(safe-area-inset-top))!important;
+  gap:clamp(4px,.6dvh,10px)!important;
+ }
+ #sceneGame .game-header{
+  margin-top:0!important;
+  margin-bottom:0!important;
+  flex:0 0 auto!important;
+ }
+ #sceneGame .table-viewport{
+  flex:1 1 0%!important;
+  display:flex!important;
+  align-items:stretch!important;
+  min-height:clamp(270px,38dvh,480px)!important;
+  height:auto!important;
+  max-height:none!important;
+  margin-top:0!important;
+  margin-bottom:0!important;
+ }
+ #sceneGame #tableShell{
+  flex:1 1 auto!important;
+  align-self:stretch!important;
+  height:100%!important;
+  min-height:0!important;
+  max-height:none!important;
+  aspect-ratio:auto!important;
+ }
+ #sceneGame .control-bar,
+ #sceneGame #humanZone{
+  flex:0 0 auto!important;
+  margin-top:0!important;
+  margin-bottom:0!important;
+ }
+ /* A largura real da tela determina a sobreposição, sem cortar a última
+    carta da linha direita. Em mãos enormes (28+ em celular comum), a grade
+    preserva um mínimo de 22px por carta e permite deslizar horizontalmente. */
+ #sceneGame #humanZone.tav-double-hand #humanHand{
+  grid-template-columns:repeat(var(--tav-hand-cols,6),minmax(22px,1fr))!important;
+  justify-content:start!important;
+  padding-left:6px!important;
+  padding-right:71px!important;
+  overflow-x:auto!important;
+  overscroll-behavior-x:contain!important;
+  scrollbar-width:thin!important;
+ }
+}
