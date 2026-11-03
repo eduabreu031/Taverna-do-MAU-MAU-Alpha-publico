@@ -10,7 +10,7 @@
       "items": [
         "Os retratos dos jogadores eliminados passam a ocupar uma faixa compacta de até 42 px, sem deslocar o cabeçalho ou reduzir exageradamente a mesa.",
         "Todas as cartas miniatura dos adversários voltam a aparecer em leque nos temas alternativos, com verso do baralho da paleta escolhida e contagem preservada.",
-        "Os ícones dos comandos superiores passam a compartilhar o mesmo tamanho e área de toque em celular, preservando as ilustrações e cores dos temas.",
+        "Os sete ícones dos comandos superiores compartilham o mesmo tamanho e área de toque em celular, sem redimensionar o seletor de tema; ilustrações e cores originais são preservadas.",
         "Auditoria de tela móvel confere galeria com 1 e 8 eliminados, tamanho dos controles e 5 cartas temáticas de NPCs, além das mãos com 5 a 32 cartas."
       ]
     },
