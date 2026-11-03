@@ -8,8 +8,8 @@
       "date": "2026-11-03",
       "title": "Retratos estáveis durante o turno dos bots",
       "items": [
-        "Corrigida a mudança de posição do retrato quando o bot recebe o turno, sem alterar cartas, animações de jogada ou duração do cronômetro.",
-        "O aro de tempo continua sobre o próprio medalhão e acompanha as cores do tema sem modificar a geometria original da foto, inclusive em telas estreitas.",
+        "Corrigida a troca indevida de posição absoluta para relativa no avatar neon quando o bot recebe o turno; o retrato não muda de lugar e o leque de cartas continua alinhado.",
+        "A borda do medalhão mantém a espessura original, sem encolher a fotografia. O aro progressivo de tempo permanece separado, seguindo a paleta ativa.",
         "A auditoria inicia uma partida offline real e compara tamanho e posição de cada retrato antes e durante a vez do bot, em 320, 390, 430 e 768 px nos temas Clássico, Azul e Verde, sem confundir mudança de propriedade CSS com deslocamento real."
       ]
     },
