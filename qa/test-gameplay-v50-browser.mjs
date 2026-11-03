@@ -91,6 +91,65 @@ try{
    'A mão de 20 cartas é cortada ou está fora de duas linhas: '+width+' '+JSON.stringify(adaptive));
   if(width===320)assert(adaptive.scrollRange>0,'Mão de 32 cartas deveria poder rolar em 320px');
   assert(adaptive.lastReachable,'Última carta inacessível mesmo após deslizar: '+width+' '+JSON.stringify(adaptive));
+  // v52: galeria curta após eliminar jogadores, sem reservar grandes vazios.
+  // Os versos dos bots precisam continuar em leque em vez de virar 1 carta.
+  const visuals=await page.evaluate(()=>{
+    const root=document.documentElement,scene=document.querySelector('#sceneGame');
+    root.setAttribute('data-tav-palette','neon-green');
+    const zone=scene.querySelector('#humanZone'),hand=scene.querySelector('#humanHand');
+    zone.classList.remove('tav-double-hand');
+    hand.innerHTML='<button class="playing-card">A</button><button class="playing-card">7</button><button class="playing-card">4</button>';
+    const header=scene.querySelector('.game-header'),table=scene.querySelector('.table-viewport');
+    let gallery=scene.querySelector('.tav-ghost-gallery');
+    if(!gallery){
+      gallery=document.createElement('section');
+      gallery.className='tav-ghost-gallery';
+      scene.insertBefore(gallery,header);
+    }
+    gallery.hidden=true;
+    const noGhostHeight=table.getBoundingClientRect().height;
+    const markup=(n)=>Array.from({length:n},(_,i)=>
+      '<div class="tav-ghost-card"><span class="portrait-medallion"></span><small>NPC'+i+'</small></div>'
+    ).join('');
+    gallery.hidden=false;
+    gallery.innerHTML=markup(1);
+    const oneGhostHeight=gallery.getBoundingClientRect().height;
+    const oneTableHeight=table.getBoundingClientRect().height;
+    gallery.innerHTML=markup(8);
+    const eightGhostHeight=gallery.getBoundingClientRect().height;
+    const eightTableHeight=table.getBoundingClientRect().height;
+    const headerTop=header.getBoundingClientRect().top;
+    const headerBottom=header.getBoundingClientRect().bottom;
+    const galleryTop=gallery.getBoundingClientRect().top;
+    const tableTop=table.getBoundingClientRect().top;
+    const buttonBoxes=[...header.querySelectorAll('button')].map(x=>x.getBoundingClientRect());
+    const buttonsEqual=buttonBoxes.length>1&&buttonBoxes.every(
+      b=>Math.abs(b.width-buttonBoxes[0].width)<2&&Math.abs(b.height-buttonBoxes[0].height)<2
+    );
+    scene.querySelector('#seats').innerHTML=
+      '<div class="seat"><div class="bot-pocket">'+
+      Array.from({length:5},(_,i)=>'<span class="mini-card" style="left:'+i*3+'px"></span>').join('')+
+      '<span class="bot-card-count">5</span></div></div>';
+    const mini=[...scene.querySelectorAll('.bot-pocket .mini-card')];
+    const miniVisible=mini.every(x=>getComputedStyle(x).display!=='none');
+    const backs=mini.map(x=>getComputedStyle(x).backgroundImage);
+    return {noGhostHeight,oneGhostHeight,oneTableHeight,eightGhostHeight,eightTableHeight,
+      headerTop,headerBottom,galleryTop,tableTop,buttonsEqual,buttonCount:buttonBoxes.length,
+      miniCount:mini.length,miniVisible,backs};
+  });
+  assert(visuals.headerTop<110,'Cabeçalho foi deslocado na eliminação: '+width+' '+JSON.stringify(visuals));
+  assert(visuals.oneGhostHeight<=46&&visuals.eightGhostHeight<=46,
+    'Eliminados ocupam espaço demais: '+width+' '+JSON.stringify(visuals));
+  assert(Math.abs(visuals.oneTableHeight-visuals.eightTableHeight)<12,
+    'Mais eliminados encolhem a mesa: '+width+' '+JSON.stringify(visuals));
+  assert(visuals.noGhostHeight-visuals.eightTableHeight<=65,
+    'A galeria roubou altura excessiva: '+width+' '+JSON.stringify(visuals));
+  assert(visuals.galleryTop>=visuals.headerBottom-3&&visuals.tableTop>=visuals.galleryTop+25,
+    'Faixa de eliminados não está entre cabeçalho e mesa: '+width+' '+JSON.stringify(visuals));
+  assert(visuals.buttonCount>=5&&visuals.buttonsEqual,
+    'Botões da barra com tamanhos divergentes: '+width+' '+JSON.stringify(visuals));
+  assert(visuals.miniCount===5&&visuals.miniVisible&&visuals.backs.every(x=>x.includes('neon-green')),
+    'O tema esconde cartas dos NPCs ou usa verso incorreto: '+width+' '+JSON.stringify(visuals));
   await page.close();
   console.log('GAMEPLAY_V50_BROWSER_OK',width);
  }
