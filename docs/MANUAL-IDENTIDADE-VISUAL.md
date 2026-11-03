@@ -91,3 +91,24 @@ um componente visual paralelo para uma função nova.
 Mudanças de identidade visual só ocorrem por decisão expressa do
 responsável pelo jogo. Esta é a referência permanente; instruções para
 agentes estão em `AGENTS.md` e `.github/copilot-instructions.md`.
+
+
+## Padrão de acabamento de cartas e pictogramas (0.5.0.57)
+- Todos os **11 temas alternativos** possuem um verso exclusivo baseado no SVG
+  original e refinado em \`qa/build-card-opaque-backs.py\`: moldura dupla,
+  cantoneiras, filigranas, filetes de material e motivos secundários próprios.
+  Preservar o emblema central e a direção artística de cada tema. **Não**
+  reaproveitar o verso clássico nem substituir versões por simples recoloração.
+- Os efeitos de papel, ouro, cerâmica, vidro, madeira, metal e couro devem
+  sugerir material sem sacrificar leitura em escala reduzida. O verso móvel é
+  derivado do SVG em WebP RGB sem transparência para compatibilidade Android.
+- Ícones do topo **não podem receber** filtro global \`brightness(0)\` ou
+  \`saturate(0)\`: esses filtros apagam seus detalhes e os transformam em
+  silhuetas, além de prejudicar o contraste em temas claros. Preservar
+  gradientes, traçados originais e contornos. O tema Porcelana usa símbolos
+  escuros; o Aero também exige boa distinção.
+- Nunca alterar o tamanho da área interativa, a ordem dos botões, a semântica
+  de áudio e histórico, eventos de pausa ou a identidade das cartas ao
+  aplicar refinamento. Os outros componentes mantêm seu contrato v56.
+- Na publicação, exigir \`python3 qa/test-art-v57.py site\` após gerar as
+  imagens; verificar capturas reais e inspecionar estética de todos os temas.
