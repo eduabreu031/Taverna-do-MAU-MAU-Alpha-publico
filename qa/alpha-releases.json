@@ -1,7 +1,18 @@
 {
-  "current": "alpha-0.5.0.56",
+  "current": "alpha-0.5.0.57",
   "issuesRepo": "eduabreu031/Taverna-do-MAU-MAU-Alpha-publico",
   "entries": [
+    {
+      "id": "alpha-0.5.0.57",
+      "label": "0.5.0.57-alpha",
+      "date": "2026-11-03",
+      "title": "Versos refinados nos 11 temas e símbolos do cabeçalho mais nítidos",
+      "items": [
+        "Os onze baralhos alternativos recebem camadas exclusivas de filigrana, molduras trabalhadas, relevos e motivos que preservam seus emblemas originais.",
+        "Os ícones do cabeçalho recuperam traçados e acabamentos internos, eliminando o filtro que os deixava como silhuetas; Porcelana e Brisa Aero recebem contraste próprio.",
+        "São mantidos os comandos da partida, o motor offline, o multiplayer e o clássico, com testes das artes vetoriais, versões WebP e identidade visual antes da publicação."
+      ]
+    },
     {
       "id": "alpha-0.5.0.56",
       "label": "0.5.0.56-alpha",
