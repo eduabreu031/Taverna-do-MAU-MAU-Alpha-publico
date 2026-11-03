@@ -28,30 +28,15 @@
  border-color:var(--tp-bright)!important;
  box-shadow:0 0 12px var(--tp-glow-hi)!important;
 }
-/* Miniaturas: um verso tematico legivel em vez de dezenas de riscas finas. */
+/* Todas as cartas dos adversários permanecem no leque do motor.
+   A v50 escondia todas exceto a primeira e sobrescrevia a geometria
+   do leque; a arte dos versos já é temática em theme-card-decks.css. */
 :root[data-tav-palette^="neon-"] #sceneGame #tableShell #seats .seat .bot-pocket .mini-card{
- display:none!important;
-}
-:root[data-tav-palette^="neon-"] #sceneGame #tableShell #seats .seat .bot-pocket .mini-card:first-child{
- display:block!important;
- left:50%!important;
- top:0!important;
- width:18px!important;
- min-width:18px!important;
- height:24px!important;
- transform:translateX(-50%)!important;
- border:1px solid var(--tp-edge)!important;
- border-radius:3px!important;
  background:var(--tg-deck-image) center / 100% 100% no-repeat!important;
+ border-color:var(--tp-edge)!important;
  box-shadow:0 2px 6px #0009,0 0 5px var(--tp-glow)!important;
 }
-:root[data-tav-palette^="neon-"] #sceneGame #tableShell #seats .seat .bot-pocket .mini-card:first-child::before{
- content:none!important;
- display:none!important;
-}
 :root[data-tav-palette^="neon-"] #sceneGame #tableShell #seats .seat .bot-pocket .bot-card-count{
- left:calc(50% + 10px)!important;
- top:4px!important;
  background:var(--tp-dark)!important;
  border-color:var(--tp-edge)!important;
  color:var(--tp-text)!important;
@@ -291,5 +276,83 @@
   overflow-x:auto!important;
   overscroll-behavior-x:contain!important;
   scrollbar-width:thin!important;
+ }
+}
+
+/* Alpha 0.5.0.52: eliminados não devem consumir a altura da mesa.
+   Ficam num trilho compacto e discretamente dessaturado junto ao HUD. */
+@media(max-width:760px){
+ #sceneGame .game-header{
+  order:0!important;
+ }
+ #sceneGame .tav-ghost-gallery:not([hidden]){
+  order:1!important;
+  flex:0 0 42px!important;
+  height:42px!important;
+  min-height:42px!important;
+  max-height:42px!important;
+  width:100%!important;
+  padding:0 4px!important;
+  margin:0!important;
+  gap:clamp(2px,.6vw,7px)!important;
+  justify-content:center!important;
+  align-items:center!important;
+  overflow:hidden!important;
+  box-sizing:border-box!important;
+ }
+ #sceneGame .table-viewport{order:2!important;}
+ #sceneGame .control-bar{order:3!important;}
+ #sceneGame #humanZone{order:4!important;}
+ #sceneGame .tav-ghost-gallery .tav-ghost-card{
+  width:clamp(27px,8vw,37px)!important;
+  max-width:37px!important;
+  flex:0 1 clamp(27px,8vw,37px)!important;
+  height:39px!important;
+  gap:1px!important;
+  opacity:.52;
+  filter:grayscale(.9);
+ }
+ #sceneGame .tav-ghost-gallery .portrait-medallion{
+  display:block!important;
+  width:clamp(23px,6vw,28px)!important;
+  height:clamp(23px,6vw,28px)!important;
+  min-width:0!important;
+  min-height:0!important;
+  flex:0 0 auto!important;
+ }
+ #sceneGame .tav-ghost-gallery small{
+  display:block!important;
+  font-size:8px!important;
+  line-height:1!important;
+  max-width:100%!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+ }
+ /* Botões com moldura e ilustração dimensionadas pelo mesmo padrão em
+    todas as paletas, sem mudar o tema nem o funcionamento dos comandos. */
+ #sceneGame .game-header .utility-toolbar button{
+  width:clamp(33px,8.7vw,43px)!important;
+  height:clamp(33px,8.7vw,43px)!important;
+  min-width:clamp(33px,8.7vw,43px)!important;
+  min-height:clamp(33px,8.7vw,43px)!important;
+  max-width:clamp(33px,8.7vw,43px)!important;
+  max-height:clamp(33px,8.7vw,43px)!important;
+  flex:0 0 clamp(33px,8.7vw,43px)!important;
+  box-sizing:border-box!important;
+  padding:3px!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  line-height:1!important;
+ }
+ #sceneGame .game-header .utility-toolbar button :is(img,svg){
+  display:block!important;
+  width:80%!important;
+  height:80%!important;
+  max-width:80%!important;
+  max-height:80%!important;
+  object-fit:contain!important;
+  margin:auto!important;
  }
 }

@@ -36,12 +36,14 @@ try{
    if(width===390)await page.screenshot({path:'qa/screenshots-offline-premium/saguao-'+theme+'.png'});
    console.log('WELCOME_PREMIUM_PALETTE_OK',width,theme);
   }
-  // O changelog surge 300ms apos carregar: fechar pela UI real, marcando a versao como lida.
-  // Ocultar o elemento antes do timer sem registrar leitura faria a janela reaparecer sobre os botões.
+  // O changelog é aberto 300ms após carregar. Aguardar o timer antes do
+  // clique garante que o overlay não reapareça sobre Jogar offline.
+  await page.waitForTimeout(450);
   await page.evaluate(()=>{const news=document.getElementById('alphaInformationOverlay');
    const close=document.getElementById('alphaNewsContinue')||document.getElementById('alphaModalClose');
-   if(!news?.hidden&&close)close.click();
+   if(news&&!news.hidden&&close)close.click();
   });
+  await page.waitForFunction(()=>document.getElementById('alphaInformationOverlay')?.hidden===true);
   await page.locator('#chooseOffline').click();
   assert(await page.locator('#sceneMenu').isVisible(),'O offline deixou de abrir');
   assert(await page.locator('#playerCountChoice').isVisible(),'Escolha de jogadores ausente');

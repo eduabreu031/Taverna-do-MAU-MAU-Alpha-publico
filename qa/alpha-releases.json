@@ -1,7 +1,19 @@
 {
-  "current": "alpha-0.5.0.51",
+  "current": "alpha-0.5.0.52",
   "issuesRepo": "eduabreu031/Taverna-do-MAU-MAU-Alpha-publico",
   "entries": [
+    {
+      "id": "alpha-0.5.0.52",
+      "label": "0.5.0.52-alpha",
+      "date": "2026-11-02",
+      "title": "Layout estável após eliminações e cartas completas dos adversários",
+      "items": [
+        "Os retratos dos jogadores eliminados passam a ocupar uma faixa compacta de até 42 px, sem deslocar o cabeçalho ou reduzir exageradamente a mesa.",
+        "Todas as cartas miniatura dos adversários voltam a aparecer em leque nos temas alternativos, com verso do baralho da paleta escolhida e contagem preservada.",
+        "Os sete ícones dos comandos superiores compartilham o mesmo tamanho e área de toque em celular, sem redimensionar o seletor de tema; ilustrações e cores originais são preservadas.",
+        "Auditoria de tela móvel confere 1 e 8 eliminados, sete controles, cartas temáticas de NPCs e mãos de 5 a 32 cartas; o teste agora fecha as novidades antes de entrar no offline."
+      ]
+    },
     {
         "id": "alpha-0.5.0.51",
         "label": "0.5.0.51-alpha",
