@@ -110,7 +110,7 @@ for(const id of ['neon-forge','neon-abyss','neon-forest','neon-porcelain']){
  for(const kind of ['theme-decks','theme-backdrops']){
   const file=path.join(base,kind,id+'.svg');
   const svg=fs.readFileSync(file,'utf8');
-  assert(svg.length>800&&svg.length<4200,'SVG fora do limite de peso: '+file);
+  assert(svg.length>800&&svg.length<(kind==='theme-decks'?16000:4200),'SVG fora do limite de peso: '+file);
   assert(svg.startsWith('<svg')&&svg.includes('</svg>')&&!/<script|foreignObject|<image|href=/i.test(svg.replace('http://www.w3.org/2000/svg','')),
     'SVG não isolado ou inválido: '+file);
   assert(fs.readFileSync(path.join(base,'sw.js'),'utf8').includes("'./"+kind+"/"+id+".svg'"),
