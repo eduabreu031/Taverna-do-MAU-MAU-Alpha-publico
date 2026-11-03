@@ -2,61 +2,72 @@ import {chromium} from 'playwright';
 import assert from 'node:assert/strict';
 import {mkdir} from 'node:fs/promises';
 
-/* Regressão da v60: a v59 passava nas inspeções textuais, mas desenhava
-   um disco fora da foto porque o pseudo-elemento pertencia ao wrapper. */
+/* v61 — Teste REAL: inicie partida offline com bots, preserve o DOM e
+   compare cada foto ANTES e DURANTE o turno. A v60 testava uma estrutura
+   sintética com tamanhos fixos e por isso não detectou o deslocamento. */
 await mkdir('qa/screenshots',{recursive:true});
 const browser=await chromium.launch({headless:true,args:['--no-sandbox']});
 try {
- for(const width of [320,390,768]){
-  const page=await browser.newPage({viewport:{width,height:800},isMobile:width<500,hasTouch:width<500});
+ for(const width of [320,390,430,768]){
+  const page=await browser.newPage({viewport:{width,height:940},isMobile:width<500,hasTouch:width<500,deviceScaleFactor:1});
   await page.goto('http://127.0.0.1:8765/',{waitUntil:'domcontentloaded',timeout:30000});
+  await page.evaluate(()=>window.TavernaEntrance?.skipVisualOnly?.());
+  await page.evaluate(()=>document.getElementById('alphaInformationOverlay')?.remove());
+  await page.locator('#chooseOffline').click({timeout:10000});
+  await page.evaluate(()=>{
+   const sel=document.getElementById('playerCount');
+   sel.value='5';sel.dispatchEvent(new Event('change',{bubbles:true}));
+  });
+  await page.locator('#startGameBtn').click({timeout:10000});
+  await page.waitForSelector('#sceneGame #seats .seat .bot-avatar .portrait-medallion',{state:'attached',timeout:15000});
   for(const palette of ['classic','neon-blue','neon-green']){
-   const result=await page.evaluate(palette=>{
+   const snapshots=await page.evaluate(palette=>{
     const root=document.documentElement;
     if(palette==='classic')root.removeAttribute('data-tav-palette');
     else root.setAttribute('data-tav-palette',palette);
-    const scene=document.getElementById('sceneGame');
-    scene.classList.remove('hidden');
-    scene.style.setProperty('display','block','important');
-    const seats=document.getElementById('seats');
-    seats.innerHTML='<div class="seat active"><div class="seat-inner"><div class="leather-name">'+
-      '<span class="bot-avatar" style="display:inline-block;width:76px;height:76px">'+
-      '<span class="portrait-medallion" style="display:inline-block;width:64px;height:64px;border-radius:50%"></span>'+
-      '</span><span class="npc-timer"><span class="timer-mark">15</span></span></div></div></div>';
-    const portrait=seats.querySelector('.portrait-medallion');
-    portrait.style.setProperty('--tav-npc-progress','75%');
-    const avatar=seats.querySelector('.bot-avatar');
-    const after=getComputedStyle(portrait,'::after');
-    const old=getComputedStyle(avatar,'::after');
-    const timer=getComputedStyle(seats.querySelector('.npc-timer'));
-    const rect=portrait.getBoundingClientRect();
-    const state={
-     palette,width:portrait.offsetWidth,height:portrait.offsetHeight,renderedWidth:rect.width,renderedHeight:rect.height,
-     pos:getComputedStyle(portrait).position,
-     afterDisplay:after.display,afterPosition:after.position,
-     afterWidth:parseFloat(after.width),afterHeight:parseFloat(after.height),
-     afterBackground:after.backgroundImage,afterInset:[after.top,after.right,after.bottom,after.left],
-     oldDisplay:old.display,oldContent:old.content,timerDisplay:timer.display
-    };
-    seats.querySelector('.seat').classList.remove('active');
-    state.inactiveDisplay=getComputedStyle(portrait,'::after').display;
-    seats.querySelector('.seat').classList.add('active');
-    return state;
+    const seats=[...document.querySelectorAll('#sceneGame #seats .seat')].filter(s=>s.querySelector('.bot-avatar .portrait-medallion'));
+    function measure(el){
+     const r=el.getBoundingClientRect(),css=getComputedStyle(el);
+     return {left:r.left,top:r.top,width:r.width,height:r.height,position:css.position,transform:css.transform};
+    }
+    return seats.map((seat,i)=>{
+     const avatar=seat.querySelector('.bot-avatar'),med=avatar.querySelector('.portrait-medallion');
+     const img=med.querySelector('img');
+     const wasActive=seat.classList.contains('active');
+     seat.classList.remove('active');
+     const resting={med:measure(med),avatar:measure(avatar),img:img?measure(img):null};
+     med.style.setProperty('--tav-npc-progress','60%');
+     seat.classList.add('active');
+     const active={med:measure(med),avatar:measure(avatar),img:img?measure(img):null};
+     const after=getComputedStyle(med,'::after'),old=getComputedStyle(avatar,'::after');
+     const ring={display:after.display,bg:after.backgroundImage,position:after.position,
+        width:parseFloat(after.width),height:parseFloat(after.height),oldDisplay:old.display};
+     seat.classList.toggle('active',wasActive);
+     return {seat:i,resting,active,ring};
+    });
    },palette);
-   assert.equal(result.pos,'relative',JSON.stringify(result));
-   assert.equal(result.oldDisplay,'none','Aro legado reapareceu: '+JSON.stringify(result));
-   assert.equal(result.afterDisplay,'block',JSON.stringify(result));
-   assert.equal(result.afterPosition,'absolute',JSON.stringify(result));
-   assert.equal(result.timerDisplay,'none','Relógio ainda tapa o retrato: '+JSON.stringify(result));
-   assert.equal(result.inactiveDisplay,'none','Halo continua após a vez: '+JSON.stringify(result));
-   assert(result.afterBackground.includes('conic-gradient')&&result.afterBackground.includes('75%'),
-     'Progresso não pintou o anel: '+JSON.stringify(result));
-   assert(result.afterWidth>=result.width-10&&result.afterWidth<=result.width+1,
-     'Aro extrapolou largura do medalhão: '+JSON.stringify(result));
-   assert(result.afterHeight>=result.height-10&&result.afterHeight<=result.height+1,
-     'Aro extrapolou altura do medalhão: '+JSON.stringify(result));
-   if(width===390)await page.screenshot({path:'qa/screenshots/halo-v60-'+palette+'.png'});
-   console.log('HALO_V60_ALINHADO',width,palette);
+   assert(snapshots.length>=3,'A partida real não montou 4 bots: '+JSON.stringify(snapshots));
+   for(const s of snapshots){
+    for(const el of ['med','avatar','img']){
+     if(!s.resting[el])continue;
+     for(const dim of ['left','top','width','height']){
+      const d=Math.abs(s.resting[el][dim]-s.active[el][dim]);
+      assert(d<=1,'Fotografia mudou de geometria durante turno '+width+' '+palette+' '+s.seat+
+        ' '+el+'.'+dim+' Δ'+d.toFixed(2)+' '+JSON.stringify(s));
+     }
+    }
+    assert(s.active.med.position===s.resting.med.position,
+     'Position da foto foi sobrescrita no turno: '+JSON.stringify(s));
+    assert(s.ring.display==='block'&&s.ring.bg.includes('conic-gradient'),
+     'Aro regressivo sumiu: '+JSON.stringify(s));
+    assert(s.ring.oldDisplay==='none','Halo antigo do wrapper reapareceu: '+JSON.stringify(s));
+    assert(s.ring.width<=s.active.med.width+3&&s.ring.height<=s.active.med.height+3,
+     'Aro extrapolou medalhão: '+JSON.stringify(s));
+   }
+   console.log('HALO_V61_SEM_DESLOCAMENTO',width,palette,snapshots.length);
+   if(width===390){
+    await page.screenshot({path:'qa/screenshots/halo-v61-real-'+palette+'.png'});
+   }
   }
   await page.close();
  }
