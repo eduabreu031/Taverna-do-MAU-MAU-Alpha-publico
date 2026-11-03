@@ -56,7 +56,7 @@ assert(!greenSvg.includes('<circle cx="120" cy="172" r="19"'),'Verso verde ainda
 const iconGenerator=fs.readFileSync(path.join(__dirname,'apply-alpha-ui-v91.py'),'utf8');
 assert(!iconGenerator.includes('<circle cx='),'Icone gerado ainda tem ponto circular na coroa');
 const versions=JSON.parse(fs.readFileSync(path.join(__dirname,'alpha-releases.json'),'utf8'));
-assert.equal(versions.current,'alpha-0.5.0.55');
+assert.equal(versions.current,'alpha-0.5.0.56');
 const manifest=fs.readFileSync(path.join(site,'manifest.webmanifest'),'utf8');
 assert(manifest.includes('alpha-icon-20261103-1'),'Icones PWA sem renovacao de URL');
 
