@@ -1,7 +1,19 @@
 {
-  "current": "alpha-0.5.0.50",
+  "current": "alpha-0.5.0.51",
   "issuesRepo": "eduabreu031/Taverna-do-MAU-MAU-Alpha-publico",
   "entries": [
+    {
+        "id": "alpha-0.5.0.51",
+        "label": "0.5.0.51-alpha",
+        "date": "2026-11-02",
+        "title": "Mesa móvel adaptativa e cartas completas na mão dupla",
+        "items": [
+          "O cabeçalho da partida deixa de descer conforme a quantidade de cartas; a mesa usa automaticamente a altura livre entre os controles e a mão.",
+          "Com mais de dez cartas, a mão continua com duas fileiras, mas a sobreposição lateral acompanha a largura da tela e mantém a carta da direita totalmente visível nas mãos usuais.",
+          "Para mãos excepcionalmente grandes, a rolagem horizontal permite alcançar todas as cartas sem criar uma terceira fileira ou prejudicar os alvos de toque.",
+          "Testes de interface verificam o comportamento com 5, 12, 20 e 32 cartas em larguras de 320, 390 e 430 pixels, sem modificar as regras de jogo."
+        ]
+      },
     {
       "id": "alpha-0.5.0.50",
       "label": "0.5.0.50-alpha",

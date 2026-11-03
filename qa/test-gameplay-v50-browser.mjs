@@ -56,6 +56,41 @@ try{
   assert.notEqual(result.blueShadow,result.pinkShadow,'Halo não responde à troca de tema: '+width);
   assert(result.bannerImage!=='none','Campeão ainda tem fundo de material legado: '+width);
   assert(result.miniImage!=='none','Miniatura de apuração sem verso temático: '+width);
+  // v51: 5 cartas deixam a mesa expandir, sem deslocar o cabeçalho para baixo.
+  // Com 20, ambas as últimas cartas devem aparecer sem rolagem.
+  // Com 32, a última fica alcançável deslizando a própria mão.
+  const adaptive=await page.evaluate(()=>{
+   const scene=document.querySelector('#sceneGame'),header=scene.querySelector('.game-header');
+   const table=scene.querySelector('.table-viewport');
+   const zone=scene.querySelector('#humanZone'),hand=scene.querySelector('#humanHand');
+   const fake=(n)=>Array.from({length:n},(_,i)=>
+    '<button type="button" class="playing-card" data-card="'+i+'">'+i+'</button>'
+   ).join('');
+   zone.classList.remove('tav-double-hand');
+   hand.innerHTML=fake(5);
+   const five={headerTop:header.getBoundingClientRect().top,tableHeight:table.getBoundingClientRect().height};
+   zone.classList.add('tav-double-hand');
+   hand.style.setProperty('--tav-hand-cols','10');
+   hand.innerHTML=fake(20);
+   const rects=[...hand.children].map(e=>e.getBoundingClientRect());
+   const twenty={tableHeight:table.getBoundingClientRect().height,
+    allVisible:rects.every(r=>r.left>=-1&&r.right<=innerWidth+2),
+    twoRows:rects[9].top===rects[0].top&&rects[19].top===rects[10].top&&rects[10].top>rects[9].top+70};
+   hand.style.setProperty('--tav-hand-cols','16');
+   hand.innerHTML=fake(32);
+   const scrollRange=hand.scrollWidth-hand.clientWidth;
+   hand.scrollLeft=hand.scrollWidth;
+   const last=hand.lastElementChild.getBoundingClientRect();
+   const handRight=hand.getBoundingClientRect().right;
+   return {five,twenty,scrollRange,lastReachable:last.right<=handRight+2&&last.left>=-1};
+  });
+  assert(adaptive.five.headerTop<110,'Cabeçalho empurrado para baixo: '+width+' '+JSON.stringify(adaptive));
+  assert(adaptive.five.tableHeight>adaptive.twenty.tableHeight+65,
+   'A mesa não aproveitou a altura liberada pela mão curta: '+width+' '+JSON.stringify(adaptive));
+  assert(adaptive.twenty.allVisible&&adaptive.twenty.twoRows,
+   'A mão de 20 cartas é cortada ou está fora de duas linhas: '+width+' '+JSON.stringify(adaptive));
+  if(width===320)assert(adaptive.scrollRange>0,'Mão de 32 cartas deveria poder rolar em 320px');
+  assert(adaptive.lastReachable,'Última carta inacessível mesmo após deslizar: '+width+' '+JSON.stringify(adaptive));
   await page.close();
   console.log('GAMEPLAY_V50_BROWSER_OK',width);
  }

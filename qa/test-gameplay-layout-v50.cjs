@@ -16,7 +16,10 @@ for(const token of [
  '.tav-human-trophy','.tav-ghost-gallery','.score-pending-back',
  '.bot-pocket .mini-card:first-child','.champion-banner',
  '.seat.active .portrait-medallion','var(--tp-bright)',
- 'var(--tg-deck-image)'
+ 'var(--tg-deck-image)',
+ 'height:100dvh!important','justify-content:flex-start!important',
+ 'grid-template-columns:repeat(var(--tav-hand-cols,6),minmax(22px,1fr))',
+ 'padding-right:71px!important'
 ]){
  assert(css.includes(token),'Regra visual ausente: '+token);
 }
