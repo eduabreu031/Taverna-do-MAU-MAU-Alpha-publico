@@ -9,7 +9,7 @@
       "title": "Halo de tempo integrado ao retrato e bots online com nomes oficiais",
       "items": [
         "Cronômetro dos bots deixa de cobrir o retrato: um aro externo indica o tempo restante, sem números, seguindo o brilho e as cores do tema ativo.",
-        "Bots convocados no multiplayer passam a receber os mesmos nomes curtos e retratos do elenco offline, sem o prefixo genérico; o alinhamento da mesa com nove bots melhora.",
+        "Bots novos convocados no multiplayer recebem os mesmos nomes curtos do elenco offline, sem prefixo genérico, facilitando a leitura na mesa lotada com até nove bots.",
         "Salas antigas preservam os bots, assentos e tokens de reconexão; nomes legados são apresentados com a identidade oficial, sem alterar regras, motor do jogo, dados de contas nem servidor."
       ]
     },
