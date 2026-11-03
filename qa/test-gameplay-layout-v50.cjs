@@ -25,7 +25,7 @@ for(const token of [
 }
 assert(!/\.bot-pocket \.mini-card\s*\{\s*display:none!important/.test(css),'Leque dos bots nao pode esconder miniaturas');
 assert(css.includes('order:1!important;')&&css.includes('max-height:42px!important'),'Retratos de eliminados nao devem empurrar o cabecalho');
-assert(css.includes('#sceneGame .game-header button :is(img,svg)'),'Icones do HUD sem padrao de escala');
+assert(css.includes('#sceneGame .game-header .utility-toolbar button :is(img,svg)'),'Icones do HUD sem padrao de escala');
 assert(!css.includes('#overlay:has(.suit-list) .suit-choice'),'Seletor de naipe nao pode ser alterado');
 assert(app.includes('tavRenderSessionDetails(s);'),'Render nao atualiza mao, estrelas e eliminados');
 assert(app.includes("zone.classList.toggle('tav-double-hand',count>10)"),'Limiar deveria ser 11 cartas');
