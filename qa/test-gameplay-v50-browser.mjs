@@ -122,7 +122,7 @@ try{
     const headerBottom=header.getBoundingClientRect().bottom;
     const galleryTop=gallery.getBoundingClientRect().top;
     const tableTop=table.getBoundingClientRect().top;
-    const buttonBoxes=[...header.querySelectorAll('button')].map(x=>x.getBoundingClientRect());
+    const buttonBoxes=[...header.querySelectorAll('.utility-toolbar button')].map(x=>x.getBoundingClientRect());
     const buttonsEqual=buttonBoxes.length>1&&buttonBoxes.every(
       b=>Math.abs(b.width-buttonBoxes[0].width)<2&&Math.abs(b.height-buttonBoxes[0].height)<2
     );
@@ -146,7 +146,7 @@ try{
     'A galeria roubou altura excessiva: '+width+' '+JSON.stringify(visuals));
   assert(visuals.galleryTop>=visuals.headerBottom-3&&visuals.tableTop>=visuals.galleryTop+25,
     'Faixa de eliminados não está entre cabeçalho e mesa: '+width+' '+JSON.stringify(visuals));
-  assert(visuals.buttonCount>=5&&visuals.buttonsEqual,
+  assert(visuals.buttonCount>=7&&visuals.buttonsEqual,
     'Botões da barra com tamanhos divergentes: '+width+' '+JSON.stringify(visuals));
   assert(visuals.miniCount===5&&visuals.miniVisible&&visuals.backs.every(x=>x.includes('neon-green')),
     'O tema esconde cartas dos NPCs ou usa verso incorreto: '+width+' '+JSON.stringify(visuals));
