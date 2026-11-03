@@ -76,7 +76,7 @@ try{
  assert(unified.controls.length>=9,'HUD incompleto');
  assert.equal(new Set(unified.controls.map(c=>c.color)).size,1,'Ícones do HUD com cores discrepantes');
  assert.equal(new Set(unified.controls.map(c=>c.border)).size,1,'Contornos do HUD com cores discrepantes');
- assert(unified.controls.every(c=>Math.abs(c.w-c.h)<=1),'HUD com botões fora da proporção circular');
+ assert(unified.controls.every(c=>Math.abs(c.w-c.h)<=1),'HUD com botões fora da proporção circular: '+JSON.stringify(unified));
  console.log('OFFLINE_PAUSE_BROWSER_OK',JSON.stringify({started,after,trophies,geometry,unified}));
  await page.close();
 }finally{await browser.close();}
