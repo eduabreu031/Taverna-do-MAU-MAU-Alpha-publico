@@ -60,6 +60,45 @@ try{
  assert(geometry.minX>=-2&&geometry.maxX<=geometry.screen+3,
   'Barra da mesa ultrapassou a tela: '+JSON.stringify(geometry));
  assert(geometry.yRows<=2,'HUD repartido demais: '+JSON.stringify(geometry));
- console.log('OFFLINE_PAUSE_BROWSER_OK',JSON.stringify({started,after,trophies,geometry}));
+ // Paridade visual: nove comandos têm a mesma moldura, independentemente do tema.
+ const mobileWidths=[320,360,390,430];
+ const visual=[];
+ for(const width of mobileWidths){
+  await page.setViewportSize({width,height:844});
+  const sample=await page.evaluate(()=>{
+   const buttons=[...document.querySelectorAll('#sceneGame .game-header .utility-toolbar button')];
+   const styles=buttons.map(b=>{
+    const c=getComputedStyle(b),r=b.getBoundingClientRect();
+    return {w:Math.round(r.width*10)/10,h:Math.round(r.height*10)/10,
+     left:r.left,right:r.right,round:c.borderRadius,edge:c.borderTopColor,
+     bg:c.backgroundImage,shadow:c.boxShadow};
+   });
+   return {n:buttons.length,styles,mark:!!document.querySelector('#tavOfflinePauseLayer .tav-offline-pause-mark svg'),
+    markText:document.querySelector('#tavOfflinePauseLayer .tav-offline-pause-mark')?.textContent.trim()};
+  });
+  assert(sample.n>=9&&sample.mark&&!sample.markText,'HUD ou ícone real da pausa ausente: '+JSON.stringify(sample));
+  assert(sample.styles.every(a=>a.left>=-2&&a.right<=width+3),'Controles recortados: '+width);
+  const first=sample.styles[0];
+  assert(sample.styles.every(a=>a.w===first.w&&a.h===first.h&&a.round===first.round&&
+   a.edge===first.edge&&a.bg===first.bg),'Molduras divergentes no HUD: '+width);
+  visual.push({width,count:sample.n,diameter:first.w,edge:first.edge});
+ }
+ const palettes=await page.evaluate(()=>{
+  const root=document.documentElement;
+  const before=root.getAttribute('data-tav-palette');
+  const buttons=[...document.querySelectorAll('#sceneGame .game-header .utility-toolbar button')];
+  const result={};
+  for(const theme of ['neon-blue','neon-aero','neon-tavern-dark']){
+   root.setAttribute('data-tav-palette',theme);
+   const colors=buttons.map(b=>getComputedStyle(b).borderTopColor);
+   result[theme]=colors[0];
+   if(!colors.every(c=>c===colors[0]))throw Error('HUD sem paridade no tema '+theme);
+  }
+  if(before===null)root.removeAttribute('data-tav-palette');
+  else root.setAttribute('data-tav-palette',before);
+  return result;
+ });
+ assert(new Set(Object.values(palettes)).size>=2,'HUD não acompanha a paleta: '+JSON.stringify(palettes));
+ console.log('OFFLINE_PAUSE_BROWSER_OK',JSON.stringify({started,after,trophies,geometry,visual,palettes}));
  await page.close();
 }finally{await browser.close();}
