@@ -1,7 +1,18 @@
 {
-  "current": "alpha-0.5.0.60",
+  "current": "alpha-0.5.0.61",
   "issuesRepo": "eduabreu031/Taverna-do-MAU-MAU-Alpha-publico",
   "entries": [
+    {
+      "id": "alpha-0.5.0.61",
+      "label": "0.5.0.61-alpha",
+      "date": "2026-11-03",
+      "title": "Retratos estáveis durante o turno dos bots",
+      "items": [
+        "Corrigida a mudança de posição do retrato quando o bot recebe o turno, sem alterar cartas, animações de jogada ou duração do cronômetro.",
+        "O aro de tempo continua sobre o próprio medalhão e acompanha as cores do tema sem modificar a geometria original da foto, inclusive em telas estreitas.",
+        "A auditoria automatizada agora inicia uma partida offline real e compara a posição e as dimensões dos retratos antes e durante o turno em 320, 390, 430 e 768 px nos temas Clássico, Azul e Verde."
+      ]
+    },
     {
       "id": "alpha-0.5.0.60",
       "label": "0.5.0.60-alpha",
