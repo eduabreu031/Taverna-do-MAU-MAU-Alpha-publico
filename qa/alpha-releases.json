@@ -9,7 +9,7 @@
       "title": "Retratos estáveis durante o turno dos bots",
       "items": [
         "Corrigida a troca indevida de posição absoluta para relativa no avatar neon quando o bot recebe o turno; o retrato não muda de lugar e o leque de cartas continua alinhado.",
-        "A borda do medalhão mantém a espessura original, sem encolher a fotografia. O aro progressivo de tempo permanece separado, seguindo a paleta ativa.",
+        "O aro de tempo segue o tema sem alterar a foto. A borda ativa mantém 2 px nas telas móveis e preserva a espessura original das telas maiores, evitando variações no tamanho da imagem.",
         "A auditoria inicia uma partida offline real e compara tamanho e posição de cada retrato antes e durante a vez do bot, em 320, 390, 430 e 768 px nos temas Clássico, Azul e Verde, sem confundir mudança de propriedade CSS com deslocamento real."
       ]
     },
