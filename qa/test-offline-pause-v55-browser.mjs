@@ -30,6 +30,8 @@ try{
  }));
  assert(after.pause&&!after.layer&&after.sceneInert&&after.hand===started.hand,
   'Estado alterado durante pausa: '+JSON.stringify({started,after}));
+ assert.equal(await page.locator('#tavOfflinePauseLayer .tav-offline-pause-mark svg rect').count(),2,
+  'A marca da pausa deve usar duas barras vetoriais, não um numeral');
  await page.screenshot({path:'/tmp/tav-offline-paused-390.png'});
  await page.locator('#tavOfflineResumeBtn').click({timeout:3000});
  assert.equal(await page.evaluate(()=>window.TavernaOfflinePause.isPaused()),false,
@@ -60,6 +62,21 @@ try{
  assert(geometry.minX>=-2&&geometry.maxX<=geometry.screen+3,
   'Barra da mesa ultrapassou a tela: '+JSON.stringify(geometry));
  assert(geometry.yRows<=2,'HUD repartido demais: '+JSON.stringify(geometry));
- console.log('OFFLINE_PAUSE_BROWSER_OK',JSON.stringify({started,after,trophies,geometry}));
+ const unified=await page.evaluate(()=>{
+  const controls=[...document.querySelectorAll('#sceneGame .game-header .utility-toolbar button')];
+  const mark=document.querySelector('#tavOfflinePauseLayer .tav-offline-pause-mark');
+  return {markHasText:mark.textContent.trim().length>0,
+   controls:controls.map(b=>{
+    const cs=getComputedStyle(b),rect=b.getBoundingClientRect();
+    return {w:Math.round(rect.width),h:Math.round(rect.height),radius:cs.borderTopLeftRadius,
+     color:cs.color,border:cs.borderTopColor,bg:cs.backgroundImage};
+   })};
+ });
+ assert.equal(unified.markHasText,false,'Numeral/texto legado reapareceu na pausa');
+ assert(unified.controls.length>=9,'HUD incompleto');
+ assert.equal(new Set(unified.controls.map(c=>c.color)).size,1,'Ícones do HUD com cores discrepantes');
+ assert.equal(new Set(unified.controls.map(c=>c.border)).size,1,'Contornos do HUD com cores discrepantes');
+ assert(unified.controls.every(c=>Math.abs(c.w-c.h)<=1),'HUD com botões fora da proporção circular');
+ console.log('OFFLINE_PAUSE_BROWSER_OK',JSON.stringify({started,after,trophies,geometry,unified}));
  await page.close();
 }finally{await browser.close();}
