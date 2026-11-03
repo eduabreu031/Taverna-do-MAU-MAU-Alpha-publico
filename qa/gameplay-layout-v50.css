@@ -331,7 +331,7 @@
  }
  /* Botões com moldura e ilustração dimensionadas pelo mesmo padrão em
     todas as paletas, sem mudar o tema nem o funcionamento dos comandos. */
- #sceneGame .game-header button{
+ #sceneGame .game-header .utility-toolbar button{
   width:clamp(33px,8.7vw,43px)!important;
   height:clamp(33px,8.7vw,43px)!important;
   min-width:clamp(33px,8.7vw,43px)!important;
@@ -346,7 +346,7 @@
   justify-content:center!important;
   line-height:1!important;
  }
- #sceneGame .game-header button :is(img,svg){
+ #sceneGame .game-header .utility-toolbar button :is(img,svg){
   display:block!important;
   width:80%!important;
   height:80%!important;
