@@ -1,0 +1,76 @@
+/* Alpha 0.5.0.55 — controles compactos e pausa real, só no offline. */
+#tavOfflinePauseLayer[hidden]{display:none!important}
+#tavOfflinePauseLayer{
+ position:fixed;inset:0;z-index:2147483500;
+ display:grid;place-items:center;padding:18px;
+ background:rgba(6,5,11,.86);backdrop-filter:blur(6px);
+ color:#f5e6d9;box-sizing:border-box;
+}
+#tavOfflinePauseLayer *{box-sizing:border-box}
+#tavOfflinePauseLayer .tav-offline-pause-panel{
+ width:min(440px,100%);padding:clamp(23px,5vw,40px);
+ text-align:center;border-radius:21px;border:2px solid #bb8591;
+ background:linear-gradient(150deg,#512934,#261622 75%);
+ box-shadow:0 22px 80px #000b,inset 0 1px 0 #ffffff29;
+}
+#tavOfflinePauseLayer .tav-offline-pause-mark{
+ display:grid;place-items:center;
+ margin:0 auto 14px;width:64px;height:64px;border-radius:50%;
+ border:2px solid #dfaaaf;box-shadow:0 0 18px #d6788b88;
+ color:#f8d4d8;font:bold 35px/1 Georgia,serif;
+}
+#tavOfflinePauseLayer small{color:#f6d4b9;font:700 10px Georgia,serif;letter-spacing:.11em}
+#tavOfflinePauseLayer h2{margin:11px 0 10px;font:bold clamp(26px,5vw,34px)/1.2 Georgia,serif}
+#tavOfflinePauseLayer p{margin:0 auto 21px;max-width:320px;font:15px/1.5 Georgia,serif;color:#edced2}
+#tavOfflinePauseLayer button{
+ min-height:46px;width:100%;border:2px solid #dbb49b;
+ border-radius:12px;background:linear-gradient(#80515e,#4c2b3a);
+ color:#fff4e8;font:bold 14px Georgia,serif;cursor:pointer;
+}
+#tavOfflinePauseLayer button:focus-visible,#sceneGame .tav-offline-pause-btn:focus-visible,
+#sceneGame .tav-game-cronicas-trigger:focus-visible{outline:3px solid #86e6ff;outline-offset:3px}
+:root[data-tav-palette^="neon-"] #tavOfflinePauseLayer .tav-offline-pause-panel{
+ background:var(--tp-panel)!important;border-color:var(--tp-edge)!important;color:var(--tp-text)!important;
+ box-shadow:0 20px 72px #000b,inset 0 0 22px var(--tp-glow)!important
+}
+:root[data-tav-palette^="neon-"] #tavOfflinePauseLayer .tav-offline-pause-mark{
+ border-color:var(--tp-bright)!important;color:var(--tp-bright)!important;
+ box-shadow:0 0 22px var(--tp-glow-hi)!important
+}
+:root[data-tav-palette^="neon-"] #tavOfflinePauseLayer :is(small,h2){color:var(--tp-bright)!important}
+:root[data-tav-palette^="neon-"] #tavOfflinePauseLayer p{color:var(--tp-text)!important}
+:root[data-tav-palette^="neon-"] #tavOfflinePauseLayer button{
+ background:var(--tp-button)!important;border-color:var(--tp-edge)!important;color:var(--tp-text)!important
+}
+#sceneGame .utility-toolbar :is(.tav-offline-pause-btn,.tav-game-cronicas-trigger){
+ display:inline-flex!important;align-items:center!important;justify-content:center!important;
+ padding:3px!important;line-height:1!important;
+ color:inherit!important;flex-shrink:0!important;
+}
+#sceneGame .utility-toolbar :is(.tav-offline-pause-btn,.tav-game-cronicas-trigger) svg{
+ display:block;width:75%!important;height:75%!important;max-width:75%!important;
+ max-height:75%!important;object-fit:contain!important;
+}
+:root[data-tav-palette^="neon-"] #sceneGame .utility-toolbar :is(.tav-offline-pause-btn,.tav-game-cronicas-trigger) svg{
+ color:var(--tp-bright)!important
+}
+@media(max-width:760px){
+ #sceneGame .game-header .utility-toolbar{
+  gap:clamp(1px,.45vw,3px)!important;
+  flex-wrap:nowrap!important;
+  min-width:0!important;
+  max-width:100%!important;
+ }
+ #sceneGame .game-header .utility-toolbar button{
+  width:clamp(27px,8.5vw,36px)!important;
+  height:clamp(27px,8.5vw,36px)!important;
+  min-width:clamp(27px,8.5vw,36px)!important;
+  min-height:clamp(27px,8.5vw,36px)!important;
+  max-width:clamp(27px,8.5vw,36px)!important;
+  max-height:clamp(27px,8.5vw,36px)!important;
+  flex:0 0 clamp(27px,8.5vw,36px)!important;
+ }
+}
+@media(prefers-reduced-motion:reduce){
+ #tavOfflinePauseLayer{backdrop-filter:none}
+}
