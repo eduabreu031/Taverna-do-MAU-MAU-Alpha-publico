@@ -190,3 +190,39 @@
   --tav-hud-size:clamp(29px,8.5vw,36px);
  }
 }
+
+/* v0.5.0.57 — Recupera o desenho ORIGINAL dos símbolos em vez de
+   destruí-lo com brightness(0)/saturate(0) (causa das silhuetas brancas).
+   Mantém todos os alvos, handlers, pausa e troféu existentes. */
+:root{
+ --tav-hud-glyph-filter:drop-shadow(0 1px 1px rgba(10,8,15,.72));
+}
+:root[data-tav-palette^="neon-"]{
+ --tav-hud-glyph-filter:drop-shadow(0 1px 1px rgba(2,8,18,.75));
+}
+:root[data-tav-palette="neon-porcelain"]{
+ --tav-hud-ink:#204a6d;
+ --tav-hud-glyph-filter:brightness(.53) saturate(1.4) drop-shadow(0 1px 0 #ffffffb0);
+}
+:root[data-tav-palette="neon-aero"]{
+ --tav-hud-ink:#173f55;
+ --tav-hud-glyph-filter:brightness(.52) saturate(1.25) drop-shadow(0 1px 0 #d4fff4a8);
+}
+/* Pictogramas com linhas internas originais — NÃO mascarar a arte.
+   Pausa e troféu vetoriais seguem herdando currentColor temático. */
+:root body #sceneGame#sceneGame .game-header .utility-toolbar button :is(img,svg){
+ filter:var(--tav-hud-glyph-filter)!important;
+ opacity:1!important;
+}
+:root body #sceneGame#sceneGame .game-header .utility-toolbar button svg{
+ fill:none;
+ stroke:currentColor;
+}
+:root body #sceneGame#sceneGame .game-header .utility-toolbar button svg rect[fill],
+:root body #sceneGame#sceneGame .game-header .utility-toolbar button svg path[fill]{
+ fill:currentColor;
+}
+/* Ícones integrados no DOM não devem perder os ornamentos por alvejamento. */
+:root body #sceneGame#sceneGame .game-header .utility-toolbar button:where(:focus-visible,:hover){
+ box-shadow:inset 0 1px 0 #ffffff2b,0 3px 9px #0006,0 0 0 1px var(--tav-hud-ink)!important;
+}

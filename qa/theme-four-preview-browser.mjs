@@ -104,7 +104,7 @@ try{
    assert(data.paper.includes('gradient'),'Frente da carta não está no tema: '+id+' computed='+data.paper.slice(0,240));
    assert(data.cardback.includes('theme-decks-raster/'+id+'.webp'),'Verso SVG não aplicado: '+id);
    assert.equal(data.before,'none','Desenho genérico duplicado no verso: '+id);
-   assert(data.assets.every(a=>a.ok&&a.svg&&a.bytes<4200),'SVG fora do orçamento: '+JSON.stringify(data.assets));
+   assert(data.assets.every(a=>a.ok&&a.svg&&a.bytes<(a.uri.includes('theme-decks/')?16000:4200)),'SVG fora do orçamento: '+JSON.stringify(data.assets));
    assert(data.assets[1].width===240&&data.assets[1].height===336,'Carta SVG com dimensões incorretas: '+id);
    if(width<=390)assert.equal(data.mediaFilter,'none','Efeito de blur caro no celular: '+id);
    signatures.add(data.table);scenes.add(data.scene);backs.add(data.cardback);

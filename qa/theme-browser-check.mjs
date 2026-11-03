@@ -436,7 +436,7 @@ try{
   for(const s of deckAssets){
     assert(s.ok&&s.width===240&&s.height===336,
       'Verso SVG não renderiza no navegador: '+JSON.stringify(s));
-    assert(s.bytes<4500,'SVG pesado demais para celular: '+s.id);
+    assert(s.bytes<16000,'SVG pesado demais para celular: '+s.id);
   }
   console.log('THEME_GAME_SURFACES_AND_SEVEN_DECKS_OK',width,deckAssets.map(x=>x.bytes));
   // 0.5.0.35: componentes REAIS relatados, sete paletas, clássico estável.

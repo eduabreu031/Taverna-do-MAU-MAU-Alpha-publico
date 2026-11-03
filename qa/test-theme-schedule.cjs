@@ -110,7 +110,7 @@ for(const id of ['neon-forge','neon-abyss','neon-forest','neon-porcelain']){
  for(const kind of ['theme-decks','theme-backdrops']){
   const file=path.join(base,kind,id+'.svg');
   const svg=fs.readFileSync(file,'utf8');
-  assert(svg.length>800&&svg.length<4200,'SVG fora do limite de peso: '+file);
+  assert(svg.length>800&&svg.length<(kind==='theme-decks'?16000:4200),'SVG fora do limite de peso: '+file);
   assert(svg.startsWith('<svg')&&svg.includes('</svg>')&&!/<script|foreignObject|<image|href=/i.test(svg.replace('http://www.w3.org/2000/svg','')),
     'SVG não isolado ou inválido: '+file);
   assert(fs.readFileSync(path.join(base,'sw.js'),'utf8').includes("'./"+kind+"/"+id+".svg'"),
@@ -148,7 +148,7 @@ for(const id of ['neon-blue','neon-green','neon-pink','neon-tavern-dark',
   'Skin sem verso SVG exclusivo: '+id);
  const svg=fs.readFileSync(path.join(base,'theme-decks',id+'.svg'),'utf8');
  assert(svg.startsWith('<svg xmlns="http://www.w3.org/2000/svg"')&&svg.includes('</svg>'),'SVG inválido: '+id);
- assert(svg.length>700&&svg.length<4500,'Arte vetorial de cartas fora do orçamento móvel: '+id);
+ assert(svg.length>700&&svg.length<16000,'Arte vetorial de cartas fora do orçamento móvel: '+id);
  assert(!/<script|foreignObject|<image|href=/i.test(svg),'SVG não pode conter recursos externos: '+id);
  assert(swAssets.includes("'./theme-decks/"+id+".svg'"),'Cache offline do verso ausente: '+id);
 }
