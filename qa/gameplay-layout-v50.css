@@ -96,6 +96,7 @@
  box-shadow:0 0 10px var(--tp-glow)!important;
 }
 /* A estrela do humano usa a contagem real ja aplicada aos NPCs no motor. */
+#sceneGame #humanZone .human-topline{z-index:24!important;}
 #sceneGame #humanAvatar{position:relative!important;}
 #sceneGame #humanAvatar .tav-human-trophy{
  position:absolute;
