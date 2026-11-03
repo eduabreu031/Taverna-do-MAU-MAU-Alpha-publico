@@ -13,7 +13,7 @@
         "Vitórias de rodada do jogador aparecem como estrelas acima do próprio retrato (sem ficarem escondidas pelas cartas), usando a mesma contagem já aplicada aos bots.",
         "O halo dourado residual do turno dos adversários é substituído pela cor da paleta ativa, sem mudar os indicadores do jogo.",
         "Miniaturas de versos nas mãos adversárias e na apuração passam a mostrar o baralho do tema; a tela de campeão passa a usar os materiais e cores da paleta.",
-        "Testes automatizados do motor e auditoria visual real no Chromium verificam a mão dupla, o halo dinâmico, a identidade de campeão e a preservação das regras."
+        "Testes automatizados do motor e auditoria no Chromium verificam a mão dupla, as paletas, o painel de conquistas e os fluxos de entrada; o teste agora fecha as notas de versão pela própria interface."
       ]
     },
     {
