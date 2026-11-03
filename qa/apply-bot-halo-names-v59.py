@@ -57,8 +57,8 @@ helper=(
 swap('const onlineBotPortraitCache=new Map();',helper+'const onlineBotPortraitCache=new Map();')
 swap('const portrait=byId.get(p.id)?.name;',
      'const portrait=tavOnlineDisplayBotName(byId.get(p.id));')
-swap("name:members.find(x=>x.id===p.id)?.name||'Jogador',alive:",
-     "name:tavOnlineDisplayBotName(members.find(x=>x.id===p.id))||'Jogador',alive:")
+swap("name:members.find(x=>x.id===p.id)?.name||'Jogador',portraitName:",
+     "name:tavOnlineDisplayBotName(members.find(x=>x.id===p.id))||'Jogador',portraitName:")
 
 # O relógio original continua calculando os segundos; agora alimenta apenas
 # o aro do avatar, sem sobreposição sobre a imagem e sem números visíveis.
