@@ -121,3 +121,21 @@
 @media(prefers-reduced-motion:reduce){
  #sceneGame .game-header .utility-toolbar button{transition:none!important}
 }
+
+/* Dimensão explícita: alguns estilos legados mantêm largura e altura distintas
+   mesmo com aspect-ratio. O contrato controla ambas as dimensões. */
+#sceneGame .game-header .utility-toolbar button{
+ --tav-hud-size:clamp(34px,3.3vw,44px);
+ width:var(--tav-hud-size)!important;
+ height:var(--tav-hud-size)!important;
+ min-width:var(--tav-hud-size)!important;
+ min-height:var(--tav-hud-size)!important;
+ max-width:var(--tav-hud-size)!important;
+ max-height:var(--tav-hud-size)!important;
+ flex:0 0 var(--tav-hud-size)!important;
+}
+@media(max-width:760px){
+ #sceneGame .game-header .utility-toolbar button{
+  --tav-hud-size:clamp(29px,8.5vw,36px);
+ }
+}
