@@ -75,6 +75,8 @@ try{
  assert.equal(unified.markHasText,false,'Numeral/texto legado reapareceu na pausa');
  assert(unified.controls.length>=9,'HUD incompleto');
  assert.equal(new Set(unified.controls.map(c=>c.color)).size,1,'Ícones do HUD com cores discrepantes');
+ assert(unified.controls.every(c=>c.color!=='rgba(0, 0, 0, 0)'),
+  'Cor transparente herdada pelo HUD: '+JSON.stringify(unified));
  assert.equal(new Set(unified.controls.map(c=>c.border)).size,1,'Contornos do HUD com cores discrepantes');
  assert(unified.controls.every(c=>Math.abs(c.w-c.h)<=1),'HUD com botões fora da proporção circular: '+JSON.stringify(unified));
  console.log('OFFLINE_PAUSE_BROWSER_OK',JSON.stringify({started,after,trophies,geometry,unified}));
