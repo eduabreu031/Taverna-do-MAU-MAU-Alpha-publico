@@ -56,8 +56,18 @@ assert(!greenSvg.includes('<circle cx="120" cy="172" r="19"'),'Verso verde ainda
 const iconGenerator=fs.readFileSync(path.join(__dirname,'apply-alpha-ui-v91.py'),'utf8');
 assert(!iconGenerator.includes('<circle cx='),'Icone gerado ainda tem ponto circular na coroa');
 const versions=JSON.parse(fs.readFileSync(path.join(__dirname,'alpha-releases.json'),'utf8'));
-assert.equal(versions.current,'alpha-0.5.0.53');
+assert.equal(versions.current,'alpha-0.5.0.54');
 const manifest=fs.readFileSync(path.join(site,'manifest.webmanifest'),'utf8');
 assert(manifest.includes('alpha-icon-20261103-1'),'Icones PWA sem renovacao de URL');
+
+
+// Regressao v54: contorno e pulso devem existir nos dois tipos de jogador.
+const v54=css.slice(css.indexOf('/* Alpha 0.5.0.54'));
+assert(v54.includes('tav-turn-breathe-v54'),'Pulso temático v54 ausente');
+assert(v54.includes('.seat.active .bot-avatar::after'),'Pulso do bot ativo ausente');
+assert(v54.includes('#humanZone.turn-active #humanAvatar::after'),'Pulso do jogador humano ausente');
+assert(v54.includes('var(--tp-accent)')&&v54.includes('var(--tp-bright)')&&v54.includes('var(--tp-glow-hi)'),'Halo não acompanha paleta');
+assert(v54.includes('prefers-reduced-motion:reduce'),'Redução de movimento ignorada');
+assert(!/#[0-9a-f]{3,8}\b/i.test(v54),'Halo não pode usar uma cor fixa');
 
 console.log('ALPHA_GAMEPLAY_V50_OK: duas linhas, estrelas do jogador, eliminados, campeao e cartas tematicas');

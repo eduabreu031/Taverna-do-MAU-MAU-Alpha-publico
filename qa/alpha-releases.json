@@ -1,7 +1,18 @@
 {
-  "current": "alpha-0.5.0.53",
+  "current": "alpha-0.5.0.54",
   "issuesRepo": "eduabreu031/Taverna-do-MAU-MAU-Alpha-publico",
   "entries": [
+    {
+      "id": "alpha-0.5.0.54",
+      "label": "0.5.0.54-alpha",
+      "date": "2026-11-03",
+      "title": "Brilho de turno visível e pulsante na cor de cada tema",
+      "items": [
+        "O jogador ativo volta a receber um halo circular luminoso ao redor do retrato, com pulsação suave nas cores da paleta selecionada, sem ressuscitar o dourado antigo.",
+        "O destaque acompanha também o retrato do jogador humano, some fora do turno e respeita a preferência por movimento reduzido.",
+        "O cronômetro e as regras da partida permanecem inalterados."
+      ]
+    },
     {
       "id": "alpha-0.5.0.53",
       "label": "0.5.0.53-alpha",
