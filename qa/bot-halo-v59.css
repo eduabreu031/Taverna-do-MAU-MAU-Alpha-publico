@@ -1,48 +1,69 @@
-/* Alpha 0.5.0.59 — mesmo destaque temático, com progresso em aro.
-   Não modifica o motor, duração do relógio ou retratos.
-   Este estilo vem DEPOIS dos estilos legados de cronômetro do HTML. */
-#sceneGame .table-shell .seat .npc-timer{
- display:none!important;
+/* Alpha 0.5.0.60 — reparo do aro do relógio.
+   O pseudo-elemento deve nascer no medalhão circular REAL, jamais no
+   wrapper do assento/avatares (que possui medidas e posicionamento distintos).
+   Escopo: apenas retratos de bots ativos; nenhum elemento do motor é removido. */
+#sceneGame #tableShell #seats .seat .npc-timer,
+:root[data-tav-palette^="neon-"] #sceneGame #tableShell #seats .seat .npc-timer {
+  display:none!important;
 }
-#sceneGame .table-shell .seat.active .bot-avatar{
- overflow:visible!important;
+/* Desativar o halo v54 do wrapper em TODAS as paletas, inclusive o
+   seletor de alta especificidade dos temas neon. Deixar só o anel v60. */
+#sceneGame #tableShell #seats .seat.active .bot-avatar::after,
+:root[data-tav-palette^="neon-"] #sceneGame #tableShell #seats .seat.active .bot-avatar::after {
+  content:none!important;
+  display:none!important;
+  background:none!important;
+  box-shadow:none!important;
+  filter:none!important;
+  animation:none!important;
 }
-#sceneGame .table-shell .seat.active .bot-avatar::after{
- content:""!important;
- display:block!important;
- visibility:visible!important;
- position:absolute!important;
- inset:-4px!important;
- left:-4px!important;
- right:-4px!important;
- top:-4px!important;
- bottom:-4px!important;
- width:auto!important;
- height:auto!important;
- margin:0!important;
- padding:0!important;
- transform:none!important;
- opacity:1!important;
- z-index:3!important;
- box-sizing:border-box!important;
- pointer-events:none!important;
- border:0!important;
- border-radius:50%!important;
- box-shadow:none!important;
- --tav-npc-ring-ink:var(--tp-bright,var(--tav-ui-focus,#e9bc80));
- background:conic-gradient(from -90deg,var(--tav-npc-ring-ink) var(--tav-npc-progress,0%),transparent 0)!important;
- -webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 4px),#000 calc(100% - 3px))!important;
- mask:radial-gradient(farthest-side,transparent calc(100% - 4px),#000 calc(100% - 3px))!important;
- filter:drop-shadow(0 0 3px var(--tav-npc-ring-ink))!important;
- animation:none!important;
+/* O medalhão mede exatamente o diâmetro da foto. O pseudo-elemento
+   com inset 0 não altera tamanho, fluxo, posição nem zona de toque. */
+#sceneGame #tableShell #seats .seat.active .bot-avatar .portrait-medallion,
+:root[data-tav-palette^="neon-"] #sceneGame #tableShell #seats .seat.active .bot-avatar .portrait-medallion {
+  position:relative!important;
+  --tav-npc-ring-ink:var(--tp-bright,var(--tav-ui-focus,#e9bc80));
+  border-color:color-mix(in srgb,var(--tav-npc-ring-ink) 25%,transparent)!important;
+  box-shadow:0 0 9px 1px var(--tp-glow,var(--tav-npc-ring-ink))!important;
 }
-#sceneGame .table-shell .seat:not(.active) .bot-avatar::after{
- content:none!important;
- display:none!important;
+#sceneGame #tableShell #seats .seat.active .bot-avatar .portrait-medallion::after,
+:root[data-tav-palette^="neon-"] #sceneGame #tableShell #seats .seat.active .bot-avatar .portrait-medallion::after {
+  content:""!important;
+  display:block!important;
+  visibility:visible!important;
+  position:absolute!important;
+  inset:0!important;
+  width:auto!important;
+  height:auto!important;
+  margin:0!important;
+  padding:0!important;
+  transform:none!important;
+  opacity:1!important;
+  z-index:5!important;
+  box-sizing:border-box!important;
+  pointer-events:none!important;
+  border:0!important;
+  border-radius:50%!important;
+  box-shadow:none!important;
+  background:conic-gradient(from -90deg,
+    var(--tav-npc-ring-ink) var(--tav-npc-progress,0%),
+    transparent 0)!important;
+  -webkit-mask:radial-gradient(farthest-side,
+    transparent calc(100% - 4px),#000 calc(100% - 3px))!important;
+  mask:radial-gradient(farthest-side,
+    transparent calc(100% - 4px),#000 calc(100% - 3px))!important;
+  filter:drop-shadow(0 0 3px var(--tav-npc-ring-ink))!important;
+  animation:none!important;
+}
+/* Aros de bots que não estejam na vez nunca permanecem acesos. */
+#sceneGame #tableShell #seats .seat:not(.active) .bot-avatar .portrait-medallion::after,
+:root[data-tav-palette^="neon-"] #sceneGame #tableShell #seats .seat:not(.active) .bot-avatar .portrait-medallion::after {
+  content:none!important;
+  display:none!important;
 }
 @media(prefers-reduced-motion:reduce){
- #sceneGame .table-shell .seat.active .bot-avatar::after{
-  animation:none!important;
-  transition:none!important;
+ #sceneGame #tableShell #seats .seat.active .bot-avatar .portrait-medallion::after {
+   transition:none!important;
+   animation:none!important;
  }
 }
