@@ -32,3 +32,62 @@ SFX e rádio são independentes. Narração medieval grave e pontual, sem atrapa
 4. Não alterar motor de jogo quando somente a interface precisar mudar.
 5. A inspeção estática não prova consistência visual completa: validar capturas reais de navegador.
 6. Registrar versão, atualizar cache PWA e conferir página publicada.
+
+
+## Contrato de componentes (consolidado em 0.5.0.56)
+Esta seção é normativa para toda nova funcionalidade, novo botão, menu, pop-up,
+tela, painel, modal, notificação e mudança de layout na **Alpha** e em seus
+desdobramentos. O produto publicado é a referência de aparência; não criar
+um componente visual paralelo para uma função nova.
+
+### Fonte única e reutilização
+- O CSS `qa/tavern-design-system-v56.css` define os tokens
+  `--tav-ui-*` e `--tav-hud-*`; cores alternativas vêm de
+  `--tp-*` e `--tm-*`, nunca de tons fixos inventados para cada tela.
+- Usar `.tav-ui-panel`, `.tav-ui-button` e `.tav-ui-icon-button`
+  para novas superfícies. Reutilizar os modais `tav-native-*` existentes
+  quando o fluxo já for atendido por eles; não criar novos diálogos nativos.
+- O cabeçalho da partida é **um único componente visual**, mesmo quando
+  funções são instaladas por scripts diferentes. Todos os ícones devem ter
+  o mesmo invólucro circular, proporção, material, contorno, hierarquia e
+  estilo de símbolo. A linguagem aprovada dos ícones de Pausa e Conquistas
+  orienta os demais; evitar misturar ornamentos antigos e pictogramas crus.
+- Para símbolos funcionais (pausar, sair, conquistas, áudio), usar SVG
+  semântico e acessível quando possível, não caracteres Unicode de aparência
+  variável como `Ⅱ`. Preservar `title`, `aria-label`, foco e ação.
+- Não mudar o comportamento do motor, servidor, contagem, cartas ou
+  matchmaking ao padronizar a aparência.
+- A pausa só funciona no offline; abrir Crônicas no offline pode suspender
+  o relógio. O online nunca recebe botão de pausa funcional.
+
+### Material, temas e proporções
+- Clássico: vinho/bordô, marfim e rosa suave com relevo discreto; dourado
+  envelhecido é ornamento e **não** halo universal de turno ou destaque que
+  vaze para outras paletas.
+- Paletas alternativas: as 11 paletas `neon-*` (inclusive Noite,
+  Sombria, Brisa Aero e Âmbar) derivam borda, superfície, texto e brilhos
+  do tema ativo. Nenhuma sobreposição dourada residual.
+- Botões de ação textual: altura alvo de ~44 px; botões de HUD podem ser
+  compactados no celular para comportar os nove controles na mesma área,
+  sem recortes ou sobreposições. Tamanhos de ícones, espaçamento, raio,
+  gradiente e foco devem coincidir.
+- Mão com 11+ cartas, zonas de eliminados, área inferior e botões devem
+  continuar adaptativos; nenhuma alteração cosmética deve romper o layout
+  de 320, 360, 390, 430 px, paisagem ou desktop.
+
+### Regra de aprovação para cada alteração
+1. Antes de criar UI, identificar componente e token já aprovados e
+   verificar o tema Clássico e ao menos duas paletas alternativas.
+2. Revisar também o mesmo componente em todas as telas onde aparece.
+3. Reusar estilos e padrões; justificativas de exceção visual devem
+   constar no PR antes de alterar os contratos.
+4. Executar `node qa/check-design-contract.cjs site` **após** a
+   montagem da página no CI e o teste de navegador da pausa/HUD.
+5. Conferir screenshots de celular, desktop e seleção de temas: teste
+   estático não substitui inspeção de renderização.
+6. Registrar versão/changelog, atualizar cache PWA e só então publicar
+   a versão estável na Alpha. Não tocar na Beta isolada ou no Worker.
+
+Mudanças de identidade visual só ocorrem por decisão expressa do
+responsável pelo jogo. Esta é a referência permanente; instruções para
+agentes estão em `AGENTS.md` e `.github/copilot-instructions.md`.
