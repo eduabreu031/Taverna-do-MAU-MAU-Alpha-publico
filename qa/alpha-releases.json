@@ -1,7 +1,18 @@
 {
-  "current": "alpha-0.5.0.57",
+  "current": "alpha-0.5.0.58",
   "issuesRepo": "eduabreu031/Taverna-do-MAU-MAU-Alpha-publico",
   "entries": [
+    {
+      "id": "alpha-0.5.0.58",
+      "label": "0.5.0.58-alpha",
+      "date": "2026-11-03",
+      "title": "Artes fiéis às prévias aprovadas e ícones metálicos restaurados",
+      "items": [
+        "Quatro baralhos (Azul, Verde, Rosa e Porcelana) passam a usar diretamente a arte visual aprovada nas prévias, em vez de uma interpretação simplificada; sete temas restantes recebem variantes com o mesmo nível de acabamento e emblemas próprios.",
+        "Os ícones de Pausa e Conquistas ganham gravuras e relevos metálicos próprios, removendo a regra CSS que tornava o troféu uma silhueta.",
+        "Os onze versos WebP são verificados quanto à fidelidade, tamanho, identidade exclusiva e compatibilidade móvel; mecânica de jogo e servidores permanecem inalterados."
+      ]
+    },
     {
       "id": "alpha-0.5.0.57",
       "label": "0.5.0.57-alpha",
