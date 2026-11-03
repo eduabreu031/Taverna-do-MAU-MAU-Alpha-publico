@@ -10,7 +10,7 @@
       "items": [
         "Corrigido o aro de tempo dos bots que aparecia como um disco deslocado na lateral da mesa: o progresso agora é desenhado no medalhão circular do próprio retrato, sem cobrir a foto e sem números.",
         "Removido o conflito entre o halo antigo do contêiner e os estilos de temas alternativos; o indicador segue as cores de cada tema e desaparece quando o turno muda.",
-        "Adicionado teste visual em Chromium com tamanhos de celular e paletas Clássico, Azul e Verde, montando a atualização do halo na auditoria final. Nomes oficiais dos bots e regras permanecem inalterados."
+        "Adicionado teste visual em Chromium que mede o aro em relação ao medalhão real, considerando escala responsiva, em telas de celular e paletas Clássico, Azul e Verde. Nomes oficiais dos bots e regras permanecem inalterados."
       ]
     },
     {
