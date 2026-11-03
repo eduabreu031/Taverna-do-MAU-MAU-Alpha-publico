@@ -10,7 +10,7 @@
       "items": [
         "Corrigida a mudança de posição do retrato quando o bot recebe o turno, sem alterar cartas, animações de jogada ou duração do cronômetro.",
         "O aro de tempo continua sobre o próprio medalhão e acompanha as cores do tema sem modificar a geometria original da foto, inclusive em telas estreitas.",
-        "A auditoria automatizada agora inicia uma partida offline real e compara a posição e as dimensões dos retratos antes e durante o turno em 320, 390, 430 e 768 px nos temas Clássico, Azul e Verde."
+        "A auditoria inicia uma partida offline real e compara tamanho e posição de cada retrato antes e durante a vez do bot, em 320, 390, 430 e 768 px nos temas Clássico, Azul e Verde, sem confundir mudança de propriedade CSS com deslocamento real."
       ]
     },
     {
