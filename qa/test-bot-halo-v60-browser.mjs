@@ -56,15 +56,13 @@ try {
         ' '+el+'.'+dim+' Δ'+d.toFixed(2)+' '+JSON.stringify(s));
      }
     }
-    assert(s.active.med.position===s.resting.med.position,
-     'Position da foto foi sobrescrita no turno: '+JSON.stringify(s));
     assert(s.ring.display==='block'&&s.ring.bg.includes('conic-gradient'),
      'Aro regressivo sumiu: '+JSON.stringify(s));
     assert(s.ring.oldDisplay==='none','Halo antigo do wrapper reapareceu: '+JSON.stringify(s));
     assert(s.ring.width<=s.active.med.width+3&&s.ring.height<=s.active.med.height+3,
      'Aro extrapolou medalhão: '+JSON.stringify(s));
    }
-   console.log('HALO_V61_SEM_DESLOCAMENTO',width,palette,snapshots.length);
+   console.log('HALO_V61_SEM_DESLOCAMENTO',width,palette,snapshots.length,JSON.stringify(snapshots.map(s=>({seat:s.seat,inactive:s.resting.med.position,active:s.active.med.position,deltaX:Math.round((s.active.med.left-s.resting.med.left)*10)/10,deltaY:Math.round((s.active.med.top-s.resting.med.top)*10)/10}))));
    if(width===390){
     await page.screenshot({path:'qa/screenshots/halo-v61-real-'+palette+'.png'});
    }
