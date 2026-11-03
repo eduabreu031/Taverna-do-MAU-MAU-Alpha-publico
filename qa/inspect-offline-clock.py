@@ -1,23 +1,35 @@
 #!/usr/bin/env python3
-"""Inspect offline engine / header anchors for safe pause feature."""
 from pathlib import Path
 import re
-s=Path('site/index.html').read_text('utf-8')
-print('SIZE',len(s))
+s=Path('site/index.html').read_text('utf8')
 queries={
-'engine':['class GameEngine','class MauMau','function renderGame','function renderSeats','function renderHumanHand','function renderNPC','function renderTurn','function renderHUD','function startGame','function startOffline','function goGame','function goMenu','const ui=','let ui=','class Offline'],
-'clock':['timeExpired(','clockInterval','turnSeconds','remainingTime','timeLeft','game.tick','ui.game','setInterval(','setTimeout(','clearTimeout(','clockText','npc-timer','runBot','botTurn','botThink'],
-'header':['utility-toolbar','game-header','alphaTopTools','returnMenu','soundBtn','id="sceneGame"','id="humanZone"','id="tavCronicasOverlay"']
+ "pauseSchedulers()":(100,500),
+ "function startClock(":(120,1000),
+ "function scheduleTurn(":(150,2300),
+ "function scheduleNext(":(150,2300),
+ "function scheduleAI(":(150,2300),
+ "ui.botTimeout=setTimeout(":(1900,700),
+ "ui.incidentTimer=setTimeout(":(2100,650),
+ "ui.accusationBot=setTimeout(":(850,750),
+ "function handleResult(":(200,1600),
+ "function showHelp()":(100,900),
+ "function closeOverlay(":(100,850),
+ "function finishModal(":(100,850),
+ "function closeDialog(":(100,850),
+ "function beginMatch(":(100,1200),
+ "function startMatch(":(100,1200),
+ "function scheduleTurn":(100,2200),
+ "function resumeSchedulers(":(100,900),
+ "function runBots(":(100,900),
+ "function renderAll(":(150,1000),
+ "function render(":(150,1000),
+ "function humanTurn(":(100,350),
+ "function renderControls(":(100,450),
+ "function goMenu()":(100,850),
+ "ui.introTimer=setTimeout(":(250,450),
+ "function showModal(":(100,550)
 }
-for group,terms in queries.items():
- print('\nGROUP',group)
- for term in terms:
-  matches=list(re.finditer(re.escape(term),s,re.I))
-  print('\nTERM',term,'COUNT',len(matches))
-  for m in matches[:(4 if group=='clock' else 3)]:
-   span=(650,1450) if group=='clock' else (350,1350)
-   excerpt=s[max(m.start()-span[0],0):min(m.end()+span[1],len(s))]
-   print('POSITION',m.start(),'TEXT',repr(excerpt[:2300]))
-print('\nSCRIPTS')
-for m in re.finditer(r'<script\b[^>]*>',s,re.I):
- print('SCRIPT',m.start(),m.group(0)[:130])
+for q,(before,after) in queries.items():
+ m=s.find(q)
+ print('FOCUS',q,'COUNT',s.count(q),'POSITION',m)
+ if m!=-1:print('CODE',repr(s[max(0,m-before):m+len(q)+after]))
