@@ -1,4 +1,4 @@
-/* Alpha 0.5.0.60 — reparo do aro do relógio.
+/* Alpha 0.5.0.61 — manter anel de tempo sem modificar a geometria do retrato.
    O pseudo-elemento deve nascer no medalhão circular REAL, jamais no
    wrapper do assento/avatares (que possui medidas e posicionamento distintos).
    Escopo: apenas retratos de bots ativos; nenhum elemento do motor é removido. */
@@ -17,11 +17,29 @@
   filter:none!important;
   animation:none!important;
 }
-/* O medalhão mede exatamente o diâmetro da foto. O pseudo-elemento
-   com inset 0 não altera tamanho, fluxo, posição nem zona de toque. */
+/* A v54 mudava o avatar de position:absolute para relative quando a
+   classe active era aplicada nos temas neon. Isso alargava o wrapper,
+   removia translateX(-50%) e deslocava o retrato cerca de 17–35 px.
+   Restaurar a geometria ORIGINAL do assento, sem tocar no motor. */
+:root[data-tav-palette^="neon-"] #sceneGame #tableShell #seats .seat.active .bot-avatar {
+  position:absolute!important;
+  transform:translateX(-50%)!important;
+}
+/* No layout móvel o estado inativo usa 2px: o pulso v54
+   impunha 3px e diminuía a foto. Em >=761px a borda original JÁ é
+   3px; mantê-la nessa faixa evita a regressão inversa no tablet. */
+@media (max-width:760px) {
+ :root[data-tav-palette^="neon-"] #sceneGame #tableShell #seats .seat.active .bot-avatar .portrait-medallion {
+  border-width:2px!important;
+ }
+}
+
+/* A posição original do medalhão é definida pelo layout do assento.
+   NUNCA forçar position:relative quando a vez começa: isso o tira do
+   posicionamento normal e move/diminui a foto em dispositivos móveis.
+   O anel usa o pseudo-elemento, sem alterar a posição do medalhão. */
 #sceneGame #tableShell #seats .seat.active .bot-avatar .portrait-medallion,
 :root[data-tav-palette^="neon-"] #sceneGame #tableShell #seats .seat.active .bot-avatar .portrait-medallion {
-  position:relative!important;
   --tav-npc-ring-ink:var(--tp-bright,var(--tav-ui-focus,#e9bc80));
   border-color:color-mix(in srgb,var(--tav-npc-ring-ink) 25%,transparent)!important;
   box-shadow:0 0 9px 1px var(--tp-glow,var(--tav-npc-ring-ink))!important;
