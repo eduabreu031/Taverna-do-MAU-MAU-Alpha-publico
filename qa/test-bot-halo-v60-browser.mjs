@@ -31,7 +31,7 @@ try {
     const timer=getComputedStyle(seats.querySelector('.npc-timer'));
     const rect=portrait.getBoundingClientRect();
     const state={
-     palette,width:rect.width,height:rect.height,
+     palette,width:portrait.offsetWidth,height:portrait.offsetHeight,renderedWidth:rect.width,renderedHeight:rect.height,
      pos:getComputedStyle(portrait).position,
      afterDisplay:after.display,afterPosition:after.position,
      afterWidth:parseFloat(after.width),afterHeight:parseFloat(after.height),
