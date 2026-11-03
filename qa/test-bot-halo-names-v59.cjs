@@ -15,10 +15,15 @@ assert(html.includes('LEGACY_BOT_PREFIX'),'Reconexão de nomes antigos foi perdi
 assert(html.includes('botNameForSlot(i)'),'Revanche e alteração de vagas devem preservar bots');
 assert(html.includes('tavOnlineDisplayBotName(byId.get(p.id))'),'Retratos de salas antigas não estão sincronizados');
 assert(html.includes("name:tavOnlineDisplayBotName(members.find(x=>x.id===p.id))"),'Nome visual de sala antiga não foi convertido');
+assert(html.includes("querySelector('.bot-avatar .portrait-medallion')"),'Tempo ainda preso ao contêiner errado');
 assert(html.includes("avatar.style.setProperty('--tav-npc-progress'"),'Progresso não acompanha o relógio original');
 assert(html.includes("el.querySelector('.timer-mark').textContent='';"),'Número do timer ainda é exibido');
 assert(html.includes('id="tav-bot-halo-v59-style"'),'CSS do aro não foi montado');
 assert(css.includes('conic-gradient')&&css.includes('var(--tp-bright'),'Aro não segue o tema');
+assert(css.includes('.portrait-medallion::after'),'Anel deve ser desenhado no medalhão circular, não no wrapper');
+assert(css.includes('.bot-avatar::after')&&css.includes('content:none!important'),'Anel legado no wrapper não foi desligado');
+assert(css.includes('#tableShell #seats')&&css.includes(':root[data-tav-palette^="neon-"]'),'A regra não supera os seletores anteriores nos temas');
+assert(css.includes('inset:0!important'),'Aro não deve extrapolar o medalhão');
 assert(css.includes('seat .npc-timer')&&css.includes('display:none!important'),'Relógio sobreposto permanece visível');
 assert(css.includes('prefers-reduced-motion'),'Modo reduzido sem proteção');
 console.log('BOT_HALO_NOMES_V59_OK: 9 bots oficiais, salvas antigas, progresso do aro e identidade temática');
