@@ -4,6 +4,11 @@ on:
     branches: [main]
     paths:
       - 'qa/offline-pause-*'
+      - 'qa/tavern-design-system-v56.css'
+      - 'qa/check-design-contract.cjs'
+      - 'docs/MANUAL-IDENTIDADE-VISUAL.md'
+      - 'AGENTS.md'
+      - '.github/copilot-instructions.md'
       - 'qa/apply-offline-pause-v55.py'
       - 'qa/test-offline-pause-v55-browser.mjs'
       - 'qa/cronicas-ui.js'
@@ -47,6 +52,7 @@ jobs:
           python3 qa/apply-gameplay-layout-v50.py site
           python3 qa/apply-offline-pause-v55.py site
           node qa/test-offline-pause-v55.cjs site
+          node qa/check-design-contract.cjs site
       - name: Preparar Chromium
         run: npm install --no-save playwright@1.58.2 && npx playwright install --with-deps chromium
       - name: Testar partida real no celular simulado
