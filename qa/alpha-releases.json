@@ -10,7 +10,7 @@
       "items": [
         "A mão do jogador em telas móveis passa a duas fileiras a partir de 11 cartas, sem encolher as cartas, preservando toque e rolagem horizontal em mãos muito grandes.",
         "A mesa e os controles são alinhados à parte inferior da tela móvel, reservando o espaço superior para uma galeria discreta dos participantes eliminados.",
-        "Vitórias de rodada do jogador aparecem como estrelas junto ao próprio retrato, usando a mesma contagem já aplicada aos bots e reiniciando em uma nova partida.",
+        "Vitórias de rodada do jogador aparecem como estrelas acima do próprio retrato (sem ficarem escondidas pelas cartas), usando a mesma contagem já aplicada aos bots.",
         "O halo dourado residual do turno dos adversários é substituído pela cor da paleta ativa, sem mudar os indicadores do jogo.",
         "Miniaturas de versos nas mãos adversárias e na apuração passam a mostrar o baralho do tema; a tela de campeão passa a usar os materiais e cores da paleta.",
         "Testes automatizados do motor e auditoria visual real no Chromium verificam a mão dupla, o halo dinâmico, a identidade de campeão e a preservação das regras."
