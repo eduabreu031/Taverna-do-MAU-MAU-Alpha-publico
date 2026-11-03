@@ -30,5 +30,5 @@ assert(css.includes('max-width:760px')&&css.includes('clamp(27px,8.5vw,36px)'),'
 const releases=JSON.parse(fs.readFileSync(path.join(root,'qa','alpha-releases.json'),'utf8'));
 assert.equal(releases.current,'alpha-0.5.0.56');
 const sw=fs.readFileSync(path.join(site,'sw.js'),'utf8');
-assert(sw.includes('taverna-pwa-alpha-0.5.0.55'),'Cache PWA desatualizado');
+assert(sw.includes('taverna-pwa-'+releases.current),'Cache PWA desatualizado');
 console.log('OFFLINE_PAUSE_V55_OK: timers, IA, OPA, HUD, conquistas e versionamento');
