@@ -26,5 +26,5 @@ assert(!pause.includes('Ⅱ')&&!html.includes('tav-offline-pause-mark" aria-hidd
  'Numeral romano na pausa reapareceu');
 assert(manual.includes('Contrato de componentes'),'Manual sem regras obrigatórias');
 const release=JSON.parse(fs.readFileSync(path.join(root,'qa','alpha-releases.json'),'utf8'));
-assert.equal(release.current,'alpha-0.5.0.57','Versão da correção deve constar no changelog');
+assert.equal(release.current,'alpha-0.5.0.58','Versão da correção deve constar no changelog');
 console.log('DESIGN_CONTRACT_OK: HUD, SVG da pausa, 12 paletas, componentes e manual');
