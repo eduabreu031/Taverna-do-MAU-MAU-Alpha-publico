@@ -1,0 +1,48 @@
+/* Alpha 0.5.0.59 — mesmo destaque temático, com progresso em aro.
+   Não modifica o motor, duração do relógio ou retratos.
+   Este estilo vem DEPOIS dos estilos legados de cronômetro do HTML. */
+#sceneGame .table-shell .seat .npc-timer{
+ display:none!important;
+}
+#sceneGame .table-shell .seat.active .bot-avatar{
+ overflow:visible!important;
+}
+#sceneGame .table-shell .seat.active .bot-avatar::after{
+ content:""!important;
+ display:block!important;
+ visibility:visible!important;
+ position:absolute!important;
+ inset:-4px!important;
+ left:-4px!important;
+ right:-4px!important;
+ top:-4px!important;
+ bottom:-4px!important;
+ width:auto!important;
+ height:auto!important;
+ margin:0!important;
+ padding:0!important;
+ transform:none!important;
+ opacity:1!important;
+ z-index:3!important;
+ box-sizing:border-box!important;
+ pointer-events:none!important;
+ border:0!important;
+ border-radius:50%!important;
+ box-shadow:none!important;
+ --tav-npc-ring-ink:var(--tp-bright,var(--tav-ui-focus,#e9bc80));
+ background:conic-gradient(from -90deg,var(--tav-npc-ring-ink) var(--tav-npc-progress,0%),transparent 0)!important;
+ -webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 4px),#000 calc(100% - 3px))!important;
+ mask:radial-gradient(farthest-side,transparent calc(100% - 4px),#000 calc(100% - 3px))!important;
+ filter:drop-shadow(0 0 3px var(--tav-npc-ring-ink))!important;
+ animation:none!important;
+}
+#sceneGame .table-shell .seat:not(.active) .bot-avatar::after{
+ content:none!important;
+ display:none!important;
+}
+@media(prefers-reduced-motion:reduce){
+ #sceneGame .table-shell .seat.active .bot-avatar::after{
+  animation:none!important;
+  transition:none!important;
+ }
+}
