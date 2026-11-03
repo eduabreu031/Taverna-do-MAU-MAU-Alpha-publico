@@ -8,7 +8,7 @@ try{
  await page.waitForFunction(()=>window.TavernaOfflinePause&&window.TavernaCronicas);
  await page.evaluate(()=>document.getElementById('alphaInformationOverlay')?.remove());
  await page.locator('#chooseOffline').click({timeout:5000});
- await page.locator('#playerCount').selectOption('2');
+ await page.evaluate(()=>{const select=document.getElementById('playerCount');select.value='2';select.dispatchEvent(new Event('change',{bubbles:true}));});
  await page.locator('#startGameBtn').click({timeout:5000});
  await page.waitForFunction(()=>window.TavernaOfflinePause?.pause(),null,{timeout:22000});
  const started=await page.evaluate(()=>({
