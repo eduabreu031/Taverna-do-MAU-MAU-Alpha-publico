@@ -1,7 +1,18 @@
 {
-  "current": "alpha-0.5.0.58",
+  "current": "alpha-0.5.0.59",
   "issuesRepo": "eduabreu031/Taverna-do-MAU-MAU-Alpha-publico",
   "entries": [
+    {
+      "id": "alpha-0.5.0.59",
+      "label": "0.5.0.59-alpha",
+      "date": "2026-11-03",
+      "title": "Halo de tempo integrado ao retrato e bots online com nomes oficiais",
+      "items": [
+        "Cronômetro dos bots deixa de cobrir o retrato: o aro de luz em torno do medalhão indica o tempo restante, sem números, usando as cores de cada tema.",
+        "Bots convocados no multiplayer passam a receber os mesmos nomes curtos e retratos do elenco offline, sem o prefixo genérico; o alinhamento da mesa com nove bots melhora.",
+        "Salas antigas conservam o vínculo dos bots e seus tokens de reconexão; nomes legados são apresentados com a identidade oficial, sem alterar regras, motor do jogo ou servidor."
+      ]
+    },
     {
       "id": "alpha-0.5.0.58",
       "label": "0.5.0.58-alpha",
