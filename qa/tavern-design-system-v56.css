@@ -214,13 +214,67 @@
  filter:var(--tav-hud-glyph-filter)!important;
  opacity:1!important;
 }
+/* v58 — Não sobrescrever preenchimentos do SVG: a regra antiga transformava
+   paths fill=none do troféu em massas brancas. Respeitar cada elemento. */
 :root body #sceneGame#sceneGame .game-header .utility-toolbar button svg{
- fill:none;
- stroke:currentColor;
+ fill:initial;
+ stroke:initial;
 }
-:root body #sceneGame#sceneGame .game-header .utility-toolbar button svg rect[fill],
-:root body #sceneGame#sceneGame .game-header .utility-toolbar button svg path[fill]{
- fill:currentColor;
+:root{
+ --tav-metal-hi:#fff0cd;
+ --tav-metal-mid:#d3a768;
+ --tav-metal-low:#815338;
+ --tav-metal-edge:#e9c195;
+}
+:root[data-tav-palette^="neon-"]{
+ --tav-metal-hi:#fff6da;
+ --tav-metal-mid:#dab975;
+ --tav-metal-low:#8d6649;
+ --tav-metal-edge:#fff0bc;
+}
+:root[data-tav-palette="neon-porcelain"]{
+ --tav-metal-hi:#ffffff;
+ --tav-metal-mid:#6b9dba;
+ --tav-metal-low:#2b5b82;
+ --tav-metal-edge:#28577e;
+}
+:root[data-tav-palette="neon-aero"]{
+ --tav-metal-hi:#f0fffa;
+ --tav-metal-mid:#70bdc4;
+ --tav-metal-low:#185b78;
+ --tav-metal-edge:#194e65;
+}
+:root body #sceneGame#sceneGame .game-header .utility-toolbar #tavOfflinePauseBtn svg,
+:root body #sceneGame#sceneGame .game-header .utility-toolbar .tav-game-cronicas-trigger svg{
+ overflow:visible!important;
+ filter:drop-shadow(0 1px 1px #02070aaa)!important;
+}
+:root body #sceneGame#sceneGame .game-header .utility-toolbar .tav-game-cronicas-trigger svg .tav-trophy-cup{
+ fill:url(#tavTrophyMetal58)!important;
+ stroke:var(--tav-metal-edge)!important;
+}
+:root body #sceneGame#sceneGame .game-header .utility-toolbar .tav-game-cronicas-trigger svg .tav-trophy-handles{
+ fill:none!important;
+ stroke:var(--tav-metal-edge)!important;
+}
+:root body #sceneGame#sceneGame .game-header .utility-toolbar .tav-game-cronicas-trigger svg .tav-trophy-engraving{
+ fill:var(--tav-metal-hi)!important;
+ stroke:var(--tav-metal-low)!important;
+}
+:root body #sceneGame#sceneGame .game-header .utility-toolbar #tavOfflinePauseBtn svg rect{
+ fill:url(#tavPauseMetal58)!important;
+ stroke:var(--tav-metal-edge)!important;
+}
+:root body #sceneGame#sceneGame .game-header .utility-toolbar #tavOfflinePauseBtn svg path{
+ fill:none!important;
+ stroke:var(--tav-metal-hi)!important;
+}
+/* Outros pictogramas: restaurar detalhes cromáticos e brilho de borda,
+   sem substituir ícones dinâmicos nem reescrever eventos. */
+:root body #sceneGame#sceneGame .game-header .utility-toolbar button{
+ color:var(--tav-metal-hi)!important;
+ -webkit-text-fill-color:var(--tav-metal-hi)!important;
+ text-shadow:0 1px 1px #040712ba,0 0 1px var(--tav-metal-low)!important;
 }
 /* Ícones integrados no DOM não devem perder os ornamentos por alvejamento. */
 :root body #sceneGame#sceneGame .game-header .utility-toolbar button:where(:focus-visible,:hover){
