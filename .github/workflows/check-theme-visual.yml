@@ -11,6 +11,9 @@ on:
       - 'qa/theme-parity-performance.css'
       - 'qa/theme-expansion-preview.css'
       - 'qa/build-card-opaque-backs.py'
+      - 'qa/build-premium-preview-v58.py'
+      - 'qa/premium-preview-art-v58.b64'
+      - 'qa/test-premium-preview-v58.py'
       - 'qa/tavern-design-system-v56.css'
       - 'qa/test-art-v57.py'
       - 'site/theme-decks/**'
@@ -87,8 +90,11 @@ jobs:
           python3 qa/apply-seasonal-theme.py site
           python3 qa/apply-tavern-entrance.py site
           python3 qa/build-card-opaque-backs.py site
+          python3 qa/build-premium-preview-v58.py site
       - name: Verificar arte completa dos 11 versos
-        run: python3 qa/test-art-v57.py site
+        run: |
+          python3 qa/test-art-v57.py site
+          python3 qa/test-premium-preview-v58.py site
       - name: Validar materiais e motor de paletas sem navegador
         run: node qa/test-theme-schedule.cjs site
       - name: Analisar baralhos e seletor de naipes antes das correções
