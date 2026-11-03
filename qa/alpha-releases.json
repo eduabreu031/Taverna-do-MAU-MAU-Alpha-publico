@@ -8,7 +8,7 @@
       "date": "2026-11-03",
       "title": "Halo de tempo integrado ao retrato e bots online com nomes oficiais",
       "items": [
-        "Cronômetro dos bots deixa de cobrir o retrato: o aro de luz em torno do medalhão indica o tempo restante, sem números, usando as cores de cada tema.",
+        "Cronômetro dos bots deixa de cobrir o retrato: um aro externo indica o tempo restante, sem números, seguindo o brilho e as cores do tema ativo.",
         "Bots convocados no multiplayer passam a receber os mesmos nomes curtos e retratos do elenco offline, sem o prefixo genérico; o alinhamento da mesa com nove bots melhora.",
         "Salas antigas preservam os bots, assentos e tokens de reconexão; nomes legados são apresentados com a identidade oficial, sem alterar regras, motor do jogo, dados de contas nem servidor."
       ]
