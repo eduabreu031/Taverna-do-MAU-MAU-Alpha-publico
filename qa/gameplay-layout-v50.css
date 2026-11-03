@@ -1,0 +1,237 @@
+/* Alpha 0.5.0.50: interface de jogo, contagem e campeao. Nenhuma regra alterada. */
+:root[data-tav-palette^="neon-"] #sceneGame #tableShell #seats .seat.active,
+:root[data-tav-palette^="neon-"] #sceneGame #tableShell #seats .seat.active .seat-inner,
+:root[data-tav-palette^="neon-"] #sceneGame #tableShell #seats .seat.active .leather-name,
+:root[data-tav-palette^="neon-"] #sceneGame #tableShell #seats .seat.active .bot-avatar{
+ animation:none!important;
+ filter:none!important;
+ box-shadow:none!important;
+}
+:root[data-tav-palette^="neon-"] #sceneGame #tableShell #seats .seat.active :is(.leather-name,.bot-avatar,.seat-inner)::before,
+:root[data-tav-palette^="neon-"] #sceneGame #tableShell #seats .seat.active :is(.leather-name,.bot-avatar,.seat-inner)::after{
+ animation:none!important;
+ filter:none!important;
+ box-shadow:none!important;
+}
+:root[data-tav-palette^="neon-"] #sceneGame #tableShell #seats .seat.active .portrait-medallion{
+ animation:none!important;
+ filter:none!important;
+ outline:0!important;
+ border:3px solid var(--tp-bright)!important;
+ box-shadow:0 0 0 2px var(--tp-edge),0 0 13px 4px var(--tp-glow-hi)!important;
+}
+:root[data-tav-palette^="neon-"] #sceneGame #tableShell #seats .seat.active .name-text{
+ color:var(--tp-bright)!important;
+ text-shadow:0 0 7px var(--tp-glow-hi)!important;
+}
+:root[data-tav-palette^="neon-"] #sceneGame #tableShell #seats .seat.active .npc-timer{
+ border-color:var(--tp-bright)!important;
+ box-shadow:0 0 12px var(--tp-glow-hi)!important;
+}
+/* Miniaturas: um verso tematico legivel em vez de dezenas de riscas finas. */
+:root[data-tav-palette^="neon-"] #sceneGame #tableShell #seats .seat .bot-pocket .mini-card{
+ display:none!important;
+}
+:root[data-tav-palette^="neon-"] #sceneGame #tableShell #seats .seat .bot-pocket .mini-card:first-child{
+ display:block!important;
+ left:50%!important;
+ top:0!important;
+ width:18px!important;
+ min-width:18px!important;
+ height:24px!important;
+ transform:translateX(-50%)!important;
+ border:1px solid var(--tp-edge)!important;
+ border-radius:3px!important;
+ background:var(--tg-deck-image) center / 100% 100% no-repeat!important;
+ box-shadow:0 2px 6px #0009,0 0 5px var(--tp-glow)!important;
+}
+:root[data-tav-palette^="neon-"] #sceneGame #tableShell #seats .seat .bot-pocket .mini-card:first-child::before{
+ content:none!important;
+ display:none!important;
+}
+:root[data-tav-palette^="neon-"] #sceneGame #tableShell #seats .seat .bot-pocket .bot-card-count{
+ left:calc(50% + 10px)!important;
+ top:4px!important;
+ background:var(--tp-dark)!important;
+ border-color:var(--tp-edge)!important;
+ color:var(--tp-text)!important;
+}
+:root[data-tav-palette^="neon-"] #v28-score-stage .score-pending-back{
+ background:var(--tg-deck-image) center / 100% 100% no-repeat!important;
+ border:2px solid var(--tp-edge)!important;
+ color:transparent!important;
+ box-shadow:0 3px 8px #0008,0 0 5px var(--tp-glow)!important;
+}
+/* Tema do decreto de campeao, limitado ao modal final, sem tocar no seletor de naipes. */
+:root[data-tav-palette^="neon-"] #overlay:not(:has(.suit-list)) #dialog .parchment-modal:has(.champion-banner){
+ background:var(--tp-panel)!important;
+ border:3px solid var(--tp-edge)!important;
+ color:var(--tp-text)!important;
+ box-shadow:inset 0 0 0 1px var(--tp-glow),0 12px 35px #000b!important;
+}
+:root[data-tav-palette^="neon-"] #overlay:not(:has(.suit-list)) #dialog .parchment-modal:has(.champion-banner)::before{
+ border-color:var(--tp-edge)!important;
+}
+:root[data-tav-palette^="neon-"] #overlay:not(:has(.suit-list)) #dialog .champion-banner{
+ background:var(--tp-button)!important;
+ color:var(--tp-text)!important;
+ border:2px solid var(--tp-edge)!important;
+ border-radius:13px!important;
+ box-shadow:inset 0 0 18px var(--tp-glow),0 5px 18px #0007!important;
+}
+:root[data-tav-palette^="neon-"] #overlay:not(:has(.suit-list)) #dialog .champion-banner strong,
+:root[data-tav-palette^="neon-"] #overlay:not(:has(.suit-list)) #dialog .modal-kicker,
+:root[data-tav-palette^="neon-"] #overlay:not(:has(.suit-list)) #dialog .parchment-modal:has(.champion-banner) h2{
+ color:var(--tp-bright)!important;
+ text-shadow:0 0 10px var(--tp-glow-hi)!important;
+}
+:root[data-tav-palette^="neon-"] #overlay:not(:has(.suit-list)) #dialog .champion-picture{
+ border:3px solid var(--tp-bright)!important;
+ box-shadow:0 5px 18px #0008,0 0 15px var(--tp-glow-hi)!important;
+}
+:root[data-tav-palette^="neon-"] #overlay:not(:has(.suit-list)) #dialog .parchment-modal:has(.champion-banner) .engraved-btn{
+ color:var(--tp-text)!important;
+ background:var(--tp-button)!important;
+ border-color:var(--tp-edge)!important;
+ box-shadow:0 0 10px var(--tp-glow)!important;
+}
+/* A estrela do humano usa a contagem real ja aplicada aos NPCs no motor. */
+#sceneGame #humanZone .human-topline{z-index:24!important;}
+#sceneGame #humanAvatar{position:relative!important;}
+#sceneGame #humanAvatar .tav-human-trophy{
+ position:absolute;
+ z-index:20;
+ top:-19px;
+ left:50%;
+ transform:translateX(-50%);
+ display:block;
+ white-space:nowrap;
+ border-radius:12px;
+ padding:2px 5px;
+ background:#24172abb;
+ color:#f8d38d;
+ font:bold 13px/1 Georgia,serif;
+ text-shadow:0 1px 3px #000a;
+ pointer-events:none;
+}
+:root[data-tav-palette^="neon-"] #sceneGame #humanAvatar .tav-human-trophy{
+ color:var(--tp-bright)!important;
+ background:var(--tp-dark)!important;
+ text-shadow:0 0 7px var(--tp-glow-hi)!important;
+}
+/* Retratos de eliminados sao decorativos, fora da area de toque da mesa. */
+#sceneGame .tav-ghost-gallery[hidden]{display:none!important;}
+#sceneGame .tav-ghost-gallery{
+ display:flex;
+ justify-content:center;
+ align-items:center;
+ gap:12px;
+ overflow:hidden;
+ min-width:0;
+ pointer-events:none;
+}
+#sceneGame .tav-ghost-gallery .tav-ghost-card{
+ width:clamp(43px,10vw,65px);
+ min-width:0;
+ display:flex;
+ flex-direction:column;
+ align-items:center;
+ gap:3px;
+ opacity:.43;
+ filter:grayscale(.65);
+}
+#sceneGame .tav-ghost-gallery .portrait-medallion{
+ width:clamp(33px,8vw,50px)!important;
+ height:clamp(33px,8vw,50px)!important;
+ border-width:2px!important;
+ border-color:#807987!important;
+ box-shadow:none!important;
+}
+#sceneGame .tav-ghost-gallery img{filter:grayscale(1) blur(.7px)!important;}
+#sceneGame .tav-ghost-gallery small{
+ width:100%;
+ overflow:hidden;
+ text-overflow:ellipsis;
+ white-space:nowrap;
+ font:10px/1.15 Georgia,serif;
+ text-align:center;
+ color:#beb4cc;
+}
+:root[data-tav-palette^="neon-"] #sceneGame .tav-ghost-gallery small{
+ color:var(--tp-muted)!important;
+}
+@media(max-width:760px){
+ /* Empurra o conjunto mesa + comandos + mao para a parte inferior da viewport.
+    O espaço ocioso fica em cima; a mao permanece sempre abaixo da mesa. */
+ #sceneGame:not(.hidden){
+  display:flex!important;
+  flex-direction:column!important;
+  justify-content:flex-end!important;
+  min-height:100dvh!important;
+  box-sizing:border-box!important;
+  padding-bottom:max(10px,env(safe-area-inset-bottom))!important;
+ }
+ #sceneGame .game-header{order:0!important;margin-top:auto!important;}
+ #sceneGame .table-viewport{order:1!important;}
+ #sceneGame .control-bar{order:2!important;}
+ #sceneGame #humanZone{order:3!important;}
+ #sceneGame .tav-ghost-gallery:not([hidden]){
+  order:-1!important;
+  flex:1 1 100px;
+  min-height:0;
+  max-height:145px;
+  padding:5px 6px;
+  box-sizing:border-box;
+ }
+ /* 11+ cartas: duas linhas de cartas tocaveis.
+    Acima de 14, usa rolagem horizontal sem criar terceira linha. */
+ #sceneGame #humanZone.tav-double-hand{
+  height:286px!important;
+  min-height:286px!important;
+  max-height:286px!important;
+  padding:8px 4px!important;
+  overflow:visible!important;
+ }
+ #sceneGame #humanZone.tav-double-hand #humanHand{
+  display:grid!important;
+  grid-template-columns:repeat(var(--tav-hand-cols,6),minmax(50px,1fr))!important;
+  grid-template-rows:repeat(2,96px)!important;
+  grid-auto-flow:row!important;
+  justify-content:safe center!important;
+  align-content:center!important;
+  align-items:center!important;
+  gap:8px 0!important;
+  width:100%!important;
+  height:228px!important;
+  min-height:228px!important;
+  max-height:228px!important;
+  flex:0 0 228px!important;
+  box-sizing:border-box!important;
+  padding:16px 5px 12px!important;
+  overflow-x:auto!important;
+  overflow-y:hidden!important;
+  scrollbar-width:thin;
+  overscroll-behavior-x:contain;
+  touch-action:pan-x pan-y!important;
+ }
+ #sceneGame #humanZone.tav-double-hand #humanHand>.playing-card{
+  width:65px!important;
+  height:96px!important;
+  min-width:0!important;
+  margin-right:0!important;
+  justify-self:start!important;
+  touch-action:manipulation;
+ }
+ #sceneGame #humanZone.tav-double-hand .human-topline{
+  height:43px!important;
+  min-height:43px!important;
+  max-height:43px!important;
+  flex:0 0 43px!important;
+ }
+}
+@media(prefers-reduced-motion:reduce){
+ #sceneGame .tav-ghost-gallery *,#sceneGame #humanAvatar .tav-human-trophy{
+  transition:none!important;
+  animation:none!important;
+ }
+}

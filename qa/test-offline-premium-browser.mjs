@@ -36,8 +36,12 @@ try{
    if(width===390)await page.screenshot({path:'qa/screenshots-offline-premium/saguao-'+theme+'.png'});
    console.log('WELCOME_PREMIUM_PALETTE_OK',width,theme);
   }
-  // O aviso de novidades automático não deve interceptar o toque da auditoria.
-  await page.evaluate(()=>{const news=document.getElementById('alphaInformationOverlay');if(news)news.hidden=true});
+  // O changelog surge 300ms apos carregar: fechar pela UI real, marcando a versao como lida.
+  // Ocultar o elemento antes do timer sem registrar leitura faria a janela reaparecer sobre os botões.
+  await page.evaluate(()=>{const news=document.getElementById('alphaInformationOverlay');
+   const close=document.getElementById('alphaNewsContinue')||document.getElementById('alphaModalClose');
+   if(!news?.hidden&&close)close.click();
+  });
   await page.locator('#chooseOffline').click();
   assert(await page.locator('#sceneMenu').isVisible(),'O offline deixou de abrir');
   assert(await page.locator('#playerCountChoice').isVisible(),'Escolha de jogadores ausente');
