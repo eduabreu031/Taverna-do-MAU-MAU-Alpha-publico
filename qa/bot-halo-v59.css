@@ -25,10 +25,13 @@
   position:absolute!important;
   transform:translateX(-50%)!important;
 }
-/* A borda antes passava de 2px para 3px no turno e encolhia a imagem.
-   O progresso está no pseudo-elemento: borda constante de 2px. */
-:root[data-tav-palette^="neon-"] #sceneGame #tableShell #seats .seat.active .bot-avatar .portrait-medallion {
+/* No layout móvel o estado inativo usa 2px: o pulso v54
+   impunha 3px e diminuía a foto. Em >=761px a borda original JÁ é
+   3px; mantê-la nessa faixa evita a regressão inversa no tablet. */
+@media (max-width:760px) {
+ :root[data-tav-palette^="neon-"] #sceneGame #tableShell #seats .seat.active .bot-avatar .portrait-medallion {
   border-width:2px!important;
+ }
 }
 
 /* A posição original do medalhão é definida pelo layout do assento.
