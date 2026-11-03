@@ -45,6 +45,9 @@ jobs:
           python3 qa/apply-bot-identities.py site
           python3 qa/apply-offline-scoring.py site
           python3 qa/apply-gameplay-layout-v50.py site
+          python3 qa/apply-offline-pause-v55.py site
+          python3 qa/apply-hud-design-v56.py site
+          node qa/test-hud-design-v56.cjs site
           node qa/test-gameplay-v50-browser.mjs
       - name: Guardar capturas para auditoria
         if: always()

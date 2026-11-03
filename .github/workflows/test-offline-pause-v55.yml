@@ -4,6 +4,11 @@ on:
     branches: [main]
     paths:
       - 'qa/offline-pause-*'
+      - 'qa/hud-design-v56.css'
+      - 'qa/apply-hud-design-v56.py'
+      - 'qa/test-hud-design-v56.cjs'
+      - 'AGENTS.md'
+      - 'docs/MANUAL-IDENTIDADE-VISUAL.md'
       - 'qa/apply-offline-pause-v55.py'
       - 'qa/test-offline-pause-v55-browser.mjs'
       - 'qa/cronicas-ui.js'
@@ -46,6 +51,8 @@ jobs:
           python3 qa/apply-offline-scoring.py site
           python3 qa/apply-gameplay-layout-v50.py site
           python3 qa/apply-offline-pause-v55.py site
+          python3 qa/apply-hud-design-v56.py site
+          node qa/test-hud-design-v56.cjs site
           node qa/test-offline-pause-v55.cjs site
       - name: Preparar Chromium
         run: npm install --no-save playwright@1.58.2 && npx playwright install --with-deps chromium

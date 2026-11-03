@@ -9,7 +9,7 @@ tavPauseLayer.hidden=true;
 tavPauseLayer.setAttribute('role','dialog');
 tavPauseLayer.setAttribute('aria-modal','true');
 tavPauseLayer.setAttribute('aria-labelledby','tavOfflinePauseTitle');
-tavPauseLayer.innerHTML='<div class="tav-offline-pause-panel"><div class="tav-offline-pause-mark" aria-hidden="true">Ⅱ</div><small>✦ TAVERNA DO MAU MAU ✦</small><h2 id="tavOfflinePauseTitle">Partida pausada</h2><p>Os relógios e os adversários estão parados. Você não perde a vez nem recebe punições enquanto estiver aqui.</p><button type="button" id="tavOfflineResumeBtn">▶ CONTINUAR PARTIDA</button></div>';
+tavPauseLayer.innerHTML='<div class="tav-offline-pause-panel"><div class="tav-offline-pause-mark" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false" aria-hidden="true"><rect x="5" y="3" width="5" height="18" rx="1.5"></rect><rect x="14" y="3" width="5" height="18" rx="1.5"></rect></svg></div><small>✦ TAVERNA DO MAU MAU ✦</small><h2 id="tavOfflinePauseTitle">Partida pausada</h2><p>Os relógios e os adversários estão parados. Você não perde a vez nem recebe punições enquanto estiver aqui.</p><button type="button" id="tavOfflineResumeBtn">▶ CONTINUAR PARTIDA</button></div>';
 document.body.append(tavPauseLayer);
 const tavPauseNav=document.querySelector('#sceneGame .game-header .utility-toolbar');
 if(!tavPauseNav)throw Error('Cabeçalho offline não encontrado para pausa');
