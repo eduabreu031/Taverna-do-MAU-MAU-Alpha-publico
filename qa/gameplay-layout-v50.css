@@ -356,3 +356,52 @@
   margin:auto!important;
  }
 }
+
+/* Alpha 0.5.0.53 — origem única do destaque de turno nos temas.
+   O medalhão tem a cor da paleta; nenhum filtro, gradiente ou pseudo-halo
+   clássico dos wrappers pode projetar brilho dourado. */
+:root[data-tav-palette^="neon-"] #sceneGame #tableShell #seats .seat.active{
+ --tav-active-ring:var(--tp-edge);
+ --tav-active-aura:var(--tp-glow);
+ animation:none!important;
+ filter:none!important;
+ background-image:none!important;
+ box-shadow:none!important;
+}
+:root[data-tav-palette^="neon-"] #sceneGame #tableShell #seats .seat.active :is(.seat-inner,.bot-avatar){
+ animation:none!important;
+ filter:none!important;
+ background:transparent!important;
+ background-image:none!important;
+ box-shadow:none!important;
+}
+:root[data-tav-palette^="neon-"] #sceneGame #tableShell #seats .seat.active :is(.leather-name,.bot-fan,.opphand){
+ animation:none!important;
+ filter:none!important;
+}
+:root[data-tav-palette^="neon-"] #sceneGame #tableShell #seats .seat.active::before,
+:root[data-tav-palette^="neon-"] #sceneGame #tableShell #seats .seat.active::after,
+:root[data-tav-palette^="neon-"] #sceneGame #tableShell #seats .seat.active :is(.seat-inner,.bot-avatar,.portrait-medallion)::before,
+:root[data-tav-palette^="neon-"] #sceneGame #tableShell #seats .seat.active :is(.seat-inner,.bot-avatar,.portrait-medallion)::after{
+ animation:none!important;
+ filter:none!important;
+ background:none!important;
+ background-image:none!important;
+ border-color:transparent!important;
+ box-shadow:none!important;
+}
+:root[data-tav-palette^="neon-"] #sceneGame #tableShell #seats .seat.active .portrait-medallion{
+ animation:none!important;
+ filter:none!important;
+ outline:none!important;
+ border:3px solid var(--tav-active-ring)!important;
+ box-shadow:0 0 0 2px var(--tav-active-ring),0 0 15px 5px var(--tav-active-aura)!important;
+}
+:root[data-tav-palette^="neon-"] #sceneGame #tableShell #seats .seat.active .portrait-medallion img{
+ animation:none!important;
+ filter:none!important;
+}
+:root[data-tav-palette^="neon-"] #sceneGame #tableShell #seats .seat.active .npc-timer{
+ border-color:var(--tav-active-ring)!important;
+ box-shadow:0 0 8px var(--tav-active-aura)!important;
+}

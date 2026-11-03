@@ -44,4 +44,20 @@ assert.equal(vm.runInContext('tavRoundStars(3)',ctx),'✦✦✦');
 assert.equal(vm.runInContext('tavRoundStars(7)',ctx),'✦✦✦✦✦ +2');
 assert(app.includes("ui.game.advanceRound()"),'Rodadas nao podem ser afetadas');
 assert(app.includes("ui.game.play(")||app.includes("ui.game.timeExpired("),'Motor de jogo ausente');
+
+/* Regression: tema usa a cor do jogador ativo sem halo dourado legado. */
+const v53=css.slice(css.indexOf('/* Alpha 0.5.0.53'));
+assert(v53.includes('--tav-active-ring:var(--tp-edge)'),'Halo nao usa cor da paleta');
+assert(v53.includes('--tav-active-aura:var(--tp-glow)'),'Brilho nao usa cor da paleta');
+assert(v53.includes('.seat.active::before')&&v53.includes('.seat.active :is(.seat-inner,.bot-avatar,.portrait-medallion)::after'),'Pseudo-halos antigos nao neutralizados');
+assert(v53.includes('.seat.active .portrait-medallion img'),'Filtro do retrato ainda pode herdar brilho');
+const greenSvg=fs.readFileSync(path.join(site,'theme-decks','neon-green.svg'),'utf8');
+assert(!greenSvg.includes('<circle cx="120" cy="172" r="19"'),'Verso verde ainda tem o medalhao central');
+const iconGenerator=fs.readFileSync(path.join(__dirname,'apply-alpha-ui-v91.py'),'utf8');
+assert(!iconGenerator.includes('<circle cx='),'Icone gerado ainda tem ponto circular na coroa');
+const versions=JSON.parse(fs.readFileSync(path.join(__dirname,'alpha-releases.json'),'utf8'));
+assert.equal(versions.current,'alpha-0.5.0.53');
+const manifest=fs.readFileSync(path.join(site,'manifest.webmanifest'),'utf8');
+assert(manifest.includes('alpha-icon-20261103-1'),'Icones PWA sem renovacao de URL');
+
 console.log('ALPHA_GAMEPLAY_V50_OK: duas linhas, estrelas do jogador, eliminados, campeao e cartas tematicas');
