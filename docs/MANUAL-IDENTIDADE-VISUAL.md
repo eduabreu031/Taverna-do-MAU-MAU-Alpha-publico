@@ -112,3 +112,10 @@ agentes estão em `AGENTS.md` e `.github/copilot-instructions.md`.
   aplicar refinamento. Os outros componentes mantêm seu contrato v56.
 - Na publicação, exigir \`python3 qa/test-art-v57.py site\` após gerar as
   imagens; verificar capturas reais e inspecionar estética de todos os temas.
+
+## Fidelidade às prévias aprovadas (padrão obrigatório v0.5.0.58)
+- Os quatro baralhos Azul, Verde, Rosa e Porcelana **reproduzem a imagem aprovada**, extraída de suas prévias para a arte real e não a reinterpretam com geometrias mais simples. As fontes ficam em `qa/premium-preview-art-v58.b64` e o gerador em `qa/build-premium-preview-v58.py`.
+- Os outros sete versos utilizam acabamento comparável (molduras ricas, material, emblema autoral com volume) e mantêm cores/identidade próprias; todos são WebP RGB, carregados pela mesma variável `--tg-deck-image` do jogo.
+- A comparação automática `qa/test-premium-preview-v58.py` verifica a correspondência dos quatro versos aprovados e a distinção dos onze; exige 480 × 672 pixels, sem transparência, e limite de 135 KB por arquivo.
+- Pausa e troféu usam símbolos próprios em SVG com linhas internas e metais temáticos, nunca uma regra global que preencha também caminhos `fill="none"`. Isto corrige a causa da silhueta, não só as cores aparentes.
+- Em uma revisão visual com proposta expressamente aprovada, a fidelidade à referência é requisito; não substituí-la por ornamentação nova sem autorização. A interface, regras, eventos, acertos e acessibilidade devem permanecer os mesmos.
