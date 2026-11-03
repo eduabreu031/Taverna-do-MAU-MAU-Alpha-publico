@@ -11,7 +11,7 @@ const ALL_BOTS=JSON.parse(rosterMatch[1]);
 assert(ALL_BOTS.length>=10);
 assert(app.includes('portraitHTML(p.portraitName||p.name)'),'Mesa ainda usa retrato generico');
 
-const helperStart=app.indexOf('const onlineBotPortraitCache=new Map();');
+const helperStart=app.indexOf('const tavLegacyBotNames=');
 const helperEnd=app.indexOf('window.__tavOriginalOnline={',helperStart);
 assert(helperStart>0&&helperEnd>helperStart,'Mapeamento de retratos online nao encontrado');
 const ctx=vm.createContext({ALL_BOTS,Map,Set,String});
