@@ -10,7 +10,7 @@
       "items": [
         "Os nove comandos do cabeçalho compartilham forma circular, acabamento, ícones monocromáticos, foco e dimensionamento responsivo em todas as paletas.",
         "A tela de pausa usa um ícone SVG de duas barras no lugar do caractere que aparecia como número romano.",
-        "O Manual de Identidade Visual se torna contrato obrigatório para novas telas e botões, com testes automáticos de consistência, prevalência sobre estilos legados e inspeção em navegador antes da publicação; regras e servidores permanecem iguais."
+        "O Manual de Identidade Visual se torna contrato obrigatório para novas telas e botões, com testes automáticos de consistência e auditoria visual da página final montada antes da publicação; regras e servidores permanecem iguais."
       ]
     },
     {
