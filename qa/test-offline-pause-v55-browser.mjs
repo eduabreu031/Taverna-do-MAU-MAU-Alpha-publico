@@ -69,7 +69,7 @@ try{
    const buttons=[...document.querySelectorAll('#sceneGame .game-header .utility-toolbar button')];
    const styles=buttons.map(b=>{
     const c=getComputedStyle(b),r=b.getBoundingClientRect();
-    return {w:Math.round(r.width*10)/10,h:Math.round(r.height*10)/10,
+    return {id:b.id,className:b.className,w:Math.round(r.width*10)/10,h:Math.round(r.height*10)/10,
      left:r.left,right:r.right,round:c.borderRadius,edge:c.borderTopColor,
      bg:c.backgroundImage,shadow:c.boxShadow};
    });
@@ -80,7 +80,7 @@ try{
   assert(sample.styles.every(a=>a.left>=-2&&a.right<=width+3),'Controles recortados: '+width);
   const first=sample.styles[0];
   assert(sample.styles.every(a=>a.w===first.w&&a.h===first.h&&a.round===first.round&&
-   a.edge===first.edge&&a.bg===first.bg),'Molduras divergentes no HUD: '+width);
+   a.edge===first.edge&&a.bg===first.bg),'Molduras divergentes no HUD: '+width+' '+JSON.stringify(sample.styles));
   visual.push({width,count:sample.n,diameter:first.w,edge:first.edge});
  }
  const palettes=await page.evaluate(()=>{
