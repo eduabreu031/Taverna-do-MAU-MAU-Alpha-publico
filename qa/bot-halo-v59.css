@@ -17,6 +17,20 @@
   filter:none!important;
   animation:none!important;
 }
+/* A v54 mudava o avatar de position:absolute para relative quando a
+   classe active era aplicada nos temas neon. Isso alargava o wrapper,
+   removia translateX(-50%) e deslocava o retrato cerca de 17–35 px.
+   Restaurar a geometria ORIGINAL do assento, sem tocar no motor. */
+:root[data-tav-palette^="neon-"] #sceneGame #tableShell #seats .seat.active .bot-avatar {
+  position:absolute!important;
+  transform:translateX(-50%)!important;
+}
+/* A borda antes passava de 2px para 3px no turno e encolhia a imagem.
+   O progresso está no pseudo-elemento: borda constante de 2px. */
+:root[data-tav-palette^="neon-"] #sceneGame #tableShell #seats .seat.active .bot-avatar .portrait-medallion {
+  border-width:2px!important;
+}
+
 /* A posição original do medalhão é definida pelo layout do assento.
    NUNCA forçar position:relative quando a vez começa: isso o tira do
    posicionamento normal e move/diminui a foto em dispositivos móveis.
