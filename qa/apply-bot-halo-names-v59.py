@@ -39,9 +39,6 @@ swap('function addBot(n,entry){',
      'function addBot(n,entry){')
 assert html.count('BOT_PREFIX+BOT_NAMES[i]')==3, 'Ancoras do seletor de bots mudaram'
 # A terceira ocorrencia e a definicao do helper; preservar somente essa.
-parts=html.split('BOT_PREFIX+BOT_NAMES[i]')
-assert len(parts)==4
-html='BOT_PREFIX+BOT_NAMES[i]'.join(parts[:2])+parts[2].replace('', '', 1) if False else html
 # Seletores de redução e ampliação usam o mesmo identificador da vaga.
 needle='const name=BOT_PREFIX+BOT_NAMES[i]'
 assert html.count(needle)==2,html.count(needle)
