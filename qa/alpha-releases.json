@@ -1,7 +1,18 @@
 {
-  "current": "alpha-0.5.0.54",
+  "current": "alpha-0.5.0.55",
   "issuesRepo": "eduabreu031/Taverna-do-MAU-MAU-Alpha-publico",
   "entries": [
+    {
+      "id": "alpha-0.5.0.55",
+      "label": "0.5.0.55-alpha",
+      "date": "2026-11-03",
+      "title": "Pausa offline sem penalidades e conquistas no cabeçalho",
+      "items": [
+        "O modo offline ganha um botão de pausa no cabeçalho da partida: temporizadores dos jogadores, bots e janela do OPA!!! são interrompidos e retomam do tempo restante.",
+        "O troféu das Crônicas e conquistas fica disponível ao lado dos outros comandos durante a partida; consultar conquistas pausa automaticamente os relógios do offline.",
+        "O multiplayer continua sem possibilidade de pausa e não recebe alterações nas regras, prazos ou eventos do servidor."
+      ]
+    },
     {
       "id": "alpha-0.5.0.54",
       "label": "0.5.0.54-alpha",

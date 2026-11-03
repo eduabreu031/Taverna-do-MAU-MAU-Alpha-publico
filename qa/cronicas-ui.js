@@ -247,6 +247,7 @@ function switchTab(next){
 }
 function open(trigger){
  if(!overlay.hidden)return;
+ window.TavernaOfflinePause?.holdForCronicas?.();
  previousFocus=trigger||doc.activeElement;
  active='overview';overlay.hidden=false;
  setStatus('');render();qs('#tavCronicasClose').focus();
@@ -256,6 +257,7 @@ function close(){
  if(overlay.hidden)return;
  ++requestIndex;busy=false;
  overlay.hidden=true;profile=null;book=null;orders=null;
+ window.TavernaOfflinePause?.releaseCronicas?.();
  if(previousFocus?.isConnected)previousFocus.focus();
  previousFocus=null;
 }
@@ -393,10 +395,15 @@ function install(sceneSelector,locationSelector){
  if(!parent)return;
  const button=elementButton('🏆','tav-cronicas-trigger',()=>open(button));
  button.setAttribute('aria-haspopup','dialog');button.setAttribute('aria-controls','tavCronicasOverlay');button.setAttribute('aria-label','Conquistas');button.title='Conquistas';
+ if(sceneSelector==='#sceneGame'){
+  button.classList.add('tavern-float-icon','tav-game-cronicas-trigger');
+  button.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 4h10v5c0 4-2.2 6.3-5 6.3S7 13 7 9V4Z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M7 6H4v2c0 2.4 1.3 4 4 4M17 6h3v2c0 2.4-1.3 4-4 4M12 15v4m-5 2h10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+ }
  parent.append(button);triggers.push(button);
 }
 install('#sceneWelcome','#alphaTopTools');
 install('#sceneMenu','.offline-setup-heading');
+install('#sceneGame','.game-header .utility-toolbar');
 window.TavernaCronicas=Object.freeze({
  open:()=>open(null),close,refresh,
  availableButtons:()=>triggers.length,
