@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Alpha 0.5.0.59: nomes oficiais e halo de tempo no retrato, sem mudar relógios."""
+"""Alpha 0.5.0.60: nomes oficiais e halo de tempo corrigido no retrato, sem mudar relógios."""
 from pathlib import Path
 import json, re, sys
 
@@ -63,7 +63,7 @@ swap("name:members.find(x=>x.id===p.id)?.name||'Jogador',portraitName:",
 # O relógio original continua calculando os segundos; agora alimenta apenas
 # o aro do avatar, sem sobreposição sobre a imagem e sem números visíveis.
 swap("el.classList.toggle('active',active);",
-     "const avatar=el.closest('.leather-name')?.querySelector('.bot-avatar');"
+     "const avatar=el.closest('.leather-name')?.querySelector('.bot-avatar .portrait-medallion');"
      "if(avatar){avatar.style.setProperty('--tav-npc-progress',(ratio*100)+'%');"
      "avatar.title=active?'Tempo restante: '+Math.ceil(remaining/1000)+' segundos':'';}"
      "el.classList.toggle('active',active);")
