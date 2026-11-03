@@ -1,0 +1,60 @@
+name: Validar pausa offline e conquistas em navegador
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'qa/offline-pause-*'
+      - 'qa/apply-offline-pause-v55.py'
+      - 'qa/test-offline-pause-v55-browser.mjs'
+      - 'qa/cronicas-ui.js'
+      - '.github/workflows/test-offline-pause-v55.yml'
+permissions:
+  contents: read
+jobs:
+  browser:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Instalar dependências visuais
+        run: python3 -m pip install --disable-pip-version-check cairosvg pillow
+      - name: Montar Alpha de teste
+        run: |
+          python3 qa/merge-beta-frontend.py site
+          python3 qa/apply-alpha-ui-v91.py site
+          python3 qa/apply-alpha-v92.py site
+          python3 qa/padronizar-nome.py site
+          python3 qa/apply-alpha-accounts.py site
+          python3 qa/apply-vip-bots-ui.py site
+          python3 qa/apply-visitor-entry.py site
+          python3 qa/apply-rematch-lobby.py site
+          python3 qa/apply-online-skip-final.py site
+          python3 qa/apply-social-features.py site
+          python3 qa/apply-online-abandon.py site
+          python3 qa/apply-seasonal-theme.py site
+          python3 qa/apply-tavern-entrance.py site
+          python3 qa/build-card-opaque-backs.py site
+          python3 qa/apply-online-resume.py site
+          python3 qa/apply-cronicas-ui.py site
+          python3 qa/apply-lounge-ui.py site
+          python3 qa/apply-tavern-ui-shell.py site
+          python3 qa/apply-bot-identities.py site
+          python3 qa/apply-offline-scoring.py site
+          python3 qa/apply-gameplay-layout-v50.py site
+          python3 qa/apply-offline-pause-v55.py site
+          node qa/test-offline-pause-v55.cjs site
+      - name: Preparar Chromium
+        run: npm install --no-save playwright@1.58.2 && npx playwright install --with-deps chromium
+      - name: Testar partida real no celular simulado
+        run: |
+          python3 -m http.server 8765 -d site >/tmp/tav-offline-v55-http.log 2>&1 &
+          node qa/test-offline-pause-v55-browser.mjs
+      - name: Guardar captura de diagnóstico
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pausa-offline-v55
+          path: /tmp/tav-offline-paused-390.png
+          if-no-files-found: ignore
