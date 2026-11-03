@@ -1,4 +1,4 @@
-/* Alpha 0.5.0.60 — reparo do aro do relógio.
+/* Alpha 0.5.0.61 — manter anel de tempo sem modificar a geometria do retrato.
    O pseudo-elemento deve nascer no medalhão circular REAL, jamais no
    wrapper do assento/avatares (que possui medidas e posicionamento distintos).
    Escopo: apenas retratos de bots ativos; nenhum elemento do motor é removido. */
@@ -17,11 +17,12 @@
   filter:none!important;
   animation:none!important;
 }
-/* O medalhão mede exatamente o diâmetro da foto. O pseudo-elemento
-   com inset 0 não altera tamanho, fluxo, posição nem zona de toque. */
+/* A posição original do medalhão é definida pelo layout do assento.
+   NUNCA forçar position:relative quando a vez começa: isso o tira do
+   posicionamento normal e move/diminui a foto em dispositivos móveis.
+   O anel usa o pseudo-elemento, sem alterar a posição do medalhão. */
 #sceneGame #tableShell #seats .seat.active .bot-avatar .portrait-medallion,
 :root[data-tav-palette^="neon-"] #sceneGame #tableShell #seats .seat.active .bot-avatar .portrait-medallion {
-  position:relative!important;
   --tav-npc-ring-ink:var(--tp-bright,var(--tav-ui-focus,#e9bc80));
   border-color:color-mix(in srgb,var(--tav-npc-ring-ink) 25%,transparent)!important;
   box-shadow:0 0 9px 1px var(--tp-glow,var(--tav-npc-ring-ink))!important;
