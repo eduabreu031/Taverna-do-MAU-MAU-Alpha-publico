@@ -14,7 +14,7 @@ for(const token of [
  '#humanZone.tav-double-hand','#humanHand',
  'grid-template-rows:repeat(2,96px)','overflow-x:auto',
  '.tav-human-trophy','.tav-ghost-gallery','.score-pending-back',
- '.bot-pocket .mini-card:first-child','.champion-banner',
+ '.bot-pocket .mini-card','.champion-banner',
  '.seat.active .portrait-medallion','var(--tp-bright)',
  'var(--tg-deck-image)',
  'height:100dvh!important','justify-content:flex-start!important',
@@ -23,6 +23,9 @@ for(const token of [
 ]){
  assert(css.includes(token),'Regra visual ausente: '+token);
 }
+assert(!/\.bot-pocket \.mini-card\s*\{\s*display:none!important/.test(css),'Leque dos bots nao pode esconder miniaturas');
+assert(css.includes('order:1!important;')&&css.includes('max-height:42px!important'),'Retratos de eliminados nao devem empurrar o cabecalho');
+assert(css.includes('#sceneGame .game-header button :is(img,svg)'),'Icones do HUD sem padrao de escala');
 assert(!css.includes('#overlay:has(.suit-list) .suit-choice'),'Seletor de naipe nao pode ser alterado');
 assert(app.includes('tavRenderSessionDetails(s);'),'Render nao atualiza mao, estrelas e eliminados');
 assert(app.includes("zone.classList.toggle('tav-double-hand',count>10)"),'Limiar deveria ser 11 cartas');
