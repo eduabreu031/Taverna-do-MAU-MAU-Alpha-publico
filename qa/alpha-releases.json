@@ -1,7 +1,19 @@
 {
-  "current": "alpha-0.5.0.55",
+  "current": "alpha-0.5.0.56",
   "issuesRepo": "eduabreu031/Taverna-do-MAU-MAU-Alpha-publico",
   "entries": [
+    {
+      "id": "alpha-0.5.0.56",
+      "label": "0.5.0.56-alpha",
+      "date": "2026-11-03",
+      "title": "Ícones da pausa e identidade consistente dos comandos superiores",
+      "items": [
+        "O símbolo da tela de pausa deixa de usar o numeral romano dois e passa a ser um ícone vetorial de pausa, sem renderização ambígua em diferentes dispositivos.",
+        "Os nove controles superiores da partida passam a compartilhar moldura, dimensões, relevo, cores e escala de ícones; as tintas acompanham a paleta escolhida, preservando a posição independente do seletor de temas.",
+        "O Manual de Identidade Visual se torna contrato obrigatório para funções futuras, com regras de 12 temas, quatro larguras móveis, acessibilidade e validação visual real.",
+        "Nenhuma regra de cartas, relógio, bots ou multiplayer é modificada."
+      ]
+    },
     {
       "id": "alpha-0.5.0.55",
       "label": "0.5.0.55-alpha",
