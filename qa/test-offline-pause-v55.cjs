@@ -25,7 +25,7 @@ assert(cronicas.includes('releaseCronicas'),'Fechar conquistas não retoma o rel
 const css=fs.readFileSync(path.join(root,'qa','offline-pause-ui-v55.css'),'utf8');
 assert(css.includes('max-width:760px')&&css.includes('clamp(27px,8.5vw,36px)'),'Barra móvel não cabe com nove botões');
 const releases=JSON.parse(fs.readFileSync(path.join(root,'qa','alpha-releases.json'),'utf8'));
-assert.equal(releases.current,'alpha-0.5.0.57');
+assert.equal(releases.current,'alpha-0.5.0.58');
 const sw=fs.readFileSync(path.join(site,'sw.js'),'utf8');
-assert(sw.includes('taverna-pwa-alpha-0.5.0.57'),'Cache PWA desatualizado');
+assert(sw.includes('taverna-pwa-alpha-0.5.0.58'),'Cache PWA desatualizado');
 console.log('OFFLINE_PAUSE_V55_OK: timers, IA, OPA, HUD, conquistas e versionamento');

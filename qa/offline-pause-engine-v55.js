@@ -21,7 +21,7 @@ tavPauseBtn.title='Pausar partida offline';
 tavPauseBtn.setAttribute('aria-label','Pausar partida offline');
 tavPauseBtn.setAttribute('aria-haspopup','dialog');
 tavPauseBtn.setAttribute('aria-controls','tavOfflinePauseLayer');
-tavPauseBtn.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="6" y="4" width="4" height="16" rx="1.3" fill="currentColor"></rect><rect x="14" y="4" width="4" height="16" rx="1.3" fill="currentColor"></rect></svg>';
+tavPauseBtn.innerHTML='<svg viewBox="0 0 32 32" aria-hidden="true" focusable="false"><defs><linearGradient id="tavPauseMetal58" x1="0" y1="0" x2="1" y2=".7"><stop offset="0" stop-color="var(--tav-metal-hi,#fff2d4)"/><stop offset=".55" stop-color="var(--tav-metal-mid,#c6a16e)"/><stop offset="1" stop-color="var(--tav-metal-low,#68472e)"/></linearGradient></defs><g stroke="var(--tav-metal-edge,#fae1bb)" stroke-width="1.3"><rect x="8" y="5" width="6.3" height="22" rx="1.5" fill="url(#tavPauseMetal58)"/><rect x="17.7" y="5" width="6.3" height="22" rx="1.5" fill="url(#tavPauseMetal58)"/></g><path d="M10.1 8.1v15.8M19.8 8.1v15.8" stroke="var(--tav-metal-hi,#fff2d4)" stroke-width="1.25" stroke-linecap="round"/></svg>';
 tavPauseNav.append(tavPauseBtn);
 function tavOfflineRemaining(deadline,now){return deadline>0?Math.max(1,deadline-now):null;}
 function tavOfflinePause(mode='manual'){

@@ -64,7 +64,9 @@ jobs:
       - name: Instalar fachada e porta de entrada da Taverna
         run: python3 qa/apply-tavern-entrance.py site
       - name: Gerar versos opacos dos 11 baralhos alternativos
-        run: python3 qa/build-card-opaque-backs.py site
+        run: |
+          python3 qa/build-card-opaque-backs.py site
+          python3 qa/build-premium-preview-v58.py site
       - name: Ativar retomada de partida após atualizar o navegador
         run: python3 qa/apply-online-resume.py site
       - name: Integrar Crônicas e conquistas
@@ -90,7 +92,9 @@ jobs:
       - name: Validar pausa offline e acesso a conquistas na partida
         run: node qa/test-offline-pause-v55.cjs site
       - name: Exigir artes refinadas dos 11 versos
-        run: python3 qa/test-art-v57.py site
+        run: |
+          python3 qa/test-art-v57.py site
+          python3 qa/test-premium-preview-v58.py site
       - name: Exigir contrato de identidade visual
         run: node qa/check-design-contract.cjs site
       - name: Conferir jogo e integridade das regras
@@ -163,7 +167,9 @@ jobs:
       - name: Instalar fachada e porta de entrada da Taverna
         run: python3 qa/apply-tavern-entrance.py site
       - name: Gerar versos opacos dos 11 baralhos alternativos
-        run: python3 qa/build-card-opaque-backs.py site
+        run: |
+          python3 qa/build-card-opaque-backs.py site
+          python3 qa/build-premium-preview-v58.py site
       - name: Ativar retomada de partida após atualizar o navegador
         run: python3 qa/apply-online-resume.py site
       - name: Integrar Crônicas e conquistas
@@ -183,7 +189,9 @@ jobs:
       - name: Validar bots distintos e elenco preservado na revanche
         run: node qa/test-bot-identities.cjs site
       - name: Revalidar todos os versos antes do deploy
-        run: python3 qa/test-art-v57.py site
+        run: |
+          python3 qa/test-art-v57.py site
+          python3 qa/test-premium-preview-v58.py site
       - name: Exigir contrato de identidade visual antes do deploy
         run: node qa/check-design-contract.cjs site
       - name: Preparar GitHub Pages
