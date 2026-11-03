@@ -6,6 +6,9 @@ on:
       - 'qa/offline-pause-*'
       - 'qa/tavern-design-system-v56.css'
       - 'qa/check-design-contract.cjs'
+      - 'qa/build-premium-preview-v58.py'
+      - 'qa/premium-preview-art-v58.b64'
+      - 'qa/test-premium-preview-v58.py'
       - 'docs/MANUAL-IDENTIDADE-VISUAL.md'
       - 'AGENTS.md'
       - '.github/copilot-instructions.md'
@@ -43,6 +46,7 @@ jobs:
           python3 qa/apply-seasonal-theme.py site
           python3 qa/apply-tavern-entrance.py site
           python3 qa/build-card-opaque-backs.py site
+          python3 qa/build-premium-preview-v58.py site
           python3 qa/apply-online-resume.py site
           python3 qa/apply-cronicas-ui.py site
           python3 qa/apply-lounge-ui.py site
@@ -53,6 +57,7 @@ jobs:
           python3 qa/apply-offline-pause-v55.py site
           node qa/test-offline-pause-v55.cjs site
           node qa/check-design-contract.cjs site
+          python3 qa/test-premium-preview-v58.py site
       - name: Preparar Chromium
         run: npm install --no-save playwright@1.58.2 && npx playwright install --with-deps chromium
       - name: Testar partida real no celular simulado
